@@ -21,12 +21,14 @@ export function Nav() {
             />
           </Link>
 
-          {/* Cert badges — desktop only, center */}
-          <div className="hidden lg:flex items-center gap-2 text-sm font-semibold text-brand whitespace-nowrap">
-            <span>Authorized Health Tourism Facilitator · USHAS AK-1494</span>
-            <span className="opacity-30">|</span>
-            <span>Association of Turkish Travel Agencies · 18274</span>
-          </div>
+          {/* Nav links — desktop only, center */}
+          <nav className="hidden lg:flex items-center gap-8">
+            <Link href="/" className="text-sm font-semibold text-brand hover:text-teal transition-colors">Home</Link>
+            <Link href="/hospitals" className="text-sm font-semibold text-brand hover:text-teal transition-colors">Hospitals</Link>
+            <Link href="/cost-calculator" className="text-sm font-semibold text-brand hover:text-teal transition-colors">Calculator</Link>
+            <Link href="/blog" className="text-sm font-semibold text-brand hover:text-teal transition-colors">Blog</Link>
+            <Link href="#consultation" className="text-sm font-semibold text-brand hover:text-teal transition-colors">Get Quote</Link>
+          </nav>
 
           {/* Right — phone + CTA */}
           <div className="flex items-center gap-3 shrink-0">
@@ -41,16 +43,19 @@ export function Nav() {
               href="/agency"
               className="px-4 py-2 rounded-full border border-brand text-brand text-sm font-semibold hover:bg-brand hover:text-white transition-colors"
             >
-              Agency Login
+              Partner Login
             </Link>
           </div>
 
         </div>
 
-        {/* Cert bar — mobile only, below main row */}
-        <div className="lg:hidden border-t border-gray-100 py-1.5 flex flex-col items-center gap-0.5 text-[11px] font-semibold text-brand text-center">
-          <span>Authorized Health Tourism Facilitator · USHAS AK-1494</span>
-          <span>Association of Turkish Travel Agencies · 18274</span>
+        {/* Mobile nav */}
+        <div className="lg:hidden border-t border-gray-100 py-2 flex items-center justify-center gap-6">
+          <Link href="/" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Home</Link>
+          <Link href="/hospitals" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Hospitals</Link>
+          <Link href="/cost-calculator" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Calculator</Link>
+          <Link href="/blog" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Blog</Link>
+          <Link href="#consultation" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Get Quote</Link>
         </div>
 
       </div>
