@@ -5,32 +5,32 @@ import { ChevronDown, MessageCircle, Send } from "lucide-react";
 
 const faqs = [
   {
-    q: "Is Medical Center Turkey a hospital?",
-    a: "No. MCT is an International Patient Center and Health Tourism Coordinator. We connect you with Ministry of Health certified partner hospitals and manage your entire treatment journey — we are not a healthcare provider.",
+    q: "Why do people choose Turkey for medical treatments?",
+    a: "Turkey has become one of the world's leading destinations for medical treatments, combining internationally accredited hospitals, experienced specialists, and significantly lower costs compared to the UK, USA, and Europe — without compromising on quality or safety.",
   },
   {
-    q: "Is the coordination service free?",
-    a: "Yes, 100% free of charge. MCT's coordination, consultation, hospital matching, and package planning services are completely free for patients.",
+    q: "How much can I save by getting treatment in Turkey?",
+    a: "Treatment costs in Turkey are typically 50-70% lower than in the UK, USA, or Western Europe, while using the same internationally recognized standards, technology, and techniques.",
   },
   {
-    q: "Which hospital will perform my treatment?",
-    a: "The most suitable hospital is selected according to your medical needs, treatment requirements, doctor availability, travel dates and package type. All our partner hospitals are Ministry of Health certified.",
+    q: "What treatments does Medical Center Turkey coordinate?",
+    a: "We coordinate care across a wide range of treatments, including hair transplantation, cosmetic and plastic surgery, dental treatments, and other specialist procedures, matching each patient with the right hospital and specialist for their needs.",
   },
   {
-    q: "How do I get started?",
-    a: "Simply fill out the contact form or reach us via WhatsApp. We will assess your case, answer all your questions and prepare a personalised treatment plan — no pressure, no commitment.",
+    q: "Do I need a visa to travel to Turkey for medical treatment?",
+    a: "Many nationalities, including the UK, USA, and most EU countries, can enter Turkey visa-free or obtain an e-visa online in minutes. We can guide you through the exact requirements based on your nationality.",
   },
   {
-    q: "What is included in the Hassle-Free Package?",
-    a: "Hospital coordination, appointment scheduling, VIP airport transfer, hotel accommodation, treatment support, post-op care kit and follow-up support. Everything managed from first inquiry to safe return home.",
+    q: "How long do I need to stay in Turkey for treatment?",
+    a: "Stay duration depends on the treatment type, typically ranging from 3 days to 2 weeks. We'll provide a personalized itinerary as part of your treatment plan, including recovery time before you fly home.",
   },
   {
-    q: "Can I get a price quote before travelling?",
-    a: "Yes. Send us your details and medical reports (if available) and we will prepare a full price quote and treatment plan within 24 hours, free of charge.",
+    q: "Are the hospitals in Turkey internationally accredited?",
+    a: "Yes. We work exclusively with Ministry of Health certified hospitals that meet international healthcare standards, ensuring the same level of safety and quality you'd expect at home.",
   },
   {
-    q: "Is Istanbul safe for medical travel?",
-    a: "Istanbul is one of the world's leading medical tourism destinations. Turkey's healthcare infrastructure is internationally accredited and thousands of patients travel each year for safe, high-quality treatment.",
+    q: "How do I get a personalized treatment plan and price quote?",
+    a: "Simply send us your details and photos (if relevant) through our consultation form or WhatsApp. Our case management team reviews your case and prepares a personalized treatment plan and quote within 24 hours.",
   },
 ];
 
