@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Nav } from "@/components/marketing/nav";
 import { Hero } from "@/components/marketing/hero";
+import TreatmentGrid from "@/components/TreatmentGrid";
 import { HowItWorks } from "@/components/marketing/how-it-works";
 import { Packages } from "@/components/marketing/packages";
 import { Stats } from "@/components/marketing/stats";
@@ -26,6 +27,7 @@ export default function HomePage() {
       <Nav />
       <main>
         <Hero />
+        <TreatmentGrid />
         <HowItWorks />
         <Packages />
         <Stats />
