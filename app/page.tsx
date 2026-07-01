@@ -5,6 +5,7 @@ import { HowItWorks } from "@/components/marketing/how-it-works";
 import { Packages } from "@/components/marketing/packages";
 import { Stats } from "@/components/marketing/stats";
 import { ContactFAQ } from "@/components/marketing/contact-faq";
+import { HospitalNetwork } from "@/components/marketing/hospital-network";
 import { Footer } from "@/components/marketing/footer";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 
@@ -30,6 +31,7 @@ export default function HomePage() {
         <Stats />
         <ContactFAQ />
       </main>
+      <HospitalNetwork />
       <Footer />
       <WhatsAppFloat />
     </>
