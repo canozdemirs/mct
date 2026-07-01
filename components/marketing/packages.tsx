@@ -68,11 +68,11 @@ const treatments = [
     ],
   },
   {
-    name: "Hollywood Smile",
+    name: "Blepharoplasty",
     price: "From £1,990",
-    image: "/treatments/hollywood-smile.jpg",
+    image: "/treatments/blepharoplasty-v4.jpg",
     inclusions: [
-      "Porcelain veneers / zirconia",
+      "Upper / lower eyelid surgery",
       "Hospital coordination",
       "VIP airport transfer",
       "Hotel accommodation",
@@ -171,7 +171,16 @@ export function Packages() {
           ))}
         </div>
 
-        <p className="text-center text-xs text-gray-400 mt-10">
+        <div className="flex justify-center mt-10">
+          <a
+            href="#packages"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full border-2 border-brand text-brand font-semibold text-sm hover:bg-brand hover:text-white transition-colors"
+          >
+            View All Treatments
+          </a>
+        </div>
+
+        <p className="text-center text-xs text-gray-400 mt-6">
           Final treatment suitability is determined by licensed physicians following medical
           evaluation. Results may vary.
         </p>

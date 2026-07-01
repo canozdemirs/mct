@@ -40,7 +40,7 @@ export function ContactFAQ() {
 
   const treatments = [
     "Hair Transplant", "Rhinoplasty", "Breast Augmentation", "Gynecomastia",
-    "Dental Implant", "Hollywood Smile", "Liposuction", "Check-Up", "Other",
+    "Dental Implant", "Blepharoplasty", "Liposuction", "Check-Up", "Other",
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
