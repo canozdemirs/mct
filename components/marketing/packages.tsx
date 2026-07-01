@@ -122,7 +122,7 @@ export function Packages() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
-          {treatments.map((t) => (
+          {treatments.map((t, i) => (
             <div
               key={t.name}
               className="flip-card h-64 cursor-pointer"
@@ -137,6 +137,7 @@ export function Packages() {
                     fill
                     className="object-cover"
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    priority={i === 0}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-4">
