@@ -6,6 +6,7 @@ import { Packages } from "@/components/marketing/packages";
 import { Stats } from "@/components/marketing/stats";
 import { ContactFAQ } from "@/components/marketing/contact-faq";
 import { HospitalNetwork } from "@/components/marketing/hospital-network";
+import { ContactBar } from "@/components/marketing/contact-bar";
 import { Footer } from "@/components/marketing/footer";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 
@@ -26,6 +27,7 @@ export default function HomePage() {
       <Nav />
       <main>
         <Hero />
+        <ContactBar />
         <HowItWorks />
         <Packages />
         <Stats />
