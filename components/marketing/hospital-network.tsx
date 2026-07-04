@@ -7,7 +7,7 @@ const BASE_H = 36;
 // matches logos that include an icon/emblem at the base 36px.
 const logos = [
   { name: "Acıbadem Healthcare Group", src: "/images/hospitals/groups/acibadem.png", iw: 552, ih: 77,  heightOverride: 20 },
-  { name: "Memorial Healthcare Group", src: "/hospitals/memorial.webp",              iw: 179, ih: 58,  heightOverride: 42 },
+  { name: "Memorial Healthcare Group", src: "/hospitals/memorial.webp",              iw: 179, ih: 58,  heightOverride: 40 },
   { name: "Koç University Hospital",   src: "/hospitals/koc.svg",                    iw: 415, ih: 108 },
   { name: "American Hospital",         src: "/hospitals/amerikan.png",               iw: 257, ih: 77  },
   { name: "Medipol Health Group",      src: "/hospitals/medipol.jpg",                iw: 586, ih: 163 },
