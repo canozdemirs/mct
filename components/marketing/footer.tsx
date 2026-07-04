@@ -55,7 +55,7 @@ export function Footer() {
             <ul className="space-y-2.5 text-sm text-white/55">
               {[
                 { label: "Home", href: "/" },
-                { label: "Hospitals", href: "/hospitals" },
+                { label: "Hospitals", href: "/hospitals-in-turkey" },
                 { label: "Calculator", href: "/cost-calculator" },
                 { label: "Blog", href: "/blog" },
                 { label: "Get Quote", href: "#consultation" },
