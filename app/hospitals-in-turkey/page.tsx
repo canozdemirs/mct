@@ -29,7 +29,7 @@ export default function HospitalsInTurkeyPage() {
       <main>
         {/* Hero */}
         <section
-          className="py-20 md:py-28 text-white"
+          className="py-10 md:py-14 text-white scroll-mt-16 lg:scroll-mt-20"
           style={{ background: "linear-gradient(135deg, #1b5fa8 0%, #1ab3c8 100%)" }}
         >
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
