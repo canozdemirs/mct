@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 const hospitals = [
-  { name: "Acıbadem Hospitals", src: "/hospitals/acibadem-logo-png_seeklogo-426990.png", cls: "w-full h-full scale-[3]" },
+  { name: "Acıbadem Hospitals", src: "/images/hospitals/groups/acibadem.png", cls: "w-full h-full" },
   { name: "Memorial Hospitals", src: "/hospitals/memorial.webp", cls: "w-full h-full" },
   { name: "Koç University Hospital", src: "/hospitals/koc.svg", cls: "w-3/4 h-3/4" },
   { name: "American Hospital", src: "/hospitals/amerikan.png", cls: "w-full h-full scale-125" },
