@@ -241,6 +241,7 @@ export const hospitals: Hospital[] = [
       "/images/hospitals/acibadem-atasehir/1.jpg",
       "/images/hospitals/acibadem-atasehir/2.jpg",
       "/images/hospitals/acibadem-atasehir/3.jpg",
+      "/images/hospitals/acibadem-atasehir/4.jpg",
     ],
   },
   {
