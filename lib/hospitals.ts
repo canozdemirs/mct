@@ -289,6 +289,7 @@ export const hospitals: Hospital[] = [
       "/images/hospitals/acibadem-bodrum/1.jpg",
       "/images/hospitals/acibadem-bodrum/2.jpg",
       "/images/hospitals/acibadem-bodrum/3.jpg",
+      "/images/hospitals/acibadem-bodrum/4.jpg",
     ],
   },
   {
