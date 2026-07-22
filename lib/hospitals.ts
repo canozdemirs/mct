@@ -452,7 +452,12 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
     mapEmbedUrl: "https://maps.google.com/maps?q=Acıbadem+Taksim+Hastanesi+Beyoğlu+Istanbul&z=14&output=embed",
-    images: ["/images/hospitals/acibadem-taksim/1.jpg"],
+    images: [
+      "/images/hospitals/acibadem-taksim/1.jpg",
+      "/images/hospitals/acibadem-taksim/2.jpg",
+      "/images/hospitals/acibadem-taksim/3.jpg",
+      "/images/hospitals/acibadem-taksim/4.jpg",
+    ],
   },
 
   // ─────────────────────────────── MEMORIAL (9) ───────────────────────────────
