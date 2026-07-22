@@ -217,6 +217,7 @@ export const hospitals: Hospital[] = [
       "/images/hospitals/acibadem-ankara/1.jpg",
       "/images/hospitals/acibadem-ankara/2.jpg",
       "/images/hospitals/acibadem-ankara/3.jpg",
+      "/images/hospitals/acibadem-ankara/4.jpg",
     ],
   },
   {
