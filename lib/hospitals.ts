@@ -311,6 +311,8 @@ export const hospitals: Hospital[] = [
     images: [
       "/images/hospitals/acibadem-bursa/1.jpg",
       "/images/hospitals/acibadem-bursa/2.jpg",
+      "/images/hospitals/acibadem-bursa/3.jpg",
+      "/images/hospitals/acibadem-bursa/4.jpg",
     ],
   },
   {
