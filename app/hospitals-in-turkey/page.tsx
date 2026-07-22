@@ -3,7 +3,7 @@ import { Nav } from "@/components/marketing/nav";
 import { Footer } from "@/components/marketing/footer";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import { HospitalGrid } from "@/components/marketing/hospital-grid";
-import { hospitals } from "@/lib/hospitals";
+import { hospitals, hospitalGroups } from "@/lib/hospitals";
 
 export const metadata: Metadata = {
   title: "Hospitals in Turkey | JCI-Accredited Partner Hospitals | Medical Center Turkey",
@@ -22,7 +22,16 @@ const STEPS = [
   "Full coordination during treatment",
 ];
 
-export default function HospitalsInTurkeyPage() {
+type PageProps = { searchParams: Promise<{ group?: string }> };
+
+export default async function HospitalsInTurkeyPage({ searchParams }: PageProps) {
+  const { group } = await searchParams;
+  const validGroups = Object.keys(hospitalGroups);
+  const initialGroup =
+    group && validGroups.includes(group)
+      ? (group as keyof typeof hospitalGroups)
+      : "all";
+
   return (
     <>
       <Nav />
@@ -49,7 +58,7 @@ export default function HospitalsInTurkeyPage() {
         {/* Filter + Grid */}
         <section className="py-16 bg-slate-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <HospitalGrid hospitals={hospitals} />
+            <HospitalGrid hospitals={hospitals} initialGroup={initialGroup} />
           </div>
         </section>
 

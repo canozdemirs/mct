@@ -49,6 +49,14 @@ export default async function HospitalPage({ params }: PageProps) {
   if (!hospital) notFound();
 
   const group = hospitalGroups[hospital.group];
+  const groupBreadcrumbLabel: Record<string, string> = {
+    acibadem: "Acıbadem Hospitals",
+    memorial: "Memorial Hospitals",
+    medipol: "Medipol Hospitals",
+    "koc-healthcare": "Koç Healthcare",
+    estethica: "Estethica Hospital",
+  };
+  const groupLabel = groupBreadcrumbLabel[hospital.group] ?? group.name;
   const otherInGroup = getHospitalsByGroup(hospital.group).filter(
     (h) => h.slug !== hospital.slug,
   );
@@ -80,6 +88,12 @@ export default async function HospitalPage({ params }: PageProps) {
       {
         "@type": "ListItem",
         position: 3,
+        name: groupLabel,
+        item: `https://medicalcenterturkey.com/hospitals-in-turkey?group=${hospital.group}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
         name: hospital.name,
         item: `https://medicalcenterturkey.com/${hospital.slug}`,
       },
@@ -138,6 +152,13 @@ export default async function HospitalPage({ params }: PageProps) {
                 className="hover:text-slate-600 transition-colors shrink-0"
               >
                 Hospitals in Turkey
+              </Link>
+              <ChevronRight size={13} className="shrink-0" />
+              <Link
+                href={`/hospitals-in-turkey?group=${hospital.group}`}
+                className="hover:text-slate-600 transition-colors shrink-0"
+              >
+                {groupLabel}
               </Link>
               <ChevronRight size={13} className="shrink-0" />
               <span className="text-slate-600 font-medium truncate">{hospital.name}</span>

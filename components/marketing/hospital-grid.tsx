@@ -18,8 +18,14 @@ const GROUP_TABS: Array<{ key: GroupKey | "all"; label: string }> = [
   { key: "estethica", label: "Estethica" },
 ];
 
-export function HospitalGrid({ hospitals }: { hospitals: Hospital[] }) {
-  const [active, setActive] = useState<GroupKey | "all">("all");
+export function HospitalGrid({
+  hospitals,
+  initialGroup = "all",
+}: {
+  hospitals: Hospital[];
+  initialGroup?: GroupKey | "all";
+}) {
+  const [active, setActive] = useState<GroupKey | "all">(initialGroup);
 
   const filtered =
     active === "all" ? hospitals : hospitals.filter((h) => h.group === active);
