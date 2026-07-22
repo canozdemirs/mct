@@ -261,7 +261,12 @@ export const hospitals: Hospital[] = [
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Halit+Ziya+Uşaklıgil+Cad.+No:1+Bakırköy+Istanbul&z=14&output=embed",
-    images: ["/images/hospitals/acibadem-bakirkoy/1.jpg"],
+    images: [
+      "/images/hospitals/acibadem-bakirkoy/1.jpg",
+      "/images/hospitals/acibadem-bakirkoy/2.jpg",
+      "/images/hospitals/acibadem-bakirkoy/3.jpg",
+      "/images/hospitals/acibadem-bakirkoy/4.jpg",
+    ],
   },
   {
     slug: "acibadem-bodrum-hospital",
