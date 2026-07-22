@@ -335,6 +335,8 @@ export const hospitals: Hospital[] = [
     images: [
       "/images/hospitals/acibadem-eskisehir/1.jpg",
       "/images/hospitals/acibadem-eskisehir/2.jpg",
+      "/images/hospitals/acibadem-eskisehir/3.jpg",
+      "/images/hospitals/acibadem-eskisehir/4.jpg",
     ],
   },
   {
