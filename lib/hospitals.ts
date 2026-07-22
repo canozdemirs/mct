@@ -189,7 +189,12 @@ export const hospitals: Hospital[] = [
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Cumhuriyet+Cad.+No:66+Seyhan+Adana&z=14&output=embed",
-    images: ["/images/hospitals/acibadem-adana/1.jpg"],
+    images: [
+      "/images/hospitals/acibadem-adana/1.jpg",
+      "/images/hospitals/acibadem-adana/2.jpg",
+      "/images/hospitals/acibadem-adana/3.jpg",
+      "/images/hospitals/acibadem-adana/4.jpg",
+    ],
   },
   {
     slug: "acibadem-ankara-hospital",
