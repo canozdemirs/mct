@@ -30,5 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "memorial-hospitals-content.ts"]
+  "exclude": ["node_modules", "memorial-hospitals-content.ts", "acibadem-hospitals-content.ts"]
 }
