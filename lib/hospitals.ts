@@ -187,7 +187,8 @@ export const hospitals: Hospital[] = [
     languages: ACIBADEM_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
-    mapEmbedUrl: "",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Cumhuriyet+Cad.+No:66+Seyhan+Adana&z=14&output=embed",
     images: ["/images/hospitals/acibadem-adana/1.jpg"],
   },
   {
@@ -205,7 +206,8 @@ export const hospitals: Hospital[] = [
     languages: ACIBADEM_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
-    mapEmbedUrl: "",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Turan+Güneş+Bulvarı+630.+Sok+No:6+Çankaya+Ankara&z=14&output=embed",
     images: ["/images/hospitals/acibadem-ankara/1.jpg"],
   },
   {
@@ -223,7 +225,8 @@ export const hospitals: Hospital[] = [
     languages: ACIBADEM_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
-    mapEmbedUrl: "",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Atatürk+Mah.+Turgut+Özal+Bulvarı+A+Blok+No:11+Ataşehir+Istanbul&z=14&output=embed",
     images: ["/images/hospitals/acibadem-atasehir/1.jpg"],
   },
   {
@@ -241,7 +244,8 @@ export const hospitals: Hospital[] = [
     languages: ACIBADEM_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
-    mapEmbedUrl: "",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Halit+Ziya+Uşaklıgil+Cad.+No:1+Bakırköy+Istanbul&z=14&output=embed",
     images: ["/images/hospitals/acibadem-bakirkoy/1.jpg"],
   },
   {
@@ -259,7 +263,8 @@ export const hospitals: Hospital[] = [
     languages: ACIBADEM_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
-    mapEmbedUrl: "",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Türkkuyusu+Mah.+Kıbrıs+Şehitleri+Cad.+Bodrum+Muğla&z=14&output=embed",
     images: ["/images/hospitals/acibadem-bodrum/1.jpg"],
   },
   {
@@ -277,7 +282,7 @@ export const hospitals: Hospital[] = [
     languages: ACIBADEM_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
-    mapEmbedUrl: "",
+    mapEmbedUrl: "https://maps.google.com/maps?q=Acıbadem+Bursa+Hastanesi&z=14&output=embed",
     images: ["/images/hospitals/acibadem-bursa/1.jpg"],
   },
   {
@@ -295,7 +300,8 @@ export const hospitals: Hospital[] = [
     languages: ACIBADEM_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
-    mapEmbedUrl: "",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Hoşnudiye+Mah.+Acıbadem+Sok.+No:19+Tepebaşı+Eskişehir&z=14&output=embed",
     images: ["/images/hospitals/acibadem-eskisehir/1.jpg"],
   },
   {
@@ -313,7 +319,8 @@ export const hospitals: Hospital[] = [
     languages: ACIBADEM_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
-    mapEmbedUrl: "",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Dikilitaş+Mah.+Hakkı+Yeten+Cd.+No:23+Beşiktaş+Istanbul&z=14&output=embed",
     images: ["/images/hospitals/acibadem-fulya/1.jpg"],
   },
   {
@@ -331,7 +338,7 @@ export const hospitals: Hospital[] = [
     languages: ACIBADEM_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
-    mapEmbedUrl: "",
+    mapEmbedUrl: "https://maps.google.com/maps?q=41.061527,28.8354341&z=14&output=embed",
     images: ["/images/hospitals/acibadem-international/1.jpg"],
   },
   {
@@ -349,7 +356,8 @@ export const hospitals: Hospital[] = [
     languages: ACIBADEM_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
-    mapEmbedUrl: "",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Acıbadem+Mah.+Tekin+Sk.+No:8+Kadıköy+Istanbul&z=14&output=embed",
     images: ["/images/hospitals/acibadem-kadikoy/1.jpg"],
   },
   {
@@ -367,7 +375,8 @@ export const hospitals: Hospital[] = [
     languages: ACIBADEM_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
-    mapEmbedUrl: "",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Seyitgazi+Mah.+Mustafa+Kemal+Paşa+Bulvarı+No:1+Melikgazi+Kayseri&z=14&output=embed",
     images: ["/images/hospitals/acibadem-kayseri/1.jpg"],
   },
   {
@@ -385,7 +394,8 @@ export const hospitals: Hospital[] = [
     languages: ACIBADEM_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
-    mapEmbedUrl: "",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Yeni+Mahalle+İnkılap+Cad.+Kocaeli&z=14&output=embed",
     images: ["/images/hospitals/acibadem-kocaeli/1.jpg"],
   },
   {
@@ -403,7 +413,8 @@ export const hospitals: Hospital[] = [
     languages: ACIBADEM_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
-    mapEmbedUrl: "",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Ondokuz+Mayıs+Mah.+Begonya+Sok.+No:12+Kadıköy+Istanbul&z=14&output=embed",
     images: ["/images/hospitals/acibadem-kozyatagi/1.jpg"],
   },
   {
@@ -421,7 +432,8 @@ export const hospitals: Hospital[] = [
     languages: ACIBADEM_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
-    mapEmbedUrl: "",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Büyükdere+Cad.+No:40+Maslak+Istanbul&z=14&output=embed",
     images: ["/images/hospitals/acibadem-maslak/1.jpg"],
   },
   {
@@ -439,7 +451,7 @@ export const hospitals: Hospital[] = [
     languages: ACIBADEM_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
-    mapEmbedUrl: "",
+    mapEmbedUrl: "https://maps.google.com/maps?q=Acıbadem+Taksim+Hastanesi+Beyoğlu+Istanbul&z=14&output=embed",
     images: ["/images/hospitals/acibadem-taksim/1.jpg"],
   },
 

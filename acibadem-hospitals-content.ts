@@ -59,6 +59,7 @@ export interface AcibademHospitalContent {
   operatingRooms?: number;
   intensiveCareBeds?: number;
   area: string; // e.g. "22,000 m²"
+  mapEmbedUrl: string;
 }
 
 export const acibademHospitals: AcibademHospitalContent[] = [
@@ -70,6 +71,8 @@ export const acibademHospitals: AcibademHospitalContent[] = [
     operatingRooms: 6,
     intensiveCareBeds: 28,
     area: "22,000 m²",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Cumhuriyet+Cad.+No:66+Seyhan+Adana&z=14&output=embed",
   },
   {
     slug: "acibadem-ankara-hospital",
@@ -78,6 +81,8 @@ export const acibademHospitals: AcibademHospitalContent[] = [
     beds: 103,
     operatingRooms: 4,
     area: "11,000 m²",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Turan+Güneş+Bulvarı+630.+Sok+No:6+Çankaya+Ankara&z=14&output=embed",
   },
   {
     slug: "acibadem-atasehir-hospital",
@@ -86,6 +91,8 @@ export const acibademHospitals: AcibademHospitalContent[] = [
     beds: 300,
     operatingRooms: 10,
     area: "65,000 m²",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Atatürk+Mah.+Turgut+Özal+Bulvarı+A+Blok+No:11+Ataşehir+Istanbul&z=14&output=embed",
   },
   {
     slug: "acibadem-bakirkoy-hospital",
@@ -95,6 +102,8 @@ export const acibademHospitals: AcibademHospitalContent[] = [
     operatingRooms: 7,
     intensiveCareBeds: 27,
     area: "18,000 m²",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Halit+Ziya+Uşaklıgil+Cad.+No:1+Bakırköy+Istanbul&z=14&output=embed",
   },
   {
     slug: "acibadem-bodrum-hospital",
@@ -104,6 +113,8 @@ export const acibademHospitals: AcibademHospitalContent[] = [
     operatingRooms: 4,
     intensiveCareBeds: 20,
     area: "26,000 m²",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Türkkuyusu+Mah.+Kıbrıs+Şehitleri+Cad.+Bodrum+Muğla&z=14&output=embed",
   },
   {
     slug: "acibadem-bursa-hospital",
@@ -113,6 +124,7 @@ export const acibademHospitals: AcibademHospitalContent[] = [
     operatingRooms: 7,
     intensiveCareBeds: 42,
     area: "30,000 m²",
+    mapEmbedUrl: "https://maps.google.com/maps?q=Acıbadem+Bursa+Hastanesi&z=14&output=embed",
   },
   {
     slug: "acibadem-eskisehir-hospital",
@@ -122,6 +134,8 @@ export const acibademHospitals: AcibademHospitalContent[] = [
     operatingRooms: 5,
     intensiveCareBeds: 34,
     area: "21,137 m²",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Hoşnudiye+Mah.+Acıbadem+Sok.+No:19+Tepebaşı+Eskişehir&z=14&output=embed",
   },
   {
     slug: "acibadem-fulya-hospital",
@@ -131,6 +145,8 @@ export const acibademHospitals: AcibademHospitalContent[] = [
     operatingRooms: 8,
     intensiveCareBeds: 16,
     area: "22,000 m²",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Dikilitaş+Mah.+Hakkı+Yeten+Cd.+No:23+Beşiktaş+Istanbul&z=14&output=embed",
   },
   {
     slug: "acibadem-international-hospital",
@@ -139,6 +155,7 @@ export const acibademHospitals: AcibademHospitalContent[] = [
     beds: 112,
     intensiveCareBeds: 26,
     area: "19,000 m²",
+    mapEmbedUrl: "https://maps.google.com/maps?q=41.061527,28.8354341&z=14&output=embed",
   },
   {
     slug: "acibadem-kadikoy-hospital",
@@ -147,6 +164,8 @@ export const acibademHospitals: AcibademHospitalContent[] = [
     beds: 138,
     intensiveCareBeds: 23,
     area: "17,600 m²",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Acıbadem+Mah.+Tekin+Sk.+No:8+Kadıköy+Istanbul&z=14&output=embed",
   },
   {
     slug: "acibadem-kayseri-hospital",
@@ -156,6 +175,8 @@ export const acibademHospitals: AcibademHospitalContent[] = [
     operatingRooms: 6,
     intensiveCareBeds: 28,
     area: "22,000 m²",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Seyitgazi+Mah.+Mustafa+Kemal+Paşa+Bulvarı+No:1+Melikgazi+Kayseri&z=14&output=embed",
   },
   {
     slug: "acibadem-kocaeli-hospital",
@@ -163,6 +184,8 @@ export const acibademHospitals: AcibademHospitalContent[] = [
       "Acıbadem Kocaeli Hospital serves patients in Kocaeli and the surrounding Marmara region, operating in a 6,500 m² facility with free patient parking and on-site banking services.",
     beds: 55,
     area: "6,500 m²",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Yeni+Mahalle+İnkılap+Cad.+Kocaeli&z=14&output=embed",
   },
   {
     slug: "acibadem-kozyatagi-hospital",
@@ -172,6 +195,8 @@ export const acibademHospitals: AcibademHospitalContent[] = [
     operatingRooms: 4,
     intensiveCareBeds: 13,
     area: "13,700 m²",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Ondokuz+Mayıs+Mah.+Begonya+Sok.+No:12+Kadıköy+Istanbul&z=14&output=embed",
   },
   {
     slug: "acibadem-maslak-hospital",
@@ -179,6 +204,8 @@ export const acibademHospitals: AcibademHospitalContent[] = [
       "Acıbadem Maslak Hospital began admitting patients in 2009 and, following a 2018 expansion, became the group's largest hospital at 106,000 m². Set beside forested land near the city center with metro access, the hospital holds LEED Gold certification and specializes in MAP/IVF and infertility treatment, alongside a broad range of surgical and diagnostic services.",
     beds: 364,
     area: "106,000 m²",
+    mapEmbedUrl:
+      "https://maps.google.com/maps?q=Büyükdere+Cad.+No:40+Maslak+Istanbul&z=14&output=embed",
   },
   {
     slug: "acibadem-taksim-hospital",
@@ -188,5 +215,6 @@ export const acibademHospitals: AcibademHospitalContent[] = [
     operatingRooms: 7,
     intensiveCareBeds: 17,
     area: "24,000 m²",
+    mapEmbedUrl: "https://maps.google.com/maps?q=Acıbadem+Taksim+Hastanesi+Beyoğlu+Istanbul&z=14&output=embed",
   },
 ];
