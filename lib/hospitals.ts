@@ -502,6 +502,8 @@ export const hospitals: Hospital[] = [
     images: [
       "/images/hospitals/acibadem-maslak/1.jpg",
       "/images/hospitals/acibadem-maslak/2.jpg",
+      "/images/hospitals/acibadem-maslak/3.jpg",
+      "/images/hospitals/acibadem-maslak/4.jpg",
     ],
   },
   {
