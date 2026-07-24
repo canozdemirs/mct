@@ -980,7 +980,12 @@ export const hospitals: Hospital[] = [
     ],
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Güzelbahçe+Sokak+No:20+Nişantaşı+Şişli+Istanbul&z=15&output=embed",
-    images: ["/images/hospitals/american/1.jpg"],
+    images: [
+      "/images/hospitals/american/1.jpg",
+      "/images/hospitals/american/2.jpg",
+      "/images/hospitals/american/3.jpg",
+      "/images/hospitals/american/4.jpg",
+    ],
   },
 
   // ─────────────────────────────── ESTETHICA (1) ───────────────────────────────
