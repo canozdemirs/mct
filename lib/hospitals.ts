@@ -478,6 +478,8 @@ export const hospitals: Hospital[] = [
     images: [
       "/images/hospitals/acibadem-kozyatagi/1.jpg",
       "/images/hospitals/acibadem-kozyatagi/2.jpg",
+      "/images/hospitals/acibadem-kozyatagi/3.jpg",
+      "/images/hospitals/acibadem-kozyatagi/4.jpg",
     ],
   },
   {
