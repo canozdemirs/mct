@@ -965,7 +965,12 @@ export const hospitals: Hospital[] = [
     ],
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Koç+Üniversitesi+Hastanesi+Topkapı+Zeytinburnu+Istanbul&z=15&output=embed",
-    images: ["/images/hospitals/koc-university/1.jpg"],
+    images: [
+      "/images/hospitals/koc-university/1.jpg",
+      "/images/hospitals/koc-university/2.jpg",
+      "/images/hospitals/koc-university/3.jpg",
+      "/images/hospitals/koc-university/4.jpg",
+    ],
   },
   {
     slug: "american-hospital",
