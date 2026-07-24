@@ -978,7 +978,12 @@ export const hospitals: Hospital[] = [
     treatmentUnits: ESTETHICA_TREATMENT_UNITS,
     mapEmbedUrl:
       "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d43608.90021857418!2d29.033902150871715!3d40.98503240000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cac63ca74b4dc5%3A0x3c0ea5b0da9d7027!2sestethica%20Ata%C5%9Fehir%20%7C%20Sa%C3%A7%20Ekimi%20ve%20Plastik%20Cerrahi%20Hastanesi!5e1!3m2!1str!2sbe!4v1763139578228!5m2!1str!2sbe",
-    images: ["/images/hospitals/estethica/1.jpg"],
+    images: [
+      "/images/hospitals/estethica/1.jpg",
+      "/images/hospitals/estethica/2.jpg",
+      "/images/hospitals/estethica/3.jpg",
+      "/images/hospitals/estethica/4.jpg",
+    ],
   },
 ];
 
