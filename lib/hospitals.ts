@@ -967,7 +967,7 @@ export const hospitals: Hospital[] = [
     group: "estethica",
     city: "Istanbul",
     district: "Ataşehir",
-    accreditations: ["JCI", "ISO", "TUV SUD"],
+    accreditations: ["ISO", "TUV SUD"],
     beds: null,
     operatingRooms: null,
     area: "",
