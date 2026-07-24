@@ -430,6 +430,8 @@ export const hospitals: Hospital[] = [
     images: [
       "/images/hospitals/acibadem-kayseri/1.jpg",
       "/images/hospitals/acibadem-kayseri/2.jpg",
+      "/images/hospitals/acibadem-kayseri/3.jpg",
+      "/images/hospitals/acibadem-kayseri/4.jpg",
     ],
   },
   {
