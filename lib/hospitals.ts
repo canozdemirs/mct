@@ -55,7 +55,7 @@ export const hospitalGroups = {
     name: "Estethica",
     logo: "/images/hospitals/groups/estethica.png",
     description:
-      "estethica is a Turkish aesthetic surgery and hair transplant hospital group, operating under the ethical-care motto 'Sağlıklı Güzellik' (Healthy Beauty) since 2008. Known as one of the world's leading aesthetic surgery hospitals, estethica specializes in plastic and reconstructive surgery, hair transplantation, cosmetic dermatology, dental aesthetics, and weight-loss and healthy-living programs, following Turkish Ministry of Health SKS-Hastane quality accreditation standards.",
+      "Estethica is a Turkish aesthetic surgery and hair transplant hospital group, operating under the ethical-care motto 'Sağlıklı Güzellik' (Healthy Beauty) since 2008. Known as one of the world's leading aesthetic surgery hospitals, Estethica specializes in plastic and reconstructive surgery, hair transplantation, cosmetic dermatology, dental aesthetics, and weight-loss and healthy-living programs, following Turkish Ministry of Health SKS-Hastane quality accreditation standards.",
   },
 } as const;
 
@@ -972,7 +972,7 @@ export const hospitals: Hospital[] = [
     operatingRooms: null,
     area: "",
     overview:
-      "estethica Ataşehir is the group's flagship and now only remaining hospital, located in the Küçükbakkalköy district on Istanbul's Anatolian side. Operating since 2008 under the 'Sağlıklı Güzellik' (Healthy Beauty) philosophy, the hospital was the first Turkish aesthetic-surgery hospital to be graded A+ by the Turkish government and has received over 100 awards. It follows Turkish Ministry of Health SKS-Hastane quality standards across patient care, medication management, infection control, operating rooms, and intensive care. The hospital offers a virtual 360° tour and hosts dedicated patient rooms designed around a 'world cities' concept, along with modern operating rooms serving its plastic surgery, hair transplant, dental, dermatology, and weight-loss patients.",
+      "Estethica Ataşehir is the group's flagship and now only remaining hospital, located in the Küçükbakkalköy district on Istanbul's Anatolian side. Operating since 2008 under the 'Sağlıklı Güzellik' (Healthy Beauty) philosophy, the hospital was the first Turkish aesthetic-surgery hospital to be graded A+ by the Turkish government and has received over 100 awards. It follows Turkish Ministry of Health SKS-Hastane quality standards across patient care, medication management, infection control, operating rooms, and intensive care. The hospital offers a virtual 360° tour and hosts dedicated patient rooms designed around a 'world cities' concept, along with modern operating rooms serving its plastic surgery, hair transplant, dental, dermatology, and weight-loss patients.",
     languages: ESTETHICA_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ESTETHICA_TREATMENT_UNITS,
