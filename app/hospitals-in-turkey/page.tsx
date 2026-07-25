@@ -6,9 +6,9 @@ import { HospitalGrid } from "@/components/marketing/hospital-grid";
 import { hospitals, hospitalGroups } from "@/lib/hospitals";
 
 export const metadata: Metadata = {
-  title: "Hospitals in Turkey | JCI-Accredited Partner Hospitals | Medical Center Turkey",
+  title: "Partner Hospitals in Turkey | Medical Center Turkey",
   description:
-    "Browse JCI-accredited partner hospitals in Turkey coordinated by Medical Center Turkey for international patients. Compare leading hospital groups across Istanbul, Ankara and Antalya — and start your treatment journey with full support.",
+    "Medical Center Turkey coordinates treatment at leading hospital groups across Istanbul, Ankara and Antalya. One point of contact from first consultation to your safe return home.",
   robots: {
     index: false,
     follow: false,
@@ -36,27 +36,10 @@ export default async function HospitalsInTurkeyPage({ searchParams }: PageProps)
     <>
       <Nav />
       <main>
-        {/* Hero */}
-        <section
-          className="py-10 md:py-14 text-white scroll-mt-16 lg:scroll-mt-20"
-          style={{ background: "linear-gradient(135deg, #1b5fa8 0%, #1ab3c8 100%)" }}
-        >
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p className="text-xs font-bold uppercase tracking-widest text-white/60 mb-4">
-              MCT Partner Network
-            </p>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-5">
-              Hospitals in Turkey
-            </h1>
-            <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
-              JCI-accredited partner hospitals where Medical Center Turkey coordinates
-              treatment for international patients.
-            </p>
-          </div>
-        </section>
+        <h1 className="sr-only">Hospitals in Turkey</h1>
 
         {/* Filter + Grid */}
-        <section className="py-16 bg-slate-50">
+        <section className="pt-12 pb-16 bg-slate-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <HospitalGrid hospitals={hospitals} initialGroup={initialGroup} />
           </div>
