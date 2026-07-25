@@ -1322,11 +1322,7 @@ handled on the same site within the same trip.
 Ataşehir suits patients arriving at Sabiha Gökçen Airport: the transfer is
 short and avoids crossing the Bosphorus. The district is a modern business
 centre with a dense concentration of hotels, practical for stays spanning
-several days of appointments and for companions during the procedure.
-
-Medical Center Turkey's office is in Ataşehir, a few minutes from the clinic.
-Your coordinator is nearby throughout your treatment — not managing your case
-from another part of the city.`,
+several days of appointments and for companions during the procedure.`,
     languages: ESTETHICA_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ESTETHICA_TREATMENT_UNITS,
