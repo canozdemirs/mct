@@ -1102,10 +1102,10 @@ export const hospitals: Hospital[] = [
       "https://maps.google.com/maps?q=Şht.+Emin+Çölen+Sokağı+No:4+Acıbadem+Kadıköy+Istanbul&z=15&output=embed",
     address: "Acıbadem, Şht. Emin Çölen Sokağı No:4, 34718 Kadıköy/İstanbul",
     images: [
-      "/images/hospitals/medipol-acibadem/1.png",
       "/images/hospitals/medipol-acibadem/2.jpg",
       "/images/hospitals/medipol-acibadem/3.jpg",
       "/images/hospitals/medipol-acibadem/4.jpg",
+      "/images/hospitals/medipol-acibadem/5.jpg",
     ],
   },
 
