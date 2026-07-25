@@ -19,6 +19,7 @@ export interface Hospital {
   beds: number | null;
   operatingRooms: number | null;
   intensiveCareBeds?: number;
+  displayOrder?: number;
   area: string;
   overview: string;
   languages: string[];
@@ -759,6 +760,7 @@ export const hospitals: Hospital[] = [
     slug: "medipol-ankara-university-hospital",
     name: "Medipol Ankara University Dental Hospital",
     group: "medipol",
+    displayOrder: 11,
     city: "Ankara",
     district: "Ankara",
     accreditations: [],
@@ -784,6 +786,7 @@ export const hospitals: Hospital[] = [
     slug: "medipol-bahcelievler-hospital",
     name: "Medipol Bahçelievler University Hospital",
     group: "medipol",
+    displayOrder: 2,
     city: "Istanbul",
     district: "Bahçelievler",
     accreditations: [],
@@ -809,6 +812,7 @@ export const hospitals: Hospital[] = [
     slug: "medipol-camlica-university-hospital",
     name: "Medipol Çamlıca University Hospital",
     group: "medipol",
+    displayOrder: 3,
     city: "Istanbul",
     district: "Çamlıca, Üsküdar",
     accreditations: [],
@@ -834,6 +838,7 @@ export const hospitals: Hospital[] = [
     slug: "medipol-esenler-university-hospital",
     name: "Medipol Esenler University Hospital",
     group: "medipol",
+    displayOrder: 9,
     city: "Istanbul",
     district: "Esenler",
     accreditations: [],
@@ -859,6 +864,7 @@ export const hospitals: Hospital[] = [
     slug: "medipol-istanbul-hospital",
     name: "Medipol Istanbul Hospital (Koşuyolu)",
     group: "medipol",
+    displayOrder: 7,
     city: "Istanbul",
     district: "Koşuyolu, Kadıköy",
     accreditations: [],
@@ -961,6 +967,7 @@ export const hospitals: Hospital[] = [
     slug: "medipol-mega-university-hospital",
     name: "Medipol Mega University Hospital",
     group: "medipol",
+    displayOrder: 1,
     city: "Istanbul",
     district: "Bağcılar",
     accreditations: ["JCI Academic Medical Center"],
@@ -987,6 +994,7 @@ export const hospitals: Hospital[] = [
     slug: "medipol-pendik-university-hospital",
     name: "Medipol Pendik University Hospital",
     group: "medipol",
+    displayOrder: 5,
     city: "Istanbul",
     district: "Pendik",
     accreditations: [],
@@ -1012,6 +1020,7 @@ export const hospitals: Hospital[] = [
     slug: "medipol-sefakoy-university-hospital",
     name: "Medipol Sefaköy University Hospital",
     group: "medipol",
+    displayOrder: 4,
     city: "Istanbul",
     district: "Küçükçekmece (Sefaköy)",
     accreditations: [],
@@ -1037,6 +1046,7 @@ export const hospitals: Hospital[] = [
     slug: "medipol-unkapani-university-hospital",
     name: "Medipol Unkapanı University Dental Hospital",
     group: "medipol",
+    displayOrder: 10,
     city: "Istanbul",
     district: "Unkapanı, Fatih",
     accreditations: [],
@@ -1062,8 +1072,9 @@ export const hospitals: Hospital[] = [
     slug: "medipol-vatan-university-hospital",
     name: "Medipol Vatan University Hospital",
     group: "medipol",
+    displayOrder: 8,
     city: "Istanbul",
-    district: "Fatih (Vatan Caddesi)",
+    district: "Fatih",
     accreditations: [],
     beds: null,
     operatingRooms: null,
@@ -1087,6 +1098,7 @@ export const hospitals: Hospital[] = [
     slug: "medipol-acibadem-regional-hospital",
     name: "Medipol Acıbadem Regional Hospital",
     group: "medipol",
+    displayOrder: 6,
     city: "Istanbul",
     district: "Acıbadem, Üsküdar",
     accreditations: [],

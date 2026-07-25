@@ -27,8 +27,16 @@ export function HospitalGrid({
 }) {
   const [active, setActive] = useState<GroupKey | "all">(initialGroup);
 
-  const filtered =
-    active === "all" ? hospitals : hospitals.filter((h) => h.group === active);
+  const filtered = (
+    active === "all" ? hospitals : hospitals.filter((h) => h.group === active)
+  )
+    .slice()
+    .sort((a, b) => {
+      const aOrder = a.displayOrder ?? Infinity;
+      const bOrder = b.displayOrder ?? Infinity;
+      if (aOrder !== bOrder) return aOrder - bOrder;
+      return a.name.localeCompare(b.name);
+    });
 
   return (
     <div>
@@ -71,7 +79,9 @@ export function HospitalGrid({
               <div className="flex items-center gap-1.5 text-sm text-slate-500 mb-3">
                 <MapPin size={14} className="text-[#1ab3c8] shrink-0" />
                 <span>
-                  {hospital.district ? `${hospital.district}, ` : ""}
+                  {hospital.district && hospital.district !== hospital.city
+                    ? `${hospital.district}, `
+                    : ""}
                   {hospital.city}
                 </span>
               </div>
