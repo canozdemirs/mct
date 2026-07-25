@@ -1292,7 +1292,7 @@ The hospital sits on the European side beside the TEM motorway, roughly
   // ─────────────────────────────── ESTETHICA (1) ───────────────────────────────
   {
     slug: "estethica",
-    name: "Estethica",
+    name: "Estethica Ataşehir",
     group: "estethica",
     city: "Istanbul",
     district: "Ataşehir",
@@ -1300,13 +1300,38 @@ The hospital sits on the European side beside the TEM motorway, roughly
     beds: null,
     operatingRooms: null,
     area: "",
-    overview:
-      "Estethica Ataşehir is the group's flagship and now only remaining hospital, located in the Küçükbakkalköy district on Istanbul's Anatolian side. Operating since 2008 under the 'Sağlıklı Güzellik' (Healthy Beauty) philosophy, the hospital was the first Turkish aesthetic-surgery hospital to be graded A+ by the Turkish government and has received over 100 awards. It follows Turkish Ministry of Health SKS-Hastane quality standards across patient care, medication management, infection control, operating rooms, and intensive care. The hospital offers a virtual 360° tour and hosts dedicated patient rooms designed around a 'world cities' concept, along with modern operating rooms serving its plastic surgery, hair transplant, dental, dermatology, and weight-loss patients.",
+    overview: `Estethica is an aesthetic and reconstructive surgery clinic in Ataşehir,
+Istanbul, operating since 2006. Unlike the general hospital groups in our
+network, Estethica is built entirely around elective procedures — its theatres,
+recovery areas and patient pathways are designed for planned treatment rather
+than emergency care.
+
+For international patients this changes the experience in practical ways.
+Scheduling is arranged around your travel dates, not around emergency
+admissions. Consultation, procedure and follow-up are usually completed within
+a single trip. And because international patients are a core part of the
+clinic's work rather than an add-on, the coordination around your treatment is
+built in rather than improvised.
+
+The clinic covers plastic, aesthetic and reconstructive surgery, hair
+transplantation, dermatology and medical aesthetics, dental treatment,
+ophthalmology and varicose vein treatment. Patients combining procedures — a
+hair transplant alongside dental work, for example — can often have both
+handled on the same site within the same trip.
+
+Ataşehir suits patients arriving at Sabiha Gökçen Airport: the transfer is
+short and avoids crossing the Bosphorus. The district is a modern business
+centre with a dense concentration of hotels, practical for stays spanning
+several days of appointments and for companions during the procedure.
+
+Medical Center Turkey's office is in Ataşehir, a few minutes from the clinic.
+Your coordinator is nearby throughout your treatment — not managing your case
+from another part of the city.`,
     languages: ESTETHICA_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ESTETHICA_TREATMENT_UNITS,
-    mapEmbedUrl:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d43608.90021857418!2d29.033902150871715!3d40.98503240000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cac63ca74b4dc5%3A0x3c0ea5b0da9d7027!2sestethica%20Ata%C5%9Fehir%20%7C%20Sa%C3%A7%20Ekimi%20ve%20Plastik%20Cerrahi%20Hastanesi!5e1!3m2!1str!2sbe!4v1763139578228!5m2!1str!2sbe",
+    mapEmbedUrl: "https://maps.google.com/maps?q=Işıklar+Cad+No+28+Ataşehir+Istanbul&z=16&output=embed",
+    address: "Küçükbakkalköy Mah., Işıklar Cad. No:28, 34758 Ataşehir, Istanbul",
     images: [
       "/images/hospitals/estethica/1.jpg",
       "/images/hospitals/estethica/2.jpg",
