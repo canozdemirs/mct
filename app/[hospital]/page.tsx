@@ -194,7 +194,7 @@ export default async function HospitalPage({ params }: PageProps) {
 
         {/* Two-column body */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <div className="lg:grid lg:grid-cols-[1fr_380px] lg:items-start gap-8">
+          <div className="lg:grid lg:grid-cols-[2fr_1fr] lg:items-start gap-8">
             {/* ── Main content ── */}
             <div>
               <HospitalGallery images={hospital.images} name={hospital.name} />
@@ -202,9 +202,11 @@ export default async function HospitalPage({ params }: PageProps) {
               {hospital.overview && (
                 <section className="bg-white rounded-2xl border border-slate-100 p-6 mb-6">
                   <h2 className="text-lg font-bold text-slate-800 mb-3">Overview</h2>
-                  <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line">
-                    {hospital.overview}
-                  </p>
+                  <div className="text-sm text-slate-600 leading-relaxed space-y-4">
+                    {hospital.overview.split(/\n\n+/).map((para, i) => (
+                      <p key={i}>{para.replace(/\n/g, " ")}</p>
+                    ))}
+                  </div>
                 </section>
               )}
 
