@@ -828,7 +828,7 @@ export const hospitals: Hospital[] = [
       "https://maps.google.com/maps?q=Alemdağ+Caddesi+No:100+Üsküdar+Istanbul&z=15&output=embed",
     address: "Alemdağ Caddesi, Bulgurlu Mahallesi No:100, Üsküdar, İstanbul",
     images: [
-      "/images/hospitals/medipol-camlica/1.png",
+      "/images/hospitals/medipol-camlica/1.webp",
       "/images/hospitals/medipol-camlica/2.jpg",
       "/images/hospitals/medipol-camlica/3.jpg",
       "/images/hospitals/medipol-camlica/4.jpg",
@@ -854,7 +854,7 @@ export const hospitals: Hospital[] = [
       "https://maps.google.com/maps?q=Bahçeler+Caddesi+No:5+Esenler+Istanbul&z=15&output=embed",
     address: "Birlik Mahallesi, Bahçeler Caddesi No:5, 34250 Esenler, İstanbul",
     images: [
-      "/images/hospitals/medipol-esenler/1.png",
+      "/images/hospitals/medipol-esenler/1.webp",
       "/images/hospitals/medipol-esenler/2.jpg",
       "/images/hospitals/medipol-esenler/3.jpg",
       "/images/hospitals/medipol-esenler/4.jpg",
@@ -957,7 +957,7 @@ export const hospitals: Hospital[] = [
       "https://maps.google.com/maps?q=E-5+Harem+Yolu+Üzeri+Koşuyolu+Kadıköy+Istanbul&z=15&output=embed",
     address: "E-5 Harem Yolu Üzeri, Koşuyolu/Kadıköy 34718 Istanbul",
     images: [
-      "/images/hospitals/medipol-istanbul/1.png",
+      "/images/hospitals/medipol-istanbul/1.webp",
       "/images/hospitals/medipol-istanbul/2.jpg",
       "/images/hospitals/medipol-istanbul/3.jpg",
       "/images/hospitals/medipol-istanbul/4.jpg",
@@ -1010,7 +1010,7 @@ export const hospitals: Hospital[] = [
       "https://maps.google.com/maps?q=Adnan+Menderes+Bulvarı+No:31+Pendik+Istanbul&z=15&output=embed",
     address: "Bahçelievler Mahallesi, Adnan Menderes Bulvarı No:31-33, Pendik, İstanbul",
     images: [
-      "/images/hospitals/medipol-pendik/1.png",
+      "/images/hospitals/medipol-pendik/1.webp",
       "/images/hospitals/medipol-pendik/2.jpg",
       "/images/hospitals/medipol-pendik/3.jpg",
       "/images/hospitals/medipol-pendik/4.jpg",
@@ -1036,7 +1036,7 @@ export const hospitals: Hospital[] = [
       "https://maps.google.com/maps?q=Tevfikbey+Mah+Maslak+Çeşme+Cad+Küçükçekmece+Istanbul&z=15&output=embed",
     address: "Tevfikbey Mah., Maslak Çeşme Cad., Küçükçekmece, İstanbul",
     images: [
-      "/images/hospitals/medipol-sefakoy/1.png",
+      "/images/hospitals/medipol-sefakoy/1.webp",
       "/images/hospitals/medipol-sefakoy/2.jpg",
       "/images/hospitals/medipol-sefakoy/3.jpg",
       "/images/hospitals/medipol-sefakoy/4.jpg",
