@@ -74,9 +74,11 @@ export function HospitalGrid({
               <h2 className="text-lg font-semibold text-slate-800 group-hover:text-[#1b5fa8] transition-colors mb-0.5 leading-snug">
                 {hospital.name}
               </h2>
-              <p className="text-sm text-slate-500 mb-3">
-                {hospitalGroups[hospital.group].name}
-              </p>
+              {hospitalGroups[hospital.group].name !== hospital.name && (
+                <p className="text-sm text-slate-500 mb-3">
+                  {hospitalGroups[hospital.group].name}
+                </p>
+              )}
               <div className="flex items-center gap-1.5 text-sm text-slate-500 mb-3">
                 <MapPin size={14} className="text-[#1ab3c8] shrink-0" />
                 <span>
