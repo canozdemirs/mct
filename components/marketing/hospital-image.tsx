@@ -10,9 +10,10 @@ interface Props {
   wrapperClassName: string;
   sizes?: string;
   priority?: boolean;
+  quality?: number;
 }
 
-export function HospitalImage({ src, alt, wrapperClassName, sizes, priority }: Props) {
+export function HospitalImage({ src, alt, wrapperClassName, sizes, priority, quality }: Props) {
   const [failed, setFailed] = useState(false);
 
   if (failed) {
@@ -45,6 +46,7 @@ export function HospitalImage({ src, alt, wrapperClassName, sizes, priority }: P
         fill
         sizes={sizes ?? "(max-width: 768px) 100vw, 50vw"}
         priority={priority}
+        quality={quality}
         className="object-cover"
         onError={() => setFailed(true)}
       />

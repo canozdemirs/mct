@@ -67,7 +67,8 @@ export function HospitalGrid({
               src={hospital.images[0]}
               alt={hospital.name}
               wrapperClassName="aspect-video relative rounded-t-2xl overflow-hidden"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              sizes="(max-width: 768px) 100vw, 380px"
+              quality={75}
             />
             <div className="p-5">
               <h2 className="text-lg font-semibold text-slate-800 group-hover:text-[#1b5fa8] transition-colors mb-0.5 leading-snug">

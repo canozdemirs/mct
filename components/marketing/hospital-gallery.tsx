@@ -18,8 +18,9 @@ export function HospitalGallery({ images, name }: Props) {
         src={images[active]}
         alt={`${name} — image ${active + 1}`}
         wrapperClassName="aspect-video relative rounded-2xl overflow-hidden"
-        sizes="(max-width: 1024px) 100vw, 65vw"
+        sizes="(max-width: 768px) 100vw, 1200px"
         priority={active === 0}
+        quality={80}
       />
       {images.length > 1 && (
         <div className="flex gap-2 mt-3">
@@ -38,7 +39,8 @@ export function HospitalGallery({ images, name }: Props) {
                 src={src}
                 alt={`${name} thumbnail ${i + 1}`}
                 wrapperClassName="absolute inset-0"
-                sizes="(max-width: 768px) 25vw, 12vw"
+                sizes="(max-width: 768px) 25vw, 200px"
+                quality={75}
               />
             </button>
           ))}
