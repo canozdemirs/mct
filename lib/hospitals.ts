@@ -793,8 +793,32 @@ export const hospitals: Hospital[] = [
     beds: null,
     operatingRooms: null,
     area: "",
-    overview:
-      "A university teaching hospital on Istanbul's European side, with fully equipped operating theatres, advanced intensive care units, laboratory, emergency department and treatment-equipped patient rooms, operating 24/7. Strong academic roster across surgical, internal medicine, dentistry and laboratory departments.",
+    overview: `Medipol Bahçelievler is a university teaching hospital on Istanbul's European
+side, and one of the group's busiest general campuses. It operates around the
+clock with fully equipped operating theatres, advanced intensive care units,
+an on-site laboratory, an emergency department, and patient rooms fitted for
+treatment rather than recovery alone.
+
+What distinguishes this campus is the depth of its academic roster. Because it
+functions as a teaching hospital of Istanbul Medipol University, a large share
+of its consultants hold professor or associate professor titles, spanning
+cardiology, oncology, orthopaedics, general surgery, urology, paediatrics and
+obstetrics. Patients are treated by the same senior clinicians who teach and
+publish in these fields.
+
+The hospital covers four broad areas — surgical medicine, internal medicine,
+dentistry and laboratory services — meaning most treatment pathways can be
+completed on one site, including dental work that would otherwise require a
+separate clinic. A dedicated sleep laboratory handles obstructive sleep apnoea
+diagnosis and treatment.
+
+For patients arriving from abroad, the location works in your favour. Bahçelievler
+sits on the E-5 corridor in the western half of the European side, close to the
+Istanbul Airport approach and well served by metro and metrobüs. Transfers from
+the airport are short, and the surrounding district has a wide range of hotels
+at every price point for companions or for recovery stays between appointments.
+
+Address: Çobançeşme Mahallesi, Fatih Caddesi No:1/8, Bahçelievler.`,
     languages: [],
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
@@ -872,8 +896,34 @@ export const hospitals: Hospital[] = [
     intensiveCareBeds: 20,
     operatingRooms: 6,
     area: "6,500 m²",
-    overview:
-      "Medipol Istanbul Hospital (Koşuyolu) opened in 1996 on Istanbul's Asian side, located alongside the E-5 motorway and Koşuyolu Bridge — accessible from all four road directions. The hospital operates approximately 6,500 m² of closed area across 33 clinics, with 20 intensive care beds and 6 operating rooms. A 24/7 emergency service is available, equipped with 11 observation beds and a central oxygen system.",
+    overview: `Medipol Istanbul Hospital — also known today as Medipol Koşuyolu Hospital — is
+where the group's Istanbul story began. Opened in 1996, it carried forward a
+healthcare practice dating back to 1987 and brought Medipol's care to a much
+wider audience in the city.
+
+It remains one of the leading private hospitals on Istanbul's Asian side.
+Roughly 6,500 m² of built space houses 33 clinics, 20 intensive care beds and
+6 operating theatres, alongside private patient rooms, a landscaped garden and
+extensive parking. The scale is deliberately human — smaller and calmer than
+the group's mega-campuses, which suits patients who prefer a quieter setting
+for procedures that don't require a large multi-specialty complex.
+
+Diagnostics are handled on site. Mammography, ultrasonography and endoscopy
+allow breast, digestive, urinary and genital system conditions to be
+investigated and diagnosed quickly, often within a single visit — useful when
+your time in Istanbul is limited.
+
+The emergency department runs 24 hours a day, 365 days a year, with two
+surgical intervention rooms, two emergency intervention rooms, dressing,
+plaster and injection facilities, and an 11-bed observation unit supported by
+central oxygen and nitrous oxide systems.
+
+Location is one of its strongest assets. The hospital sits in Koşuyolu,
+Kadıköy, directly beside the E-5 motorway and the Koşuyolu Bridge, with roads
+on all four sides. Access from either side of the Bosphorus is straightforward,
+and Sabiha Gökçen Airport is a short drive east.
+
+Address: E-5 Harem Yolu Üzeri, Koşuyolu/Kadıköy 34718 Istanbul.`,
     languages: [
       "Arabic",
       "English",
@@ -975,8 +1025,33 @@ export const hospitals: Hospital[] = [
     operatingRooms: 25,
     intensiveCareBeds: 215,
     area: "165,000 m²",
-    overview:
-      "Opened in 2012 as the Mega Hospitals Complex in Bağcılar, this is the flagship of the Medipol group, housing four hospitals on one campus — General, Dental, Cardiovascular Diseases, and Oncology — operating 24/7 with an academic medical staff. The first hospital in Turkey accredited to JCI Academic Medical Center Hospital standards (February 2014) and the private healthcare investment with the widest range of medical branches in Turkey. The campus features da Vinci robotic surgery, HIFU for prostate cancer and uterine fibroids, an on-site heliport rated for Turkey's heaviest helicopter, and a 15,000 m² landscaped garden.",
+    overview: `Medipol Mega is the flagship of the Medipol group and one of the largest
+private healthcare investments in Turkey. Opened in Bağcılar in 2012 as the
+Mega Hospitals Complex, it brings seven specialist hospitals onto a single
+campus — General, Dental, Cardiovascular, Obstetrics, IVF, Oncology and Eye —
+so a patient needing more than one department never has to travel between
+buildings.
+
+The scale is unusual even by international standards: 810 beds, 215 intensive
+care units, 25 operating theatres that can run simultaneously, and 358
+outpatient consulting rooms across 165,000 m² of built space. It carries the
+widest range of medical branches of any private hospital in the country.
+
+In February 2014 Medipol Mega became the first hospital in Turkey accredited
+under Joint Commission International's Academic Medical Center Hospital
+standards — a stricter framework than standard JCI accreditation, applied to
+hospitals that also teach medicine and conduct clinical research.
+
+For international patients the practical advantages are concrete. The campus
+has its own heliport, rated for the heaviest helicopter operating in Turkey and
+built for domestic and cross-border patient transfer. Robotic surgery using the
+da Vinci system is performed in urology, cardiac surgery, gynaecology and
+general surgery. HIFU is available for prostate cancer, bone metastases and
+uterine fibroids — a non-invasive option with short hospital stays and low
+complication risk.
+
+The hospital sits on the European side beside the TEM motorway, roughly
+40 minutes from Istanbul Airport.`,
     languages: [],
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
