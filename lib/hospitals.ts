@@ -767,8 +767,32 @@ export const hospitals: Hospital[] = [
     beds: null,
     operatingRooms: null,
     area: "",
-    overview:
-      "Medipol's dental hospital in Ankara, covering the full range of oral and dental health needs with advanced medical technology and an academic clinical team. The group's only non-Istanbul hospital.",
+    overview: `Medipol Ankara University Dental Hospital is the group's only campus outside
+Istanbul, and its only dental hospital in the capital. Like Unkapanı, it is a
+standalone dental hospital — the building, equipment and clinical team are
+dedicated entirely to oral and dental health rather than shared with other
+departments.
+
+It delivers the full range of oral and dental treatment with current dental
+technology and an academic clinical team drawn from Medipol University,
+following the same clinical protocols as the group's Istanbul campuses.
+
+Medical Center Turkey's dental packages are built around a seven-day stay.
+That window covers examination and imaging, the treatment plan, the procedures
+and the final fitting before you fly home. Crown, veneer and smile-design work
+is generally completed within it. Implant treatment is the exception: the
+implant post needs months to fuse with the bone before the permanent tooth is
+fitted, so it usually involves a second visit. Your coordinator will confirm
+what your specific case requires before you book flights.
+
+Ankara suits patients who are already travelling to the capital, or who prefer
+a calmer city than Istanbul for a week of treatment. Esenboğa Airport connects
+to most European capitals, and Ankara's compact centre means shorter transfers
+between hotel and hospital than Istanbul typically allows.
+
+For most international patients arriving specifically for dental treatment,
+Medical Center Turkey coordinates care in Istanbul. If Ankara suits your travel
+plans better, tell your coordinator at the consultation stage.`,
     languages: [],
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ["Oral and Dental Health"],
@@ -843,8 +867,27 @@ Address: Çobançeşme Mahallesi, Fatih Caddesi No:1/8, Bahçelievler.`,
     beds: null,
     operatingRooms: null,
     area: "",
-    overview:
-      "Part of Istanbul Medipol University's Health Practice and Research Centres network, located on the Asian side. Delivers care across 19 separate medical branches.",
+    overview: `Medipol Çamlıca is one of Istanbul Medipol University's Health Practice and
+Research Centres, on the Asian side of the city in Üsküdar. Across 13,000 m²
+of floor space it operates 100 inpatient beds, 6 advanced operating theatres,
+general and neonatal intensive care units, and a staff of more than 350.
+
+The hospital opened delivering 19 medical branches, with the range planned to
+expand considerably. Radiology and laboratory services are held to high quality
+standards on site, and the emergency department is comprehensive — meaning a
+complication or an unexpected finding does not require transfer elsewhere.
+
+As a university hospital, its consultants combine clinical practice with
+teaching and research. Patients are treated by the same senior physicians who
+train Turkish medical students, and clinical protocols are shared across the
+Medipol network.
+
+Its position suits patients who prefer to be treated away from the density of
+central Istanbul. Çamlıca sits on the higher ground of the Asian side, quieter
+and greener than the European campuses, while remaining within reach of both
+Bosphorus bridges. Sabiha Gökçen Airport lies to the east, and the surrounding
+Üsküdar and Kadıköy districts offer a wide range of accommodation for
+companions or for recovery stays between appointments.`,
     languages: [],
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
@@ -869,8 +912,29 @@ Address: Çobançeşme Mahallesi, Fatih Caddesi No:1/8, Bahçelievler.`,
     beds: null,
     operatingRooms: null,
     area: "",
-    overview:
-      "A university teaching hospital in the central Esenler district on the European side, combining modern architecture with advanced medical technology and an academic clinical team.",
+    overview: `Medipol Esenler is a university teaching hospital on Istanbul's European side,
+operating as one of Istanbul Medipol University's Health Practice and Research
+Centres. It delivers both outpatient and inpatient care, and is recognised as
+one of Istanbul's leading private hospitals in several specific specialties.
+
+The emergency department is comprehensively equipped, with surgical
+intervention, emergency intervention, dressing, plaster, injection and
+observation units on site. Trauma from accidents, burns, haemorrhage,
+respiratory difficulty, cardiac events and poisoning are all handled here, and
+where surgery is needed the hospital's own emergency surgical team performs it
+without transfer to another site.
+
+For international patients, Esenler's value is its position. The district sits
+at the centre of the European side, close to the Istanbul Airport corridor and
+directly served by the metro — Esenler and Menderes stations are both within
+reach. It is a shorter transfer from Istanbul Airport than most hospitals on
+the Asian side, and connections to the historic peninsula are direct.
+
+The hospital combines modern architecture with current medical technology and
+an academic clinical team, sharing consultants and protocols with the group's
+larger campuses.
+
+Address: Birlik Mahallesi, Bahçeler Caddesi No:5, 34250 Esenler, Istanbul.`,
     languages: [],
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
@@ -1076,8 +1140,30 @@ The hospital sits on the European side beside the TEM motorway, roughly
     beds: null,
     operatingRooms: null,
     area: "",
-    overview:
-      "Medipol's university hospital in Pendik on the far Asian side. Its position makes it the group's most convenient campus for patients arriving at Sabiha Gökçen International Airport.",
+    overview: `Medipol Pendik opened in 2019 as one of Istanbul Medipol University's Health
+Practice and Research Centres, on the far Asian side of the city. It operates
+97 inpatient beds and 26 intensive care units across 19 medical branches, with
+a staff of around 480 and services delivered in six languages.
+
+Its real advantage for international patients is arrival logistics. Pendik is
+the closest Medipol campus to Sabiha Gökçen International Airport — the MR60
+airport bus stops 140 metres from the entrance. Patients flying into Istanbul
+Airport on the European side can take the metrobüs to Mecidiyeköy and the 251
+bus to Pendik, and the Marmaray line stops 650 metres away, connecting the
+hospital directly to Yenikapı and the historic peninsula.
+
+For a patient arriving with luggage after a long flight, this matters more than
+it might appear. Most Istanbul hospitals require a taxi transfer of an hour or
+more from the arrival airport; here the walk from the bus stop is shorter than
+the walk through most terminals.
+
+The hospital runs 24 hours a day with intensive care units, advanced operating
+theatres, an on-site laboratory, emergency department and treatment-equipped
+patient rooms. A cafe, prayer room and hairdresser inside the building serve
+patients and the family members staying with them — a practical consideration
+for companions during a multi-day stay.
+
+Address: Bahçelievler Mah., Adnan Menderes Bulvarı No:31-33, Pendik, Istanbul.`,
     languages: [],
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
@@ -1151,8 +1237,33 @@ Address: Tevfikbey Mah., Maslak Çeşme Cd. No:30, 34295 Küçükçekmece.`,
     beds: null,
     operatingRooms: null,
     area: "",
-    overview:
-      "A standalone university dental hospital specialising in oral and dental health, located in Unkapanı on Istanbul's European side. A dedicated dental hospital — not a dental wing — making it directly relevant for MCT's dental treatment packages.",
+    overview: `Medipol Unkapanı is a dedicated university dental hospital in the Unkapanı
+area of Fatih, on Istanbul's historic peninsula. It is a standalone dental
+hospital rather than a dental department inside a general hospital — the
+distinction matters, because the entire building, equipment and clinical team
+are built around oral and dental health rather than sharing theatre time and
+imaging with other specialties.
+
+For patients travelling to Istanbul for dental treatment, this shapes the
+experience in practical terms. Appointments can be scheduled in longer blocks,
+several procedures can be combined in one day, and imaging or laboratory work
+happens on site rather than being sent elsewhere. A treatment plan that would
+take weeks of separate appointments at home is compressed into a single trip.
+
+Medical Center Turkey's dental packages are built around a seven-day stay in
+Istanbul. That window covers the initial examination and imaging, the treatment
+plan, the procedures themselves, and the final fitting and check before you fly
+home. Crown, veneer and smile-design work is generally completed within it.
+Implants are different: the implant post needs months to fuse with the bone
+before the permanent tooth is fitted, so implant treatment usually involves a
+second visit. Your coordinator will set out exactly what your case requires
+before you book flights, so there are no surprises in the final days of the
+trip.
+
+Being a university hospital, treatment is delivered by academic dental staff
+of Istanbul Medipol University. The Fatih location puts the hospital within
+reach of the historic peninsula's hotels — practical for a week-long stay, and
+for companions who want something to do between appointments.`,
     languages: [],
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ["Oral and Dental Health"],
@@ -1217,13 +1328,38 @@ at every price level.`,
     group: "medipol",
     displayOrder: 6,
     city: "Istanbul",
-    district: "Acıbadem, Üsküdar",
+    district: "Acıbadem, Kadıköy",
     accreditations: [],
     beds: null,
     operatingRooms: null,
     area: "",
-    overview:
-      "Medipol's regional hospital in the Acıbadem district on Istanbul's Asian side, sharing consultants with the Bahçelievler and Mega campuses.",
+    overview: `Medipol Acıbadem Regional Hospital is the newest addition to the Medipol group,
+opened on the Asian side of Istanbul in the Acıbadem district of Kadıköy. It is
+a Medipol hospital — not connected to the Acıbadem Healthcare Group, which
+shares the district's name.
+
+Despite being the most recent campus, it is one of the group's larger ones:
+218 inpatient beds, 54 intensive care units and 118 outpatient consulting
+rooms. That combination — high consulting-room count alongside substantial
+inpatient capacity — means diagnostic appointments and surgery can usually be
+scheduled within the same short window rather than spread across separate
+visits.
+
+Being new has practical advantages for an international patient. Equipment is
+current rather than inherited, patient rooms are built to contemporary comfort
+standards, and the building was designed around modern clinical workflow rather
+than retrofitted into an older structure.
+
+The hospital operates 24 hours a day with intensive care units, advanced
+operating theatres, laboratory, emergency department and treatment-equipped
+rooms, staffed by academic consultants drawn from the wider Medipol university
+network. A cafe and prayer room inside the building serve patients and
+accompanying family.
+
+Kadıköy is well connected to both sides of the city and sits close to the E-5
+corridor, making transfers from either airport straightforward.
+
+Address: Acıbadem, Şht. Emin Çölen Sokağı No:4, 34718 Kadıköy, Istanbul.`,
     languages: [],
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
