@@ -977,9 +977,9 @@ export const hospitals: Hospital[] = [
       "https://maps.google.com/maps?q=TEM+Avrupa+Otoyolu+Göztepe+Çıkışı+No:1+Bağcılar+Istanbul&z=14&output=embed",
     address: "TEM Avrupa Otoyolu Göztepe Çıkışı No: 1, Bağcılar, 34214 İstanbul",
     images: [
-      "/images/hospitals/medipol-mega/1.jpg",
-      "/images/hospitals/medipol-mega/2.jpg",
       "/images/hospitals/medipol-mega/3.jpg",
+      "/images/hospitals/medipol-mega/2.jpg",
+      "/images/hospitals/medipol-mega/1.jpg",
       "/images/hospitals/medipol-mega/4.jpg",
     ],
   },
