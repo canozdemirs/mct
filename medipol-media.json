@@ -1,0 +1,313 @@
+{
+  "medipol-mega-university-hospital": {
+    "sourceUrl": "https://medipol.com.tr/hastanelerimiz/medipol-mega",
+    "hero": "https://media.medipol.com.tr/assets/s3fs-public/styles/metatag_large_style/public/2025-02/Websitesi_Hastane_Gorsellerii_2023-01-ea513ebb-cd90-4c8e-81ee-f3fbd15c07b3.jpg?VersionId=8fcaa4e0-cf85-41e0-b83c-afa89487aae5&itok=Z6r3D36L",
+    "address": "TEM Avrupa Otoyolu Göztepe Çıkışı No: 1 Bağcılar 34214 İstanbul",
+    "phone": "4447044",
+    "fax": "02124607070",
+    "remoteGallery": [
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/Websitesi_Hastane_Gorsellerii_2023-01-ea513ebb-cd90-4c8e-81ee-f3fbd15c07b3.jpg",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/M-0470___-ab49616d-07fb-4ad5-a7a9-a8d2495ed245.jpg?VersionId=99207dfa-fe01-4ff8-98df-ec36b5615a7b",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bagcilar-Medipol-Mega-Universite-Hastanesi-01-79bd1a6d-6c6d-4060-aeef-3595ffb3c28b.jpg?VersionId=13a64ae3-6b7a-466d-8320-486244234959",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bagcilar-Medipol-Mega-Universite-Hastanesi-02-aa64e541-2e19-4cf7-87ea-1d7086241002.jpg?VersionId=ffd8f590-db44-48c9-920a-d72f202b0d9d",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bagcilar-Medipol-Mega-Universite-Hastanesi-03-d561399e-0ef4-4851-aca5-62823be362fd.jpg?VersionId=357286a0-105d-4b5f-9236-8a656b331560",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bagcilar-Medipol-Mega-Universite-Hastanesi-04-b189a09e-7334-4111-a589-0975ce1c3783.jpg?VersionId=78139c09-06c4-4691-a87b-5913c645c3df",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bagcilar-Medipol-Mega-Universite-Hastanesi-06-7e334dd8-7531-4015-9c06-419d936e944c.jpg?VersionId=a055a857-0eb7-402b-b536-38a275f9ba7a",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bagcilar-Medipol-Mega-Universite-Hastanesi-07-22fde4c3-464d-4236-9b9f-ab6bf842a150.jpg?VersionId=2f843938-d4b9-488e-b5cb-5f54b8a90c9b",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bagcilar-Medipol-Mega-Universite-Hastanesi-08-758e3f4f-2df4-425f-8800-9a05688fd1e5.jpg?VersionId=65d88ba4-02ec-4aac-a5bf-5ef05fab3260",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bagcilar-Medipol-Mega-Universite-Hastanesi-09-9e05ae98-d54c-4156-8a1d-076bb4f20198.jpg?VersionId=4659b376-6a64-4a7e-89d1-cba7fe1c1fa5",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bagcilar-Medipol-Mega-Universite-Hastanesi-10-5eb71b33-e027-4eae-a820-eff1b865a144.jpg?VersionId=d55b4041-9ee9-4063-a15d-5798fd8fce61"
+    ],
+    "images": [
+      "/images/hospitals/medipol-mega/1.jpg",
+      "/images/hospitals/medipol-mega/2.jpg",
+      "/images/hospitals/medipol-mega/3.jpg",
+      "/images/hospitals/medipol-mega/4.jpg",
+      "/images/hospitals/medipol-mega/5.jpg",
+      "/images/hospitals/medipol-mega/6.jpg",
+      "/images/hospitals/medipol-mega/7.jpg",
+      "/images/hospitals/medipol-mega/8.jpg",
+      "/images/hospitals/medipol-mega/9.jpg",
+      "/images/hospitals/medipol-mega/10.jpg",
+      "/images/hospitals/medipol-mega/11.jpg"
+    ]
+  },
+  "medipol-istanbul-hospital": {
+    "sourceUrl": "https://medipol.com.tr/hastanelerimiz/medipol-kosuyolu",
+    "hero": "https://media.medipol.com.tr/assets/s3fs-public/styles/metatag_large_style/public/2026-05/kosuyolu.png?itok=675Ww8xM",
+    "address": "E-5 Harem Yolu Üzeri, Koşuyolu/Kadıköy 34718 Istanbul",
+    "phone": "02165446666",
+    "fax": "02163394444",
+    "remoteGallery": [
+      "https://media.medipol.com.tr/assets/s3fs-public/2026-05/kosuyolu.png",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Medipol_Hastaneleri_fotograflar_2023_kosuyolu_2-841a38d1-cef7-4b31-bf2a-c423315e06b3.jpg?VersionId=c19c8420-4651-4499-b282-201c69e5fc31",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Medipol_Hastaneleri_fotograflar_2023_kosuyolu_3-45b7714b-0a65-443f-9a7a-7b1d73665a98.jpg?VersionId=1f5e4347-1154-4a66-b8d0-bd70c11d90e2",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Medipol_Hastaneleri_fotograflar_2023_kosuyolu_4-60600d4e-98b2-4a51-bb4b-1c892728688e.jpg?VersionId=64e8007b-0691-485d-8efe-aae08d131f18",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Medipol_Hastaneleri_fotograflar_2023_kosuyolu-d234260a-27a3-4316-a1eb-fe51f4f92ac0.jpg?VersionId=a17ad2c5-357a-43a0-a45a-15ec186ea0b3"
+    ],
+    "images": [
+      "/images/hospitals/medipol-istanbul/1.png",
+      "/images/hospitals/medipol-istanbul/2.jpg",
+      "/images/hospitals/medipol-istanbul/3.jpg",
+      "/images/hospitals/medipol-istanbul/4.jpg",
+      "/images/hospitals/medipol-istanbul/5.jpg"
+    ]
+  },
+  "medipol-bahcelievler-hospital": {
+    "sourceUrl": "https://medipol.com.tr/hastanelerimiz/bahcelievler-medipol-hastanesi",
+    "hero": "https://media.medipol.com.tr/assets/s3fs-public/styles/metatag_large_style/public/2025-02/Websitesi_Hastane_Gorsellerii_2023-02-a2ecc1b2-c956-4af2-923a-3f7cc80eddcf.jpg?VersionId=1a24fd5d-d61e-4251-ab12-1f51cc0612f1&itok=a_IdnrkV",
+    "address": "Çobançesme Mahallesi, Fatih Caddesi, No:1/8, Bahçelievler, 34196 İstanbul",
+    "phone": "4447044",
+    "fax": "02124523336",
+    "remoteGallery": [
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/Websitesi_Hastane_Gorsellerii_2023-02-a2ecc1b2-c956-4af2-923a-3f7cc80eddcf.jpg",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bahcelievler-Medipol-Hastanesi-01-6b86ddfb-7dea-4a5c-9672-c79f179cc627.jpg?VersionId=3fdc43f3-3ddd-40ee-b816-b13546508fdf",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bahcelievler-Medipol-Hastanesi-02-732d9fd3-0a3c-4abe-b67e-35b8185f9d05.jpg?VersionId=a243b6d6-0d6c-4628-a33f-923850387294",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bahcelievler-Medipol-Hastanesi-03-f7437ac7-fcc4-41cd-b5c1-de9391e3222c.jpg?VersionId=a7112f01-a901-4e55-8550-d003842d3d70",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bahcelievler-Medipol-Hastanesi-04-a9b9c11c-ad1c-499e-a861-8f3e551447dc.jpg?VersionId=69a7318e-7174-4ec3-8e36-567fa9a3fc1e",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bahcelievler-Medipol-Hastanesi-05-9e6d60d1-9a50-41c7-90a2-dde43b1bb1c8.jpg?VersionId=5053de2e-9b9c-4414-9e4d-f76a109c1901",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bahcelievler-Medipol-Hastanesi-06-b59b0872-9c7f-47d7-9fc3-4b4016c9f9a2.jpg?VersionId=2b4ce75a-b25e-4e23-b7f5-84c0fce63de9",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bahcelievler-Medipol-Hastanesi-07-6f713823-5b8e-4d5d-919d-c7ccb2c3a80a.jpg?VersionId=2721c0b2-8f5b-4228-99b2-318c46380a58",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bahcelievler-Medipol-Hastanesi-08-1703abe3-c1ca-4811-a413-173309db44c3.jpg?VersionId=ae565328-0296-4497-bb80-46379b1972b3",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bahcelievler-Medipol-Hastanesi-09-423bded1-8721-4c03-8e95-8838f852b1db.jpg?VersionId=ae940e63-a438-48ea-b78e-d6a23e59b21c",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Bahcelievler-Medipol-Hastanesi-10-7a9424db-a9c1-4720-bfdf-934c0e9dda20.jpg?VersionId=1b3c2aa9-3d14-4717-9398-c7fdef102c05"
+    ],
+    "images": [
+      "/images/hospitals/medipol-bahcelievler/1.jpg",
+      "/images/hospitals/medipol-bahcelievler/2.jpg",
+      "/images/hospitals/medipol-bahcelievler/3.jpg",
+      "/images/hospitals/medipol-bahcelievler/4.jpg",
+      "/images/hospitals/medipol-bahcelievler/5.jpg",
+      "/images/hospitals/medipol-bahcelievler/6.jpg",
+      "/images/hospitals/medipol-bahcelievler/7.jpg",
+      "/images/hospitals/medipol-bahcelievler/8.jpg",
+      "/images/hospitals/medipol-bahcelievler/9.jpg",
+      "/images/hospitals/medipol-bahcelievler/10.jpg",
+      "/images/hospitals/medipol-bahcelievler/11.jpg"
+    ]
+  },
+  "medipol-acibadem-regional-hospital": {
+    "sourceUrl": "https://medipol.com.tr/hastanelerimiz/medipol-acibadem-bolge-hastanesi",
+    "hero": "https://media.medipol.com.tr/assets/s3fs-public/styles/metatag_large_style/public/2026-05/acibadem.png?itok=HhI76DJr",
+    "address": "Acıbadem, Şht. Emin Çölen Sokağı No:4, 34718 Kadıköy/İstanbul",
+    "phone": "02165441111",
+    "fax": "02163394444",
+    "remoteGallery": [
+      "https://media.medipol.com.tr/assets/s3fs-public/2026-05/acibadem.png",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Websitesi_Hastane_Gorselleri_2024_5-4614ce48-53ef-400f-9484-c63eed04de6f.jpg?VersionId=3692cf40-99f8-4451-ba1f-ecef943a46b5",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Acibadem_2-4f2af316-1081-4773-8763-56f9144bf316.jpg?VersionId=484b8a8d-dae8-43eb-aeee-2714709a05c4",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Acibadem_3-79c6907d-a1d5-4220-b8d3-e9ae4a59d488.jpg?VersionId=9d48924f-73ca-477f-afe0-8ac07caa74ca",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/AcibademHastaneGorseli-408ff0c0-eef5-4ff9-82ac-77f03d9a8340.jpg?VersionId=14c88d95-e24c-4630-8410-fb1eec818775"
+    ],
+    "images": [
+      "/images/hospitals/medipol-acibadem/1.png",
+      "/images/hospitals/medipol-acibadem/2.jpg",
+      "/images/hospitals/medipol-acibadem/3.jpg",
+      "/images/hospitals/medipol-acibadem/4.jpg",
+      "/images/hospitals/medipol-acibadem/5.jpg"
+    ]
+  },
+  "medipol-esenler-university-hospital": {
+    "sourceUrl": "https://medipol.com.tr/hastanelerimiz/medipol-esenler",
+    "hero": "https://media.medipol.com.tr/assets/s3fs-public/styles/metatag_large_style/public/2026-05/Medipol-Esenler--1-.png?itok=3zJA2bRT",
+    "address": "İstanbul Medipol Üniversitesi Sağlık Uygulama ve Araştırma Merkezi Esenler Hastanesi Birlik Mahallesi Bahçeler Caddesi No:5, 34250 Esenler / İstanbul",
+    "phone": "02124401000",
+    "fax": "02124401000",
+    "remoteGallery": [
+      "https://media.medipol.com.tr/assets/s3fs-public/2026-05/Medipol-Esenler--1-.png",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Esenler-Medipol-Universitesi-Hastanesi-e76d72e2-9d40-478b-9efb-95f965f9437a.jpg?VersionId=19ca765a-2dca-48a0-a7e9-3a7339444bb9",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Esenler-Medipol-Universitesi-Hastanesi-02-9285c0c3-3cb0-4100-ab5f-e13ec39b9951.jpg?VersionId=fc6ebf87-512a-4dc8-8c4b-0d26d6429d51",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Esenler-Medipol-Universitesi-Hastanesi-03-8dbb18c4-9424-430f-9b0e-cbeb143cd2fc.jpg?VersionId=39e92afd-77db-4f35-a1a8-cc121dc8ebeb",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Esenler-Medipol-Universitesi-Hastanesi-04-303996c1-bc40-4bdd-b2a3-493b0c005e3d.jpg?VersionId=a299b750-ff37-4117-bf43-90868a659368",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Esenler-Medipol-Universitesi-Hastanesi-05-273a9138-8813-4cda-8c75-dbb92fd5e25b.jpg?VersionId=2cbfaf6c-b8ef-46d0-a3e1-a30ef3da5090",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Esenler-Medipol-Universitesi-Hastanesi-06-5f1fd3b5-67dd-47bb-bdd8-1c7f54eb0125.jpg?VersionId=ba53b6fe-70b0-4e4b-826b-b46a3b1a88d0"
+    ],
+    "images": [
+      "/images/hospitals/medipol-esenler/1.png",
+      "/images/hospitals/medipol-esenler/2.jpg",
+      "/images/hospitals/medipol-esenler/3.jpg",
+      "/images/hospitals/medipol-esenler/4.jpg",
+      "/images/hospitals/medipol-esenler/5.jpg",
+      "/images/hospitals/medipol-esenler/6.jpg",
+      "/images/hospitals/medipol-esenler/7.jpg"
+    ]
+  },
+  "medipol-camlica-university-hospital": {
+    "sourceUrl": "https://medipol.com.tr/hastanelerimiz/medipol-camlica",
+    "hero": "https://media.medipol.com.tr/assets/s3fs-public/styles/metatag_large_style/public/2026-05/camlica.png?itok=KRQhl2lW",
+    "address": "Alemdağ Caddesi Bulgurlu Mahallesi No:100 Üsküdar/İstanbul",
+    "phone": "02166813030",
+    "fax": "02169122020",
+    "remoteGallery": [
+      "https://media.medipol.com.tr/assets/s3fs-public/2026-05/camlica.png",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Medipol_Hastaneleri_fotograflar_2023_camlica_1-735a3ab1-fc50-4ad7-957b-20103ca48dd5.jpg?VersionId=3a75f1f1-2313-4c64-848e-5cc8ce3bb36f",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Medipol_Hastaneleri_fotograflar_2023_camlica_2-785ff37d-d1b8-4baa-a2fc-29c36b81b1d3.jpg?VersionId=e62fbee4-3d73-4e39-83ed-40c5b8644806",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Medipol_Hastaneleri_fotograflar_2023_camlica_4-13f9cacc-7d95-4eee-ae4f-b984d6146087.jpg?VersionId=55e10da1-81d8-4730-a36b-bff756c9b828",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Medipol_Hastaneleri_fotograflar_2023_camlica_5-91ba4741-5841-4ee1-8e65-0c8ab8599ae0.jpg?VersionId=1b695857-e42b-4b45-8ff5-855e5f25af46",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Medipol_Hastaneleri_fotograflar_2023_camlica_6-2bd12179-2997-47f3-8367-ca41433ed781.jpg?VersionId=32b7144d-c2f6-43a9-8fc2-66c96c415843",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Medipol_Hastaneleri_fotograflar_2023_camlica_7-ce89e239-c20f-449d-a300-1ded7780db66.jpg?VersionId=0037ab5b-e163-4e8a-b98a-273d49823745"
+    ],
+    "images": [
+      "/images/hospitals/medipol-camlica/1.png",
+      "/images/hospitals/medipol-camlica/2.jpg",
+      "/images/hospitals/medipol-camlica/3.jpg",
+      "/images/hospitals/medipol-camlica/4.jpg",
+      "/images/hospitals/medipol-camlica/5.jpg",
+      "/images/hospitals/medipol-camlica/6.jpg",
+      "/images/hospitals/medipol-camlica/7.jpg"
+    ]
+  },
+  "medipol-pendik-university-hospital": {
+    "sourceUrl": "https://medipol.com.tr/hastanelerimiz/medipol-pendik",
+    "hero": "https://media.medipol.com.tr/assets/s3fs-public/styles/metatag_large_style/public/2026-05/Medipol-Pendik-Drone.png?itok=nQVN3kWA",
+    "address": "Bahçelievler Mahallesi Adnan Menderes Bulvarı no:31-33 Pendik İstanbul",
+    "phone": "02166828000",
+    "fax": "02169122223",
+    "remoteGallery": [
+      "https://media.medipol.com.tr/assets/s3fs-public/2026-05/Medipol-Pendik-Drone.png",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/Ekran-Resmi-2023-10-11-10.44.48-5507a7a7-8e19-4855-9758-07ca5dcfd018.jpg?VersionId=c8e4d758-bc62-43d3-b209-7d068501d922",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/Ekran-Resmi-2023-10-11-10.45.05-3e0b0bba-1574-45b4-a843-107e10979f0e.jpg?VersionId=17b5bca2-76f8-421a-8da7-2a6606592291",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/Ekran-Resmi-2023-10-11-10.45.35-85c53866-d864-4149-99db-a2a48f5d9a50.jpg?VersionId=7cb7ffd4-bec0-46c7-8ebf-7081d0240b54",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/Ekran-Resmi-2023-10-11-10.45.49-96cc8a73-e694-4613-83d8-a4fe2e006bb0.jpg?VersionId=8ebb5e55-4a72-482b-943b-485ad0ecb7c1"
+    ],
+    "images": [
+      "/images/hospitals/medipol-pendik/1.png",
+      "/images/hospitals/medipol-pendik/2.jpg",
+      "/images/hospitals/medipol-pendik/3.jpg",
+      "/images/hospitals/medipol-pendik/4.jpg",
+      "/images/hospitals/medipol-pendik/5.jpg"
+    ]
+  },
+  "medipol-vatan-university-hospital": {
+    "sourceUrl": "https://medipol.com.tr/hastanelerimiz/medipol-vatan",
+    "hero": "https://media.medipol.com.tr/assets/s3fs-public/styles/metatag_large_style/public/2025-02/vatan-klinikleri-4b9a566d-c87d-4bfd-afc0-00098f7ee5ef.jpg?VersionId=1c6b6e42-d59b-4540-98d1-eae79ce4ac05&itok=aCSFI2Rj",
+    "address": "Vatan Cad. Halıcılar Köşkü Sk. No:11 Aksaray, Fatih-İstanbul",
+    "phone": "02126311522",
+    "fax": "02125212783",
+    "remoteGallery": [
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/vatan-klinikleri-4b9a566d-c87d-4bfd-afc0-00098f7ee5ef.jpg",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/DJI_0059-a395b319-9477-4df0-a94a-48983ba094c8.jpg?VersionId=8b71cbf4-86e0-497b-8c4d-3b2132d496ac",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/DJI_0061-b680daed-b1d0-4bb0-b3ae-055b7068a344.jpg?VersionId=68f37008-4bde-4ac8-a424-3588fe2cfd8b",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/DSC03881-9993a8b9-a1b8-428b-abcd-7ed99c17649b.jpg?VersionId=b98eb4ca-1a74-4ad8-a492-5598d4227fbe",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/DSC03914-29bd9b39-06ab-474c-97d2-88308f222e06.jpg?VersionId=729c68a5-7d8e-403b-92dd-fc3bed106f5f"
+    ],
+    "images": [
+      "/images/hospitals/medipol-vatan/1.jpg",
+      "/images/hospitals/medipol-vatan/2.jpg",
+      "/images/hospitals/medipol-vatan/3.jpg",
+      "/images/hospitals/medipol-vatan/4.jpg",
+      "/images/hospitals/medipol-vatan/5.jpg"
+    ]
+  },
+  "medipol-sefakoy-university-hospital": {
+    "sourceUrl": "https://medipol.com.tr/hastanelerimiz/medipol-sefakoy",
+    "hero": "https://media.medipol.com.tr/assets/s3fs-public/styles/metatag_large_style/public/2026-05/Medipol-Sefakoy-2.png?itok=93aMHRT5",
+    "address": "Tevfikbey Mah. Maslak Çeşme Cad. Küçükçekmece / İstanbul",
+    "phone": "02129122525",
+    "fax": "02129122525",
+    "remoteGallery": [
+      "https://media.medipol.com.tr/assets/s3fs-public/2026-05/Medipol-Sefakoy-2.png",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Medipol_Hastaneleri_fotograflar_2023_sefakoy_1-203e82ed-6f8f-4634-8aff-e0c0ac5c672b.jpg?VersionId=b75dd591-5de6-4bbe-88dc-e3c03617777e",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Medipol_Hastaneleri_fotograflar_2023_sefakoy_2-c86d0afa-7beb-4381-ae85-0dc4358afd30.jpg?VersionId=80ef038a-51d3-40eb-88bb-22c9dde09658",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Medipol_Hastaneleri_fotograflar_2023_sefakoy_3-9d3fe2ce-66a2-4725-8a09-6b140801fa49.jpg?VersionId=05b84b61-a5ef-41b2-88f6-d533de0b9a0e"
+    ],
+    "images": [
+      "/images/hospitals/medipol-sefakoy/1.png",
+      "/images/hospitals/medipol-sefakoy/2.jpg",
+      "/images/hospitals/medipol-sefakoy/3.jpg",
+      "/images/hospitals/medipol-sefakoy/4.jpg"
+    ]
+  },
+  "medipol-unkapani-university-hospital": {
+    "sourceUrl": "https://medipol.com.tr/hastanelerimiz/medipol-unkapani",
+    "hero": "https://media.medipol.com.tr/assets/s3fs-public/styles/metatag_large_style/public/2025-02/Unkapani-Medipol-Universitesi%20Dis-Hastanesi-0ae7aa8a-2a7c-4a6b-97b9-827c28613f55.jpg?VersionId=4e80537d-b89c-4d91-b463-3b80c1f9e107&itok=TlW236QH",
+    "address": "Atatürk Bulvarı No:27 Unkapanı Fatih/İstanbul",
+    "phone": "4446344",
+    "fax": "4446344",
+    "remoteGallery": [
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/Unkapani-Medipol-Universitesi%20Dis-Hastanesi-0ae7aa8a-2a7c-4a6b-97b9-827c28613f55.jpg",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Medipol-Halic-dd81e651-60d8-4f29-a153-9f2ae790a054.jpg?VersionId=439139c3-142f-40b1-892f-e12d538f4cbb",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Screenshot-2023-10-06-at-16.49.31-ee604fd9-5a24-43fc-9636-20eed7529c03.jpg?VersionId=078f63d7-2a85-4dc9-a1ef-d50842b08672",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/20160531_093401-41b274dc-9ab6-4172-8ab8-fb2c5047a4cd.jpg?VersionId=c9dd6dd3-b454-433e-8790-a1649c29fb6f",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/Medipol-Halic-dd81e651-60d8-4f29-a153-9f2ae790a054_0.jpg?VersionId=a7a4feaf-e5f0-4e84-8509-cd114b987970"
+    ],
+    "images": [
+      "/images/hospitals/medipol-unkapani/1.jpg",
+      "/images/hospitals/medipol-unkapani/2.jpg",
+      "/images/hospitals/medipol-unkapani/3.jpg",
+      "/images/hospitals/medipol-unkapani/4.jpg",
+      "/images/hospitals/medipol-unkapani/5.jpg"
+    ]
+  },
+  "medipol-ankara-university-hospital": {
+    "sourceUrl": "https://medipol.com.tr/hastanelerimiz/medipol-universitesi-ankara-dis-hastanesi",
+    "hero": "https://media.medipol.com.tr/assets/s3fs-public/styles/metatag_large_style/public/2025-02/Medipol_Ankara_Dis_Hastanesi_Acilis_isleri_Header_2022_R1-1-copy-ae3d2151-d067-4777-8bc2-db94962f8f26.jpg?VersionId=617bfd76-3d91-4b37-bf36-a4df1e23c55d&itok=YAgmBB4n",
+    "address": "Eti, Celal Bayar Blv. No:88/1, 06570 Çankaya/Ankara",
+    "phone": "4442010",
+    "fax": "03129201006",
+    "remoteGallery": [
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/Medipol_Ankara_Dis_Hastanesi_Acilis_isleri_Header_2022_R1-1-copy-ae3d2151-d067-4777-8bc2-db94962f8f26.jpg",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/Ekran-Resmi-2023-10-11-10.44.48-5507a7a7-8e19-4855-9758-07ca5dcfd018_0.jpg?VersionId=c6f57066-d0ae-4308-bab0-a4dbf8e3b78a",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/2-307c0b30-9f9f-4b55-8e80-8c7dc804e7ad.jpg?VersionId=8ce224ba-ac4f-49ff-a497-d52a194e5d6a",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/3-0db0f8c5-477a-4552-a091-903683374201.jpg?VersionId=cecf3c4f-75b7-481b-8301-1a4dd64c6bd7",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/4-5bb74d0f-52a2-49c8-8cf3-69744c6aa5f0.jpg?VersionId=011e7a9b-67dd-4ab4-a390-9d9993a04541",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/5-c5cf4fb6-2e6a-43ea-854d-ab3f33c9711f.jpg?VersionId=e0a91326-29f9-4e36-a3a6-4be510ff525d",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/6-c921b441-43c7-4e48-b263-4efbcfb017d2.jpg?VersionId=b3475fc8-e91e-4248-b327-ccccb5a5d95b",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/7-216fd4a3-f269-43ab-bc99-5a83862de62a.jpg?VersionId=f97febc3-2768-4d73-a250-fc95a88c7337",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/8-96bcd3ca-35d6-4e27-a95f-93cb343ca59c.jpg?VersionId=7dd19ea4-e74f-41ff-a638-61b7bd844511",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/11-e3aa2b9a-f1a9-466b-b9d0-28b797b2a156.jpg?VersionId=450187cb-a913-4b28-8cf3-4efb2d24d591",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/12-d57a8875-3ad0-4cab-827f-059c4c85f3b2.jpg?VersionId=d3e61675-2148-46b9-a1ea-89b7736bd2a4",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/13-754be4b3-a98c-47e3-a666-d14e55b7dd12.jpg?VersionId=260612f2-cd49-461b-a79b-be2d750d6ce7",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/14-1ba95ef3-8bd5-4dab-a604-312e32376e50.jpg?VersionId=27ad4ac9-476c-4a72-865f-cbc798f383ff",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/15-d45fe539-006b-4e0b-bdaf-545459797fe5.jpg?VersionId=fc00824d-8c86-452f-81f9-ff5e3444ba10",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/16-7e724875-22d7-4b9c-83fb-e2e59d757eef.jpg?VersionId=27f299b8-e7a5-4380-aad1-ed8cb262ae06",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/17-fdee9083-e0a3-4f39-bf46-b864fdbb9a30.jpg?VersionId=e7e44ec9-5a4b-4957-9d8f-84df2cf44927",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/18-1a47a4f7-643a-42f9-a967-59c2efb9248d.jpg?VersionId=cb572a55-ace6-4bc8-9551-be81e4c8a9bc",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-02/19-2ee7e9bc-5151-4841-99f8-be93a21c78b3.jpg?VersionId=50c2ecc8-140a-451b-bb6a-16a0d782fd80",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/20-ca5e310a-56d9-41d1-bf93-2794f0184ab0.jpg?VersionId=16a1ac15-61c0-4c0f-8372-0b38588def94",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/21-2e40fbf3-0bc3-4f29-97d4-1d6df4dfdb6c.jpg?VersionId=b8d1f5af-99f1-4777-b34b-3c9d645a0cd1",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/22-b49186e3-a9f7-48c3-ae60-70448a83087e.jpg?VersionId=6402a184-79df-49ea-afba-46910b65d74d",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/23-a023acf0-bd6d-4fe5-a479-518a91e9b2aa.jpg?VersionId=c80fffd1-d0c4-406e-a225-9a4d650976ea",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/24-90df93c0-917f-4023-99e6-6558df72add0.jpg?VersionId=a50fbe94-72b7-4e62-8808-5a568e270f0c",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/26-baa97925-220e-4ec2-95e7-19b50654c0f1.jpg?VersionId=0dce35eb-c4f6-440b-8684-8b885a1c7696",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/27-4894bbab-e139-4548-9da9-92286fae4806.jpg?VersionId=5e94cf38-f570-4099-8fc7-e638d2bf097f",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/28-cb740c5a-8e0d-4854-aae9-f9b2bc333544.jpg?VersionId=79f64c84-0284-4ac0-bd15-b196cad80251",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/29-8a6fa2b1-1032-489a-b42d-f30ec7d3ea06.jpg?VersionId=2668b552-5ea3-4ed9-80ac-8bbdaa4d4574",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/30-22606453-aedc-4315-81cc-4d3243c21526.jpg?VersionId=db2fecdc-4341-4a78-a1bb-650f7addd65b",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/31-c9cec450-da78-4f3f-8ba1-72bbd45e3e3e.jpg?VersionId=8db965bf-e2e7-41cf-9f3c-9e0e5e5f53f0",
+      "https://media.medipol.com.tr/assets/s3fs-public/2025-05/32-ef1aea63-8e1c-4c60-bea4-5d8070400774.jpg?VersionId=be7f4518-242a-49bd-8ce2-10aec67126b3"
+    ],
+    "images": [
+      "/images/hospitals/medipol-ankara/1.jpg",
+      "/images/hospitals/medipol-ankara/2.jpg",
+      "/images/hospitals/medipol-ankara/3.jpg",
+      "/images/hospitals/medipol-ankara/4.jpg",
+      "/images/hospitals/medipol-ankara/5.jpg",
+      "/images/hospitals/medipol-ankara/6.jpg",
+      "/images/hospitals/medipol-ankara/7.jpg",
+      "/images/hospitals/medipol-ankara/8.jpg",
+      "/images/hospitals/medipol-ankara/9.jpg",
+      "/images/hospitals/medipol-ankara/10.jpg",
+      "/images/hospitals/medipol-ankara/11.jpg",
+      "/images/hospitals/medipol-ankara/12.jpg",
+      "/images/hospitals/medipol-ankara/13.jpg",
+      "/images/hospitals/medipol-ankara/14.jpg",
+      "/images/hospitals/medipol-ankara/15.jpg",
+      "/images/hospitals/medipol-ankara/16.jpg",
+      "/images/hospitals/medipol-ankara/17.jpg",
+      "/images/hospitals/medipol-ankara/18.jpg",
+      "/images/hospitals/medipol-ankara/19.jpg",
+      "/images/hospitals/medipol-ankara/20.jpg",
+      "/images/hospitals/medipol-ankara/21.jpg",
+      "/images/hospitals/medipol-ankara/22.jpg",
+      "/images/hospitals/medipol-ankara/23.jpg",
+      "/images/hospitals/medipol-ankara/24.jpg",
+      "/images/hospitals/medipol-ankara/25.jpg",
+      "/images/hospitals/medipol-ankara/26.jpg",
+      "/images/hospitals/medipol-ankara/27.jpg",
+      "/images/hospitals/medipol-ankara/28.jpg",
+      "/images/hospitals/medipol-ankara/29.jpg",
+      "/images/hospitals/medipol-ankara/30.jpg"
+    ]
+  }
+}

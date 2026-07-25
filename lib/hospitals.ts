@@ -771,8 +771,14 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ["Oral and Dental Health"],
     mapEmbedUrl:
-      "https://maps.google.com/maps?q=Medipol+Ankara+University+Dental+Hospital+Ankara&z=14&output=embed",
-    images: ["/images/hospitals/medipol-ankara/1.jpg"],
+      "https://maps.google.com/maps?q=Celal+Bayar+Blv+No:88+Çankaya+Ankara&z=15&output=embed",
+    address: "Eti Mahallesi, Celal Bayar Bulvarı No:88/1, 06570 Çankaya, Ankara",
+    images: [
+      "/images/hospitals/medipol-ankara/1.jpg",
+      "/images/hospitals/medipol-ankara/2.jpg",
+      "/images/hospitals/medipol-ankara/3.jpg",
+      "/images/hospitals/medipol-ankara/4.jpg",
+    ],
   },
   {
     slug: "medipol-bahcelievler-hospital",
@@ -791,8 +797,13 @@ export const hospitals: Hospital[] = [
     treatmentUnits: [],
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Fatih+Caddesi+No:1+Bahçelievler+Istanbul&z=15&output=embed",
-    address: "Çobançeşme Mahallesi, Fatih Caddesi No:1/8, Bahçelievler, 34196 Istanbul",
-    images: ["/images/hospitals/medipol-bahcelievler/1.jpg"],
+    address: "Çobançeşme Mahallesi, Fatih Caddesi No:1/8, Bahçelievler, 34196 İstanbul",
+    images: [
+      "/images/hospitals/medipol-bahcelievler/1.jpg",
+      "/images/hospitals/medipol-bahcelievler/2.jpg",
+      "/images/hospitals/medipol-bahcelievler/3.jpg",
+      "/images/hospitals/medipol-bahcelievler/4.jpg",
+    ],
   },
   {
     slug: "medipol-camlica-university-hospital",
@@ -810,8 +821,14 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
     mapEmbedUrl:
-      "https://maps.google.com/maps?q=Medipol+Çamlıca+University+Hospital+Üsküdar+Istanbul&z=14&output=embed",
-    images: ["/images/hospitals/medipol-camlica/1.jpg"],
+      "https://maps.google.com/maps?q=Alemdağ+Caddesi+No:100+Üsküdar+Istanbul&z=15&output=embed",
+    address: "Alemdağ Caddesi, Bulgurlu Mahallesi No:100, Üsküdar, İstanbul",
+    images: [
+      "/images/hospitals/medipol-camlica/1.png",
+      "/images/hospitals/medipol-camlica/2.jpg",
+      "/images/hospitals/medipol-camlica/3.jpg",
+      "/images/hospitals/medipol-camlica/4.jpg",
+    ],
   },
   {
     slug: "medipol-esenler-university-hospital",
@@ -829,8 +846,14 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
     mapEmbedUrl:
-      "https://maps.google.com/maps?q=Medipol+Esenler+University+Hospital+Istanbul&z=14&output=embed",
-    images: ["/images/hospitals/medipol-esenler/1.jpg"],
+      "https://maps.google.com/maps?q=Bahçeler+Caddesi+No:5+Esenler+Istanbul&z=15&output=embed",
+    address: "Birlik Mahallesi, Bahçeler Caddesi No:5, 34250 Esenler, İstanbul",
+    images: [
+      "/images/hospitals/medipol-esenler/1.png",
+      "/images/hospitals/medipol-esenler/2.jpg",
+      "/images/hospitals/medipol-esenler/3.jpg",
+      "/images/hospitals/medipol-esenler/4.jpg",
+    ],
   },
   {
     slug: "medipol-istanbul-hospital",
@@ -927,7 +950,12 @@ export const hospitals: Hospital[] = [
     mapEmbedUrl:
       "https://maps.google.com/maps?q=E-5+Harem+Yolu+Üzeri+Koşuyolu+Kadıköy+Istanbul&z=15&output=embed",
     address: "E-5 Harem Yolu Üzeri, Koşuyolu/Kadıköy 34718 Istanbul",
-    images: ["/images/hospitals/medipol-istanbul/1.jpg"],
+    images: [
+      "/images/hospitals/medipol-istanbul/1.png",
+      "/images/hospitals/medipol-istanbul/2.jpg",
+      "/images/hospitals/medipol-istanbul/3.jpg",
+      "/images/hospitals/medipol-istanbul/4.jpg",
+    ],
   },
   {
     slug: "medipol-mega-university-hospital",
@@ -946,8 +974,14 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
     mapEmbedUrl:
-      "https://maps.google.com/maps?q=Medipol+Mega+University+Hospital+Bağcılar+Istanbul&z=14&output=embed",
-    images: ["/images/hospitals/medipol-mega/1.jpg"],
+      "https://maps.google.com/maps?q=TEM+Avrupa+Otoyolu+Göztepe+Çıkışı+No:1+Bağcılar+Istanbul&z=14&output=embed",
+    address: "TEM Avrupa Otoyolu Göztepe Çıkışı No: 1, Bağcılar, 34214 İstanbul",
+    images: [
+      "/images/hospitals/medipol-mega/1.jpg",
+      "/images/hospitals/medipol-mega/2.jpg",
+      "/images/hospitals/medipol-mega/3.jpg",
+      "/images/hospitals/medipol-mega/4.jpg",
+    ],
   },
   {
     slug: "medipol-pendik-university-hospital",
@@ -965,8 +999,14 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
     mapEmbedUrl:
-      "https://maps.google.com/maps?q=Medipol+Pendik+University+Hospital+Istanbul&z=14&output=embed",
-    images: ["/images/hospitals/medipol-pendik/1.jpg"],
+      "https://maps.google.com/maps?q=Adnan+Menderes+Bulvarı+No:31+Pendik+Istanbul&z=15&output=embed",
+    address: "Bahçelievler Mahallesi, Adnan Menderes Bulvarı No:31-33, Pendik, İstanbul",
+    images: [
+      "/images/hospitals/medipol-pendik/1.png",
+      "/images/hospitals/medipol-pendik/2.jpg",
+      "/images/hospitals/medipol-pendik/3.jpg",
+      "/images/hospitals/medipol-pendik/4.jpg",
+    ],
   },
   {
     slug: "medipol-sefakoy-university-hospital",
@@ -984,9 +1024,14 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
     mapEmbedUrl:
-      "https://maps.google.com/maps?q=Maslak+Çeşme+Cad+Küçükçekmece+Istanbul&z=15&output=embed",
-    address: "Tevfikbey Mah., Maslak Çeşme Cad., Küçükçekmece, Istanbul",
-    images: ["/images/hospitals/medipol-sefakoy/1.jpg"],
+      "https://maps.google.com/maps?q=Tevfikbey+Mah+Maslak+Çeşme+Cad+Küçükçekmece+Istanbul&z=15&output=embed",
+    address: "Tevfikbey Mah., Maslak Çeşme Cad., Küçükçekmece, İstanbul",
+    images: [
+      "/images/hospitals/medipol-sefakoy/1.png",
+      "/images/hospitals/medipol-sefakoy/2.jpg",
+      "/images/hospitals/medipol-sefakoy/3.jpg",
+      "/images/hospitals/medipol-sefakoy/4.jpg",
+    ],
   },
   {
     slug: "medipol-unkapani-university-hospital",
@@ -1004,8 +1049,14 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ["Oral and Dental Health"],
     mapEmbedUrl:
-      "https://maps.google.com/maps?q=Medipol+Unkapanı+Dental+Hospital+Fatih+Istanbul&z=15&output=embed",
-    images: ["/images/hospitals/medipol-unkapani/1.jpg"],
+      "https://maps.google.com/maps?q=Atatürk+Bulvarı+No:27+Unkapanı+Fatih+Istanbul&z=15&output=embed",
+    address: "Atatürk Bulvarı No:27, Unkapanı, Fatih, İstanbul",
+    images: [
+      "/images/hospitals/medipol-unkapani/1.jpg",
+      "/images/hospitals/medipol-unkapani/2.jpg",
+      "/images/hospitals/medipol-unkapani/3.jpg",
+      "/images/hospitals/medipol-unkapani/4.jpg",
+    ],
   },
   {
     slug: "medipol-vatan-university-hospital",
@@ -1023,8 +1074,14 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
     mapEmbedUrl:
-      "https://maps.google.com/maps?q=Medipol+Vatan+Clinics+Fatih+Istanbul&z=15&output=embed",
-    images: ["/images/hospitals/medipol-vatan/1.jpg"],
+      "https://maps.google.com/maps?q=Vatan+Cad+Halıcılar+Köşkü+Sk+No:11+Fatih+Istanbul&z=15&output=embed",
+    address: "Vatan Cad., Halıcılar Köşkü Sk. No:11, Aksaray, Fatih, İstanbul",
+    images: [
+      "/images/hospitals/medipol-vatan/1.jpg",
+      "/images/hospitals/medipol-vatan/2.jpg",
+      "/images/hospitals/medipol-vatan/3.jpg",
+      "/images/hospitals/medipol-vatan/4.jpg",
+    ],
   },
   {
     slug: "medipol-acibadem-regional-hospital",
@@ -1042,8 +1099,14 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
     mapEmbedUrl:
-      "https://maps.google.com/maps?q=Medipol+Acıbadem+Regional+Hospital+Üsküdar+Istanbul&z=14&output=embed",
-    images: [],
+      "https://maps.google.com/maps?q=Şht.+Emin+Çölen+Sokağı+No:4+Acıbadem+Kadıköy+Istanbul&z=15&output=embed",
+    address: "Acıbadem, Şht. Emin Çölen Sokağı No:4, 34718 Kadıköy/İstanbul",
+    images: [
+      "/images/hospitals/medipol-acibadem/1.png",
+      "/images/hospitals/medipol-acibadem/2.jpg",
+      "/images/hospitals/medipol-acibadem/3.jpg",
+      "/images/hospitals/medipol-acibadem/4.jpg",
+    ],
   },
 
   // ────────────────────── KOÇ HEALTHCARE INSTITUTIONS (2) ──────────────────────
