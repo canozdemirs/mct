@@ -1102,8 +1102,31 @@ The hospital sits on the European side beside the TEM motorway, roughly
     beds: null,
     operatingRooms: null,
     area: "",
-    overview:
-      "Opened on 5 November 2014, Medipol Sefaköy is one of the group's highest-volume campuses, handling approximately 400,000 outpatient visits, 5,000 surgeries and 2,500 births each year. Located near the Istanbul Airport corridor with Metrobüs access, the hospital also runs a dedicated spine diseases programme.",
+    overview: `Medipol Sefaköy opened on 5 November 2014 as a Research and Application
+Hospital of Istanbul Medipol University, and has grown into one of the group's
+highest-volume campuses on the European side.
+
+The numbers tell the story: roughly 400,000 outpatient consultations, 5,000
+surgeries and 2,500 births every year. For an international patient, volume
+matters more than it might seem — surgical teams performing a procedure
+hundreds of times a year work faster, handle complications better, and have
+tighter theatre scheduling than teams doing it occasionally.
+
+The hospital covers surgical medicine, internal medicine and laboratory
+services, with consultants across neurosurgery, general surgery, urology,
+orthopaedics and traumatology, cardiology, gastroenterology, ENT, ophthalmology,
+obstetrics and gynaecology, paediatrics, dermatology and physiotherapy. Its
+spine programme handles diagnosis and treatment to international standards,
+covering both surgical and conservative pathways.
+
+Getting there is unusually easy for a hospital in this part of the city.
+Sefaköy sits directly on the metrobüs route — the Beylikdüzü–Mecidiyeköy
+corridor — so patients staying almost anywhere on the European side can reach
+it without changing transport. Coming from Başakşehir, Esenler, Bağcılar or
+Güneşli, the Basın Ekspres connection road leads straight to it. Istanbul
+Airport is a short drive north.
+
+Address: Tevfikbey Mah., Maslak Çeşme Cd. No:30, 34295 Küçükçekmece.`,
     languages: [],
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
@@ -1154,8 +1177,27 @@ The hospital sits on the European side beside the TEM motorway, roughly
     beds: null,
     operatingRooms: null,
     area: "",
-    overview:
-      "Istanbul Medipol University Health Practice and Research Hospital Vatan Clinics opened on 1 February 2012. Its Fatih location puts it within easy reach of Istanbul's historic peninsula hotels — a practical benefit for patients combining treatment with sightseeing.",
+    overview: `Istanbul Medipol University Health Practice and Research Hospital — Vatan
+Clinics — began serving patients on 1 February 2012. It sits on Vatan Caddesi
+in Fatih, inside Istanbul's historic peninsula, and functions as a university
+teaching hospital within the Medipol group.
+
+Its defining advantage for international patients is location. Fatih puts the
+hospital within easy reach of Sultanahmet, Eminönü and the Grand Bazaar — the
+part of the city most visitors want to see. For patients travelling with family,
+or for procedures that need several appointments spread across a week, this
+means companions are not stranded in a hospital district with nothing around
+them, and recovery days can include a short walk somewhere worth walking.
+
+Clinically, the hospital operates as part of the university network, sharing
+academic staff and clinical protocols with the group's larger campuses. Patients
+requiring a procedure beyond its scope are referred within the Medipol network
+rather than sent outside it — continuity of records and consulting team is
+preserved.
+
+Tram and metro connections through Fatih make transfers straightforward, and
+the surrounding area has the widest hotel selection of any district in the city,
+at every price level.`,
     languages: [],
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
