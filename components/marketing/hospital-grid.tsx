@@ -74,7 +74,7 @@ export function HospitalGrid({
               <h2 className="text-lg font-semibold text-slate-800 group-hover:text-[#1b5fa8] transition-colors mb-0.5 leading-snug">
                 {hospital.name}
               </h2>
-              {hospitalGroups[hospital.group].name !== hospital.name && (
+              {!hospital.name.startsWith(hospitalGroups[hospital.group].name) && (
                 <p className="text-sm text-slate-500 mb-3">
                   {hospitalGroups[hospital.group].name}
                 </p>

@@ -172,7 +172,9 @@ export default async function HospitalPage({ params }: PageProps) {
             <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-2 leading-tight">
               {hospital.name}
             </h1>
-            <p className="text-base text-slate-500 mb-3">{group.name}</p>
+            {!hospital.name.startsWith(group.name) && (
+              <p className="text-base text-slate-500 mb-3">{group.name}</p>
+            )}
             <div className="flex items-center gap-2 text-sm text-slate-500 mb-4">
               <MapPin size={14} className="text-[#1ab3c8] shrink-0" />
               <span>{location}</span>
