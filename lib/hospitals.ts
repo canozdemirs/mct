@@ -204,6 +204,7 @@ export const hospitals: Hospital[] = [
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Cumhuriyet+Cad.+No:66+Seyhan+Adana&z=14&output=embed",
+    address: "Cumhuriyet Cad. No:66, Seyhan, Adana",
     images: [
       "/images/hospitals/acibadem-adana/1.jpg",
       "/images/hospitals/acibadem-adana/2.jpg",
@@ -228,6 +229,7 @@ export const hospitals: Hospital[] = [
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Turan+Güneş+Bulvarı+630.+Sok+No:6+Çankaya+Ankara&z=14&output=embed",
+    address: "Turan Güneş Bulvarı, 630. Sk. No:6, Çankaya, Ankara",
     images: [
       "/images/hospitals/acibadem-ankara/1.jpg",
       "/images/hospitals/acibadem-ankara/2.jpg",
@@ -252,6 +254,7 @@ export const hospitals: Hospital[] = [
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Atatürk+Mah.+Turgut+Özal+Bulvarı+A+Blok+No:11+Ataşehir+Istanbul&z=14&output=embed",
+    address: "Atatürk Mah., Turgut Özal Bulvarı A Blok No:11, Ataşehir, Istanbul",
     images: [
       "/images/hospitals/acibadem-atasehir/1.jpg",
       "/images/hospitals/acibadem-atasehir/2.jpg",
@@ -276,6 +279,7 @@ export const hospitals: Hospital[] = [
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Halit+Ziya+Uşaklıgil+Cad.+No:1+Bakırköy+Istanbul&z=14&output=embed",
+    address: "Halit Ziya Uşaklıgil Cad. No:1, Bakırköy, Istanbul",
     images: [
       "/images/hospitals/acibadem-bakirkoy/1.jpg",
       "/images/hospitals/acibadem-bakirkoy/2.jpg",
@@ -300,6 +304,7 @@ export const hospitals: Hospital[] = [
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Türkkuyusu+Mah.+Kıbrıs+Şehitleri+Cad.+Bodrum+Muğla&z=14&output=embed",
+    address: "Türkkuyusu Mah., Kıbrıs Şehitleri Cad., Bodrum, Muğla",
     images: [
       "/images/hospitals/acibadem-bodrum/1.jpg",
       "/images/hospitals/acibadem-bodrum/2.jpg",
@@ -348,6 +353,7 @@ export const hospitals: Hospital[] = [
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Hoşnudiye+Mah.+Acıbadem+Sok.+No:19+Tepebaşı+Eskişehir&z=14&output=embed",
+    address: "Hoşnudiye Mah., Acıbadem Sok. No:19, Tepebaşı, Eskişehir",
     images: [
       "/images/hospitals/acibadem-eskisehir/1.jpg",
       "/images/hospitals/acibadem-eskisehir/2.jpg",
@@ -372,6 +378,7 @@ export const hospitals: Hospital[] = [
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Dikilitaş+Mah.+Hakkı+Yeten+Cd.+No:23+Beşiktaş+Istanbul&z=14&output=embed",
+    address: "Dikilitaş Mah., Hakkı Yeten Cd. No:23, Beşiktaş, Istanbul",
     images: [
       "/images/hospitals/acibadem-fulya/1.jpg",
       "/images/hospitals/acibadem-fulya/2.jpg",
@@ -420,6 +427,7 @@ export const hospitals: Hospital[] = [
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Acıbadem+Mah.+Tekin+Sk.+No:8+Kadıköy+Istanbul&z=14&output=embed",
+    address: "Acıbadem Mah., Tekin Sk. No:8, Kadıköy, Istanbul",
     images: [
       "/images/hospitals/acibadem-kadikoy/1.jpg",
       "/images/hospitals/acibadem-kadikoy/2.jpg",
@@ -444,6 +452,7 @@ export const hospitals: Hospital[] = [
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Seyitgazi+Mah.+Mustafa+Kemal+Paşa+Bulvarı+No:1+Melikgazi+Kayseri&z=14&output=embed",
+    address: "Seyitgazi Mah., Mustafa Kemal Paşa Bulvarı No:1, Melikgazi, Kayseri",
     images: [
       "/images/hospitals/acibadem-kayseri/1.jpg",
       "/images/hospitals/acibadem-kayseri/2.jpg",
@@ -492,6 +501,7 @@ export const hospitals: Hospital[] = [
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Ondokuz+Mayıs+Mah.+Begonya+Sok.+No:12+Kadıköy+Istanbul&z=14&output=embed",
+    address: "Ondokuz Mayıs Mah., Begonya Sok. No:12, Kadıköy, Istanbul",
     images: [
       "/images/hospitals/acibadem-kozyatagi/1.jpg",
       "/images/hospitals/acibadem-kozyatagi/2.jpg",
@@ -516,6 +526,7 @@ export const hospitals: Hospital[] = [
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Büyükdere+Cad.+No:40+Maslak+Istanbul&z=14&output=embed",
+    address: "Büyükdere Cad. No:40, Maslak, Sarıyer, Istanbul",
     images: [
       "/images/hospitals/acibadem-maslak/1.jpg",
       "/images/hospitals/acibadem-maslak/2.jpg",
@@ -1460,6 +1471,7 @@ corridor, making transfers from either airport straightforward.`,
     ],
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Güzelbahçe+Sokak+No:20+Nişantaşı+Şişli+Istanbul&z=15&output=embed",
+    address: "Güzelbahçe Sok. No:20, Nişantaşı, Şişli, Istanbul",
     images: [
       "/images/hospitals/american/1.jpg",
       "/images/hospitals/american/2.jpg",
