@@ -107,6 +107,7 @@ export default async function HospitalPage({ params }: PageProps) {
     name: hospital.name,
     address: {
       "@type": "PostalAddress",
+      ...(hospital.address ? { streetAddress: hospital.address } : {}),
       addressLocality: hospital.district || hospital.city,
       addressRegion: hospital.city,
       addressCountry: "TR",
@@ -291,6 +292,12 @@ export default async function HospitalPage({ params }: PageProps) {
               {hospital.mapEmbedUrl && (
                 <section className="bg-white rounded-2xl border border-slate-100 p-6 mb-6">
                   <h2 className="text-lg font-bold text-slate-800 mb-4">Location</h2>
+                  {hospital.address && (
+                    <p className="text-sm text-slate-600 mb-4 flex items-start gap-1.5">
+                      <MapPin size={14} className="text-[#1ab3c8] shrink-0 mt-0.5" />
+                      {hospital.address}
+                    </p>
+                  )}
                   <div className="rounded-xl overflow-hidden border border-slate-100">
                     <iframe
                       src={hospital.mapEmbedUrl}

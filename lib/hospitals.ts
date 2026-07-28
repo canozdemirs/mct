@@ -840,9 +840,7 @@ For patients arriving from abroad, the location works in your favour. Bahçeliev
 sits on the E-5 corridor in the western half of the European side, close to the
 Istanbul Airport approach and well served by metro and metrobüs. Transfers from
 the airport are short, and the surrounding district has a wide range of hotels
-at every price point for companions or for recovery stays between appointments.
-
-Address: Çobançeşme Mahallesi, Fatih Caddesi No:1/8, Bahçelievler.`,
+at every price point for companions or for recovery stays between appointments.`,
     languages: [],
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
@@ -932,9 +930,7 @@ the Asian side, and connections to the historic peninsula are direct.
 
 The hospital combines modern architecture with current medical technology and
 an academic clinical team, sharing consultants and protocols with the group's
-larger campuses.
-
-Address: Birlik Mahallesi, Bahçeler Caddesi No:5, 34250 Esenler, Istanbul.`,
+larger campuses.`,
     languages: [],
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
@@ -985,9 +981,7 @@ central oxygen and nitrous oxide systems.
 Location is one of its strongest assets. The hospital sits in Koşuyolu,
 Kadıköy, directly beside the E-5 motorway and the Koşuyolu Bridge, with roads
 on all four sides. Access from either side of the Bosphorus is straightforward,
-and Sabiha Gökçen Airport is a short drive east.
-
-Address: E-5 Harem Yolu Üzeri, Koşuyolu/Kadıköy 34718 Istanbul.`,
+and Sabiha Gökçen Airport is a short drive east.`,
     languages: [
       "Arabic",
       "English",
@@ -1161,9 +1155,7 @@ The hospital runs 24 hours a day with intensive care units, advanced operating
 theatres, an on-site laboratory, emergency department and treatment-equipped
 patient rooms. A cafe, prayer room and hairdresser inside the building serve
 patients and the family members staying with them — a practical consideration
-for companions during a multi-day stay.
-
-Address: Bahçelievler Mah., Adnan Menderes Bulvarı No:31-33, Pendik, Istanbul.`,
+for companions during a multi-day stay.`,
     languages: [],
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
@@ -1210,9 +1202,7 @@ Sefaköy sits directly on the metrobüs route — the Beylikdüzü–Mecidiyekö
 corridor — so patients staying almost anywhere on the European side can reach
 it without changing transport. Coming from Başakşehir, Esenler, Bağcılar or
 Güneşli, the Basın Ekspres connection road leads straight to it. Istanbul
-Airport is a short drive north.
-
-Address: Tevfikbey Mah., Maslak Çeşme Cd. No:30, 34295 Küçükçekmece.`,
+Airport is a short drive north.`,
     languages: [],
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
@@ -1357,9 +1347,7 @@ network. A cafe and prayer room inside the building serve patients and
 accompanying family.
 
 Kadıköy is well connected to both sides of the city and sits close to the E-5
-corridor, making transfers from either airport straightforward.
-
-Address: Acıbadem, Şht. Emin Çölen Sokağı No:4, 34718 Kadıköy, Istanbul.`,
+corridor, making transfers from either airport straightforward.`,
     languages: [],
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: [],
