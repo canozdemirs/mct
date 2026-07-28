@@ -323,6 +323,7 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
     mapEmbedUrl: "https://maps.google.com/maps?q=Acıbadem+Bursa+Hastanesi&z=14&output=embed",
+    address: "Barış Mah., Sümer Sk. No:1-7, 16210 Nilüfer, Bursa",
     images: [
       "/images/hospitals/acibadem-bursa/1.jpg",
       "/images/hospitals/acibadem-bursa/2.jpg",
@@ -383,7 +384,7 @@ export const hospitals: Hospital[] = [
     name: "Acıbadem International Hospital",
     group: "acibadem",
     city: "Istanbul",
-    district: "Yeşilköy",
+    district: "Yeşilköy, Bakırköy",
     accreditations: ["JCI"],
     beds: 112,
     operatingRooms: null,
@@ -394,6 +395,7 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
     mapEmbedUrl: "https://maps.google.com/maps?q=41.061527,28.8354341&z=14&output=embed",
+    address: "Yeşilköy Mah., Yeşilköy İstanbul Cd. No:82, 34149 Bakırköy, Istanbul",
     images: [
       "/images/hospitals/acibadem-international/1.jpg",
       "/images/hospitals/acibadem-international/2.jpg",
@@ -526,7 +528,7 @@ export const hospitals: Hospital[] = [
     name: "Acıbadem Taksim Hospital",
     group: "acibadem",
     city: "Istanbul",
-    district: "Taksim",
+    district: "Şişli",
     accreditations: ["JCI"],
     beds: 93,
     operatingRooms: 7,
@@ -537,6 +539,7 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
     mapEmbedUrl: "https://maps.google.com/maps?q=Acıbadem+Taksim+Hastanesi+Beyoğlu+Istanbul&z=14&output=embed",
+    address: "İnönü Mah., Nizamiye Cd. No:1-9, 34373 Şişli, Istanbul",
     images: [
       "/images/hospitals/acibadem-taksim/1.jpg",
       "/images/hospitals/acibadem-taksim/2.jpg",
@@ -562,6 +565,7 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: MEMORIAL_TREATMENT_UNITS,
     mapEmbedUrl: "https://maps.google.com/maps?q=41.061527,28.972632&z=14&output=embed",
+    address: "Kaptan Paşa Mah., Piyale Paşa Bulvarı, Okmeydanı Cd. No:4, 34384 Şişli, Istanbul",
     images: [
       "/images/hospitals/memorial-sisli/1.jpg",
       "/images/hospitals/memorial-sisli/2.jpg",
@@ -585,6 +589,7 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: MEMORIAL_TREATMENT_UNITS,
     mapEmbedUrl: "https://maps.google.com/maps?q=40.984375,29.106864&z=14&output=embed",
+    address: "Küçükbakkalköy Mah., Vedat Günyol Cd. No:28-30, 34750 Ataşehir, Istanbul",
     images: [
       "/images/hospitals/memorial-atasehir/1.jpg",
       "/images/hospitals/memorial-atasehir/2.jpg",
@@ -608,6 +613,7 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: MEMORIAL_TREATMENT_UNITS,
     mapEmbedUrl: "https://maps.google.com/maps?q=40.993097,28.852337&z=14&output=embed",
+    address: "Bahçelievler Mah., Adnan Kahveci Blv. No:227, 34180 Bahçelievler, Istanbul",
     images: [
       "/images/hospitals/memorial-bahcelievler/1.jpg",
       "/images/hospitals/memorial-bahcelievler/2.jpg",
@@ -620,7 +626,7 @@ export const hospitals: Hospital[] = [
     name: "Memorial Göztepe Hospital",
     group: "memorial",
     city: "Istanbul",
-    district: "Göztepe",
+    district: "Ataşehir",
     accreditations: [],
     beds: 300,
     operatingRooms: 19,
@@ -632,6 +638,7 @@ export const hospitals: Hospital[] = [
     treatmentUnits: MEMORIAL_TREATMENT_UNITS,
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Memorial+G%C3%B6ztepe+Hastanesi+Istanbul&z=14&output=embed",
+    address: "Yeni Sahra Mah., Karaman Cd. No:1, 34634 Ataşehir, Istanbul",
     images: [
       "/images/hospitals/memorial-goztepe/1.jpg",
       "/images/hospitals/memorial-goztepe/2.jpg",
@@ -655,6 +662,7 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: MEMORIAL_TREATMENT_UNITS,
     mapEmbedUrl: "https://maps.google.com/maps?q=39.903538,32.815306&z=14&output=embed",
+    address: "Balgat Mah., Mevlana Bulvarı, 1422. Sk. No:4, 06520 Çankaya, Ankara",
     images: [
       "/images/hospitals/memorial-ankara/1.jpg",
       "/images/hospitals/memorial-ankara/2.jpg",
@@ -678,6 +686,7 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: MEMORIAL_TREATMENT_UNITS,
     mapEmbedUrl: "https://maps.google.com/maps?q=36.917617,30.69347&z=14&output=embed",
+    address: "Zafer Mah., Yıldırım Beyazıt Cd. No:91, 07025 Kepez, Antalya",
     images: [
       "/images/hospitals/memorial-antalya/1.jpg",
       "/images/hospitals/memorial-antalya/2.jpg",
@@ -701,6 +710,7 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: MEMORIAL_TREATMENT_UNITS,
     mapEmbedUrl: "https://maps.google.com/maps?q=38.728712,35.479552&z=14&output=embed",
+    address: "Örnekevler Mah., Salih Avgun Paşa Cd., Temizel Sk. No:13, 38010 Kocasinan, Kayseri",
     images: [
       "/images/hospitals/memorial-kayseri/1.jpg",
       "/images/hospitals/memorial-kayseri/2.jpg",
@@ -724,6 +734,7 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: MEMORIAL_TREATMENT_UNITS,
     mapEmbedUrl: "https://maps.google.com/maps?q=37.936,40.187779&z=14&output=embed",
+    address: "Peyas Mah., Fırat Blv. No:12, 21070 Kayapınar, Diyarbakır",
     images: [
       "/images/hospitals/memorial-diyarbakir/1.jpg",
       "/images/hospitals/memorial-diyarbakir/2.jpg",
@@ -747,6 +758,7 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: MEMORIAL_TREATMENT_UNITS,
     mapEmbedUrl: "https://maps.google.com/maps?q=37.925497,40.162134&z=14&output=embed",
+    address: "Fırat Mah., Urfa Yolu 3. Km, 507. Sk. No:150, 21220 Kayapınar, Diyarbakır",
     images: [
       "/images/hospitals/memorial-dicle/1.jpg",
       "/images/hospitals/memorial-dicle/2.jpg",
@@ -1402,6 +1414,7 @@ corridor, making transfers from either airport straightforward.`,
     ],
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Koç+Üniversitesi+Hastanesi+Topkapı+Zeytinburnu+Istanbul&z=15&output=embed",
+    address: "Topkapı, Davutpaşa Cd. No:4, 34010 Zeytinburnu, Istanbul",
     images: [
       "/images/hospitals/koc-university/1.jpg",
       "/images/hospitals/koc-university/2.jpg",
