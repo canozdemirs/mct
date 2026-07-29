@@ -24,7 +24,7 @@ export function Nav() {
           <nav className="hidden lg:flex items-center gap-8">
             <Link href="/" className="text-sm font-semibold text-brand hover:text-teal transition-colors">Home</Link>
             <Link href="/hospitals-in-turkey" className="text-sm font-semibold text-brand hover:text-teal transition-colors">Hospitals</Link>
-            <Link href="/cost-calculator" className="text-sm font-semibold text-brand hover:text-teal transition-colors">Calculator</Link>
+            <Link href="/treatment-prices-in-turkey" className="text-sm font-semibold text-brand hover:text-teal transition-colors">Cost Calculator</Link>
             <Link href="/blog" className="text-sm font-semibold text-brand hover:text-teal transition-colors">Blog</Link>
             <Link href="#consultation" className="text-sm font-semibold text-brand hover:text-teal transition-colors">Get Quote</Link>
           </nav>
@@ -45,7 +45,7 @@ export function Nav() {
         <div className="lg:hidden border-t border-gray-100 py-2 flex items-center justify-center gap-6">
           <Link href="/" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Home</Link>
           <Link href="/hospitals-in-turkey" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Hospitals</Link>
-          <Link href="/cost-calculator" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Calculator</Link>
+          <Link href="/treatment-prices-in-turkey" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Cost Calculator</Link>
           <Link href="/blog" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Blog</Link>
           <Link href="#consultation" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Get Quote</Link>
         </div>
