@@ -465,7 +465,7 @@ export const hospitals: Hospital[] = [
     name: "Acıbadem Kocaeli Hospital",
     group: "acibadem",
     city: "Kocaeli",
-    district: "",
+    district: "İzmit",
     accreditations: ["JCI"],
     beds: 55,
     operatingRooms: null,
@@ -476,7 +476,8 @@ export const hospitals: Hospital[] = [
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
     mapEmbedUrl:
-      "https://maps.google.com/maps?q=Yeni+Mahalle+İnkılap+Cad.+Kocaeli&z=14&output=embed",
+      "https://maps.google.com/maps?q=Yenimahalle+İnkılap+Cad+No:9+İzmit+Kocaeli&z=14&output=embed",
+    address: "Yenimahalle, İnkılap Cd. No:9, 41100 İzmit, Kocaeli",
     images: [
       "/images/hospitals/acibadem-kocaeli/1.jpg",
       "/images/hospitals/acibadem-kocaeli/2.jpg",
