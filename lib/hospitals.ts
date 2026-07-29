@@ -470,8 +470,11 @@ export const hospitals: Hospital[] = [
     beds: 55,
     operatingRooms: null,
     area: "6,500 m²",
-    overview:
-      "Acıbadem Kocaeli Hospital serves patients in Kocaeli and the surrounding Marmara region, operating in a 6,500 m² facility with free patient parking and on-site banking services.",
+    overview: `Acıbadem Kocaeli Hospital serves the Marmara region from İzmit, the provincial seat of Kocaeli. Operating in a 6,500 m² facility with 55 inpatient beds, it is one of the group's smaller campuses — and for some patients that is the point. Consultations are less rushed, the building is easier to navigate, and a patient is not one of several hundred admissions that day.
+
+Despite its size, the hospital covers a wide clinical range: cardiology and cardiovascular surgery, general surgery, medical oncology, obstetrics and gynaecology, IVF, neurology and neurosurgery, orthopaedics, ophthalmology, ENT, paediatrics, urology, dermatology, plastic surgery and dental treatment, with a 24-hour emergency department. Cases requiring capacity beyond this site are referred within the Acıbadem network rather than outside it, so records and consulting team stay continuous.
+
+For international patients, İzmit is worth considering as an alternative to Istanbul. It is roughly an hour and a half from Istanbul by road and closer still to Sabiha Gökçen Airport, but costs less to stay in and moves at a calmer pace than the city. Free patient parking and on-site banking services are available, and the hospital sits in central İzmit with hotels within easy reach.`,
     languages: ACIBADEM_LANGUAGES,
     freeServices: DEFAULT_FREE_SERVICES,
     treatmentUnits: ACIBADEM_TREATMENT_UNITS,
