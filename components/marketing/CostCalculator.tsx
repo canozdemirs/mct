@@ -189,7 +189,7 @@ export default function CostCalculator() {
 
   const [subService, setSubService] = useState("");
 
-  const [days, setDays] = useState(5);
+  const [days, setDays] = useState(0);
   const [travellers, setTravellers] = useState(1);
 
   const [transportOption, setTransportOption] = useState<"none" | "one-way" | "two-way">("none");
@@ -340,13 +340,13 @@ export default function CostCalculator() {
               </span>
             </div>
             <input
-              type="range" min={1} max={30} step={1} value={days}
+              type="range" min={0} max={30} step={1} value={days}
               onChange={(e) => setDays(Number(e.target.value))}
               className="w-full"
               style={{ accentColor: BRAND_BLUE }}
             />
             <div className="flex justify-between text-xs text-slate-400 mt-1">
-              <span>1</span><span>30</span>
+              <span>0</span><span>30</span>
             </div>
           </div>
           <div>
@@ -432,9 +432,6 @@ export default function CostCalculator() {
 
         {/* Estimated Cost */}
         <div className="rounded-xl border border-slate-200 p-4 bg-slate-50">
-          <h4 className="text-sm font-semibold uppercase tracking-wide mb-3" style={{ color: BRAND_BLUE }}>
-            Estimated Treatment Journey Cost
-          </h4>
           <div className="flex justify-between items-center">
             <span className="font-semibold" style={{ color: BRAND_BLUE }}>Estimated Total Cost</span>
             <span className="text-lg font-bold" style={{ color: BRAND_BLUE }}>{formatEUR(totalCost)}</span>
