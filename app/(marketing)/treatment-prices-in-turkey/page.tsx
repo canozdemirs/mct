@@ -14,7 +14,7 @@ export default function TreatmentPricesPage() {
   return (
     <>
       <Nav />
-      <main className="bg-slate-50 min-h-screen py-12">
+      <main className="bg-slate-50 min-h-screen py-2">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <h1 className="sr-only">Treatment Prices in Turkey</h1>
           <p className="sr-only">
