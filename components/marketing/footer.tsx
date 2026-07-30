@@ -56,7 +56,7 @@ export function Footer() {
               {[
                 { label: "Home", href: "/" },
                 { label: "Hospitals", href: "/hospitals-in-turkey" },
-                { label: "Calculator", href: "/cost-calculator" },
+                { label: "Cost Calculator", href: "/treatment-prices-in-turkey" },
                 { label: "Blog", href: "/blog" },
                 { label: "Get Quote", href: "#consultation" },
               ].map((link) => (
