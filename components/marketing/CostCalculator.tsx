@@ -34,130 +34,176 @@ type TreatmentCategory = {
 };
 
 const TREATMENT_CATEGORIES: TreatmentCategory[] = [
-  { id: "breast-augmentation", name: "Breast Augmentation", defaultDays: 5 },
-  { id: "cardiology", name: "Cardiology Surgery", defaultDays: 7 },
-  { id: "cardiovascular", name: "Cardiovascular Surgery", defaultDays: 10 },
-  { id: "dental", name: "Dental Treatment", defaultDays: 7 },
-  { id: "eye-diseases", name: "Eye Diseases Surgery", defaultDays: 3 },
-  { id: "gastroenterology", name: "Gastroenterology Surgery", defaultDays: 5 },
-  { id: "general-surgery", name: "General Surgery", defaultDays: 5 },
-  { id: "gynecomastia", name: "Gynecomastia Surgery", defaultDays: 4 },
+  { id: "breast-augmentation", name: "Breast Augmentation", defaultDays: 7 },
+  { id: "cardiology", name: "Cardiology Surgery", defaultDays: 9 },
+  { id: "cardiovascular", name: "Cardiovascular Surgery", defaultDays: 12 },
+  { id: "dental", name: "Dental Treatment", defaultDays: 9 },
+  { id: "eye-diseases", name: "Eye Diseases Surgery", defaultDays: 5 },
+  { id: "gastroenterology", name: "Gastroenterology Surgery", defaultDays: 7 },
+  { id: "general-surgery", name: "General Surgery", defaultDays: 7 },
+  { id: "gynecomastia", name: "Gynecomastia Surgery", defaultDays: 6 },
   { id: "hair-transplant", name: "Hair Transplant Surgery", defaultDays: 3 },
-  { id: "ivf", name: "IVF Treatment", defaultDays: 10 },
-  { id: "liposuction", name: "Liposuction Surgery", defaultDays: 5 },
-  { id: "medical-checkup", name: "Medical Check Up", defaultDays: 1 },
-  { id: "neurochirurgia", name: "Neurochirurgia Surgery", defaultDays: 10 },
-  { id: "orthopedics", name: "Orthopedics Surgery", defaultDays: 7 },
-  { id: "otolaryngology", name: "Otolaryngology Surgery", defaultDays: 4 },
-  { id: "plastic-surgery", name: "Plastic Surgery", defaultDays: 7 },
-  { id: "radiation-oncology", name: "Radiation Oncology Surgery", defaultDays: 14 },
-  { id: "rhinoplasty", name: "Rhinoplasty Surgery", defaultDays: 7 },
-  { id: "transplantation", name: "Transplantation Surgery", defaultDays: 21 },
-  { id: "urology", name: "Urology Surgery", defaultDays: 5 },
-  { id: "womens-diseases", name: "Women's Diseases Surgery", defaultDays: 5 },
-  { id: "other", name: "Other", defaultDays: 5 },
+  { id: "ivf", name: "IVF Treatment", defaultDays: 12 },
+  { id: "liposuction", name: "Liposuction Surgery", defaultDays: 7 },
+  { id: "medical-checkup", name: "Medical Check Up", defaultDays: 3 },
+  { id: "neurochirurgia", name: "Neurochirurgia Surgery", defaultDays: 12 },
+  { id: "orthopedics", name: "Orthopedics Surgery", defaultDays: 9 },
+  { id: "otolaryngology", name: "Otolaryngology Surgery", defaultDays: 6 },
+  { id: "plastic-surgery", name: "Plastic Surgery", defaultDays: 9 },
+  { id: "radiation-oncology", name: "Radiation Oncology Surgery", defaultDays: 16 },
+  { id: "rhinoplasty", name: "Rhinoplasty Surgery", defaultDays: 9 },
+  { id: "transplantation", name: "Transplantation Surgery", defaultDays: 23 },
+  { id: "urology", name: "Urology Surgery", defaultDays: 7 },
+  { id: "womens-diseases", name: "Women's Diseases Surgery", defaultDays: 7 },
+  { id: "other", name: "Other", defaultDays: 7 },
 ];
 
 // ---- Alt hizmetler (Service Type seçilince açılan ikinci dropdown) ----
 // NOT: Bu liste placeholder'dır — gerçek partner hastane hizmet listelerine
 // göre güncellenmeli. Kategoriye alt hizmet tanımlanmamışsa dropdown açılmaz.
-type SubService = { name: string; price?: number }; // price (if set) is now added into the visible Estimated Total Cost
+type SubService = { name: string; price?: number; defaultDays?: number }; // price is added into the visible Estimated Total Cost; defaultDays (if set) overrides the category-level default when this specific service is picked
 
 const SUB_SERVICES: Record<string, SubService[]> = {
   "breast-augmentation": [
-    { name: "Silicone Implants (Round)", price: 4424 },
-    { name: "Fat Transfer (Fat-to-Breast)" },
-    { name: "Breast Lift + Augmentation", price: 5030 },
-    { name: "Implant Revision", price: 1830 },
+    { name: "Silicone Implants (Round)", price: 4424, defaultDays: 7 },
+    { name: "Fat Transfer (Fat-to-Breast)", defaultDays: 7 },
+    { name: "Breast Lift + Augmentation", price: 5030, defaultDays: 9 },
+    { name: "Implant Revision", price: 1830, defaultDays: 7 },
     { name: "Other" },
   ],
   "cardiology": [
-    { name: "Angiography" }, { name: "Angioplasty / Stent" },
-    { name: "Pacemaker Implantation" }, { name: "Cardiac Check-up" }, { name: "Other" },
+    { name: "Angiography", defaultDays: 4 },
+    { name: "Angioplasty / Stent", defaultDays: 6 },
+    { name: "Pacemaker Implantation", defaultDays: 7 },
+    { name: "Cardiac Check-up", defaultDays: 3 },
+    { name: "Other" },
   ],
   "cardiovascular": [
-    { name: "Coronary Bypass (CABG)" }, { name: "Heart Valve Surgery" }, { name: "Aortic Surgery" }, { name: "Other" },
+    { name: "Coronary Bypass (CABG)", defaultDays: 14 },
+    { name: "Heart Valve Surgery", defaultDays: 14 },
+    { name: "Aortic Surgery", defaultDays: 16 },
+    { name: "Other" },
   ],
   "dental": [
-    { name: "Tooth Extraction" }, { name: "Dental Filling" }, { name: "Root Canal Treatment" },
-    { name: "Dental Implant" }, { name: "Zirconia Crown" }, { name: "Veneers" },
-    { name: "Teeth Whitening" }, { name: "Full Mouth Restoration" }, { name: "Other" },
+    { name: "Tooth Extraction", defaultDays: 4 },
+    { name: "Dental Filling", defaultDays: 4 },
+    { name: "Root Canal Treatment", defaultDays: 5 },
+    { name: "Dental Implant", defaultDays: 7 },
+    { name: "Zirconia Crown", defaultDays: 7 },
+    { name: "Veneers", defaultDays: 7 },
+    { name: "Teeth Whitening", defaultDays: 4 },
+    { name: "Full Mouth Restoration", defaultDays: 9 },
+    { name: "Other" },
   ],
   "eye-diseases": [
-    { name: "LASIK / Laser Eye Surgery" }, { name: "Cataract Surgery" }, { name: "Retina Treatment" }, { name: "Other" },
+    { name: "LASIK / Laser Eye Surgery", defaultDays: 4 },
+    { name: "Cataract Surgery", defaultDays: 5 },
+    { name: "Retina Treatment", defaultDays: 5 },
+    { name: "Other" },
   ],
   "gastroenterology": [
-    { name: "Endoscopy" }, { name: "Colonoscopy" }, { name: "Bariatric (Weight Loss) Surgery" }, { name: "Other" },
+    { name: "Endoscopy", defaultDays: 3 },
+    { name: "Colonoscopy", defaultDays: 3 },
+    { name: "Bariatric (Weight Loss) Surgery", defaultDays: 9 },
+    { name: "Other" },
   ],
   "general-surgery": [
-    { name: "Hernia Repair" }, { name: "Gallbladder Surgery" }, { name: "Appendectomy" }, { name: "Other" },
+    { name: "Hernia Repair", defaultDays: 6 },
+    { name: "Gallbladder Surgery", defaultDays: 6 },
+    { name: "Appendectomy", defaultDays: 6 },
+    { name: "Other" },
   ],
   "gynecomastia": [
-    { name: "Liposuction Technique", price: 2090 },
-    { name: "Gland Excision", price: 2090 },
-    { name: "Combined (Vaser Liposuction) Technique", price: 2408 },
+    { name: "Liposuction Technique", price: 2090, defaultDays: 6 },
+    { name: "Gland Excision", price: 2090, defaultDays: 6 },
+    { name: "Combined (Vaser Liposuction) Technique", price: 2408, defaultDays: 6 },
     { name: "Other" },
   ],
   "hair-transplant": [
-    { name: "FUE Sapphire", price: 1400 },
-    { name: "FUE Sedation (Pain-Free)", price: 1550 },
-    { name: "DHI", price: 1550 },
-    { name: "DHI Sedation", price: 1700 },
-    { name: "Beard Transplant", price: 1400 },
-    { name: "Eyebrow Transplant", price: 1400 },
+    { name: "FUE Sapphire", price: 1400, defaultDays: 3 },
+    { name: "FUE Sedation (Pain-Free)", price: 1550, defaultDays: 3 },
+    { name: "DHI", price: 1550, defaultDays: 3 },
+    { name: "DHI Sedation", price: 1700, defaultDays: 3 },
+    { name: "Beard Transplant", price: 1400, defaultDays: 2 },
+    { name: "Eyebrow Transplant", price: 1400, defaultDays: 2 },
     { name: "Other" },
   ],
   "ivf": [
-    { name: "IVF (Standard)" }, { name: "ICSI" }, { name: "Egg Donation" }, { name: "Embryo Screening (PGT)" }, { name: "Other" },
+    { name: "IVF (Standard)", defaultDays: 14 },
+    { name: "ICSI", defaultDays: 14 },
+    { name: "Egg Donation", defaultDays: 16 },
+    { name: "Embryo Screening (PGT)", defaultDays: 14 },
+    { name: "Other" },
   ],
   "liposuction": [
-    { name: "Abdomen (1 Area)", price: 1894 },
-    { name: "Arms (1 Area)", price: 1894 },
-    { name: "Thighs (2 Areas)", price: 2101 },
-    { name: "Full Body (5+ Areas)", price: 2944 },
+    { name: "Abdomen (1 Area)", price: 1894, defaultDays: 7 },
+    { name: "Arms (1 Area)", price: 1894, defaultDays: 6 },
+    { name: "Thighs (2 Areas)", price: 2101, defaultDays: 7 },
+    { name: "Full Body (5+ Areas)", price: 2944, defaultDays: 9 },
     { name: "Other" },
   ],
   "medical-checkup": [
-    { name: "General Health Check-up" }, { name: "Cardiac Check-up" }, { name: "Cancer Screening" }, { name: "Other" },
+    { name: "General Health Check-up", defaultDays: 3 },
+    { name: "Cardiac Check-up", defaultDays: 3 },
+    { name: "Cancer Screening", defaultDays: 3 },
+    { name: "Other" },
   ],
   "neurochirurgia": [
-    { name: "Brain Tumor Surgery" }, { name: "Spinal Surgery" }, { name: "Disc Herniation Surgery" }, { name: "Other" },
+    { name: "Brain Tumor Surgery", defaultDays: 16 },
+    { name: "Spinal Surgery", defaultDays: 12 },
+    { name: "Disc Herniation Surgery", defaultDays: 9 },
+    { name: "Other" },
   ],
   "orthopedics": [
-    { name: "Knee Replacement" }, { name: "Hip Replacement" }, { name: "Sports Injury Surgery" }, { name: "Other" },
+    { name: "Knee Replacement", defaultDays: 12 },
+    { name: "Hip Replacement", defaultDays: 12 },
+    { name: "Sports Injury Surgery", defaultDays: 7 },
+    { name: "Other" },
   ],
   "otolaryngology": [
-    { name: "Tonsillectomy", price: 1369 },
-    { name: "Sinus Surgery (Full FES)", price: 2240 },
-    { name: "Ear Surgery (Otoplasty)", price: 1954 },
+    { name: "Tonsillectomy", price: 1369, defaultDays: 6 },
+    { name: "Sinus Surgery (Full FES)", price: 2240, defaultDays: 6 },
+    { name: "Ear Surgery (Otoplasty)", price: 1954, defaultDays: 7 },
     { name: "Other" },
   ],
   "plastic-surgery": [
-    { name: "Tummy Tuck (Full Abdominoplasty)", price: 3900 },
-    { name: "Facelift (Full Face)", price: 5257 },
-    { name: "Body Lift (Hip Lift)", price: 3205 },
-    { name: "Arm Lift", price: 2632 },
+    { name: "Tummy Tuck (Full Abdominoplasty)", price: 3900, defaultDays: 12 },
+    { name: "Facelift (Full Face)", price: 5257, defaultDays: 9 },
+    { name: "Body Lift (Hip Lift)", price: 3205, defaultDays: 12 },
+    { name: "Arm Lift", price: 2632, defaultDays: 7 },
     { name: "Other" },
   ],
   "radiation-oncology": [
-    { name: "External Radiotherapy" }, { name: "Chemotherapy" }, { name: "Combined Treatment" }, { name: "Other" },
+    { name: "External Radiotherapy", defaultDays: 16 },
+    { name: "Chemotherapy", defaultDays: 16 },
+    { name: "Combined Treatment", defaultDays: 23 },
+    { name: "Other" },
   ],
   "rhinoplasty": [
-    { name: "Primary Rhinoplasty", price: 2443 },
-    { name: "Tip Rhinoplasty (Tipplasty)", price: 1470 },
-    { name: "Revision Rhinoplasty (Complex)", price: 3261 },
-    { name: "Non-Surgical (Filler)" },
-    { name: "Ethnic Rhinoplasty" },
+    { name: "Primary Rhinoplasty", price: 2443, defaultDays: 9 },
+    { name: "Tip Rhinoplasty (Tipplasty)", price: 1470, defaultDays: 7 },
+    { name: "Revision Rhinoplasty (Complex)", price: 3261, defaultDays: 12 },
+    { name: "Non-Surgical (Filler)", defaultDays: 4 },
+    { name: "Ethnic Rhinoplasty", defaultDays: 9 },
     { name: "Other" },
   ],
   "transplantation": [
-    { name: "Kidney Transplant" }, { name: "Liver Transplant" }, { name: "Bone Marrow Transplant" }, { name: "Other" },
+    { name: "Kidney Transplant", defaultDays: 23 },
+    { name: "Liver Transplant", defaultDays: 30 },
+    { name: "Bone Marrow Transplant", defaultDays: 32 },
+    { name: "Other" },
   ],
   "urology": [
-    { name: "Kidney Stone Treatment" }, { name: "Prostate Surgery" }, { name: "Urinary Incontinence Surgery" }, { name: "Other" },
+    { name: "Kidney Stone Treatment", defaultDays: 5 },
+    { name: "Prostate Surgery", defaultDays: 7 },
+    { name: "Urinary Incontinence Surgery", defaultDays: 6 },
+    { name: "Other" },
   ],
   "womens-diseases": [
-    { name: "Hysterectomy" }, { name: "Myoma Surgery" }, { name: "Ovarian Cyst Surgery" }, { name: "Other" },
+    { name: "Hysterectomy", defaultDays: 9 },
+    { name: "Myoma Surgery", defaultDays: 7 },
+    { name: "Ovarian Cyst Surgery", defaultDays: 6 },
+    { name: "Other" },
   ],
 };
 
@@ -217,7 +263,7 @@ export default function CostCalculator() {
 
   const [subService, setSubService] = useState("");
 
-  const [days, setDays] = useState(5);
+  const [days, setDays] = useState(0);
   const [travellers, setTravellers] = useState(1);
 
   const [transportOption, setTransportOption] = useState<"none" | "one-way" | "two-way">("none");
@@ -235,6 +281,14 @@ export default function CostCalculator() {
     setCategoryId(id);
     setDays(next.defaultDays); // kullanıcı isterse elle değiştirebilir
     setSubService(""); // kategori değişince alt hizmet seçimi sıfırlanır
+  }
+
+  function handleSubServiceChange(selectedName: string) {
+    setSubService(selectedName);
+    const picked = subServiceOptions?.find((s) => s.name === selectedName);
+    if (picked?.defaultDays) {
+      setDays(picked.defaultDays); // spesifik hizmetin gerçek süresi varsa, kategori varsayılanının üzerine yazar
+    }
   }
 
   // Sadece TOPLAM için — tek tek kalem fiyatları gösterilmiyor, tedavi ücreti dahil değil.
@@ -348,7 +402,7 @@ export default function CostCalculator() {
             </label>
             <select
               value={subService}
-              onChange={(e) => setSubService(e.target.value)}
+              onChange={(e) => handleSubServiceChange(e.target.value)}
               className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2"
               style={{ ["--tw-ring-color" as any]: BRAND_BLUE }}
             >
@@ -369,7 +423,7 @@ export default function CostCalculator() {
             </div>
             <input
               type="range"
-              min={1}
+              min={0}
               max={30}
               step={1}
               value={days}
@@ -378,7 +432,7 @@ export default function CostCalculator() {
               style={{ accentColor: BRAND_BLUE }}
             />
             <div className="flex justify-between text-xs text-slate-400 mt-1">
-              <span>1</span>
+              <span>0</span>
               <span>30</span>
             </div>
           </div>
