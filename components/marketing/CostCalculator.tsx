@@ -191,7 +191,7 @@ export default function CostCalculator() {
       <div className="p-6 space-y-5 bg-white">
         {/* Country */}
         <div>
-          <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
+          <label className="block text-sm font-semibold mb-1.5" style={{ color: BRAND_BLUE }}>
             Select Your Country
           </label>
           <select
@@ -207,7 +207,7 @@ export default function CostCalculator() {
 
         {/* Service type */}
         <div>
-          <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
+          <label className="block text-sm font-semibold mb-1.5" style={{ color: BRAND_BLUE }}>
             Service Type Selection
           </label>
           <select
@@ -225,7 +225,7 @@ export default function CostCalculator() {
         <div className="grid grid-cols-2 gap-6">
           <div>
             <div className="flex items-baseline justify-between mb-1.5">
-              <label className="text-sm font-medium" style={{ color: BRAND_BLUE }}>Duration of Treatment</label>
+              <label className="text-sm font-semibold" style={{ color: BRAND_BLUE }}>Duration of Treatment</label>
               <span className="text-sm font-semibold" style={{ color: BRAND_BLUE }}>
                 {days} day{days === 1 ? "" : "s"}
               </span>
@@ -247,7 +247,7 @@ export default function CostCalculator() {
           </div>
           <div>
             <div className="flex items-baseline justify-between mb-1.5">
-              <label className="text-sm font-medium" style={{ color: BRAND_BLUE }}>Number of Travellers</label>
+              <label className="text-sm font-semibold" style={{ color: BRAND_BLUE }}>Number of Travellers</label>
               <span className="text-sm font-semibold" style={{ color: BRAND_BLUE }}>
                 {travellers}
               </span>
@@ -271,7 +271,7 @@ export default function CostCalculator() {
 
         {/* Transport */}
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: BRAND_BLUE }}>Transport</label>
+          <label className="block text-sm font-semibold mb-2" style={{ color: BRAND_BLUE }}>Transport</label>
           <div className="grid grid-cols-3 gap-2">
             {[
               { id: "none" as const, label: "None" },
@@ -297,7 +297,7 @@ export default function CostCalculator() {
 
         {/* Accommodation */}
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: BRAND_BLUE }}>Accommodation</label>
+          <label className="block text-sm font-semibold mb-2" style={{ color: BRAND_BLUE }}>Accommodation</label>
           <div className="grid grid-cols-3 gap-2">
             {[
               { id: "none" as const, label: "None" },
@@ -323,7 +323,7 @@ export default function CostCalculator() {
 
         {/* Food */}
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: BRAND_BLUE }}>Food</label>
+          <label className="block text-sm font-semibold mb-2" style={{ color: BRAND_BLUE }}>Food</label>
           <div className="grid grid-cols-3 gap-2">
             {[
               { id: "breakfast" as const, label: "Breakfast" },
@@ -349,7 +349,7 @@ export default function CostCalculator() {
 
         {/* Istanbul Tour */}
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: BRAND_BLUE }}>Istanbul Tour</label>
+          <label className="block text-sm font-semibold mb-2" style={{ color: BRAND_BLUE }}>Istanbul Tour</label>
           <button
             type="button"
             onClick={() => setIstanbulTour((v) => !v)}
@@ -383,7 +383,7 @@ export default function CostCalculator() {
 
         {/* Lead capture — terms, then contact details with a channel choice */}
         <div className="rounded-xl border border-slate-200 p-4">
-          <p className="text-sm font-medium text-slate-700 mb-3">
+          <p className="text-sm font-semibold text-slate-700 mb-3">
             Like our price? Leave your details below and we'll contact you.
           </p>
 
@@ -404,7 +404,7 @@ export default function CostCalculator() {
           {agreed && (
             <div className="mt-4 space-y-3">
               <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
+                <label className="block text-sm font-semibold mb-1.5" style={{ color: BRAND_BLUE }}>
                   Your Name
                 </label>
                 <input
@@ -418,7 +418,7 @@ export default function CostCalculator() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
+                <label className="block text-sm font-semibold mb-1.5" style={{ color: BRAND_BLUE }}>
                   How should we contact you?
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -444,7 +444,7 @@ export default function CostCalculator() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
+                <label className="block text-sm font-semibold mb-1.5" style={{ color: BRAND_BLUE }}>
                   {contactMethod === "whatsapp" ? "Your WhatsApp / Phone Number" : "Your Email Address"}
                 </label>
                 <input
