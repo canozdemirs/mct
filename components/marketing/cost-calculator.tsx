@@ -123,16 +123,6 @@ export function CostCalculator() {
 
   return (
     <div className="w-full max-w-2xl mx-auto rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-      <div
-        className="px-6 py-5"
-        style={{ background: `linear-gradient(135deg, ${BRAND_BLUE}, ${BRAND_TEAL})` }}
-      >
-        <h3 className="text-white text-xl font-semibold">Calculate Your Treatment Cost in Turkey</h3>
-        <p className="text-white/80 text-sm mt-1">
-          Get an estimate of your travel and accommodation costs for your treatment journey.
-        </p>
-      </div>
-
       <div className="p-6 space-y-5 bg-white">
         <div>
           <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
