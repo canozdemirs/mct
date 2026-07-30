@@ -2,9 +2,29 @@
 
 import { useMemo, useState } from "react";
 
+/**
+ * MCT Türkiye'de Tedavi Maliyeti Hesaplama
+ * -----------------------------------------
+ * Eski WordPress sitesindeki "Treatment Prices" formunun mantığını takip eder:
+ * Ülke → Tedavi Kategorisi → Tedavi Süresi (gün, elle girilir) → Kişi Sayısı
+ * → Ekstra Hizmetler (Transport / Konaklama / Yeme / Istanbul Turu)
+ * → Estimated Cost (kalemler fiyatsız, toplamda € gösterilir)
+ *
+ * BİLİNÇLİ TASARIM KARARI: Tedavi (sağlık hizmeti) ücreti HİÇBİR ZAMAN
+ * gösterilmez/hesaplanmaz. Transport/konaklama/yemek/tur gibi lojistik
+ * kalemlerin TEK TEK fiyatı da gösterilmez — sadece bunların TOPLAMI
+ * "Total Estimated Cost" olarak gösterilir. Kesin (tedavi dahil) fiyat,
+ * WhatsApp üzerinden MCT tarafından kişiye özel olarak iletilir. Bu ayrımı
+ * kaldırma.
+ */
+
 const BRAND_BLUE = "#1b5fa8";
 const BRAND_TEAL = "#1ab3c8";
 
+// ---- Tedavi kategorileri: eski sitedeki "Service Type Selection" listesiyle birebir ----
+// NOT: defaultDays placeholder'dır — gerçek partner hastane sürelerine göre
+// güncellenmeli. Tedavi ücreti bilinçli olarak burada YOK — bu araç tedavi
+// fiyatı göstermiyor/hesaplamıyor.
 type TreatmentCategory = {
   id: string;
   name: string;
@@ -68,6 +88,13 @@ const COUNTRIES = [
   "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe", "Other",
 ];
 
+// NOT: Fiyat rakamları (transport/konaklama/yemek/İstanbul turu) bilinçli
+// olarak bu component içinde artık HESAPLANMIYOR/GÖSTERİLMİYOR — "Estimated
+// Cost" bölümü sadece kullanıcının seçimlerinin özeti. Kesin fiyat MCT
+// tarafından WhatsApp/danışmanlık sonrası iletiliyor.
+
+// Lojistik masraf fiyatları (€) — sağlık hizmeti DEĞİL, toplamda gösterilmesi
+// serbest. NOT: tedavi ücreti hâlâ hiçbir hesaplamaya dahil edilmiyor.
 const TRANSPORT_PRICE = { "one-way": 75, "two-way": 150 } as const;
 const ACCOMMODATION_PRICE_PER_NIGHT = { "4star": 70, "5star": 100 } as const;
 const MEAL_PRICE_PER_DAY = { breakfast: 0, lunch: 10, dinner: 15 } as const;
@@ -77,7 +104,7 @@ function formatEUR(n: number) {
   return `€${Math.round(n).toLocaleString("en-US")}`;
 }
 
-export function CostCalculator() {
+export default function CostCalculator() {
   const [country, setCountry] = useState(COUNTRIES[0]);
   const [categoryId, setCategoryId] = useState(TREATMENT_CATEGORIES[0].id);
   const category = TREATMENT_CATEGORIES.find((c) => c.id === categoryId)!;
@@ -94,299 +121,334 @@ export function CostCalculator() {
   const [name, setName] = useState("");
   const [contactMethod, setContactMethod] = useState<"whatsapp" | "email">("whatsapp");
   const [contactValue, setContactValue] = useState("");
-  const [submitState, setSubmitState] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   function handleCategoryChange(id: string) {
     const next = TREATMENT_CATEGORIES.find((c) => c.id === id)!;
     setCategoryId(id);
-    setDays(next.defaultDays);
+    setDays(next.defaultDays); // kullanıcı isterse elle değiştirebilir
   }
 
+  // Sadece TOPLAM için — tek tek kalem fiyatları gösterilmiyor, tedavi ücreti dahil değil.
   const totalCost = useMemo(() => {
     const safeDays = Math.max(days, 0);
     const safeTravellers = Math.max(travellers, 1);
+
     const transport = transportOption === "none" ? 0 : TRANSPORT_PRICE[transportOption];
+
     const accommodation =
       accommodationTier === "none"
         ? 0
         : ACCOMMODATION_PRICE_PER_NIGHT[accommodationTier] * safeDays * safeTravellers;
+
     const mealPerDay =
       (meals.breakfast ? MEAL_PRICE_PER_DAY.breakfast : 0) +
       (meals.lunch ? MEAL_PRICE_PER_DAY.lunch : 0) +
       (meals.dinner ? MEAL_PRICE_PER_DAY.dinner : 0);
     const food = mealPerDay * safeDays * safeTravellers;
+
     const tour = istanbulTour ? ISTANBUL_TOUR_PRICE : 0;
+
     return transport + accommodation + food + tour;
   }, [days, travellers, transportOption, accommodationTier, meals, istanbulTour]);
 
   function summaryText() {
-    const mealList = (["breakfast", "lunch", "dinner"] as const)
-      .filter((k) => meals[k])
-      .map((k) => k.charAt(0).toUpperCase() + k.slice(1))
-      .join(", ");
-
-    const lines = [
-      `Hello, my name is ${name}.`,
-      `I'm from ${country} and I'm interested in ${category.name}.`,
-      `Duration: ${days} day${days === 1 ? "" : "s"}, ${travellers} traveller${travellers === 1 ? "" : "s"}.`,
-      transportOption !== "none" ? `Transport: ${transportOption === "one-way" ? "One Way" : "Two Way"}` : null,
-      accommodationTier !== "none" ? `Accommodation: ${accommodationTier === "4star" ? "4 Star Hotel" : "5 Star Hotel"}` : null,
-      mealList ? `Food: ${mealList}` : null,
-      istanbulTour ? "Istanbul Tour: Added" : null,
-      `Estimated journey cost: ${formatEUR(totalCost)}`,
-      `My contact: ${contactValue}`,
-      `I'd like to receive a personalised quote.`,
-    ].filter(Boolean);
-
-    return lines.join("\n");
+    return (
+      `Hello, I'm ${name || "(name)"} from ${country}. For ${category.name} ` +
+      `(${days} days, ${travellers} traveller(s)), I saw a total estimated cost of ` +
+      `${formatEUR(totalCost)}, I'd like a personalized quote.`
+    );
   }
 
   function whatsappHref() {
-    return `https://wa.me/908508888911?text=${encodeURIComponent(summaryText())}`;
+    const msg = `${summaryText()}\n\nMy WhatsApp/phone: ${contactValue}`;
+    return `https://wa.me/908508888911?text=${encodeURIComponent(msg)}`;
   }
 
-const canSubmit = agreed && name.trim() !== "" && contactValue.trim() !== "" && submitState === "idle";
-
-  async function handleSubmit() {
-    if (!canSubmit) return;
-    setSubmitState("loading");
-    try {
-      if (contactMethod === "whatsapp") {
-        window.open(whatsappHref(), "_blank");
-        setSubmitState("success");
-      } else {
-        const res = await fetch("/api/contact", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, contactMethod, contactValue, summary: summaryText() }),
-        });
-        if (!res.ok) throw new Error("send failed");
-        setSubmitState("success");
-      }
-    } catch {
-      setSubmitState("error");
-    }
+  function mailtoHref() {
+    const subject = `Personalized Quote Request — ${category.name}`;
+    const body = `${summaryText()}\n\nMy email: ${contactValue}`;
+    return `mailto:hello@medicalcenterturkey.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 
   return (
     <div className="w-full max-w-2xl mx-auto rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       <div className="p-6 space-y-5 bg-white">
+        {/* Country */}
         <div>
-          <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
-            Select Your Country
-          </label>
+          <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>Select Your Country</label>
           <select
             value={country}
             onChange={(e) => setCountry(e.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#1b5fa8]"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2"
+            style={{ ["--tw-ring-color" as any]: BRAND_BLUE }}
           >
             {COUNTRIES.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
         </div>
 
+        {/* Service type */}
         <div>
-          <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
-            Service Type Selection
-          </label>
+          <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>Service Type Selection</label>
           <select
             value={categoryId}
             onChange={(e) => handleCategoryChange(e.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#1b5fa8]"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2"
+            style={{ ["--tw-ring-color" as any]: BRAND_BLUE }}
           >
             {TREATMENT_CATEGORIES.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
         </div>
 
+        {/* Duration + travellers — drag-to-right sliders */}
         <div className="grid grid-cols-2 gap-6">
           <div>
             <div className="flex items-baseline justify-between mb-1.5">
-              <label className="text-sm font-medium" style={{ color: BRAND_BLUE }}>Duration</label>
+              <label className="text-sm font-medium" style={{ color: BRAND_BLUE }}>Duration of Treatment</label>
               <span className="text-sm font-semibold" style={{ color: BRAND_BLUE }}>
                 {days} day{days === 1 ? "" : "s"}
               </span>
             </div>
-            <input type="range" min={1} max={30} step={1} value={days}
+            <input
+              type="range"
+              min={1}
+              max={30}
+              step={1}
+              value={days}
               onChange={(e) => setDays(Number(e.target.value))}
-              className="w-full accent-[#1b5fa8]" />
-            <div className="flex justify-between text-xs text-slate-400 mt-1"><span>1</span><span>30</span></div>
+              className="w-full"
+              style={{ accentColor: BRAND_BLUE }}
+            />
+            <div className="flex justify-between text-xs text-slate-400 mt-1">
+              <span>1</span>
+              <span>30</span>
+            </div>
           </div>
           <div>
             <div className="flex items-baseline justify-between mb-1.5">
-              <label className="text-sm font-medium" style={{ color: BRAND_BLUE }}>Travellers</label>
-              <span className="text-sm font-semibold" style={{ color: BRAND_BLUE }}>{travellers}</span>
+              <label className="text-sm font-medium" style={{ color: BRAND_BLUE }}>Number of Travellers</label>
+              <span className="text-sm font-semibold" style={{ color: BRAND_BLUE }}>
+                {travellers}
+              </span>
             </div>
-            <input type="range" min={1} max={10} step={1} value={travellers}
+            <input
+              type="range"
+              min={1}
+              max={10}
+              step={1}
+              value={travellers}
               onChange={(e) => setTravellers(Number(e.target.value))}
-              className="w-full accent-[#1b5fa8]" />
-            <div className="flex justify-between text-xs text-slate-400 mt-1"><span>1</span><span>10</span></div>
+              className="w-full"
+              style={{ accentColor: BRAND_BLUE }}
+            />
+            <div className="flex justify-between text-xs text-slate-400 mt-1">
+              <span>1</span>
+              <span>10</span>
+            </div>
           </div>
         </div>
 
+        {/* Transport */}
         <div>
           <label className="block text-sm font-medium mb-2" style={{ color: BRAND_BLUE }}>Transport</label>
           <div className="grid grid-cols-3 gap-2">
-            {(["none", "one-way", "two-way"] as const).map((opt) => (
-              <button key={opt} type="button" onClick={() => setTransportOption(opt)}
-                className={`rounded-lg border px-3 py-2 text-sm transition-colors ${transportOption === opt ? "text-white border-transparent" : "text-slate-500 border-slate-300 hover:border-slate-400"}`}
-                style={transportOption === opt ? { background: BRAND_TEAL } : undefined}>
-                {opt === "none" ? "None" : opt === "one-way" ? "One Way" : "Two Way"}
+            {[
+              { id: "none" as const, label: "None" },
+              { id: "one-way" as const, label: "One Way" },
+              { id: "two-way" as const, label: "Two Way" },
+            ].map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => setTransportOption(opt.id)}
+                className={`rounded-lg border px-3 py-2 text-sm transition-colors ${
+                  transportOption === opt.id
+                    ? "text-white border-transparent"
+                    : "text-slate-500 border-slate-300 hover:border-slate-400"
+                }`}
+                style={transportOption === opt.id ? { background: BRAND_TEAL } : undefined}
+              >
+                {opt.label}
               </button>
             ))}
           </div>
         </div>
 
+        {/* Accommodation */}
         <div>
           <label className="block text-sm font-medium mb-2" style={{ color: BRAND_BLUE }}>Accommodation</label>
           <div className="grid grid-cols-3 gap-2">
-            {(["none", "4star", "5star"] as const).map((opt) => (
-              <button key={opt} type="button" onClick={() => setAccommodationTier(opt)}
-                className={`rounded-lg border px-3 py-2 text-sm transition-colors ${accommodationTier === opt ? "text-white border-transparent" : "text-slate-500 border-slate-300 hover:border-slate-400"}`}
-                style={accommodationTier === opt ? { background: BRAND_TEAL } : undefined}>
-                {opt === "none" ? "None" : opt === "4star" ? "4 Star Hotel" : "5 Star Hotel"}
+            {[
+              { id: "none" as const, label: "None" },
+              { id: "4star" as const, label: "4 Star Hotel" },
+              { id: "5star" as const, label: "5 Star Hotel" },
+            ].map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => setAccommodationTier(opt.id)}
+                className={`rounded-lg border px-3 py-2 text-sm transition-colors ${
+                  accommodationTier === opt.id
+                    ? "text-white border-transparent"
+                    : "text-slate-500 border-slate-300 hover:border-slate-400"
+                }`}
+                style={accommodationTier === opt.id ? { background: BRAND_TEAL } : undefined}
+              >
+                {opt.label}
               </button>
             ))}
           </div>
         </div>
 
+        {/* Food */}
         <div>
           <label className="block text-sm font-medium mb-2" style={{ color: BRAND_BLUE }}>Food</label>
           <div className="grid grid-cols-3 gap-2">
-            {(["breakfast", "lunch", "dinner"] as const).map((opt) => (
-              <button key={opt} type="button" onClick={() => setMeals((m) => ({ ...m, [opt]: !m[opt] }))}
-                className={`rounded-lg border px-3 py-2 text-sm transition-colors ${meals[opt] ? "text-white border-transparent" : "text-slate-500 border-slate-300 hover:border-slate-400"}`}
-                style={meals[opt] ? { background: BRAND_TEAL } : undefined}>
-                {opt.charAt(0).toUpperCase() + opt.slice(1)}
+            {[
+              { id: "breakfast" as const, label: "Breakfast" },
+              { id: "lunch" as const, label: "Lunch" },
+              { id: "dinner" as const, label: "Dinner" },
+            ].map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => setMeals((m) => ({ ...m, [opt.id]: !m[opt.id] }))}
+                className={`rounded-lg border px-3 py-2 text-sm transition-colors ${
+                  meals[opt.id]
+                    ? "text-white border-transparent"
+                    : "text-slate-500 border-slate-300 hover:border-slate-400"
+                }`}
+                style={meals[opt.id] ? { background: BRAND_TEAL } : undefined}
+              >
+                {opt.label}
               </button>
             ))}
           </div>
         </div>
 
+        {/* Istanbul Tour */}
         <div>
           <label className="block text-sm font-medium mb-2" style={{ color: BRAND_BLUE }}>Istanbul Tour</label>
-          <button type="button" onClick={() => setIstanbulTour((v) => !v)}
-            className={`rounded-lg border px-3 py-2 text-sm transition-colors ${istanbulTour ? "text-white border-transparent" : "text-slate-500 border-slate-300 hover:border-slate-400"}`}
-            style={istanbulTour ? { background: BRAND_TEAL } : undefined}>
+          <button
+            type="button"
+            onClick={() => setIstanbulTour((v) => !v)}
+            className={`rounded-lg border px-3 py-2 text-sm transition-colors ${
+              istanbulTour
+                ? "text-white border-transparent"
+                : "text-slate-500 border-slate-300 hover:border-slate-400"
+            }`}
+            style={istanbulTour ? { background: BRAND_TEAL } : undefined}
+          >
             {istanbulTour ? "Added" : "Add Istanbul Tour"}
           </button>
         </div>
 
+        {/* Estimated Cost — sadece toplam, kalem listesi yok */}
         <div className="rounded-xl border border-slate-200 p-4 bg-slate-50">
           <h4 className="text-sm font-semibold uppercase tracking-wide mb-3" style={{ color: BRAND_BLUE }}>
             Estimated Treatment Journey Cost
           </h4>
-          <ul className="space-y-2 text-sm">
-            <li className="flex justify-between">
-              <span className="text-slate-600">Treatment</span>
-              <span className="font-medium text-slate-800">{category.name}</span>
-            </li>
-            {transportOption !== "none" && (
-              <li className="flex justify-between">
-                <span className="text-slate-600">Transport</span>
-                <span className="font-medium text-slate-800">{transportOption === "one-way" ? "One Way" : "Two Way"}</span>
-              </li>
-            )}
-            {accommodationTier !== "none" && (
-              <li className="flex justify-between">
-                <span className="text-slate-600">Accommodation</span>
-                <span className="font-medium text-slate-800">{accommodationTier === "4star" ? "4 Star Hotel" : "5 Star Hotel"}</span>
-              </li>
-            )}
-            {(meals.breakfast || meals.lunch || meals.dinner) && (
-              <li className="flex justify-between">
-                <span className="text-slate-600">Food</span>
-                <span className="font-medium text-slate-800">
-                  {(["breakfast", "lunch", "dinner"] as const).filter((k) => meals[k]).map((k) => k.charAt(0).toUpperCase() + k.slice(1)).join(", ")}
-                </span>
-              </li>
-            )}
-            {istanbulTour && (
-              <li className="flex justify-between">
-                <span className="text-slate-600">Istanbul Tour</span>
-                <span className="font-medium text-slate-800">Added</span>
-              </li>
-            )}
-          </ul>
-          <div className="mt-3 pt-3 border-t border-slate-300 flex justify-between items-center">
-            <span className="font-semibold" style={{ color: BRAND_BLUE }}>Total Cost</span>
-            <span className="text-lg font-bold" style={{ color: BRAND_BLUE }}>{formatEUR(totalCost)}</span>
+          <div className="flex justify-between items-center">
+            <span className="font-semibold" style={{ color: BRAND_BLUE }}>Estimated Total Cost</span>
+            <span className="text-lg font-bold" style={{ color: BRAND_BLUE }}>
+              {formatEUR(totalCost)}
+            </span>
           </div>
           <p className="text-xs text-slate-500 mt-2">
-            Prices shown are for informational purposes only and are not final — they may vary from person to person. Please contact us for an exact quote.
+            Prices shown are for informational purposes only and are not final — they may vary
+            from person to person. Please contact us for an exact quote.
           </p>
         </div>
 
-        <div className="rounded-xl border border-slate-200 p-4 space-y-3">
-          <p className="text-sm font-medium text-slate-700">
-            Like our price? Leave your details and we&apos;ll send you a personalised quote.
+        {/* Lead capture — terms, then contact details with a channel choice */}
+        <div className="rounded-xl border border-slate-200 p-4">
+          <p className="text-sm font-medium text-slate-700 mb-3">
+            Like our price? Leave your details below and we'll contact you.
           </p>
 
-          <div>
-            <label className="block text-xs font-medium text-slate-500 mb-1">Your Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Full name"
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#1b5fa8]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-slate-500 mb-1">Preferred Contact Method</label>
-            <div className="grid grid-cols-2 gap-2">
-              {(["whatsapp", "email"] as const).map((method) => (
-                <button key={method} type="button" onClick={() => { setContactMethod(method); setContactValue(""); }}
-                  className={`rounded-lg border px-3 py-2 text-sm transition-colors ${contactMethod === method ? "text-white border-transparent" : "text-slate-500 border-slate-300 hover:border-slate-400"}`}
-                  style={contactMethod === method ? { background: BRAND_TEAL } : undefined}>
-                  {method === "whatsapp" ? "WhatsApp" : "Email"}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-slate-500 mb-1">
-              {contactMethod === "whatsapp" ? "Your WhatsApp Number" : "Your Email Address"}
-            </label>
-            <input
-              type={contactMethod === "email" ? "email" : "tel"}
-              value={contactValue}
-              onChange={(e) => setContactValue(e.target.value)}
-              placeholder={contactMethod === "whatsapp" ? "+1 234 567 8900" : "you@example.com"}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#1b5fa8]"
-            />
-          </div>
-
           <label className="flex items-start gap-2 text-xs text-slate-600">
-            <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-0.5 shrink-0" />
+            <input
+              type="checkbox"
+              checked={agreed}
+              onChange={(e) => setAgreed(e.target.checked)}
+              className="mt-0.5"
+            />
             <span>
-              I agree to Medical Center Turkey&apos;s Terms and Conditions, I have read the Privacy Policy and I agree that my given details including health data may be processed by Medical Center Turkey for the purpose of obtaining quotes.
+              I agree to Medical Center Turkey's Terms and Conditions, I have read the Privacy
+              Policy and I agree that my given details including health data may be processed
+              by Medical Center Turkey for the purpose of obtaining quotes.
             </span>
           </label>
 
-          {submitState === "success" ? (
-            <div className="rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-800 text-center">
-              Your message has been received. We&apos;ll be in touch with you shortly.
-            </div>
-          ) : (
-            <>
-              <button
-                type="button"
-                onClick={handleSubmit}
-                disabled={!canSubmit}
-                className={`flex w-full justify-center items-center rounded-lg py-2.5 text-white font-medium text-sm transition-opacity ${canSubmit ? "opacity-100" : "opacity-50 cursor-not-allowed"}`}
+          {agreed && (
+            <div className="mt-4 space-y-3">
+              <div>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
+                  Your Name
+                </label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Full name"
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2"
+                  style={{ ["--tw-ring-color" as any]: BRAND_BLUE }}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
+                  How should we contact you?
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { id: "whatsapp" as const, label: "WhatsApp" },
+                    { id: "email" as const, label: "Email" },
+                  ].map((opt) => (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={() => { setContactMethod(opt.id); setContactValue(""); }}
+                      className={`rounded-lg border px-3 py-2 text-sm transition-colors ${
+                        contactMethod === opt.id
+                          ? "text-white border-transparent"
+                          : "text-slate-500 border-slate-300 hover:border-slate-400"
+                      }`}
+                      style={contactMethod === opt.id ? { background: BRAND_TEAL } : undefined}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
+                  {contactMethod === "whatsapp" ? "Your WhatsApp / Phone Number" : "Your Email Address"}
+                </label>
+                <input
+                  type={contactMethod === "whatsapp" ? "tel" : "email"}
+                  value={contactValue}
+                  onChange={(e) => setContactValue(e.target.value)}
+                  placeholder={contactMethod === "whatsapp" ? "+44 7XXX XXXXXX" : "you@example.com"}
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2"
+                  style={{ ["--tw-ring-color" as any]: BRAND_BLUE }}
+                />
+              </div>
+
+              <a
+                href={name && contactValue ? (contactMethod === "whatsapp" ? whatsappHref() : mailtoHref()) : undefined}
+                target={contactMethod === "whatsapp" ? "_blank" : undefined}
+                rel="noopener noreferrer"
+                aria-disabled={!(name && contactValue)}
+                onClick={(e) => { if (!(name && contactValue)) e.preventDefault(); }}
+                className={`inline-flex w-full justify-center rounded-lg py-2.5 text-white font-medium ${
+                  name && contactValue ? "" : "opacity-50 cursor-not-allowed"
+                }`}
                 style={{ background: BRAND_TEAL }}
               >
-                {submitState === "loading"
-                  ? "Sending…"
-                  : contactMethod === "whatsapp"
-                  ? "Send via WhatsApp"
-                  : "Send via Email"}
-              </button>
-              {submitState === "error" && (
-                <p className="text-xs text-red-500 text-center">Something went wrong. Please try again.</p>
-              )}
-            </>
+                {contactMethod === "whatsapp" ? "Send via WhatsApp" : "Send via Email"}
+              </a>
+            </div>
           )}
         </div>
       </div>
