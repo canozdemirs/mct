@@ -94,6 +94,7 @@ export function CostCalculator() {
   const [name, setName] = useState("");
   const [contactMethod, setContactMethod] = useState<"whatsapp" | "email">("whatsapp");
   const [contactValue, setContactValue] = useState("");
+  const [submitState, setSubmitState] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   function handleCategoryChange(id: string) {
     const next = TREATMENT_CATEGORIES.find((c) => c.id === id)!;
@@ -144,12 +145,28 @@ export function CostCalculator() {
     return `https://wa.me/908508888911?text=${encodeURIComponent(summaryText())}`;
   }
 
-  function mailtoHref() {
-    const subject = `Treatment Enquiry — ${category.name} (${country})`;
-    return `mailto:hello@medicalcenterturkey.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(summaryText())}`;
-  }
+const canSubmit = agreed && name.trim() !== "" && contactValue.trim() !== "" && submitState === "idle";
 
-  const canSubmit = agreed && name.trim() !== "" && contactValue.trim() !== "";
+  async function handleSubmit() {
+    if (!canSubmit) return;
+    setSubmitState("loading");
+    try {
+      if (contactMethod === "whatsapp") {
+        window.open(whatsappHref(), "_blank");
+        setSubmitState("success");
+      } else {
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, contactMethod, contactValue, summary: summaryText() }),
+        });
+        if (!res.ok) throw new Error("send failed");
+        setSubmitState("success");
+      }
+    } catch {
+      setSubmitState("error");
+    }
+  }
 
   return (
     <div className="w-full max-w-2xl mx-auto rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
@@ -347,17 +364,30 @@ export function CostCalculator() {
             </span>
           </label>
 
-          <a
-            href={canSubmit ? (contactMethod === "whatsapp" ? whatsappHref() : mailtoHref()) : undefined}
-            target={contactMethod === "whatsapp" ? "_blank" : undefined}
-            rel="noopener noreferrer"
-            aria-disabled={!canSubmit}
-            onClick={(e) => { if (!canSubmit) e.preventDefault(); }}
-            className={`flex w-full justify-center items-center rounded-lg py-2.5 text-white font-medium text-sm transition-opacity ${canSubmit ? "opacity-100" : "opacity-50 cursor-not-allowed"}`}
-            style={{ background: BRAND_TEAL }}
-          >
-            {contactMethod === "whatsapp" ? "Send via WhatsApp" : "Send via Email"}
-          </a>
+          {submitState === "success" ? (
+            <div className="rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-800 text-center">
+              Your message has been received. We&apos;ll be in touch with you shortly.
+            </div>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={!canSubmit}
+                className={`flex w-full justify-center items-center rounded-lg py-2.5 text-white font-medium text-sm transition-opacity ${canSubmit ? "opacity-100" : "opacity-50 cursor-not-allowed"}`}
+                style={{ background: BRAND_TEAL }}
+              >
+                {submitState === "loading"
+                  ? "Sending…"
+                  : contactMethod === "whatsapp"
+                  ? "Send via WhatsApp"
+                  : "Send via Email"}
+              </button>
+              {submitState === "error" && (
+                <p className="text-xs text-red-500 text-center">Something went wrong. Please try again.</p>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>
