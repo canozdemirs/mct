@@ -152,10 +152,26 @@ export default function CostCalculator() {
   }, [days, travellers, transportOption, accommodationTier, meals, istanbulTour]);
 
   function summaryText() {
+    const transportLabel =
+      transportOption === "none" ? "None" : transportOption === "one-way" ? "One Way" : "Two Way";
+    const accommodationLabel =
+      accommodationTier === "none" ? "None" : accommodationTier === "4star" ? "4 Star Hotel" : "5 Star Hotel";
+    const foodLabel =
+      [meals.breakfast && "Breakfast", meals.lunch && "Lunch", meals.dinner && "Dinner"]
+        .filter(Boolean)
+        .join(", ") || "None";
+
     return (
-      `Hello, I'm ${name || "(name)"} from ${country}. For ${category.name} ` +
-      `(${days} days, ${travellers} traveller(s)), I saw a total estimated cost of ` +
-      `${formatEUR(totalCost)}, I'd like a personalized quote.`
+      `Hello, I'm ${name || "(name)"} from ${country}.\n\n` +
+      `Treatment: ${category.name}\n` +
+      `Duration: ${days} day${days === 1 ? "" : "s"}\n` +
+      `Travellers: ${travellers}\n` +
+      `Transport: ${transportLabel}\n` +
+      `Accommodation: ${accommodationLabel}\n` +
+      `Food: ${foodLabel}\n` +
+      `Istanbul Tour: ${istanbulTour ? "Added" : "Not added"}\n` +
+      `Estimated Total Cost seen: ${formatEUR(totalCost)}\n\n` +
+      `I'd like a personalized quote.`
     );
   }
 
