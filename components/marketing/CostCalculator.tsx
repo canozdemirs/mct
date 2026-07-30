@@ -191,7 +191,8 @@ export default function CostCalculator() {
       <div className="p-6 space-y-5 bg-white">
         {/* Country */}
         <div>
-          <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>Select Your Country</label>
+          <label className="block text-sm font-medium mb-0.5" style={{ color: BRAND_BLUE }}>Select Your Country</label>
+          <p className="text-xs text-slate-500 mb-1.5">Which country's passport do you hold?</p>
           <select
             value={country}
             onChange={(e) => setCountry(e.target.value)}
@@ -204,7 +205,8 @@ export default function CostCalculator() {
 
         {/* Service type */}
         <div>
-          <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>Service Type Selection</label>
+          <label className="block text-sm font-medium mb-0.5" style={{ color: BRAND_BLUE }}>Service Type Selection</label>
+          <p className="text-xs text-slate-500 mb-1.5">Which treatment would you like an approximate price for?</p>
           <select
             value={categoryId}
             onChange={(e) => handleCategoryChange(e.target.value)}
