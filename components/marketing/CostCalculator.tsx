@@ -56,6 +56,33 @@ const TREATMENT_CATEGORIES: TreatmentCategory[] = [
   { id: "other", name: "Other", defaultDays: 5 },
 ];
 
+// ---- Alt hizmetler (Service Type seçilince açılan ikinci dropdown) ----
+// NOT: Bu liste placeholder'dır — gerçek partner hastane hizmet listelerine
+// göre güncellenmeli. Kategoriye alt hizmet tanımlanmamışsa dropdown açılmaz.
+const SUB_SERVICES: Record<string, string[]> = {
+  "breast-augmentation": ["Silicone Implants", "Fat Transfer (Fat-to-Breast)", "Breast Lift + Augmentation", "Implant Revision", "Other"],
+  "cardiology": ["Angiography", "Angioplasty / Stent", "Pacemaker Implantation", "Cardiac Check-up", "Other"],
+  "cardiovascular": ["Coronary Bypass (CABG)", "Heart Valve Surgery", "Aortic Surgery", "Other"],
+  "dental": ["Tooth Extraction", "Dental Filling", "Root Canal Treatment", "Dental Implant", "Zirconia Crown", "Veneers", "Teeth Whitening", "Full Mouth Restoration", "Other"],
+  "eye-diseases": ["LASIK / Laser Eye Surgery", "Cataract Surgery", "Retina Treatment", "Other"],
+  "gastroenterology": ["Endoscopy", "Colonoscopy", "Bariatric (Weight Loss) Surgery", "Other"],
+  "general-surgery": ["Hernia Repair", "Gallbladder Surgery", "Appendectomy", "Other"],
+  "gynecomastia": ["Liposuction Technique", "Gland Excision", "Combined Technique", "Other"],
+  "hair-transplant": ["FUE", "DHI", "Sapphire FUE", "Beard Transplant", "Eyebrow Transplant", "Other"],
+  "ivf": ["IVF (Standard)", "ICSI", "Egg Donation", "Embryo Screening (PGT)", "Other"],
+  "liposuction": ["Abdomen", "Arms", "Thighs", "Full Body", "Other"],
+  "medical-checkup": ["General Health Check-up", "Cardiac Check-up", "Cancer Screening", "Other"],
+  "neurochirurgia": ["Brain Tumor Surgery", "Spinal Surgery", "Disc Herniation Surgery", "Other"],
+  "orthopedics": ["Knee Replacement", "Hip Replacement", "Sports Injury Surgery", "Other"],
+  "otolaryngology": ["Tonsillectomy", "Sinus Surgery", "Ear Surgery", "Other"],
+  "plastic-surgery": ["Tummy Tuck", "Facelift", "Body Lift", "Arm Lift", "Other"],
+  "radiation-oncology": ["External Radiotherapy", "Chemotherapy", "Combined Treatment", "Other"],
+  "rhinoplasty": ["Primary Rhinoplasty", "Revision Rhinoplasty", "Non-Surgical (Filler)", "Ethnic Rhinoplasty", "Other"],
+  "transplantation": ["Kidney Transplant", "Liver Transplant", "Bone Marrow Transplant", "Other"],
+  "urology": ["Kidney Stone Treatment", "Prostate Surgery", "Urinary Incontinence Surgery", "Other"],
+  "womens-diseases": ["Hysterectomy", "Myoma Surgery", "Ovarian Cyst Surgery", "Other"],
+};
+
 const COUNTRIES = [
   "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda",
   "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain",
@@ -108,6 +135,9 @@ export default function CostCalculator() {
   const [country, setCountry] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const category = TREATMENT_CATEGORIES.find((c) => c.id === categoryId);
+  const subServiceOptions = categoryId ? SUB_SERVICES[categoryId] : undefined;
+
+  const [subService, setSubService] = useState("");
 
   const [days, setDays] = useState(5);
   const [travellers, setTravellers] = useState(1);
@@ -126,6 +156,7 @@ export default function CostCalculator() {
     const next = TREATMENT_CATEGORIES.find((c) => c.id === id)!;
     setCategoryId(id);
     setDays(next.defaultDays); // kullanıcı isterse elle değiştirebilir
+    setSubService(""); // kategori değişince alt hizmet seçimi sıfırlanır
   }
 
   // Sadece TOPLAM için — tek tek kalem fiyatları gösterilmiyor, tedavi ücreti dahil değil.
@@ -163,7 +194,7 @@ export default function CostCalculator() {
 
     return (
       `Hello, I'm ${name || "(name)"} from ${country || "(country not selected)"}.\n\n` +
-      `Treatment: ${category?.name || "(not selected)"}\n` +
+      `Treatment: ${category?.name || "(not selected)"}${subService ? ` — ${subService}` : ""}\n` +
       `Duration: ${days} day${days === 1 ? "" : "s"}\n` +
       `Travellers: ${travellers}\n` +
       `Transport: ${transportLabel}\n` +
@@ -191,7 +222,7 @@ export default function CostCalculator() {
       <div className="p-6 space-y-5 bg-white">
         {/* Country */}
         <div>
-          <label className="block text-xs lg:text-sm font-semibold mb-1.5" style={{ color: BRAND_BLUE }}>
+          <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
             Select Your Country
           </label>
           <select
@@ -207,7 +238,7 @@ export default function CostCalculator() {
 
         {/* Service type */}
         <div>
-          <label className="block text-xs lg:text-sm font-semibold mb-1.5" style={{ color: BRAND_BLUE }}>
+          <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
             Service Type Selection
           </label>
           <select
@@ -221,12 +252,30 @@ export default function CostCalculator() {
           </select>
         </div>
 
+        {/* Sub-service — only shown once a category with defined sub-services is selected */}
+        {subServiceOptions && (
+          <div>
+            <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
+              Which specific service?
+            </label>
+            <select
+              value={subService}
+              onChange={(e) => setSubService(e.target.value)}
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2"
+              style={{ ["--tw-ring-color" as any]: BRAND_BLUE }}
+            >
+              <option value="" disabled hidden>Select a specific service</option>
+              {subServiceOptions.map((s) => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
+        )}
+
         {/* Duration + travellers — drag-to-right sliders */}
         <div className="grid grid-cols-2 gap-6">
           <div>
             <div className="flex items-baseline justify-between mb-1.5">
-              <label className="text-xs lg:text-sm font-semibold" style={{ color: BRAND_BLUE }}>Duration of Treatment</label>
-              <span className="text-xs lg:text-sm font-semibold" style={{ color: BRAND_BLUE }}>
+              <label className="text-sm font-medium" style={{ color: BRAND_BLUE }}>Duration of Treatment</label>
+              <span className="text-sm font-semibold" style={{ color: BRAND_BLUE }}>
                 {days} day{days === 1 ? "" : "s"}
               </span>
             </div>
@@ -247,8 +296,8 @@ export default function CostCalculator() {
           </div>
           <div>
             <div className="flex items-baseline justify-between mb-1.5">
-              <label className="text-xs lg:text-sm font-semibold" style={{ color: BRAND_BLUE }}>Number of Travellers</label>
-              <span className="text-xs lg:text-sm font-semibold" style={{ color: BRAND_BLUE }}>
+              <label className="text-sm font-medium" style={{ color: BRAND_BLUE }}>Number of Travellers</label>
+              <span className="text-sm font-semibold" style={{ color: BRAND_BLUE }}>
                 {travellers}
               </span>
             </div>
@@ -271,7 +320,7 @@ export default function CostCalculator() {
 
         {/* Transport */}
         <div>
-          <label className="block text-xs lg:text-sm font-semibold mb-2" style={{ color: BRAND_BLUE }}>Transport</label>
+          <label className="block text-sm font-medium mb-2" style={{ color: BRAND_BLUE }}>Transport</label>
           <div className="grid grid-cols-3 gap-2">
             {[
               { id: "none" as const, label: "None" },
@@ -297,7 +346,7 @@ export default function CostCalculator() {
 
         {/* Accommodation */}
         <div>
-          <label className="block text-xs lg:text-sm font-semibold mb-2" style={{ color: BRAND_BLUE }}>Accommodation</label>
+          <label className="block text-sm font-medium mb-2" style={{ color: BRAND_BLUE }}>Accommodation</label>
           <div className="grid grid-cols-3 gap-2">
             {[
               { id: "none" as const, label: "None" },
@@ -323,7 +372,7 @@ export default function CostCalculator() {
 
         {/* Food */}
         <div>
-          <label className="block text-xs lg:text-sm font-semibold mb-2" style={{ color: BRAND_BLUE }}>Food</label>
+          <label className="block text-sm font-medium mb-2" style={{ color: BRAND_BLUE }}>Food</label>
           <div className="grid grid-cols-3 gap-2">
             {[
               { id: "breakfast" as const, label: "Breakfast" },
@@ -349,7 +398,7 @@ export default function CostCalculator() {
 
         {/* Istanbul Tour */}
         <div>
-          <label className="block text-xs lg:text-sm font-semibold mb-2" style={{ color: BRAND_BLUE }}>Istanbul Tour</label>
+          <label className="block text-sm font-medium mb-2" style={{ color: BRAND_BLUE }}>Istanbul Tour</label>
           <button
             type="button"
             onClick={() => setIstanbulTour((v) => !v)}
@@ -366,7 +415,7 @@ export default function CostCalculator() {
 
         {/* Estimated Cost — sadece toplam, kalem listesi yok */}
         <div className="rounded-xl border border-slate-200 p-4 bg-slate-50">
-          <h4 className="text-xs lg:text-sm font-semibold uppercase tracking-wide mb-3" style={{ color: BRAND_BLUE }}>
+          <h4 className="text-sm font-semibold uppercase tracking-wide mb-3" style={{ color: BRAND_BLUE }}>
             Estimated Treatment Journey Cost
           </h4>
           <div className="flex justify-between items-center">
@@ -383,7 +432,7 @@ export default function CostCalculator() {
 
         {/* Lead capture — terms, then contact details with a channel choice */}
         <div className="rounded-xl border border-slate-200 p-4">
-          <p className="text-xs lg:text-sm font-semibold text-slate-700 mb-3">
+          <p className="text-sm font-medium text-slate-700 mb-3">
             Like our price? Leave your details below and we'll contact you.
           </p>
 
@@ -404,7 +453,7 @@ export default function CostCalculator() {
           {agreed && (
             <div className="mt-4 space-y-3">
               <div>
-                <label className="block text-xs lg:text-sm font-semibold mb-1.5" style={{ color: BRAND_BLUE }}>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
                   Your Name
                 </label>
                 <input
@@ -418,7 +467,7 @@ export default function CostCalculator() {
               </div>
 
               <div>
-                <label className="block text-xs lg:text-sm font-semibold mb-1.5" style={{ color: BRAND_BLUE }}>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
                   How should we contact you?
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -444,7 +493,7 @@ export default function CostCalculator() {
               </div>
 
               <div>
-                <label className="block text-xs lg:text-sm font-semibold mb-1.5" style={{ color: BRAND_BLUE }}>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
                   {contactMethod === "whatsapp" ? "Your WhatsApp / Phone Number" : "Your Email Address"}
                 </label>
                 <input
