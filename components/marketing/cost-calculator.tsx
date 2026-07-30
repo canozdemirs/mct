@@ -146,7 +146,7 @@ export function CostCalculator() {
 
   function mailtoHref() {
     const subject = `Treatment Enquiry — ${category.name} (${country})`;
-    return `mailto:info@medicalcenterturkey.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(summaryText())}`;
+    return `mailto:hello@medicalcenterturkey.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(summaryText())}`;
   }
 
   const canSubmit = agreed && name.trim() !== "" && contactValue.trim() !== "";
