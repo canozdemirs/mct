@@ -105,11 +105,11 @@ function formatEUR(n: number) {
 }
 
 export default function CostCalculator() {
-  const [country, setCountry] = useState(COUNTRIES[0]);
-  const [categoryId, setCategoryId] = useState(TREATMENT_CATEGORIES[0].id);
-  const category = TREATMENT_CATEGORIES.find((c) => c.id === categoryId)!;
+  const [country, setCountry] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const category = TREATMENT_CATEGORIES.find((c) => c.id === categoryId);
 
-  const [days, setDays] = useState(category.defaultDays);
+  const [days, setDays] = useState(5);
   const [travellers, setTravellers] = useState(1);
 
   const [transportOption, setTransportOption] = useState<"none" | "one-way" | "two-way">("two-way");
@@ -162,8 +162,8 @@ export default function CostCalculator() {
         .join(", ") || "None";
 
     return (
-      `Hello, I'm ${name || "(name)"} from ${country}.\n\n` +
-      `Treatment: ${category.name}\n` +
+      `Hello, I'm ${name || "(name)"} from ${country || "(country not selected)"}.\n\n` +
+      `Treatment: ${category?.name || "(not selected)"}\n` +
       `Duration: ${days} day${days === 1 ? "" : "s"}\n` +
       `Travellers: ${travellers}\n` +
       `Transport: ${transportLabel}\n` +
@@ -181,7 +181,7 @@ export default function CostCalculator() {
   }
 
   function mailtoHref() {
-    const subject = `Personalized Quote Request — ${category.name}`;
+    const subject = `Personalized Quote Request — ${category?.name || "Treatment"}`;
     const body = `${summaryText()}\n\nMy email: ${contactValue}`;
     return `mailto:hello@medicalcenterturkey.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
@@ -191,28 +191,32 @@ export default function CostCalculator() {
       <div className="p-6 space-y-5 bg-white">
         {/* Country */}
         <div>
-          <label className="block text-sm font-medium mb-0.5" style={{ color: BRAND_BLUE }}>Select Your Country</label>
-          <p className="text-xs text-slate-500 mb-1.5">Which country's passport do you hold?</p>
+          <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
+            Select Your Country
+          </label>
           <select
             value={country}
             onChange={(e) => setCountry(e.target.value)}
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2"
             style={{ ["--tw-ring-color" as any]: BRAND_BLUE }}
           >
+            <option value="" disabled hidden>Which country's passport do you hold?</option>
             {COUNTRIES.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
         </div>
 
         {/* Service type */}
         <div>
-          <label className="block text-sm font-medium mb-0.5" style={{ color: BRAND_BLUE }}>Service Type Selection</label>
-          <p className="text-xs text-slate-500 mb-1.5">Which treatment would you like an approximate price for?</p>
+          <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
+            Service Type Selection
+          </label>
           <select
             value={categoryId}
             onChange={(e) => handleCategoryChange(e.target.value)}
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2"
             style={{ ["--tw-ring-color" as any]: BRAND_BLUE }}
           >
+            <option value="" disabled hidden>Which treatment would you like an approximate price for?</option>
             {TREATMENT_CATEGORIES.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
         </div>
