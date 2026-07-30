@@ -89,7 +89,11 @@ export function CostCalculator() {
   const [accommodationTier, setAccommodationTier] = useState<"none" | "4star" | "5star">("4star");
   const [meals, setMeals] = useState({ breakfast: true, lunch: false, dinner: false });
   const [istanbulTour, setIstanbulTour] = useState(false);
+
   const [agreed, setAgreed] = useState(false);
+  const [name, setName] = useState("");
+  const [contactMethod, setContactMethod] = useState<"whatsapp" | "email">("whatsapp");
+  const [contactValue, setContactValue] = useState("");
 
   function handleCategoryChange(id: string) {
     const next = TREATMENT_CATEGORIES.find((c) => c.id === id)!;
@@ -114,12 +118,38 @@ export function CostCalculator() {
     return transport + accommodation + food + tour;
   }, [days, travellers, transportOption, accommodationTier, meals, istanbulTour]);
 
-  function whatsappHref() {
-    const msg =
-      `Hello, I'm from ${country}. For ${category.name} (${days} days, ${travellers} traveller(s)), ` +
-      `I saw a total estimated cost of ${formatEUR(totalCost)}, I'd like a personalized quote.`;
-    return `https://wa.me/908508888911?text=${encodeURIComponent(msg)}`;
+  function summaryText() {
+    const mealList = (["breakfast", "lunch", "dinner"] as const)
+      .filter((k) => meals[k])
+      .map((k) => k.charAt(0).toUpperCase() + k.slice(1))
+      .join(", ");
+
+    const lines = [
+      `Hello, my name is ${name}.`,
+      `I'm from ${country} and I'm interested in ${category.name}.`,
+      `Duration: ${days} day${days === 1 ? "" : "s"}, ${travellers} traveller${travellers === 1 ? "" : "s"}.`,
+      transportOption !== "none" ? `Transport: ${transportOption === "one-way" ? "One Way" : "Two Way"}` : null,
+      accommodationTier !== "none" ? `Accommodation: ${accommodationTier === "4star" ? "4 Star Hotel" : "5 Star Hotel"}` : null,
+      mealList ? `Food: ${mealList}` : null,
+      istanbulTour ? "Istanbul Tour: Added" : null,
+      `Estimated journey cost: ${formatEUR(totalCost)}`,
+      `My contact: ${contactValue}`,
+      `I'd like to receive a personalised quote.`,
+    ].filter(Boolean);
+
+    return lines.join("\n");
   }
+
+  function whatsappHref() {
+    return `https://wa.me/908508888911?text=${encodeURIComponent(summaryText())}`;
+  }
+
+  function mailtoHref() {
+    const subject = `Treatment Enquiry — ${category.name} (${country})`;
+    return `mailto:info@medicalcenterturkey.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(summaryText())}`;
+  }
+
+  const canSubmit = agreed && name.trim() !== "" && contactValue.trim() !== "";
 
   return (
     <div className="w-full max-w-2xl mx-auto rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
@@ -268,26 +298,65 @@ export function CostCalculator() {
           </p>
         </div>
 
-        <div className="rounded-xl border border-slate-200 p-4">
-          <p className="text-sm font-medium text-slate-700 mb-3">
-            Like our price? Leave your details below and we&apos;ll contact you.
+        <div className="rounded-xl border border-slate-200 p-4 space-y-3">
+          <p className="text-sm font-medium text-slate-700">
+            Like our price? Leave your details and we&apos;ll send you a personalised quote.
           </p>
+
+          <div>
+            <label className="block text-xs font-medium text-slate-500 mb-1">Your Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Full name"
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#1b5fa8]"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-slate-500 mb-1">Preferred Contact Method</label>
+            <div className="grid grid-cols-2 gap-2">
+              {(["whatsapp", "email"] as const).map((method) => (
+                <button key={method} type="button" onClick={() => { setContactMethod(method); setContactValue(""); }}
+                  className={`rounded-lg border px-3 py-2 text-sm transition-colors ${contactMethod === method ? "text-white border-transparent" : "text-slate-500 border-slate-300 hover:border-slate-400"}`}
+                  style={contactMethod === method ? { background: BRAND_TEAL } : undefined}>
+                  {method === "whatsapp" ? "WhatsApp" : "Email"}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-slate-500 mb-1">
+              {contactMethod === "whatsapp" ? "Your WhatsApp Number" : "Your Email Address"}
+            </label>
+            <input
+              type={contactMethod === "email" ? "email" : "tel"}
+              value={contactValue}
+              onChange={(e) => setContactValue(e.target.value)}
+              placeholder={contactMethod === "whatsapp" ? "+1 234 567 8900" : "you@example.com"}
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#1b5fa8]"
+            />
+          </div>
+
           <label className="flex items-start gap-2 text-xs text-slate-600">
-            <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-0.5" />
+            <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-0.5 shrink-0" />
             <span>
               I agree to Medical Center Turkey&apos;s Terms and Conditions, I have read the Privacy Policy and I agree that my given details including health data may be processed by Medical Center Turkey for the purpose of obtaining quotes.
             </span>
           </label>
+
           <a
-            href={agreed ? whatsappHref() : undefined}
-            target="_blank"
+            href={canSubmit ? (contactMethod === "whatsapp" ? whatsappHref() : mailtoHref()) : undefined}
+            target={contactMethod === "whatsapp" ? "_blank" : undefined}
             rel="noopener noreferrer"
-            aria-disabled={!agreed}
-            onClick={(e) => { if (!agreed) e.preventDefault(); }}
-            className={`mt-3 flex w-full justify-center items-center rounded-lg py-2.5 text-white font-medium text-sm transition-opacity ${agreed ? "opacity-100" : "opacity-50 cursor-not-allowed"}`}
+            aria-disabled={!canSubmit}
+            onClick={(e) => { if (!canSubmit) e.preventDefault(); }}
+            className={`flex w-full justify-center items-center rounded-lg py-2.5 text-white font-medium text-sm transition-opacity ${canSubmit ? "opacity-100" : "opacity-50 cursor-not-allowed"}`}
             style={{ background: BRAND_TEAL }}
           >
-            Leave Your Details — We&apos;ll Contact You
+            {contactMethod === "whatsapp" ? "Send via WhatsApp" : "Send via Email"}
           </a>
         </div>
       </div>
