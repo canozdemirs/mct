@@ -65,8 +65,11 @@ type SubService = { name: string; price?: number }; // price (if set) is now add
 
 const SUB_SERVICES: Record<string, SubService[]> = {
   "breast-augmentation": [
-    { name: "Silicone Implants" }, { name: "Fat Transfer (Fat-to-Breast)" },
-    { name: "Breast Lift + Augmentation" }, { name: "Implant Revision" }, { name: "Other" },
+    { name: "Silicone Implants (Round)", price: 4424 },
+    { name: "Fat Transfer (Fat-to-Breast)" },
+    { name: "Breast Lift + Augmentation", price: 5030 },
+    { name: "Implant Revision", price: 1830 },
+    { name: "Other" },
   ],
   "cardiology": [
     { name: "Angiography" }, { name: "Angioplasty / Stent" },
@@ -90,7 +93,10 @@ const SUB_SERVICES: Record<string, SubService[]> = {
     { name: "Hernia Repair" }, { name: "Gallbladder Surgery" }, { name: "Appendectomy" }, { name: "Other" },
   ],
   "gynecomastia": [
-    { name: "Liposuction Technique" }, { name: "Gland Excision" }, { name: "Combined Technique" }, { name: "Other" },
+    { name: "Liposuction Technique", price: 2090 },
+    { name: "Gland Excision", price: 2090 },
+    { name: "Combined (Vaser Liposuction) Technique", price: 2408 },
+    { name: "Other" },
   ],
   "hair-transplant": [
     { name: "FUE Sapphire", price: 1400 },
@@ -105,7 +111,11 @@ const SUB_SERVICES: Record<string, SubService[]> = {
     { name: "IVF (Standard)" }, { name: "ICSI" }, { name: "Egg Donation" }, { name: "Embryo Screening (PGT)" }, { name: "Other" },
   ],
   "liposuction": [
-    { name: "Abdomen" }, { name: "Arms" }, { name: "Thighs" }, { name: "Full Body" }, { name: "Other" },
+    { name: "Abdomen (1 Area)", price: 1894 },
+    { name: "Arms (1 Area)", price: 1894 },
+    { name: "Thighs (2 Areas)", price: 2101 },
+    { name: "Full Body (5+ Areas)", price: 2944 },
+    { name: "Other" },
   ],
   "medical-checkup": [
     { name: "General Health Check-up" }, { name: "Cardiac Check-up" }, { name: "Cancer Screening" }, { name: "Other" },
@@ -117,17 +127,28 @@ const SUB_SERVICES: Record<string, SubService[]> = {
     { name: "Knee Replacement" }, { name: "Hip Replacement" }, { name: "Sports Injury Surgery" }, { name: "Other" },
   ],
   "otolaryngology": [
-    { name: "Tonsillectomy" }, { name: "Sinus Surgery" }, { name: "Ear Surgery" }, { name: "Other" },
+    { name: "Tonsillectomy", price: 1369 },
+    { name: "Sinus Surgery (Full FES)", price: 2240 },
+    { name: "Ear Surgery (Otoplasty)", price: 1954 },
+    { name: "Other" },
   ],
   "plastic-surgery": [
-    { name: "Tummy Tuck" }, { name: "Facelift" }, { name: "Body Lift" }, { name: "Arm Lift" }, { name: "Other" },
+    { name: "Tummy Tuck (Full Abdominoplasty)", price: 3900 },
+    { name: "Facelift (Full Face)", price: 5257 },
+    { name: "Body Lift (Hip Lift)", price: 3205 },
+    { name: "Arm Lift", price: 2632 },
+    { name: "Other" },
   ],
   "radiation-oncology": [
     { name: "External Radiotherapy" }, { name: "Chemotherapy" }, { name: "Combined Treatment" }, { name: "Other" },
   ],
   "rhinoplasty": [
-    { name: "Primary Rhinoplasty" }, { name: "Revision Rhinoplasty" },
-    { name: "Non-Surgical (Filler)" }, { name: "Ethnic Rhinoplasty" }, { name: "Other" },
+    { name: "Primary Rhinoplasty", price: 2443 },
+    { name: "Tip Rhinoplasty (Tipplasty)", price: 1470 },
+    { name: "Revision Rhinoplasty (Complex)", price: 3261 },
+    { name: "Non-Surgical (Filler)" },
+    { name: "Ethnic Rhinoplasty" },
+    { name: "Other" },
   ],
   "transplantation": [
     { name: "Kidney Transplant" }, { name: "Liver Transplant" }, { name: "Bone Marrow Transplant" }, { name: "Other" },
@@ -172,6 +193,13 @@ const COUNTRIES = [
   "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe", "Other",
 ];
 
+// NOT: Fiyat rakamları (transport/konaklama/yemek/İstanbul turu) bilinçli
+// olarak bu component içinde artık HESAPLANMIYOR/GÖSTERİLMİYOR — "Estimated
+// Cost" bölümü sadece kullanıcının seçimlerinin özeti. Kesin fiyat MCT
+// tarafından WhatsApp/danışmanlık sonrası iletiliyor.
+
+// Lojistik masraf fiyatları (€) — sağlık hizmeti DEĞİL, toplamda gösterilmesi
+// serbest. NOT: tedavi ücreti hâlâ hiçbir hesaplamaya dahil edilmiyor.
 const TRANSPORT_PRICE = { "one-way": 75, "two-way": 150 } as const;
 const ACCOMMODATION_PRICE_PER_NIGHT = { "4star": 70, "5star": 100 } as const;
 const MEAL_PRICE_PER_DAY = { breakfast: 0, lunch: 10, dinner: 15 } as const;
@@ -189,7 +217,7 @@ export default function CostCalculator() {
 
   const [subService, setSubService] = useState("");
 
-  const [days, setDays] = useState(0);
+  const [days, setDays] = useState(5);
   const [travellers, setTravellers] = useState(1);
 
   const [transportOption, setTransportOption] = useState<"none" | "one-way" | "two-way">("none");
@@ -205,17 +233,18 @@ export default function CostCalculator() {
   function handleCategoryChange(id: string) {
     const next = TREATMENT_CATEGORIES.find((c) => c.id === id)!;
     setCategoryId(id);
-    setDays(next.defaultDays);
-    setSubService("");
+    setDays(next.defaultDays); // kullanıcı isterse elle değiştirebilir
+    setSubService(""); // kategori değişince alt hizmet seçimi sıfırlanır
   }
 
+  // Sadece TOPLAM için — tek tek kalem fiyatları gösterilmiyor, tedavi ücreti dahil değil.
   const totalCost = useMemo(() => {
     const safeDays = Math.max(days, 0);
     const safeTravellers = Math.max(travellers, 1);
 
     const transport = transportOption === "none" ? 0 : TRANSPORT_PRICE[transportOption];
 
-    // Double occupancy — price per room, not per person
+    // İki kişi aynı odada (double oda) kalabiliyor — kişi başı değil, oda başına ücretlendiriyoruz.
     const rooms = Math.ceil(safeTravellers / 2);
     const accommodation =
       accommodationTier === "none"
@@ -231,7 +260,7 @@ export default function CostCalculator() {
     const tour = istanbulTour ? ISTANBUL_TOUR_PRICE : 0;
 
     const selectedSubService = subServiceOptions?.find((s) => s.name === subService);
-    const treatmentPrice = selectedSubService?.price ?? 0;
+    const treatmentPrice = selectedSubService?.price || 0;
 
     return transport + accommodation + food + tour + treatmentPrice;
   }, [days, travellers, transportOption, accommodationTier, meals, istanbulTour, subServiceOptions, subService]);
@@ -279,7 +308,6 @@ export default function CostCalculator() {
   return (
     <div className="w-full max-w-2xl mx-auto rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       <div className="p-6 space-y-5 bg-white">
-
         {/* Country */}
         <div>
           <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
@@ -291,7 +319,7 @@ export default function CostCalculator() {
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2"
             style={{ ["--tw-ring-color" as any]: BRAND_BLUE }}
           >
-            <option value="" disabled hidden>Which country&apos;s passport do you hold?</option>
+            <option value="" disabled hidden>Which country's passport do you hold?</option>
             {COUNTRIES.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
         </div>
@@ -330,7 +358,7 @@ export default function CostCalculator() {
           </div>
         )}
 
-        {/* Duration + travellers */}
+        {/* Duration + travellers — drag-to-right sliders */}
         <div className="grid grid-cols-2 gap-6">
           <div>
             <div className="flex items-baseline justify-between mb-1.5">
@@ -340,28 +368,40 @@ export default function CostCalculator() {
               </span>
             </div>
             <input
-              type="range" min={0} max={30} step={1} value={days}
+              type="range"
+              min={1}
+              max={30}
+              step={1}
+              value={days}
               onChange={(e) => setDays(Number(e.target.value))}
               className="w-full"
               style={{ accentColor: BRAND_BLUE }}
             />
             <div className="flex justify-between text-xs text-slate-400 mt-1">
-              <span>0</span><span>30</span>
+              <span>1</span>
+              <span>30</span>
             </div>
           </div>
           <div>
             <div className="flex items-baseline justify-between mb-1.5">
               <label className="text-sm font-medium" style={{ color: BRAND_BLUE }}>Number of Travellers</label>
-              <span className="text-sm font-semibold" style={{ color: BRAND_BLUE }}>{travellers}</span>
+              <span className="text-sm font-semibold" style={{ color: BRAND_BLUE }}>
+                {travellers}
+              </span>
             </div>
             <input
-              type="range" min={1} max={10} step={1} value={travellers}
+              type="range"
+              min={1}
+              max={10}
+              step={1}
+              value={travellers}
               onChange={(e) => setTravellers(Number(e.target.value))}
               className="w-full"
               style={{ accentColor: BRAND_BLUE }}
             />
             <div className="flex justify-between text-xs text-slate-400 mt-1">
-              <span>1</span><span>10</span>
+              <span>1</span>
+              <span>10</span>
             </div>
           </div>
         </div>
@@ -375,9 +415,17 @@ export default function CostCalculator() {
               { id: "one-way" as const, label: "One Way" },
               { id: "two-way" as const, label: "Two Way" },
             ].map((opt) => (
-              <button key={opt.id} type="button" onClick={() => setTransportOption(opt.id)}
-                className={`rounded-lg border px-3 py-2 text-sm transition-colors ${transportOption === opt.id ? "text-white border-transparent" : "text-slate-500 border-slate-300 hover:border-slate-400"}`}
-                style={transportOption === opt.id ? { background: BRAND_TEAL } : undefined}>
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => setTransportOption(opt.id)}
+                className={`rounded-lg border px-3 py-2 text-sm transition-colors ${
+                  transportOption === opt.id
+                    ? "text-white border-transparent"
+                    : "text-slate-500 border-slate-300 hover:border-slate-400"
+                }`}
+                style={transportOption === opt.id ? { background: BRAND_TEAL } : undefined}
+              >
                 {opt.label}
               </button>
             ))}
@@ -393,9 +441,17 @@ export default function CostCalculator() {
               { id: "4star" as const, label: "4 Star Hotel" },
               { id: "5star" as const, label: "5 Star Hotel" },
             ].map((opt) => (
-              <button key={opt.id} type="button" onClick={() => setAccommodationTier(opt.id)}
-                className={`rounded-lg border px-3 py-2 text-sm transition-colors ${accommodationTier === opt.id ? "text-white border-transparent" : "text-slate-500 border-slate-300 hover:border-slate-400"}`}
-                style={accommodationTier === opt.id ? { background: BRAND_TEAL } : undefined}>
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => setAccommodationTier(opt.id)}
+                className={`rounded-lg border px-3 py-2 text-sm transition-colors ${
+                  accommodationTier === opt.id
+                    ? "text-white border-transparent"
+                    : "text-slate-500 border-slate-300 hover:border-slate-400"
+                }`}
+                style={accommodationTier === opt.id ? { background: BRAND_TEAL } : undefined}
+              >
                 {opt.label}
               </button>
             ))}
@@ -411,9 +467,17 @@ export default function CostCalculator() {
               { id: "lunch" as const, label: "Lunch" },
               { id: "dinner" as const, label: "Dinner" },
             ].map((opt) => (
-              <button key={opt.id} type="button" onClick={() => setMeals((m) => ({ ...m, [opt.id]: !m[opt.id] }))}
-                className={`rounded-lg border px-3 py-2 text-sm transition-colors ${meals[opt.id] ? "text-white border-transparent" : "text-slate-500 border-slate-300 hover:border-slate-400"}`}
-                style={meals[opt.id] ? { background: BRAND_TEAL } : undefined}>
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => setMeals((m) => ({ ...m, [opt.id]: !m[opt.id] }))}
+                className={`rounded-lg border px-3 py-2 text-sm transition-colors ${
+                  meals[opt.id]
+                    ? "text-white border-transparent"
+                    : "text-slate-500 border-slate-300 hover:border-slate-400"
+                }`}
+                style={meals[opt.id] ? { background: BRAND_TEAL } : undefined}
+              >
                 {opt.label}
               </button>
             ))}
@@ -423,18 +487,30 @@ export default function CostCalculator() {
         {/* Istanbul Tour */}
         <div>
           <label className="block text-sm font-medium mb-2" style={{ color: BRAND_BLUE }}>Istanbul Tour</label>
-          <button type="button" onClick={() => setIstanbulTour((v) => !v)}
-            className={`rounded-lg border px-3 py-2 text-sm transition-colors ${istanbulTour ? "text-white border-transparent" : "text-slate-500 border-slate-300 hover:border-slate-400"}`}
-            style={istanbulTour ? { background: BRAND_TEAL } : undefined}>
+          <button
+            type="button"
+            onClick={() => setIstanbulTour((v) => !v)}
+            className={`rounded-lg border px-3 py-2 text-sm transition-colors ${
+              istanbulTour
+                ? "text-white border-transparent"
+                : "text-slate-500 border-slate-300 hover:border-slate-400"
+            }`}
+            style={istanbulTour ? { background: BRAND_TEAL } : undefined}
+          >
             {istanbulTour ? "Added" : "Add Istanbul Tour"}
           </button>
         </div>
 
-        {/* Estimated Cost */}
+        {/* Estimated Cost — sadece toplam, kalem listesi yok */}
         <div className="rounded-xl border border-slate-200 p-4 bg-slate-50">
+          <h4 className="text-sm font-semibold uppercase tracking-wide mb-3" style={{ color: BRAND_BLUE }}>
+            Estimated Treatment Journey Cost
+          </h4>
           <div className="flex justify-between items-center">
             <span className="font-semibold" style={{ color: BRAND_BLUE }}>Estimated Total Cost</span>
-            <span className="text-lg font-bold" style={{ color: BRAND_BLUE }}>{formatEUR(totalCost)}</span>
+            <span className="text-lg font-bold" style={{ color: BRAND_BLUE }}>
+              {formatEUR(totalCost)}
+            </span>
           </div>
           <p className="text-xs text-slate-500 mt-2">
             Prices shown are for informational purposes only and are not final — they may vary
@@ -442,16 +518,21 @@ export default function CostCalculator() {
           </p>
         </div>
 
-        {/* Lead capture */}
+        {/* Lead capture — terms, then contact details with a channel choice */}
         <div className="rounded-xl border border-slate-200 p-4">
           <p className="text-sm font-medium text-slate-700 mb-3">
-            Like our price? Leave your details below and we&apos;ll contact you.
+            Like our price? Leave your details below and we'll contact you.
           </p>
 
           <label className="flex items-start gap-2 text-xs text-slate-600">
-            <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-0.5" />
+            <input
+              type="checkbox"
+              checked={agreed}
+              onChange={(e) => setAgreed(e.target.checked)}
+              className="mt-0.5"
+            />
             <span>
-              I agree to Medical Center Turkey&apos;s Terms and Conditions, I have read the Privacy
+              I agree to Medical Center Turkey's Terms and Conditions, I have read the Privacy
               Policy and I agree that my given details including health data may be processed
               by Medical Center Turkey for the purpose of obtaining quotes.
             </span>
@@ -464,7 +545,9 @@ export default function CostCalculator() {
                   Your Name
                 </label>
                 <input
-                  type="text" value={name} onChange={(e) => setName(e.target.value)}
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   placeholder="Full name"
                   className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2"
                   style={{ ["--tw-ring-color" as any]: BRAND_BLUE }}
@@ -480,10 +563,17 @@ export default function CostCalculator() {
                     { id: "whatsapp" as const, label: "WhatsApp" },
                     { id: "email" as const, label: "Email" },
                   ].map((opt) => (
-                    <button key={opt.id} type="button"
+                    <button
+                      key={opt.id}
+                      type="button"
                       onClick={() => { setContactMethod(opt.id); setContactValue(""); }}
-                      className={`rounded-lg border px-3 py-2 text-sm transition-colors ${contactMethod === opt.id ? "text-white border-transparent" : "text-slate-500 border-slate-300 hover:border-slate-400"}`}
-                      style={contactMethod === opt.id ? { background: BRAND_TEAL } : undefined}>
+                      className={`rounded-lg border px-3 py-2 text-sm transition-colors ${
+                        contactMethod === opt.id
+                          ? "text-white border-transparent"
+                          : "text-slate-500 border-slate-300 hover:border-slate-400"
+                      }`}
+                      style={contactMethod === opt.id ? { background: BRAND_TEAL } : undefined}
+                    >
                       {opt.label}
                     </button>
                   ))}
@@ -496,7 +586,8 @@ export default function CostCalculator() {
                 </label>
                 <input
                   type={contactMethod === "whatsapp" ? "tel" : "email"}
-                  value={contactValue} onChange={(e) => setContactValue(e.target.value)}
+                  value={contactValue}
+                  onChange={(e) => setContactValue(e.target.value)}
                   placeholder={contactMethod === "whatsapp" ? "+44 7XXX XXXXXX" : "you@example.com"}
                   className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2"
                   style={{ ["--tw-ring-color" as any]: BRAND_BLUE }}
@@ -509,7 +600,9 @@ export default function CostCalculator() {
                 rel="noopener noreferrer"
                 aria-disabled={!(name && contactValue)}
                 onClick={(e) => { if (!(name && contactValue)) e.preventDefault(); }}
-                className={`inline-flex w-full justify-center rounded-lg py-2.5 text-white font-medium ${name && contactValue ? "" : "opacity-50 cursor-not-allowed"}`}
+                className={`inline-flex w-full justify-center rounded-lg py-2.5 text-white font-medium ${
+                  name && contactValue ? "" : "opacity-50 cursor-not-allowed"
+                }`}
                 style={{ background: BRAND_TEAL }}
               >
                 {contactMethod === "whatsapp" ? "Send via WhatsApp" : "Send via Email"}
@@ -517,7 +610,6 @@ export default function CostCalculator() {
             </div>
           )}
         </div>
-
       </div>
     </div>
   );
