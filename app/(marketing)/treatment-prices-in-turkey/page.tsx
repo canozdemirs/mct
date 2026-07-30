@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/marketing/nav";
 import { Footer } from "@/components/marketing/footer";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
-import CostCalculator from "@/components/marketing/cost-calculator";
+import CostCalculator from "@/components/marketing/CostCalculator";
 
 export const metadata: Metadata = {
   title: "Treatment Prices in Turkey - Medical Center Turkey",
