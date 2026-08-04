@@ -34,6 +34,7 @@ type TreatmentCategory = {
 };
 
 const TREATMENT_CATEGORIES: TreatmentCategory[] = [
+  { id: "blepharoplasty", name: "Blepharoplasty", defaultDays: 4 },
   { id: "breast-augmentation", name: "Breast Augmentation", defaultDays: 6 },
   { id: "cardiology", name: "Cardiology Surgery", defaultDays: 9 },
   { id: "cardiovascular", name: "Cardiovascular Surgery", defaultDays: 12 },
@@ -64,6 +65,11 @@ const TREATMENT_CATEGORIES: TreatmentCategory[] = [
 type SubService = { name: string; price?: number; defaultDays?: number }; // price is added into the visible Estimated Total Cost; defaultDays (if set) overrides the category-level default when this specific service is picked
 
 const SUB_SERVICES: Record<string, SubService[]> = {
+  "blepharoplasty": [
+    { name: "Blepharoplasty (2 Eyelids)", price: 1600, defaultDays: 4 },
+    { name: "Blepharoplasty (4 Eyelids)", price: 1800, defaultDays: 4 },
+    { name: "Other" },
+  ],
   "breast-augmentation": [
     { name: "Silicone Implants (Round)", price: 4424, defaultDays: 6 },
     { name: "Fat Transfer (Fat-to-Breast)", defaultDays: 6 },
