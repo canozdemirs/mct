@@ -1,10 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Check, MessageCircle } from "lucide-react";
 
 const treatments = [
   {
     name: "Hair Transplant",
-    price: "From £1,490",
+    price: "From €1,700",
     image: "/treatments/hair-transplant-v7.jpg",
     inclusions: [
       "FUE / DHI technique",
@@ -16,8 +17,33 @@ const treatments = [
     ],
   },
   {
+    name: "All-on-4 Dental Implants",
+    price: "From €1,500",
+    image: "/treatments/dental-implant.jpg",
+    inclusions: [
+      "Full-arch fixed prosthesis",
+      "Titanium implants",
+      "Hospital coordination",
+      "Digital treatment plan",
+      "Aftercare kit",
+      "Follow-up support",
+    ],
+  },
+  {
+    name: "Dental Implant",
+    price: "From €400",
+    image: "/treatments/dental-implant.jpg",
+    inclusions: [
+      "Titanium implant",
+      "Hospital coordination",
+      "Digital X-ray & consultation",
+      "Aftercare kit",
+      "Follow-up support",
+    ],
+  },
+  {
     name: "Rhinoplasty",
-    price: "From £2,490",
+    price: "From €2,850",
     image: "/treatments/rhinoplasty.jpg",
     inclusions: [
       "Closed / open technique",
@@ -30,7 +56,7 @@ const treatments = [
   },
   {
     name: "Breast Augmentation",
-    price: "From £2,990",
+    price: "From €4,700",
     image: "/treatments/breast-augmentation-v3.jpg",
     inclusions: [
       "Silicone implants included",
@@ -42,8 +68,21 @@ const treatments = [
     ],
   },
   {
+    name: "Liposuction",
+    price: "From €2,300",
+    image: "/treatments/liposuction.jpg",
+    inclusions: [
+      "Standard / Laser / Vaser technique",
+      "Hospital coordination",
+      "VIP airport transfer",
+      "Hotel accommodation",
+      "Compression garment",
+      "Follow-up support",
+    ],
+  },
+  {
     name: "Gynecomastia",
-    price: "From £1,990",
+    price: "From €2,700",
     image: "/treatments/gynecomastia-v2.jpg",
     inclusions: [
       "Liposuction + gland removal",
@@ -55,21 +94,44 @@ const treatments = [
     ],
   },
   {
-    name: "Dental Implant",
-    price: "From £490",
-    image: "/treatments/dental-implant.jpg",
+    name: "LASIK Eye Surgery",
+    price: "From €1,600",
+    image: "/treatments/blepharoplasty-v2.jpg",
     inclusions: [
-      "Titanium implant + crown",
+      "ILASIK / PRK / Lasek technique",
+      "Hospital coordination",
+      "Pre-op eye examination",
+      "Post-op medication",
+      "Follow-up support",
+    ],
+  },
+  {
+    name: "Cataract Surgery",
+    price: "From €5,500",
+    image: "/treatments/blepharoplasty-v3.jpg",
+    inclusions: [
+      "IOL implantation (both eyes)",
+      "Choice of lens (Multifocal, Toric, etc.)",
+      "Hospital coordination",
+      "Pre-op examination",
+      "Follow-up support",
+    ],
+  },
+  {
+    name: "IVF",
+    price: "From €4,150",
+    image: "/treatments/checkup.jpg",
+    inclusions: [
+      "Standard IVF protocol",
       "Hospital coordination",
       "VIP airport transfer",
-      "Hotel accommodation",
-      "Aftercare kit",
+      "Hotel accommodation (14 nights)",
       "Follow-up support",
     ],
   },
   {
     name: "Blepharoplasty",
-    price: "From £1,990",
+    price: "From €2,050",
     image: "/treatments/blepharoplasty-v4.jpg",
     inclusions: [
       "Upper / lower eyelid surgery",
@@ -81,28 +143,13 @@ const treatments = [
     ],
   },
   {
-    name: "Liposuction",
-    price: "From £1,990",
-    image: "/treatments/liposuction.jpg",
-    inclusions: [
-      "Vaser / traditional lipo",
-      "Hospital coordination",
-      "VIP airport transfer",
-      "Hotel accommodation",
-      "Compression garment",
-      "Follow-up support",
-    ],
-  },
-  {
     name: "Check-Up",
-    price: "From £290",
+    price: "From €1,100",
     image: "/treatments/checkup.jpg",
     inclusions: [
       "Full blood panel",
       "Cardiac screening",
       "Hospital coordination",
-      "VIP airport transfer",
-      "Hotel accommodation",
       "Detailed health report",
     ],
   },
@@ -173,12 +220,12 @@ export function Packages() {
         </div>
 
         <div className="flex justify-center mt-10">
-          <a
-            href="#packages"
+          <Link
+            href="/treatment-prices-in-turkey"
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full border-2 border-brand text-brand font-semibold text-sm hover:bg-brand hover:text-white transition-colors"
           >
-            View All Treatments
-          </a>
+            Create Your Package
+          </Link>
         </div>
 
         <p className="text-center text-xs text-gray-400 mt-6">
