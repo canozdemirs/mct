@@ -108,7 +108,7 @@ const treatments = [
   {
     name: "Cataract Surgery",
     price: "From €5,500",
-    image: "/treatments/blepharoplasty-v3.jpg",
+    image: "/treatments/cataract.jpg",
     inclusions: [
       "IOL implantation (both eyes)",
       "Choice of lens (Multifocal, Toric, etc.)",
@@ -120,7 +120,7 @@ const treatments = [
   {
     name: "IVF",
     price: "From €4,150",
-    image: "/treatments/checkup.jpg",
+    image: "/treatments/ivf.jpg",
     inclusions: [
       "Standard IVF protocol",
       "Hospital coordination",
