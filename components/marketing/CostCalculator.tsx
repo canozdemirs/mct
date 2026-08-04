@@ -354,7 +354,7 @@ export default function CostCalculator() {
     return (
       `Hello, I'm ${name || "(name)"} from ${country || "(country not selected)"}.\n\n` +
       `Treatment: ${category?.name || "(not selected)"}${subServiceSuffix}\n` +
-      `Duration: ${days} day${days === 1 ? "" : "s"}\n` +
+      `Nights of Stay: ${days} night${days === 1 ? "" : "s"}\n` +
       `Travellers: ${travellers}\n` +
       `Transport: ${transportLabel}\n` +
       `Accommodation: ${accommodationLabel}\n` +
@@ -433,9 +433,9 @@ export default function CostCalculator() {
         <div className="grid grid-cols-2 gap-6">
           <div>
             <div className="flex items-baseline justify-between mb-1.5">
-              <label className="text-sm font-medium" style={{ color: BRAND_BLUE }}>Duration of Treatment</label>
+              <label className="text-sm font-medium" style={{ color: BRAND_BLUE }}>Nights of Stay</label>
               <span className="text-sm font-semibold" style={{ color: BRAND_BLUE }}>
-                {days} day{days === 1 ? "" : "s"}
+                {days} night{days === 1 ? "" : "s"}
               </span>
             </div>
             <input
