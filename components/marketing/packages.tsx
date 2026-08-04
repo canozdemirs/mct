@@ -159,20 +159,17 @@ const treatments = [
 ];
 
 function QuoteModal({ name, onClose }: { name: string; onClose: () => void }) {
-  const encodedText = encodeURIComponent(`Hi, I'm interested in ${name}. Could you please send me a free quote?`);
-  const waHref = `https://wa.me/908508888911?text=${encodedText}`;
-  const mailHref = `mailto:hello@medicalcenterturkey.com?subject=${encodeURIComponent(`Quote Request: ${name}`)}&body=${encodedText}`;
+  const msgBody = `Hi, I'm interested in ${name}. Could you please send me a free quote?`;
+  const waHref = `https://wa.me/908508888911?text=${encodeURIComponent(msgBody)}`;
+  const mailHref = `mailto:hello@medicalcenterturkey.com?subject=${encodeURIComponent(`Quote Request: ${name}`)}&body=${encodeURIComponent(msgBody)}`;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      onClick={onClose}
-    >
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
-        className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6"
-        onClick={(e) => e.stopPropagation()}
-      >
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      <div className="relative z-10 bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
