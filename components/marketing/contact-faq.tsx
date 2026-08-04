@@ -40,7 +40,8 @@ export function ContactFAQ() {
 
   const treatments = [
     "Hair Transplant", "Rhinoplasty", "Breast Augmentation", "Gynecomastia",
-    "Dental Implant", "Blepharoplasty", "Liposuction", "Check-Up", "Other",
+    "Dental Implant", "All-on-4 Dental Implants", "Blepharoplasty", "Liposuction",
+    "LASIK Eye Surgery", "Cataract Surgery", "IVF", "Check-Up", "Other",
   ];
 
   const handleSubmit = (e: React.FormEvent) => {

@@ -1,6 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Check, MessageCircle } from "lucide-react";
+import { Check, MessageCircle, X, Mail } from "lucide-react";
 
 const treatments = [
   {
@@ -155,7 +158,63 @@ const treatments = [
   },
 ];
 
+function QuoteModal({ name, onClose }: { name: string; onClose: () => void }) {
+  const encodedText = encodeURIComponent(`Hi, I'm interested in ${name}. Could you please send me a free quote?`);
+  const waHref = `https://wa.me/908508888911?text=${encodedText}`;
+  const mailHref = `mailto:hello@medicalcenterturkey.com?subject=${encodeURIComponent(`Quote Request: ${name}`)}&body=${encodedText}`;
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+      <div
+        className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+          aria-label="Close"
+        >
+          <X size={20} />
+        </button>
+
+        <h3 className="text-base font-bold text-brand pr-6 leading-snug">
+          Get a Free Quote
+          <span className="block text-teal mt-0.5">{name}</span>
+        </h3>
+        <p className="text-sm text-gray-500 mt-2 mb-5">
+          Choose how you&apos;d like to reach us
+        </p>
+
+        <div className="flex flex-col gap-3">
+          <a
+            href={waHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 bg-[#25D366] text-white font-semibold text-sm px-4 py-3 rounded-xl hover:bg-[#1ebe5a] transition-colors"
+          >
+            <MessageCircle size={16} />
+            Contact via WhatsApp
+          </a>
+          <a
+            href={mailHref}
+            className="flex items-center justify-center gap-2 bg-brand text-white font-semibold text-sm px-4 py-3 rounded-xl hover:bg-brand-dark transition-colors"
+          >
+            <Mail size={16} />
+            Contact via Email
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function Packages() {
+  const [selected, setSelected] = useState<string | null>(null);
+
   return (
     <section className="bg-gray-50 pb-16 sm:pb-24 pt-2" id="packages">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -204,15 +263,13 @@ export function Packages() {
                       </li>
                     ))}
                   </ul>
-                  <a
-                    href="https://wa.me/908508888911"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-3 flex items-center justify-center gap-1.5 bg-teal text-white text-xs font-semibold px-3 py-2 rounded-full hover:bg-[#159fb3] transition-colors"
+                  <button
+                    onClick={() => setSelected(t.name)}
+                    className="mt-3 flex items-center justify-center gap-1.5 bg-teal text-white text-xs font-semibold px-3 py-2 rounded-full hover:bg-[#159fb3] transition-colors w-full"
                   >
                     <MessageCircle size={11} />
                     Get a Free Quote
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -233,6 +290,10 @@ export function Packages() {
           evaluation. Results may vary.
         </p>
       </div>
+
+      {selected && (
+        <QuoteModal name={selected} onClose={() => setSelected(null)} />
+      )}
     </section>
   );
 }
