@@ -37,7 +37,7 @@ const TREATMENT_CATEGORIES: TreatmentCategory[] = [
   { id: "breast-augmentation", name: "Breast Augmentation", defaultDays: 6 },
   { id: "cardiology", name: "Cardiology Surgery", defaultDays: 9 },
   { id: "cardiovascular", name: "Cardiovascular Surgery", defaultDays: 12 },
-  { id: "dental", name: "Dental Treatment", defaultDays: 9 },
+  { id: "dental", name: "Dental Treatment", defaultDays: 6 },
   { id: "eye-diseases", name: "Eye Diseases Surgery", defaultDays: 4 },
   { id: "gastroenterology", name: "Gastroenterology Surgery", defaultDays: 7 },
   { id: "general-surgery", name: "General Surgery", defaultDays: 7 },
