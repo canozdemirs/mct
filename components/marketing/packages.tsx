@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Check, MessageCircle, X, Mail } from "lucide-react";
+import { Check, MessageCircle, X, Send } from "lucide-react";
 
 const treatments = [
   {
@@ -158,52 +158,125 @@ const treatments = [
   },
 ];
 
+const treatmentOptions = [
+  "Hair Transplant", "Rhinoplasty", "Breast Augmentation", "Gynecomastia",
+  "Dental Implant", "All-on-4 Dental Implants", "Blepharoplasty", "Liposuction",
+  "LASIK Eye Surgery", "Cataract Surgery", "IVF", "Check-Up", "Other",
+];
+
 function QuoteModal({ name, onClose }: { name: string; onClose: () => void }) {
-  const msgBody = `Hi, I'm interested in ${name}. Could you please send me a free quote?`;
-  const waHref = `https://wa.me/908508888911?text=${encodeURIComponent(msgBody)}`;
-  const mailHref = `mailto:hello@medicalcenterturkey.com?subject=${encodeURIComponent(`Quote Request: ${name}`)}&body=${encodeURIComponent(msgBody)}`;
+  const [form, setForm] = useState({ name: "", email: "", phone: "", treatment: name, message: "" });
+
+  const handleWhatsApp = (e: React.FormEvent) => {
+    e.preventDefault();
+    const text = `Hello MCT,%0A%0AName: ${form.name}%0AEmail: ${form.email}%0APhone: ${form.phone}%0ATreatment: ${form.treatment}%0A%0A${form.message}`;
+    window.open(`https://wa.me/908508888911?text=${text}`, "_blank");
+  };
+
+  const handleEmail = (e: React.FormEvent) => {
+    e.preventDefault();
+    const body = `Hello MCT,\n\nName: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nTreatment: ${form.treatment}\n\n${form.message}`;
+    window.location.href = `mailto:hello@medicalcenterturkey.com?subject=${encodeURIComponent(`Quote Request: ${form.treatment}`)}&body=${encodeURIComponent(body)}`;
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
-      />
-      <div className="relative z-10 bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
-          aria-label="Close"
-        >
-          <X size={20} />
-        </button>
-
-        <h3 className="text-base font-bold text-brand pr-6 leading-snug">
-          Get a Free Quote
-          <span className="block text-teal mt-0.5">{name}</span>
-        </h3>
-        <p className="text-sm text-gray-500 mt-2 mb-5">
-          Choose how you&apos;d like to reach us
-        </p>
-
-        <div className="flex flex-col gap-3">
-          <a
-            href={waHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 bg-[#25D366] text-white font-semibold text-sm px-4 py-3 rounded-xl hover:bg-[#1ebe5a] transition-colors"
-          >
-            <MessageCircle size={16} />
-            Contact via WhatsApp
-          </a>
-          <a
-            href={mailHref}
-            className="flex items-center justify-center gap-2 bg-brand text-white font-semibold text-sm px-4 py-3 rounded-xl hover:bg-brand-dark transition-colors"
-          >
-            <Mail size={16} />
-            Contact via Email
-          </a>
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative z-10 bg-white rounded-3xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 bg-white rounded-t-3xl px-6 pt-6 pb-4 border-b border-gray-50 flex items-start justify-between gap-4">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-widest text-teal">Free Consultation</span>
+            <h3 className="text-xl font-bold text-brand mt-0.5">Get Your Free Treatment Plan</h3>
+            <p className="text-xs text-gray-400 mt-1">We&apos;ll get back to you within 24 hours — no commitment required.</p>
+          </div>
+          <button onClick={onClose} className="shrink-0 mt-1 text-gray-400 hover:text-gray-600 transition-colors" aria-label="Close">
+            <X size={20} />
+          </button>
         </div>
+
+        <form className="px-6 py-5 space-y-4">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">Full Name</label>
+              <input
+                type="text"
+                required
+                value={form.name}
+                onChange={e => setForm({ ...form, name: e.target.value })}
+                placeholder="John Smith"
+                className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-teal focus:bg-white transition-all"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">Phone</label>
+              <input
+                type="tel"
+                value={form.phone}
+                onChange={e => setForm({ ...form, phone: e.target.value })}
+                placeholder="+1 234 567 8900"
+                className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-teal focus:bg-white transition-all"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">Email</label>
+            <input
+              type="email"
+              required
+              value={form.email}
+              onChange={e => setForm({ ...form, email: e.target.value })}
+              placeholder="john@example.com"
+              className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-teal focus:bg-white transition-all"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">Treatment Interest</label>
+            <select
+              value={form.treatment}
+              onChange={e => setForm({ ...form, treatment: e.target.value })}
+              className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:border-teal focus:bg-white transition-all"
+            >
+              <option value="">Select a treatment</option>
+              {treatmentOptions.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">Message</label>
+            <textarea
+              rows={3}
+              value={form.message}
+              onChange={e => setForm({ ...form, message: e.target.value })}
+              placeholder="Tell us about your treatment needs or any questions..."
+              className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-teal focus:bg-white transition-all resize-none"
+            />
+          </div>
+
+          <div className="flex gap-3 pt-1">
+            <button
+              type="button"
+              onClick={handleWhatsApp}
+              className="flex-1 flex items-center justify-center gap-1.5 bg-teal text-white px-4 py-3 rounded-full font-semibold text-sm hover:bg-[#159fb3] transition-colors"
+            >
+              <MessageCircle size={14} />
+              WhatsApp
+            </button>
+            <button
+              type="button"
+              onClick={handleEmail}
+              className="flex-1 flex items-center justify-center gap-1.5 bg-brand text-white px-4 py-3 rounded-full font-semibold text-sm hover:bg-[#154d8a] transition-colors"
+            >
+              <Send size={14} />
+              Send Request
+            </button>
+          </div>
+
+          <p className="text-xs text-gray-300 text-center pb-1">
+            Your information is kept strictly confidential.
+          </p>
+        </form>
       </div>
     </div>
   );
