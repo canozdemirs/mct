@@ -96,7 +96,7 @@ export function ConsultationForm({ initialTreatment = "", onSuccess }: Consultat
         <button
           type="button"
           onClick={handleWhatsApp}
-          className="flex items-center justify-center gap-2 bg-teal text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:bg-[#159fb3] transition-colors shadow-lg shadow-teal/20"
+          className="flex items-center justify-center gap-2 bg-[#25D366] text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:bg-[#1ebe5a] transition-colors shadow-lg shadow-[#25D366]/20"
         >
           <MessageCircle size={15} />
           Send via WhatsApp
