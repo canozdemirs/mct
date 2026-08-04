@@ -47,7 +47,7 @@ const treatments = [
   },
   {
     name: "Rhinoplasty",
-    price: "From €2,850",
+    price: "From €3,000",
     image: "/treatments/rhinoplasty.jpg",
     inclusions: [
       "Closed / open technique",
@@ -60,7 +60,7 @@ const treatments = [
   },
   {
     name: "Breast Augmentation",
-    price: "From €4,700",
+    price: "From €5,000",
     image: "/treatments/breast-augmentation-v3.jpg",
     inclusions: [
       "Silicone implants included",
@@ -72,8 +72,8 @@ const treatments = [
     ],
   },
   {
-    name: "Liposuction",
-    price: "From €2,300",
+    name: "Liposuction (3 Areas)",
+    price: "From €2,900",
     image: "/treatments/liposuction.jpg",
     inclusions: [
       "Standard / Laser / Vaser technique",
