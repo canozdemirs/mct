@@ -19,7 +19,7 @@ const treatments = [
   {
     name: "All-on-4 Dental Implants",
     price: "From €1,500",
-    image: "/treatments/dental-implant.jpg",
+    image: "/treatments/hollywood-smile.jpg",
     inclusions: [
       "Full-arch fixed prosthesis",
       "Titanium implants",
@@ -96,7 +96,7 @@ const treatments = [
   {
     name: "LASIK Eye Surgery",
     price: "From €1,600",
-    image: "/treatments/blepharoplasty-v2.jpg",
+    image: "/treatments/blepharoplasty-v4.jpg",
     inclusions: [
       "ILASIK / PRK / Lasek technique",
       "Hospital coordination",
@@ -132,7 +132,7 @@ const treatments = [
   {
     name: "Blepharoplasty",
     price: "From €2,050",
-    image: "/treatments/blepharoplasty-v4.jpg",
+    image: "/treatments/blepharoplasty-v2.jpg",
     inclusions: [
       "Upper / lower eyelid surgery",
       "Hospital coordination",
