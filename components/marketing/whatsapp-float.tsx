@@ -5,7 +5,8 @@ import { MessageCircle, X, Send } from "lucide-react";
 
 const treatments = [
   "Hair Transplant", "Rhinoplasty", "Breast Augmentation", "Gynecomastia",
-  "Dental Implant", "Blepharoplasty", "Liposuction", "Check-Up", "Other",
+  "Dental Implant", "All-on-4 Dental Implants", "Blepharoplasty", "Liposuction",
+  "LASIK Eye Surgery", "Cataract Surgery", "IVF", "Check-Up", "Other",
 ];
 
 export function WhatsAppFloat() {
@@ -142,7 +143,7 @@ export function WhatsAppFloat() {
                 <button
                   type="button"
                   onClick={handleWhatsApp}
-                  className="flex items-center justify-center gap-2 bg-[#25D366] text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:bg-[#1fb55a] transition-colors shadow-lg"
+                  className="flex items-center justify-center gap-2 bg-teal text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:bg-[#159fb3] transition-colors shadow-lg shadow-teal/20"
                 >
                   <MessageCircle size={15} />
                   Send via WhatsApp
@@ -150,10 +151,10 @@ export function WhatsAppFloat() {
                 <button
                   type="button"
                   onClick={handleEmail}
-                  className="flex items-center justify-center gap-2 bg-brand text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:bg-[#154d8a] transition-colors shadow-lg"
+                  className="flex items-center justify-center gap-2 bg-brand text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:bg-[#154d8a] transition-colors shadow-lg shadow-brand/20"
                 >
                   <Send size={15} />
-                  Send via Email
+                  Send Request
                 </button>
               </div>
 
