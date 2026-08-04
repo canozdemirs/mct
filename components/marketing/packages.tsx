@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Check, MessageCircle, X, Send } from "lucide-react";
+import { Check, MessageCircle, X } from "lucide-react";
+import { ConsultationForm } from "./consultation-form";
 
 const treatments = [
   {
@@ -158,27 +159,7 @@ const treatments = [
   },
 ];
 
-const treatmentOptions = [
-  "Hair Transplant", "Rhinoplasty", "Breast Augmentation", "Gynecomastia",
-  "Dental Implant", "All-on-4 Dental Implants", "Blepharoplasty", "Liposuction",
-  "LASIK Eye Surgery", "Cataract Surgery", "IVF", "Check-Up", "Other",
-];
-
 function QuoteModal({ name, onClose }: { name: string; onClose: () => void }) {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", treatment: name, message: "" });
-
-  const handleWhatsApp = (e: React.FormEvent) => {
-    e.preventDefault();
-    const text = `Hello MCT,%0A%0AName: ${form.name}%0AEmail: ${form.email}%0APhone: ${form.phone}%0ATreatment: ${form.treatment}%0A%0A${form.message}`;
-    window.open(`https://wa.me/908508888911?text=${text}`, "_blank");
-  };
-
-  const handleEmail = (e: React.FormEvent) => {
-    e.preventDefault();
-    const body = `Hello MCT,\n\nName: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nTreatment: ${form.treatment}\n\n${form.message}`;
-    window.location.href = `mailto:hello@medicalcenterturkey.com?subject=${encodeURIComponent(`Quote Request: ${form.treatment}`)}&body=${encodeURIComponent(body)}`;
-  };
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
@@ -193,90 +174,9 @@ function QuoteModal({ name, onClose }: { name: string; onClose: () => void }) {
             <X size={20} />
           </button>
         </div>
-
-        <form className="px-6 py-5 space-y-4">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">Full Name</label>
-              <input
-                type="text"
-                required
-                value={form.name}
-                onChange={e => setForm({ ...form, name: e.target.value })}
-                placeholder="John Smith"
-                className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-teal focus:bg-white transition-all"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">Phone</label>
-              <input
-                type="tel"
-                value={form.phone}
-                onChange={e => setForm({ ...form, phone: e.target.value })}
-                placeholder="+1 234 567 8900"
-                className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-teal focus:bg-white transition-all"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">Email</label>
-            <input
-              type="email"
-              required
-              value={form.email}
-              onChange={e => setForm({ ...form, email: e.target.value })}
-              placeholder="john@example.com"
-              className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-teal focus:bg-white transition-all"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">Treatment Interest</label>
-            <select
-              value={form.treatment}
-              onChange={e => setForm({ ...form, treatment: e.target.value })}
-              className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:border-teal focus:bg-white transition-all"
-            >
-              <option value="">Select a treatment</option>
-              {treatmentOptions.map(t => <option key={t} value={t}>{t}</option>)}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">Message</label>
-            <textarea
-              rows={3}
-              value={form.message}
-              onChange={e => setForm({ ...form, message: e.target.value })}
-              placeholder="Tell us about your treatment needs or any questions..."
-              className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-teal focus:bg-white transition-all resize-none"
-            />
-          </div>
-
-          <div className="flex gap-3 pt-1">
-            <button
-              type="button"
-              onClick={handleWhatsApp}
-              className="flex-1 flex items-center justify-center gap-1.5 bg-teal text-white px-4 py-3 rounded-full font-semibold text-sm hover:bg-[#159fb3] transition-colors"
-            >
-              <MessageCircle size={14} />
-              WhatsApp
-            </button>
-            <button
-              type="button"
-              onClick={handleEmail}
-              className="flex-1 flex items-center justify-center gap-1.5 bg-brand text-white px-4 py-3 rounded-full font-semibold text-sm hover:bg-[#154d8a] transition-colors"
-            >
-              <Send size={14} />
-              Send Request
-            </button>
-          </div>
-
-          <p className="text-xs text-gray-300 text-center pb-1">
-            Your information is kept strictly confidential.
-          </p>
-        </form>
+        <div className="px-6 py-5">
+          <ConsultationForm initialTreatment={name} onSuccess={onClose} />
+        </div>
       </div>
     </div>
   );
