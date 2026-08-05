@@ -280,7 +280,7 @@ export default function HairTransplantLanding() {
 
 
       {/* ── 2. PACKAGES ─────────────────────────────────────────── */}
-      <section style={{ background: "#fff", padding: "52px 20px 96px" }}>
+      <section style={{ background: "#fff", padding: "80px 20px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div className="text-center mb-4">
             <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>All-Inclusive Packages</div>
@@ -336,7 +336,7 @@ export default function HairTransplantLanding() {
       </section>
 
       {/* ── 3. BEFORE / AFTER ───────────────────────────────────── */}
-      <section style={{ background: "#F4F8FB", padding: "52px 20px 96px" }}>
+      <section style={{ background: "#F4F8FB", padding: "80px 20px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ maxWidth: 640, marginBottom: 52 }}>
             <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Real Results · Real Patients</div>
@@ -366,7 +366,7 @@ export default function HairTransplantLanding() {
       </section>
 
       {/* ── 4. TRUST ─────────────────────────────────────────────── */}
-      <section style={{ background: "#fff", padding: "96px 20px" }}>
+      <section style={{ background: "#fff", padding: "80px 20px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>17 Years of Experience</div>
           <h2 style={{ fontSize: "clamp(26px,4vw,42px)", fontWeight: 800, color: "#053980", lineHeight: 1.2, marginBottom: 14 }}>We Answer Every Question. Before You Even Ask.</h2>
@@ -384,7 +384,7 @@ export default function HairTransplantLanding() {
       </section>
 
       {/* ── 5. JOURNEY ───────────────────────────────────────────── */}
-      <section style={{ background: "#fff", padding: "96px 20px" }}>
+      <section style={{ background: "#F4F8FB", padding: "80px 20px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Step by Step</div>
           <h2 style={{ fontSize: "clamp(26px,4vw,42px)", fontWeight: 800, color: "#053980", lineHeight: 1.2, marginBottom: 14 }}>3 Days. Life-Changing Results.</h2>
@@ -421,7 +421,7 @@ export default function HairTransplantLanding() {
       </section>
 
       {/* ── 6. WHY MCT ───────────────────────────────────────────── */}
-      <section className="relative py-24 px-5">
+      <section className="relative py-20 px-5">
         <Image src="/mct_head_office.jpg" alt="" fill className="object-cover" sizes="100vw" />
         <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(4,40,90,0.88) 0%, rgba(4,40,90,0.82) 100%)" }} />
         <div className="relative" style={{ maxWidth: 1100, margin: "0 auto" }}>
@@ -445,7 +445,7 @@ export default function HairTransplantLanding() {
       </section>
 
       {/* ── 7. TESTIMONIALS ──────────────────────────────────────── */}
-      <section style={{ background: "#fff", padding: "96px 20px" }}>
+      <section style={{ background: "#fff", padding: "80px 20px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Patient Reviews</div>
           <h2 style={{ fontSize: "clamp(26px,4vw,42px)", fontWeight: 800, color: "#053980", lineHeight: 1.2, marginBottom: 14 }}>What Our Patients Say</h2>
@@ -470,7 +470,7 @@ export default function HairTransplantLanding() {
       </section>
 
       {/* ── 8. FAQ ───────────────────────────────────────────────── */}
-      <section style={{ background: "#F4F8FB", padding: "96px 20px" }}>
+      <section style={{ background: "#F4F8FB", padding: "80px 20px" }}>
         <div style={{ maxWidth: 760, margin: "0 auto" }}>
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>FAQ</div>
           <h2 style={{ fontSize: "clamp(26px,4vw,42px)", fontWeight: 800, color: "#053980", lineHeight: 1.2, marginBottom: 14 }}>Frequently Asked Questions</h2>
@@ -498,7 +498,7 @@ export default function HairTransplantLanding() {
       </section>
 
       {/* ── 9. CTA / FORM ────────────────────────────────────────── */}
-      <section id="ht-form" style={{ background: "linear-gradient(135deg, #053980, #031e46)", padding: "100px 20px" }}>
+      <section id="ht-form" style={{ background: "linear-gradient(135deg, #053980, #031e46)", padding: "80px 20px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mb-16">
             {/* Left */}
