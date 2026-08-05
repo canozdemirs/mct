@@ -28,7 +28,7 @@ const packages = [
     name: "Gold Package",
     price: "From €1,700",
     highlight: false,
-    badge: null as string | null,
+    badge: "Award Winning · Best Value",
     inclusions: [
       "Everything in Premium, plus:",
       "Local Anaesthesia",
@@ -145,9 +145,9 @@ const recoveryTimeline = [
 ];
 
 const testimonials = [
-  { name: "James T.", country: "United Kingdom", pkg: "Hassle-Free Package", text: "From the moment I landed in Istanbul, everything was taken care of. The GO coordinator was with me the whole day. Ten months later, the results are incredible." },
-  { name: "Michael R.", country: "United States", pkg: "Gold Package", text: "I was nervous about travelling abroad for surgery. MCT made it completely seamless — the hotel, the transfers, the hospital. Zero stress. Highly recommend." },
-  { name: "David K.", country: "Germany", pkg: "Exclusive Package", text: "The transparency was what impressed me most. Fixed price, clear inclusions, no surprises. The 12-month aftercare support is a real differentiator." },
+  { name: "Sena Alkan", country: "November 2025", pkg: "Hassle-Free Package", text: "My husband had a hair transplant at Medical Center Turkey and we are very happy with the whole experience. From the moment we arrived in Istanbul, everything was perfectly organised — the transfers, the hotel and the clinic." },
+  { name: "Stylez", country: "May 2024", pkg: "Gold Package", text: "I am currently on day 29 of my hair transplant and I am very happy with the service. From start to finish, the experience could not have been better." },
+  { name: "S.H.", country: "December 2024", pkg: "Premium Package", text: "Excellent procedure! Everything was perfectly organised. The hospital and staff were kind and there were no concerns whatsoever." },
 ];
 
 export default function HairTransplantLanding() {
@@ -293,16 +293,14 @@ export default function HairTransplantLanding() {
             <h2 className="text-2xl sm:text-3xl font-bold text-brand mt-2">See the Difference. Judge for Yourself.</h2>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            {[1, 2, 3, 4, 5, 6].map((n) => (
-              <div key={n} className="rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm aspect-[4/3] flex items-center justify-center">
-                <div className="text-center p-4">
-                  <div className="flex gap-2 justify-center mb-3">
-                    <span className="text-xs bg-gray-100 text-gray-400 px-2.5 py-1 rounded-md font-semibold">Before</span>
-                    <span className="text-gray-300 self-center">→</span>
-                    <span className="text-xs bg-teal/10 text-teal px-2.5 py-1 rounded-md font-semibold">After</span>
-                  </div>
-                  <p className="text-xs text-gray-300">Patient photo coming soon</p>
-                </div>
+            {[1, 2, 3, 4, 5, 6, 8, 9].map((n) => (
+              <div key={n} className="rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm aspect-[4/3] relative">
+                <Image
+                  src={`/treatments/hair-ba-${n}.webp`}
+                  alt={`Hair transplant before and after result ${n}`}
+                  fill
+                  className="object-cover"
+                />
               </div>
             ))}
           </div>
