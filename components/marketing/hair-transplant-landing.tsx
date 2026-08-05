@@ -232,19 +232,6 @@ export default function HairTransplantLanding() {
             You fly to Istanbul. We take care of everything else — the surgery, the hotel, the transfers, the aftercare. You just focus on your results.
           </p>
 
-          {/* Trust badges */}
-          <div className="flex flex-wrap justify-center gap-3" style={{ marginBottom: 40 }}>
-            {[
-              { icon: "🏥", text: "Ministry of Health Certified" },
-              { icon: "✦", text: "All-Inclusive Package" },
-              { icon: "🛡", text: "12 Month Aftercare" },
-            ].map((b) => (
-              <div key={b.text} style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 100, padding: "8px 18px", fontSize: 13, color: "rgba(255,255,255,0.85)", fontWeight: 500, backdropFilter: "blur(8px)" }}>
-                <span style={{ fontSize: 14 }}>{b.icon}</span>
-                {b.text}
-              </div>
-            ))}
-          </div>
           <div ref={statsRef} className="flex justify-center gap-12 mt-16 flex-wrap">
             <div className="text-center">
               <div style={{ fontSize: 30, fontWeight: 800, color: "#A3C6CF" }}>{statsVisible ? countYears : 0}</div>
