@@ -233,13 +233,23 @@ export function Packages() {
                       </li>
                     ))}
                   </ul>
-                  <button
-                    onClick={() => setSelected(t.name)}
-                    className="mt-3 flex items-center justify-center gap-1.5 bg-teal text-white text-xs font-semibold px-3 py-2 rounded-full hover:bg-[#159fb3] transition-colors w-full"
-                  >
-                    <MessageCircle size={11} />
-                    Get a Free Quote
-                  </button>
+                  <div className="mt-3 flex flex-col gap-1.5">
+                    <button
+                      onClick={() => setSelected(t.name)}
+                      className="flex items-center justify-center gap-1.5 bg-teal text-white text-xs font-semibold px-3 py-2 rounded-full hover:bg-[#159fb3] transition-colors w-full"
+                    >
+                      <MessageCircle size={11} />
+                      Get a Free Quote
+                    </button>
+                    {t.name === "Hair Transplant" && (
+                      <Link
+                        href="/hair-transplant-turkey"
+                        className="flex items-center justify-center text-xs font-semibold text-brand hover:text-teal transition-colors"
+                      >
+                        View Full Package →
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
