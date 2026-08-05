@@ -469,63 +469,38 @@ export default function HairTransplantLanding() {
         </div>
       </section>
 
-      {/* ── 8. FAQ ───────────────────────────────────────────────── */}
-      <section style={{ background: "#F4F8FB", padding: "80px 20px" }}>
-        <div style={{ maxWidth: 760, margin: "0 auto" }}>
-          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>FAQ</div>
-          <h2 style={{ fontSize: "clamp(26px,4vw,42px)", fontWeight: 800, color: "#053980", lineHeight: 1.2, marginBottom: 14 }}>Frequently Asked Questions</h2>
-          <p style={{ fontSize: 16, color: "#6B7C8D", marginBottom: 52 }}>The most common questions from our international patients — answered honestly.</p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {faqs.map((faq, i) => (
-              <div key={i} style={{ background: "#fff", border: "1px solid rgba(87,136,172,0.18)", borderRadius: 12, overflow: "hidden" }}>
-                <button
-                  onClick={() => setFaqOpen(faqOpen === i ? null : i)}
-                  className="w-full flex items-center justify-between gap-4 text-left"
-                  style={{ padding: "20px 24px", cursor: "pointer", background: "none", border: "none" }}
-                >
-                  <span style={{ fontSize: 15, fontWeight: 600, color: "#1A2A3A" }}>{faq.q}</span>
-                  <span style={{ fontSize: 22, color: "#5788AC", transition: "transform .2s", transform: faqOpen === i ? "rotate(45deg)" : "none", flexShrink: 0 }}>+</span>
-                </button>
-                {faqOpen === i && (
-                  <div style={{ padding: "0 24px 20px", fontSize: 14, color: "#6B7C8D", lineHeight: 1.7 }}>
-                    {faq.a}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 9. CTA / FORM ────────────────────────────────────────── */}
+      {/* ── 8. FAQ + FORM ────────────────────────────────────────── */}
       <section id="ht-form" style={{ background: "linear-gradient(135deg, #053980, #031e46)", padding: "80px 20px" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mb-16">
-            {/* Left */}
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
+
+            {/* Left — FAQ */}
             <div>
-              <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#A3C6CF", marginBottom: 14 }}>Free Consultation</div>
-              <h2 style={{ fontSize: "clamp(26px,4vw,42px)", fontWeight: 800, color: "#fff", lineHeight: 1.2, marginBottom: 14 }}>Start Your Hair Transplant Journey</h2>
-              <p style={{ fontSize: 16, color: "rgba(255,255,255,0.7)", marginBottom: 40 }}>Send us your details and photos. Our team will review your case and recommend the right package — completely free, no pressure, no commitment.</p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                {[
-                  { label: "WHATSAPP", val: "+90 850 888 89 11", href: "https://wa.me/908508888911" },
-                  { label: "PHONE", val: "+90 850 888 89 11", href: "tel:+908508888911" },
-                  { label: "EMAIL", val: "hello@medicalcenterturkey.com", href: "mailto:hello@medicalcenterturkey.com" },
-                  { label: "LOCATION", val: "Ataşehir, Istanbul, Turkey", href: null },
-                ].map((c) => (
-                  <div key={c.label}>
-                    <div style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: 4 }}>{c.label}</div>
-                    {c.href ? (
-                      <a href={c.href} target={c.href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" style={{ fontSize: 15, color: "#A3C6CF", fontWeight: 600, textDecoration: "none" }}>{c.val}</a>
-                    ) : (
-                      <span style={{ fontSize: 15, color: "#fff", fontWeight: 600 }}>{c.val}</span>
+              <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#A3C6CF", marginBottom: 14 }}>FAQ</div>
+              <h2 style={{ fontSize: "clamp(24px,3vw,36px)", fontWeight: 800, color: "#fff", lineHeight: 1.2, marginBottom: 10 }}>Frequently Asked Questions</h2>
+              <p style={{ fontSize: 15, color: "rgba(255,255,255,0.55)", marginBottom: 32 }}>The most common questions from our international patients — answered honestly.</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {faqs.map((faq, i) => (
+                  <div key={i} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, overflow: "hidden" }}>
+                    <button
+                      onClick={() => setFaqOpen(faqOpen === i ? null : i)}
+                      className="w-full flex items-center justify-between gap-4 text-left"
+                      style={{ padding: "16px 20px", cursor: "pointer", background: "none", border: "none" }}
+                    >
+                      <span style={{ fontSize: 14, fontWeight: 600, color: "#fff" }}>{faq.q}</span>
+                      <span style={{ fontSize: 20, color: "#A3C6CF", transition: "transform .2s", transform: faqOpen === i ? "rotate(45deg)" : "none", flexShrink: 0 }}>+</span>
+                    </button>
+                    {faqOpen === i && (
+                      <div style={{ padding: "0 20px 16px", fontSize: 13, color: "rgba(255,255,255,0.6)", lineHeight: 1.7 }}>
+                        {faq.a}
+                      </div>
                     )}
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Right - Form */}
+            {/* Right — Form */}
             <div style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 16, overflow: "hidden" }}>
               <div style={{ padding: "24px 32px", borderBottom: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)" }}>
                 <div style={{ fontSize: 18, fontWeight: 800, color: "#fff" }}>Get Your Free Hair Analysis</div>
@@ -580,18 +555,14 @@ export default function HairTransplantLanding() {
                   </button>
                   <button type="button" onClick={handleEmail}
                     style={{ flex: 1, background: "#2884C0", color: "#fff", padding: "14px 20px", borderRadius: 8, fontWeight: 700, fontSize: 15, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-                    <Send size={16} /> ✦ Send My Free Consultation Request
+                    <Send size={16} /> Send My Consultation Request
                   </button>
                 </div>
-                <p style={{ fontSize: 12, color: "#6B7C8D", textAlign: "center" }}>No commitment required · No spam · We reply within 24 hours</p>
+                <p style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", textAlign: "center" }}>No commitment required · No spam · We reply within 24 hours</p>
               </form>
             </div>
-          </div>
 
-          <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", textAlign: "center", lineHeight: 2 }}>
-            <strong style={{ color: "rgba(255,255,255,0.7)" }}>Medical Center Turkey</strong> · Licensed Medical Tourism Provider · Ataşehir, Istanbul 34746<br />
-            Available 7 days a week · English-speaking team · No commitment required. No spam. Just honest advice.
-          </p>
+          </div>
         </div>
       </section>
     </>
