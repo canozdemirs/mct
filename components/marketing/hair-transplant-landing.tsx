@@ -220,7 +220,7 @@ export default function HairTransplantLanding() {
       <section className="relative min-h-screen flex items-center justify-center text-center px-5 pt-12 pb-24">
         <Image src="/mct_head_office.jpg" alt="Medical Center Turkey Istanbul" fill className="object-cover" priority />
         <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(5,57,128,0.45) 0%, rgba(5,57,128,0.65) 55%, rgba(3,30,70,0.95) 100%)" }} />
-        <div className="relative max-w-4xl mx-auto w-full" style={{ marginTop: "-80px" }}>
+        <div className="relative max-w-4xl mx-auto w-full" style={{ marginTop: "-30px" }}>
           <div className="inline-block mb-7" style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.35)", color: "#fff", fontSize: 12, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase", padding: "8px 18px", borderRadius: 100 }}>
             Istanbul&apos;s Complete Hair Transplant Experience · Est. 2008
           </div>
