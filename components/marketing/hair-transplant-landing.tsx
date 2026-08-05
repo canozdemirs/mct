@@ -204,10 +204,6 @@ export default function HairTransplantLanding() {
   const countPatients = useCountUp(5000, 2000, statsVisible);
   const countAftercare = useCountUp(12, 1200, statsVisible);
 
-  const scrollToForm = () => {
-    document.getElementById("ht-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
   const handleWhatsApp = () => {
     const text = `Hello MCT,%0A%0AName: ${form.name}%0ACountry: ${form.country}%0AEmail: ${form.email}%0APhone: ${form.phone}%0APackage: ${form.pkg}%0A%0A${form.message}`;
     window.open(`https://wa.me/908508888911?text=${text}`, "_blank");
@@ -321,14 +317,14 @@ export default function HairTransplantLanding() {
                     ))}
                   </ul>
                 </div>
-                <button onClick={scrollToForm} style={{
-                  display: "block", width: "100%", textAlign: "center", margin: "8px 28px 28px", padding: 14, borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: "pointer", transition: "all .2s",
+                <a href="#ht-form" style={{
+                  display: "block", textAlign: "center", margin: "8px 28px 28px", padding: 14, borderRadius: 8, fontWeight: 700, fontSize: 15, textDecoration: "none", transition: "all .2s",
                   ...(pkg.cta === "gold"
-                    ? { background: "#053980", color: "#fff", border: "none" }
+                    ? { background: "#053980", color: "#fff" }
                     : { background: "transparent", color: "#053980", border: "1.5px solid rgba(5,57,128,0.3)" })
                 }}>
                   Get Started
-                </button>
+                </a>
               </div>
             ))}
           </div>
@@ -362,9 +358,9 @@ export default function HairTransplantLanding() {
           </div>
           <div style={{ textAlign: "center", marginTop: 48 }}>
             <p style={{ fontSize: 16, color: "#6B7C8D", marginBottom: 20 }}>Ready to write your own before &amp; after story?</p>
-            <button onClick={scrollToForm} style={{ background: "#053980", color: "#fff", padding: "16px 36px", borderRadius: 8, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <a href="#ht-form" style={{ background: "#053980", color: "#fff", padding: "16px 36px", borderRadius: 8, fontWeight: 700, fontSize: 16, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8 }}>
               Get Your Free Consultation <ArrowRight size={16} />
-            </button>
+            </a>
           </div>
         </div>
       </section>
@@ -473,96 +469,99 @@ export default function HairTransplantLanding() {
         </div>
       </section>
 
-      {/* ── 8. FAQ ───────────────────────────────────────────────── */}
-      <section style={{ background: "#F4F8FB", padding: "80px 20px" }}>
-        <div style={{ maxWidth: 760, margin: "0 auto" }}>
-          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>FAQ</div>
-          <h2 style={{ fontSize: "clamp(26px,4vw,42px)", fontWeight: 800, color: "#053980", lineHeight: 1.2, marginBottom: 14 }}>Frequently Asked Questions</h2>
-          <p style={{ fontSize: 16, color: "#6B7C8D", marginBottom: 40 }}>The most common questions from our international patients — answered honestly.</p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {faqs.map((faq, i) => (
-              <div key={i} style={{ background: "#fff", border: "1px solid rgba(87,136,172,0.18)", borderRadius: 12, overflow: "hidden" }}>
-                <button
-                  onClick={() => setFaqOpen(faqOpen === i ? null : i)}
-                  className="w-full flex items-center justify-between gap-4 text-left"
-                  style={{ padding: "18px 22px", cursor: "pointer", background: "none", border: "none" }}
-                >
-                  <span style={{ fontSize: 15, fontWeight: 600, color: "#1A2A3A" }}>{faq.q}</span>
-                  <span style={{ fontSize: 22, color: "#5788AC", transition: "transform .2s", transform: faqOpen === i ? "rotate(45deg)" : "none", flexShrink: 0 }}>+</span>
-                </button>
-                {faqOpen === i && (
-                  <div style={{ padding: "0 22px 18px", fontSize: 14, color: "#6B7C8D", lineHeight: 1.7 }}>
-                    {faq.a}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ── 8. FAQ + FORM ────────────────────────────────────────── */}
+      <section id="ht-form" style={{ background: "linear-gradient(135deg, #053980, #031e46)", padding: "80px 20px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
 
-      {/* ── 9. FORM ──────────────────────────────────────────────── */}
-      <section id="ht-form" style={{ background: "linear-gradient(135deg, #053980, #031e46)", padding: "80px 20px", scrollMarginTop: "72px" }}>
-        <div style={{ maxWidth: 560, margin: "0 auto" }}>
-          <div style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 16, overflow: "hidden" }}>
-            <div style={{ padding: "24px 32px", borderBottom: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)" }}>
-              <div style={{ fontSize: 18, fontWeight: 800, color: "#fff" }}>Get Your Free Hair Analysis</div>
-              <div style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>We&apos;ll respond within 24 hours</div>
+            {/* Left — FAQ */}
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#A3C6CF", marginBottom: 14 }}>FAQ</div>
+              <h2 style={{ fontSize: "clamp(24px,3vw,36px)", fontWeight: 800, color: "#fff", lineHeight: 1.2, marginBottom: 10 }}>Frequently Asked Questions</h2>
+              <p style={{ fontSize: 15, color: "rgba(255,255,255,0.55)", marginBottom: 32 }}>The most common questions from our international patients — answered honestly.</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {faqs.map((faq, i) => (
+                  <div key={i} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, overflow: "hidden" }}>
+                    <button
+                      onClick={() => setFaqOpen(faqOpen === i ? null : i)}
+                      className="w-full flex items-center justify-between gap-4 text-left"
+                      style={{ padding: "16px 20px", cursor: "pointer", background: "none", border: "none" }}
+                    >
+                      <span style={{ fontSize: 14, fontWeight: 600, color: "#fff" }}>{faq.q}</span>
+                      <span style={{ fontSize: 20, color: "#A3C6CF", transition: "transform .2s", transform: faqOpen === i ? "rotate(45deg)" : "none", flexShrink: 0 }}>+</span>
+                    </button>
+                    {faqOpen === i && (
+                      <div style={{ padding: "0 20px 16px", fontSize: 13, color: "rgba(255,255,255,0.6)", lineHeight: 1.7 }}>
+                        {faq.a}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-            <form style={{ padding: 32, display: "flex", flexDirection: "column", gap: 16 }} onSubmit={e => e.preventDefault()}>
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { label: "Full Name", key: "name", type: "text", ph: "John Smith" },
-                  { label: "Country", key: "country", type: "text", ph: "United Kingdom" },
-                ].map((f) => (
-                  <div key={f.key}>
-                    <label style={{ fontSize: 13, fontWeight: 600, color: "#fff", display: "block", marginBottom: 6 }}>{f.label}</label>
-                    <input type={f.type} placeholder={f.ph} value={form[f.key as keyof typeof form]} onChange={e => setForm({ ...form, [f.key]: e.target.value })}
-                      style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, padding: "12px 16px", fontSize: 14, color: "#fff", outline: "none" }} />
-                  </div>
-                ))}
+
+            {/* Right — Form */}
+            <div style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 16, overflow: "hidden" }}>
+              <div style={{ padding: "24px 32px", borderBottom: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)" }}>
+                <div style={{ fontSize: 18, fontWeight: 800, color: "#fff" }}>Get Your Free Hair Analysis</div>
+                <div style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>We&apos;ll respond within 24 hours</div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { label: "Email Address", key: "email", type: "email", ph: "john@example.com" },
-                  { label: "WhatsApp / Phone", key: "phone", type: "tel", ph: "+1 234 567 8900" },
-                ].map((f) => (
-                  <div key={f.key}>
-                    <label style={{ fontSize: 13, fontWeight: 600, color: "#fff", display: "block", marginBottom: 6 }}>{f.label}</label>
-                    <input type={f.type} placeholder={f.ph} value={form[f.key as keyof typeof form]} onChange={e => setForm({ ...form, [f.key]: e.target.value })}
-                      style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, padding: "12px 16px", fontSize: 14, color: "#fff", outline: "none" }} />
-                  </div>
-                ))}
-              </div>
-              <div>
-                <label style={{ fontSize: 13, fontWeight: 600, color: "#fff", display: "block", marginBottom: 6 }}>Which package are you interested in?</label>
-                <select value={form.pkg} onChange={e => setForm({ ...form, pkg: e.target.value })}
-                  style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, padding: "12px 16px", fontSize: 14, color: "#fff", outline: "none" }}>
-                  <option value="" style={{ color: "#000" }}>Select a package...</option>
-                  <option value="Premium Package — From €1,400" style={{ color: "#000" }}>Premium Package — From €1,400</option>
-                  <option value="Gold Package — From €1,700" style={{ color: "#000" }}>Gold Package — From €1,700</option>
-                  <option value="Hassle-Free Package — From €1,870" style={{ color: "#000" }}>Hassle-Free Package — From €1,870</option>
-                  <option value="Exclusive Package — From €3,300" style={{ color: "#000" }}>Exclusive Package — From €3,300</option>
-                  <option value="Not sure yet" style={{ color: "#000" }}>Not sure yet</option>
-                </select>
-              </div>
-              <div>
-                <label style={{ fontSize: 13, fontWeight: 600, color: "#fff", display: "block", marginBottom: 6 }}>Your Message (optional)</label>
-                <textarea rows={3} placeholder="Tell us about your hair loss situation..." value={form.message} onChange={e => setForm({ ...form, message: e.target.value })}
-                  style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, padding: "12px 16px", fontSize: 14, color: "#fff", outline: "none", resize: "vertical" }} />
-              </div>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button type="button" onClick={handleWhatsApp}
-                  style={{ flex: 1, background: "#25D366", color: "#fff", padding: "14px 20px", borderRadius: 8, fontWeight: 700, fontSize: 15, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-                  <MessageCircle size={16} /> Send via WhatsApp
-                </button>
-                <button type="button" onClick={handleEmail}
-                  style={{ flex: 1, background: "#2884C0", color: "#fff", padding: "14px 20px", borderRadius: 8, fontWeight: 700, fontSize: 15, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-                  <Send size={16} /> Send My Consultation Request
-                </button>
-              </div>
-              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", textAlign: "center" }}>No commitment required · No spam · We reply within 24 hours</p>
-            </form>
+              <form style={{ padding: 32, display: "flex", flexDirection: "column", gap: 16 }} onSubmit={e => e.preventDefault()}>
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { label: "Full Name", key: "name", type: "text", ph: "John Smith" },
+                    { label: "Country", key: "country", type: "text", ph: "United Kingdom" },
+                  ].map((f) => (
+                    <div key={f.key}>
+                      <label style={{ fontSize: 13, fontWeight: 600, color: "#fff", display: "block", marginBottom: 6 }}>{f.label}</label>
+                      <input type={f.type} placeholder={f.ph} value={form[f.key as keyof typeof form]} onChange={e => setForm({ ...form, [f.key]: e.target.value })}
+                        style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, padding: "12px 16px", fontSize: 14, color: "#fff", outline: "none" }} />
+                    </div>
+                  ))}
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { label: "Email Address", key: "email", type: "email", ph: "john@example.com" },
+                    { label: "WhatsApp / Phone", key: "phone", type: "tel", ph: "+1 234 567 8900" },
+                  ].map((f) => (
+                    <div key={f.key}>
+                      <label style={{ fontSize: 13, fontWeight: 600, color: "#fff", display: "block", marginBottom: 6 }}>{f.label}</label>
+                      <input type={f.type} placeholder={f.ph} value={form[f.key as keyof typeof form]} onChange={e => setForm({ ...form, [f.key]: e.target.value })}
+                        style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, padding: "12px 16px", fontSize: 14, color: "#fff", outline: "none" }} />
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <label style={{ fontSize: 13, fontWeight: 600, color: "#fff", display: "block", marginBottom: 6 }}>Which package are you interested in?</label>
+                  <select value={form.pkg} onChange={e => setForm({ ...form, pkg: e.target.value })}
+                    style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, padding: "12px 16px", fontSize: 14, color: "#fff", outline: "none" }}>
+                    <option value="" style={{ color: "#000" }}>Select a package...</option>
+                    <option value="Premium Package — From €1,400" style={{ color: "#000" }}>Premium Package — From €1,400</option>
+                    <option value="Gold Package — From €1,700" style={{ color: "#000" }}>Gold Package — From €1,700</option>
+                    <option value="Hassle-Free Package — From €1,870" style={{ color: "#000" }}>Hassle-Free Package — From €1,870</option>
+                    <option value="Exclusive Package — From €3,300" style={{ color: "#000" }}>Exclusive Package — From €3,300</option>
+                    <option value="Not sure yet" style={{ color: "#000" }}>Not sure yet</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={{ fontSize: 13, fontWeight: 600, color: "#fff", display: "block", marginBottom: 6 }}>Your Message (optional)</label>
+                  <textarea rows={3} placeholder="Tell us about your hair loss situation..." value={form.message} onChange={e => setForm({ ...form, message: e.target.value })}
+                    style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, padding: "12px 16px", fontSize: 14, color: "#fff", outline: "none", resize: "vertical" }} />
+                </div>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <button type="button" onClick={handleWhatsApp}
+                    style={{ flex: 1, background: "#25D366", color: "#fff", padding: "14px 20px", borderRadius: 8, fontWeight: 700, fontSize: 15, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                    <MessageCircle size={16} /> Send via WhatsApp
+                  </button>
+                  <button type="button" onClick={handleEmail}
+                    style={{ flex: 1, background: "#2884C0", color: "#fff", padding: "14px 20px", borderRadius: 8, fontWeight: 700, fontSize: 15, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                    <Send size={16} /> Send My Consultation Request
+                  </button>
+                </div>
+                <p style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", textAlign: "center" }}>No commitment required · No spam · We reply within 24 hours</p>
+              </form>
+            </div>
+
           </div>
         </div>
       </section>
