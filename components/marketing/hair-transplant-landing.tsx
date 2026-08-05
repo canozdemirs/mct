@@ -280,7 +280,7 @@ export default function HairTransplantLanding() {
 
 
       {/* ── 2. PACKAGES ─────────────────────────────────────────── */}
-      <section style={{ background: "#fff", padding: "96px 20px" }}>
+      <section style={{ background: "#fff", padding: "52px 20px 96px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div className="text-center mb-4">
             <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>All-Inclusive Packages</div>
