@@ -321,14 +321,16 @@ export default function HairTransplantLanding() {
                     ))}
                   </ul>
                 </div>
-                <button onClick={scrollToForm} style={{
-                  display: "block", width: "100%", textAlign: "center", margin: "8px 28px 28px", padding: 14, borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: "pointer", transition: "all .2s",
-                  ...(pkg.cta === "gold"
-                    ? { background: "#053980", color: "#fff", border: "none" }
-                    : { background: "transparent", color: "#053980", border: "1.5px solid rgba(5,57,128,0.3)" })
-                }}>
-                  Get Started
-                </button>
+                <div style={{ margin: "8px 28px 28px" }}>
+                  <button onClick={scrollToForm} style={{
+                    display: "block", width: "100%", textAlign: "center", padding: 14, borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: "pointer", transition: "all .2s",
+                    ...(pkg.cta === "gold"
+                      ? { background: "#053980", color: "#fff", border: "none" }
+                      : { background: "transparent", color: "#053980", border: "1.5px solid rgba(5,57,128,0.3)" })
+                  }}>
+                    Get Started
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -362,9 +364,9 @@ export default function HairTransplantLanding() {
           </div>
           <div style={{ textAlign: "center", marginTop: 48 }}>
             <p style={{ fontSize: 16, color: "#6B7C8D", marginBottom: 20 }}>Ready to write your own before &amp; after story?</p>
-            <a href="#ht-form" style={{ background: "#053980", color: "#fff", padding: "16px 36px", borderRadius: 8, fontWeight: 700, fontSize: 16, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <button onClick={scrollToForm} style={{ background: "#053980", color: "#fff", padding: "16px 36px", borderRadius: 8, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 8 }}>
               Get Your Free Consultation <ArrowRight size={16} />
-            </a>
+            </button>
           </div>
         </div>
       </section>
@@ -474,7 +476,7 @@ export default function HairTransplantLanding() {
       </section>
 
       {/* ── 8. FAQ + FORM ────────────────────────────────────────── */}
-      <section id="ht-form" style={{ background: "linear-gradient(135deg, #053980, #031e46)", padding: "80px 20px" }}>
+      <section style={{ background: "linear-gradient(135deg, #053980, #031e46)", padding: "80px 20px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
 
