@@ -278,12 +278,6 @@ export default function HairTransplantLanding() {
         </div>
       </section>
 
-      {/* ── Hospitals strip ──────────────────────────────────────── */}
-      <div style={{ background: "#F4F8FB", padding: "22px 20px", textAlign: "center", borderBottom: "1px solid rgba(87,136,172,0.15)" }}>
-        <p style={{ fontSize: 14, color: "#053980", fontWeight: 500, letterSpacing: 0.3 }}>
-          <strong>Ministry of Health Certified</strong> · All treatments performed at licensed partner hospitals in Istanbul
-        </p>
-      </div>
 
       {/* ── 2. PACKAGES ─────────────────────────────────────────── */}
       <section style={{ background: "#fff", padding: "96px 20px" }}>
