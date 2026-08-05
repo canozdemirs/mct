@@ -225,7 +225,7 @@ const treatments = [
   {
     name: "LASIK Eye Surgery",
     price: "From €1,600",
-    image: "/treatments/blepharoplasty/v4.jpg",
+    image: "/treatments/lasik/card.jpg",
     inclusions: [
       "Operation",
       "Hospital coordination",
