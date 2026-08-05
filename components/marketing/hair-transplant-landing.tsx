@@ -168,37 +168,40 @@ export default function HairTransplantLanding() {
     <>
       {/* ── 1. HERO ───────────────────────────────────────────── */}
       <section className="relative flex flex-col overflow-hidden">
-        <div className="relative min-h-[620px] sm:min-h-[700px] flex items-center">
+        <div className="relative min-h-[620px] sm:min-h-[700px] flex items-center justify-center text-center">
           <Image
-            src="/treatments/hair-transplant-v7.jpg"
-            alt="Hair transplant Turkey — Medical Center Turkey"
+            src="/mct_head_office.jpg"
+            alt="Medical Center Turkey — Istanbul"
             fill
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/20" />
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 w-full">
-            <span className="inline-block bg-white/10 border border-white/20 text-teal text-xs font-bold px-4 py-1.5 rounded-full mb-6 tracking-wide">
-              17 Years of Experience · Ministry of Health Approved Partner Hospitals
+          <div className="absolute inset-0 bg-brand/88" />
+          <div className="relative max-w-3xl mx-auto px-4 sm:px-6 py-24 w-full flex flex-col items-center">
+            <span className="inline-block border border-white/25 text-white/70 text-[11px] font-semibold px-4 py-1.5 rounded-full mb-8 tracking-widest uppercase">
+              Istanbul&apos;s Complete Hair Transplant Experience · Est. 2008
             </span>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white max-w-2xl leading-tight mb-5">
-              Hair Transplant Turkey.<br />Done Right. From Start to Finish.
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+              <span className="text-white">Hair Transplant </span>
+              <span className="text-teal">Turkey.</span>
+              <br />
+              <span className="text-white">Done Right. From Start to Finish.</span>
             </h1>
-            <p className="text-white/70 text-base sm:text-lg max-w-xl mb-8 leading-relaxed">
+            <p className="text-white/60 text-base sm:text-lg max-w-lg mb-10 leading-relaxed">
               You fly to Istanbul. We take care of everything else — the surgery, the hotel, the transfers, the aftercare. You just focus on your results.
             </p>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3 justify-center">
               <a
                 href="#ht-form"
-                className="inline-flex items-center gap-2 bg-teal text-white font-semibold px-7 py-3.5 rounded-full hover:bg-[#159fb3] transition-colors shadow-lg"
+                className="inline-flex items-center gap-2 border-2 border-white text-white font-semibold px-7 py-3.5 rounded-full hover:bg-white hover:text-brand transition-colors"
               >
-                Start Your Experience
+                + Start Your Experience
               </a>
               <a
                 href="https://wa.me/908508888911"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#25D366] text-white font-semibold px-7 py-3.5 rounded-full hover:bg-[#1ebe5a] transition-colors shadow-lg"
+                className="inline-flex items-center gap-2 bg-[#25D366] text-white font-semibold px-7 py-3.5 rounded-full hover:bg-[#1ebe5a] transition-colors"
               >
                 <MessageCircle size={16} />
                 WhatsApp Us
@@ -208,7 +211,7 @@ export default function HairTransplantLanding() {
         </div>
 
         {/* Stats strip */}
-        <div className="relative bg-brand">
+        <div className="relative bg-brand-dark border-t border-white/10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
             {[
               { value: "17", label: "Years in Health Tourism" },
