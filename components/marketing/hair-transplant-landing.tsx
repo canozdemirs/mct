@@ -345,7 +345,7 @@ export default function HairTransplantLanding() {
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
             {[1, 2, 3, 4, 5, 6, 8, 9].map((n) => (
-              <div key={n} style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 4px 16px rgba(5,57,128,0.08)", background: "#fff", aspectRatio: "3/4", position: "relative", transition: "transform .2s, box-shadow .2s" }}>
+              <div key={n} style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 4px 16px rgba(5,57,128,0.08)", background: "#fff", aspectRatio: "1/1", position: "relative", transition: "transform .2s, box-shadow .2s" }}>
                 <Image
                   src={`/treatments/hair-transplant/landing/hair_transplant-before-and-after-${n}.webp`}
                   alt={`Hair transplant before and after result ${n}`}
