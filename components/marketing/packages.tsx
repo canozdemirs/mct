@@ -190,10 +190,10 @@ export function Packages() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <h2 className="text-2xl sm:text-3xl font-bold text-brand mb-3">
-            MCT Hassle-Free Packages
+            MCT Signature Packages
           </h2>
           <p className="text-gray-500 text-base max-w-2xl mx-auto">
-            MCT&apos;s most preferred Hassle-Free treatment packages — hover a card to see what&apos;s included.
+            Complete, transparent pricing — fully coordinated from arrival to aftercare. Hover a package to see what&apos;s included.
           </p>
         </div>
 
