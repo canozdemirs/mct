@@ -50,7 +50,7 @@ const treatments = [
     price: "From €3,000",
     image: "/treatments/rhinoplasty.jpg",
     inclusions: [
-      "Closed / open technique",
+      "Operation",
       "Hospital coordination",
       "VIP airport transfer",
       "Hotel accommodation",
@@ -76,7 +76,7 @@ const treatments = [
     price: "From €2,900",
     image: "/treatments/liposuction.jpg",
     inclusions: [
-      "Standard / Laser / Vaser technique",
+      "Operation",
       "Hospital coordination",
       "VIP airport transfer",
       "Hotel accommodation",
@@ -102,7 +102,7 @@ const treatments = [
     price: "From €1,600",
     image: "/treatments/blepharoplasty-v4.jpg",
     inclusions: [
-      "ILASIK / PRK / Lasek technique",
+      "Operation",
       "Hospital coordination",
       "Pre-op eye examination",
       "Post-op medication",
@@ -114,7 +114,7 @@ const treatments = [
     price: "From €5,500",
     image: "/treatments/cataract.jpg",
     inclusions: [
-      "IOL implantation (both eyes)",
+      "Operation",
       "Choice of lens (Multifocal, Toric, etc.)",
       "Hospital coordination",
       "Pre-op examination",
