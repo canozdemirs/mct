@@ -1,8 +1,24 @@
 "use client";
 
-import { useState } from "react";
-import { Check, ChevronDown, MessageCircle, Send, ArrowRight } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Check, MessageCircle, Send, ArrowRight } from "lucide-react";
 import Image from "next/image";
+
+function useCountUp(target: number, duration = 1800, start = false) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    if (!start) return;
+    let startTime: number | null = null;
+    const step = (ts: number) => {
+      if (!startTime) startTime = ts;
+      const progress = Math.min((ts - startTime) / duration, 1);
+      setCount(Math.floor(progress * target));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [start, target, duration]);
+  return count;
+}
 
 const packages = [
   {
@@ -171,6 +187,22 @@ const testimonials = [
 export default function HairTransplantLanding() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [form, setForm] = useState({ name: "", country: "", email: "", phone: "", pkg: "", message: "" });
+  const [statsVisible, setStatsVisible] = useState(false);
+  const statsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = statsRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setStatsVisible(true); observer.disconnect(); }
+    }, { threshold: 0.3 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const countYears = useCountUp(17, 1400, statsVisible);
+  const countPatients = useCountUp(5000, 2000, statsVisible);
+  const countAftercare = useCountUp(12, 1200, statsVisible);
 
   const handleWhatsApp = () => {
     const text = `Hello MCT,%0A%0AName: ${form.name}%0ACountry: ${form.country}%0AEmail: ${form.email}%0APhone: ${form.phone}%0APackage: ${form.pkg}%0A%0A${form.message}`;
@@ -185,14 +217,14 @@ export default function HairTransplantLanding() {
   return (
     <>
       {/* ── 1. HERO ─────────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex items-center justify-center text-center px-5 py-20">
+      <section className="relative min-h-screen flex items-center justify-center text-center px-5 pt-12 pb-24">
         <Image src="/mct_head_office.jpg" alt="Medical Center Turkey Istanbul" fill className="object-cover" priority />
         <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(5,57,128,0.45) 0%, rgba(5,57,128,0.65) 55%, rgba(3,30,70,0.95) 100%)" }} />
-        <div className="relative max-w-4xl mx-auto w-full">
+        <div className="relative max-w-4xl mx-auto w-full" style={{ marginTop: "-80px" }}>
           <div className="inline-block mb-7" style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.35)", color: "#fff", fontSize: 12, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase", padding: "8px 18px", borderRadius: 100 }}>
             Istanbul&apos;s Complete Hair Transplant Experience · Est. 2008
           </div>
-          <h1 className="font-extrabold leading-tight mb-6 text-white" style={{ fontSize: "clamp(34px, 6vw, 64px)", lineHeight: 1.1, maxWidth: 820, margin: "0 auto 24px" }}>
+          <h1 className="font-extrabold leading-tight text-white" style={{ fontSize: "clamp(34px, 6vw, 64px)", lineHeight: 1.1, maxWidth: 820, margin: "0 auto 24px" }}>
             Hair Transplant <span style={{ color: "#A3C6CF" }}>Turkey.</span><br />
             Done Right. From Start to Finish.
           </h1>
@@ -207,18 +239,27 @@ export default function HairTransplantLanding() {
               <MessageCircle size={18} /> WhatsApp Us
             </a>
           </div>
-          <div className="flex justify-center gap-12 mt-16 flex-wrap">
-            {[
-              { val: "17", label: "Years in Health Tourism" },
-              { val: "5,000+", label: "International Patients" },
-              { val: "#1", label: "Package System Pioneer" },
-              { val: "12 Mo", label: "Aftercare Support" },
-            ].map((s) => (
-              <div key={s.label} className="text-center">
-                <div style={{ fontSize: 30, fontWeight: 800, color: "#A3C6CF" }}>{s.val}</div>
-                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>{s.label}</div>
+          <div ref={statsRef} className="flex justify-center gap-12 mt-16 flex-wrap">
+            <div className="text-center">
+              <div style={{ fontSize: 30, fontWeight: 800, color: "#A3C6CF" }}>{statsVisible ? countYears : 0}</div>
+              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>Years in Health Tourism</div>
+            </div>
+            <div className="text-center">
+              <div style={{ fontSize: 30, fontWeight: 800, color: "#A3C6CF" }}>
+                {statsVisible ? (countPatients >= 5000 ? "5,000+" : countPatients.toLocaleString()) : "0"}
               </div>
-            ))}
+              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>International Patients</div>
+            </div>
+            <div className="text-center">
+              <div style={{ fontSize: 30, fontWeight: 800, color: "#A3C6CF" }}>#1</div>
+              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>Package System Pioneer</div>
+            </div>
+            <div className="text-center">
+              <div style={{ fontSize: 30, fontWeight: 800, color: "#A3C6CF" }}>
+                {statsVisible ? `${countAftercare} Mo` : "0 Mo"}
+              </div>
+              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>Aftercare Support</div>
+            </div>
           </div>
         </div>
       </section>
