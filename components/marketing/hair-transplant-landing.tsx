@@ -232,12 +232,16 @@ export default function HairTransplantLanding() {
             You fly to Istanbul. We take care of everything else — the surgery, the hotel, the transfers, the aftercare. You just focus on your results.
           </p>
 
-          {/* Hair follicle visual indicator */}
-          <div className="flex items-end justify-center gap-1.5" style={{ marginBottom: 40 }}>
-            {[28, 38, 48, 56, 48, 38, 28].map((h, i) => (
-              <div key={i} className="flex flex-col items-center gap-1">
-                <div style={{ width: 3, height: h, background: "linear-gradient(to top, #A3C6CF, rgba(163,198,207,0.3))", borderRadius: 999 }} />
-                <div style={{ width: 7, height: 7, borderRadius: "50%", background: "rgba(163,198,207,0.5)", border: "1px solid #A3C6CF" }} />
+          {/* Trust badges */}
+          <div className="flex flex-wrap justify-center gap-3" style={{ marginBottom: 40 }}>
+            {[
+              { icon: "🏥", text: "Ministry of Health Certified" },
+              { icon: "✦", text: "All-Inclusive Package" },
+              { icon: "🛡", text: "12 Month Aftercare" },
+            ].map((b) => (
+              <div key={b.text} style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 100, padding: "8px 18px", fontSize: 13, color: "rgba(255,255,255,0.85)", fontWeight: 500, backdropFilter: "blur(8px)" }}>
+                <span style={{ fontSize: 14 }}>{b.icon}</span>
+                {b.text}
               </div>
             ))}
           </div>
