@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, ChevronDown, MessageCircle, Send, Star, Shield, Award, Users, Clock, Headphones, FileCheck } from "lucide-react";
+import { Check, ChevronDown, MessageCircle, Send, Star, Shield, Award, Users, Clock, Headphones, FileCheck, ArrowRight } from "lucide-react";
 import Image from "next/image";
 
 const packages = [
@@ -9,32 +9,35 @@ const packages = [
     tier: "Entry",
     name: "Premium Package",
     price: "From €1,400",
+    subtitle: "All-inclusive · No hidden fees",
     highlight: false,
     badge: null as string | null,
     inclusions: [
-      "Max Grafts FUE/DHI Plus Gold",
-      "Blood Test & PRP",
+      "Max Grafts FUE / DHI Plus Gold",
+      "Blood Test & PRP Treatment",
       "Medication & Foam",
       "Mesotherapy & Gold Cream",
       "Laser Treatment",
       "Aesthetic Hospital",
       "Warranty Certificate",
-      "Translator",
-      "GO Day Care Assistance",
+      "Translator / Interpreter",
+      "GOs Day Care Assistance",
     ],
   },
   {
     tier: "Complete",
     name: "Gold Package",
     price: "From €1,700",
+    subtitle: "All-inclusive · Local Anaesthesia",
     highlight: false,
     badge: "Award Winning · Best Value",
     inclusions: [
-      "Everything in Premium, plus:",
+      "Everything in Premium",
       "Local Anaesthesia",
       "Private Airport Transfers",
-      "2 Nights 4-Star Hotel + Breakfast",
-      "Free Lunch/Dinner on Op Day",
+      "2 Nights @ 4-Star Hotel",
+      "Breakfast at Hotel",
+      "Free Lunch & Dinner on Operation Day",
       "Panoramic Istanbul View",
     ],
   },
@@ -42,14 +45,16 @@ const packages = [
     tier: "Most Popular",
     name: "Hassle-Free Package",
     price: "From €1,870",
+    subtitle: "Most popular · The package others tried to copy",
     highlight: true,
     badge: "MOST POPULAR",
     inclusions: [
-      "Everything in Premium, plus:",
-      "Sedation (Light Sleep, Pain Free)",
+      "Everything in Premium",
+      "Sedation — Performed Under Light Sleep · Pain Free",
       "Private Airport Transfers",
-      "2 Nights 4-Star Hotel + Breakfast",
-      "Free Lunch/Dinner on Op Day",
+      "2 Nights @ 4-Star Hotel",
+      "Breakfast at Hotel",
+      "Free Lunch & Dinner on Operation Day",
       "Panoramic Istanbul View",
     ],
   },
@@ -57,13 +62,14 @@ const packages = [
     tier: "Luxury",
     name: "Exclusive Package",
     price: "From €3,300",
+    subtitle: "Full VIP experience · Premium accommodation",
     highlight: false,
     badge: null as string | null,
     inclusions: [
-      "Everything in Hassle-Free, plus:",
-      "BMW Chauffeur (8h)",
-      "2 Nights 5-Star Hotel",
-      "Lunch/Dinner at Exclusive Restaurants",
+      "Everything in Hassle-Free",
+      "BMW Chauffeur (8 hours)",
+      "2 Nights @ 5-Star Hotel",
+      "Lunch & Dinner @ Exclusive Restaurants",
       "Sightseeing & Shopping Tour",
       "Premium Bosphorus Experience",
     ],
@@ -72,69 +78,65 @@ const packages = [
 
 const faqs = [
   {
-    q: "What is included in the MCT hair transplant package?",
-    a: "Every MCT hair transplant package includes the operation itself (Max Grafts FUE/DHI Plus Gold), blood test & PRP, all medication and aftercare foam, mesotherapy & gold cream, laser treatment, surgery at a licensed aesthetic hospital, a warranty certificate, a dedicated translator, and full GO Day Care Assistance. Higher-tier packages add hotel accommodation, private airport transfers, and premium extras.",
+    q: "What is included in the Medical Center Turkey hair transplant package?",
+    a: "Our all-inclusive Hassle-Free Package & Gold Package cover everything you need from arrival to results. This includes the hair transplant procedure itself (FUE or DHI Plus Gold technique), blood test and PRP treatment, mesotherapy and laser treatment, gold cream and aftercare medications, private airport transfers, 2 nights at a 4-star hotel, breakfast, lunch and dinner on your operation day, a panoramic Istanbul view experience, a dedicated English-speaking GO (Gentle Organiser) who stays with you throughout your entire stay, and 12 months of online aftercare support after you return home. No hidden fees — one clear price covers everything.",
   },
   {
-    q: "How is the price of my hair transplant determined?",
-    a: "Our packages are all-inclusive fixed prices — not per-graft. The package tier you choose determines your price: Premium (from €1,400), Gold (from €1,700), Hassle-Free (from €1,870), or Exclusive (from €3,300). DHI technique is available with an additional €250 fee. Credit card payments carry a 10% surcharge.",
+    q: "How much does a hair transplant in Turkey cost with Medical Center Turkey?",
+    a: "Our packages start from €1,400 for the Premium Package and from €1,870 for the most popular Hassle-Free Package, which includes hotel, transfers, meals, and a personal coordinator. Our Exclusive VIP Package starts from €3,300 and includes luxury hotel accommodation, BMW chauffeur service, and private dining experiences. Final pricing may vary slightly depending on your individual case and graft requirements — we provide a personalised quote after reviewing your photos during the free consultation. There are no hidden fees.",
   },
   {
-    q: "How many days do I need to stay in Istanbul?",
-    a: "We recommend 3 nights / 4 days. Day 1: arrival and check-in. Day 2: surgery day. Day 3: first professional wash and follow-up check. Day 4: departure. You can return to work within 2 days and wash your hair independently from the next day.",
+    q: "How many days do I need to stay in Istanbul for a hair transplant?",
+    a: "We recommend a minimum of 3 days and 2 nights in Istanbul. Day 1 is your arrival — we pick you up from the airport and you check in to your hotel. Day 2 is your hair transplant procedure, which typically takes 6–8 hours. Day 3 includes your first professional hair wash, post-op consultation, and you receive your full aftercare kit before flying home. Most patients are comfortable returning to work within 2 days of arriving home. We have designed the entire schedule so you don't need to take more than a long weekend.",
   },
   {
-    q: "Why should I choose Medical Center Turkey for my hair transplant?",
-    a: "MCT has been coordinating international hair transplant patients since 2008. We pioneered the all-inclusive package model, hold dual health tourism certification, coordinate exclusively with Ministry of Health approved hospitals, and assign a dedicated GO Coordinator to every patient throughout their journey.",
+    q: "Why should I choose Medical Center Turkey?",
+    a: "When you book with Medical Center Turkey, you don't feel like a medical tourist in a foreign country — you feel like a VIP being taken care of at home. From the moment you land in Istanbul to the moment you fly back, someone is always by your side. Your personal English-speaking GO coordinator handles everything: transfers, hotel, hospital, translations, meals, and any question you have along the way. You never have to figure anything out alone. We've been doing this since 2008, and our entire system is built around one goal — making sure you feel safe, comfortable, and looked after every single step of the way. You arrive as a guest. You leave with results and peace of mind.",
   },
   {
-    q: "Can the consultation and planning be done remotely before I travel?",
-    a: "Yes. We conduct a full online consultation via WhatsApp or video call before you travel. Our team reviews your photos, recommends the right package and technique, and answers all your questions — no commitment required.",
+    q: "Do I need to be in Istanbul for the procedure? Can it be done remotely or locally?",
+    a: "Yes, you will need to travel to Istanbul for the procedure itself — hair transplant surgery must be performed in person. However, everything before and after can be handled remotely. Your free consultation happens online via WhatsApp or our contact form — just send us your photos and we will assess your case and recommend the right package. After you return home, all follow-up support for the 12 months post-procedure is provided online by our team. We have patients from the USA, UK, Germany, Netherlands, and across Europe who travel specifically for this experience.",
   },
   {
-    q: "What is the difference between the Gold and Hassle-Free packages?",
-    a: "The key difference is the anaesthesia type. The Gold Package uses standard local anaesthesia. The Hassle-Free Package uses sedation — a light sleep state — making the procedure completely pain-free and anxiety-free. Both include hotel accommodation, private airport transfers, and full care on surgery day.",
+    q: "What is the difference between the Gold Package and the Hassle-Free Package?",
+    a: "The only difference is the anaesthesia. Both packages include identical services — hotel, transfers, meals, GO coordinator, and all treatments. The Gold Package is performed under local anaesthesia, while the Hassle-Free Package uses sedation (light sleep), making it completely pain-free and anxiety-free. If you prefer to be fully awake during the procedure, the Gold Package is the right choice.",
   },
   {
-    q: "What is the difference between FUE and DHI techniques?",
-    a: "FUE (Follicular Unit Extraction) extracts grafts and implants them through channels opened in the scalp. DHI (Direct Hair Implantation) uses a Choi pen to extract and implant simultaneously, allowing more precise placement and potentially denser results. DHI is available on any package for an additional €250.",
+    q: "What is the difference between FUE and DHI hair transplant techniques?",
+    a: "Both techniques are modern and highly effective — the right choice depends on your individual case. FUE (Follicular Unit Extraction) is the gold standard method where grafts are extracted individually and implanted into the recipient area. DHI (Direct Hair Implantation) uses a specialised implanter pen to place grafts directly without creating incisions first, which can offer more precise angle and direction control. Our surgeons will recommend the most suitable technique after reviewing your photos during the free consultation. DHI is available on any of our packages for an additional €250.",
   },
   {
-    q: "How do I know the surgery will be safe and high quality?",
-    a: "All surgery takes place in Ministry of Health certified aesthetic hospitals. MCT holds dual international health tourism certification and issues a formal warranty certificate with every procedure. Our 17-year track record and 5,000+ international patients speak to our consistency and standards.",
+    q: "Is a hair transplant in Turkey safe? How do I know the quality is reliable?",
+    a: "Safety is our number one priority. We work exclusively with hospitals and clinics approved by the Turkish Ministry of Health — we do not compromise on this. Turkey is one of the world's leading destinations for hair transplant procedures, with highly experienced surgeons and modern facilities at a fraction of the cost of the UK or USA. Medical Center Turkey has been operating since 2008 with over 5,000 international patients treated through our network. Every hair transplant comes with an official warranty certificate, and our team is available to you for 12 months after your procedure. We have English-speaking support 7 days a week.",
   },
   {
     q: "When will I see the final results of my hair transplant?",
-    a: "Initial growth starts around 3–4 months post-operation. The majority of transplanted hair grows in between months 6–9. Full, final results are typically visible at the 12-month mark. MCT provides 12 months of aftercare support throughout the entire recovery journey.",
-  },
-  {
-    q: "What happens after I return home?",
-    a: "You leave with a detailed aftercare protocol and your care kit. Our team stays in contact via WhatsApp for the full 12 months. We schedule regular photo check-ins to monitor your progress and answer any questions that arise. You are never left alone after surgery.",
+    a: "Hair transplant results develop gradually. In the first 2–4 weeks, the transplanted hairs will shed — this is completely normal and expected. New growth begins around months 3–4. By month 6 you will see significant improvement, and your final, full result is typically visible at 12 months. This is why our aftercare support runs for a full year — we check in with you at 1 month, 3 months, and 12 months to monitor your progress and answer any questions you have along the way.",
   },
 ];
 
 const trustBlocks = [
-  { icon: Shield, title: "Dual Health Tourism Certification", desc: "Certified by two independent international health tourism bodies — meeting the highest standards of patient coordination." },
-  { icon: Award, title: "World's First Package System", desc: "MCT pioneered the all-inclusive hair transplant package model for international patients. Copied by many, matched by none." },
-  { icon: Users, title: "17 Years · 5,000+ Patients", desc: "Since 2008, over 5,000 international patients from the UK, USA, Europe and beyond have trusted MCT." },
-  { icon: FileCheck, title: "Warranty Certificate", desc: "Every patient receives a formal written warranty certificate covering their procedure — included in every package." },
+  { icon: Shield, title: "Dual Health Tourism Certification", desc: "Both our agency and our partner hospital hold Turkey's official Health Tourism Authorization Certificate — the highest accreditation standard issued by the Ministry of Health." },
+  { icon: Award, title: "World's First Package System", desc: "We pioneered the all-inclusive health tourism package model in 2008. No one has more experience doing this right." },
+  { icon: Users, title: "17 Years. 5,000+ Patients.", desc: "Operating since 2008 with over 5,000 international patients from the USA, UK, and Europe. Experience you can trust." },
+  { icon: FileCheck, title: "Warranty Certificate", desc: "Every hair transplant comes with an official written warranty certificate — your guarantee that we stand behind every result we deliver." },
 ];
 
 const whyMCT = [
-  { icon: Check, title: "Truly Hassle-Free", desc: "Surgery, hotel, transfers, aftercare — every single detail handled for you. Nothing left to chance." },
-  { icon: Headphones, title: "Dedicated GO Coordinator", desc: "Your personal Guest Operations coordinator is with you from first contact to full 12-month recovery." },
-  { icon: Star, title: "Zero Question Marks", desc: "Fixed all-inclusive pricing. No hidden fees, no per-graft billing surprises. What you see is what you pay." },
-  { icon: Clock, title: "Fast Recovery", desc: "Back to work in 2 days. Independent hair washing from the very next day after surgery." },
-  { icon: FileCheck, title: "Warranty Certificate", desc: "Formal written warranty included with every package — your results are backed in writing." },
-  { icon: Shield, title: "Ministry of Health Approved", desc: "Surgery takes place exclusively in MOH certified partner hospitals. No exceptions." },
+  { icon: Check, title: "Truly Hassle-Free", desc: "From first message to final result — every detail is handled. No research, no coordination, no stress on your end." },
+  { icon: Headphones, title: "Dedicated GO Coordinator", desc: "Your personal 'Gentle Organiser' is with you from airport arrival to departure. You are never alone." },
+  { icon: Star, title: "Zero Question Marks", desc: "We answer every concern before you board the plane. 17 years means we've heard every question — and we have the answers." },
+  { icon: Clock, title: "Fast Recovery", desc: "Back to daily life in 2 days. Most patients don't miss more than a long weekend." },
+  { icon: FileCheck, title: "Warranty Certificate", desc: "Every hair transplant comes with an official warranty certificate — your written guarantee for peace of mind." },
+  { icon: Shield, title: "Ministry of Health Approved", desc: "We work exclusively with Turkish Ministry of Health approved hospitals. No shortcuts. No compromises." },
 ];
 
 const journeySteps = [
-  { day: "Before", title: "Free Online Consultation", desc: "Photo review, technique recommendation, package selection — all done remotely before you book your flights." },
-  { day: "Day 1", title: "Arrival", desc: "Your private transfer picks you up at Istanbul airport and takes you directly to your hotel." },
-  { day: "Day 2", title: "Surgery", desc: "Full day at the hospital. Your GO Coordinator is with you throughout. Surgery completed by evening." },
-  { day: "Day 3", title: "Follow-Up & First Wash", desc: "Medical check-up at the hospital. First professional hair wash by our nursing team." },
-  { day: "Day 4+", title: "Return Home & Support", desc: "Fly home with your aftercare kit. 12 months of WhatsApp support begins immediately." },
+  { day: "Step 1", title: "Free Online Consultation", desc: "Send us your photos via WhatsApp or the form. We review your case, recommend a package, and answer every question — at no cost." },
+  { day: "Day 1", title: "Arrival in Istanbul", desc: "Private airport pickup. Check in to your hotel. Rest and prepare. Your GO (personal coordinator) meets you upon arrival." },
+  { day: "Day 2", title: "Hair Transplant Surgery", desc: "FUE or DHI Plus Gold technique. Blood test and physical examination. Personalized hairline design with your surgeon. Your GO stays with you throughout." },
+  { day: "Day 3", title: "Follow-Up & First Wash", desc: "Post-op consultation. First professional hair wash and dressing application. Aftercare kit and full instructions provided." },
+  { day: "Day 4+", title: "Return Home & Ongoing Support", desc: "Fly home confidently. We provide 12 months of online follow-up support and monitor your results every step of the way." },
 ];
 
 const recoveryTimeline = [
@@ -145,9 +147,24 @@ const recoveryTimeline = [
 ];
 
 const testimonials = [
-  { name: "Sena Alkan", country: "November 2025", pkg: "Hassle-Free Package", text: "My husband had a hair transplant at Medical Center Turkey and we are very happy with the whole experience. From the moment we arrived in Istanbul, everything was perfectly organised — the transfers, the hotel and the clinic." },
-  { name: "Stylez", country: "May 2024", pkg: "Gold Package", text: "I am currently on day 29 of my hair transplant and I am very happy with the service. From start to finish, the experience could not have been better." },
-  { name: "S.H.", country: "December 2024", pkg: "Premium Package", text: "Excellent procedure! Everything was perfectly organised. The hospital and staff were kind and there were no concerns whatsoever." },
+  {
+    name: "Sena Alkan",
+    source: "Google Review · GR · November 2025",
+    pkg: "Hassle-Free Package",
+    text: "My husband had his hair transplant at Medical Center Turkey and we are extremely happy with the whole experience. From the moment we arrived in Istanbul, everything was perfectly organized – the transfers, the hotel, and the clinic. The team was very professional, kind and attentive. They truly exceeded our expectations!",
+  },
+  {
+    name: "Stylez",
+    source: "Google Review · CA · May 2024",
+    pkg: "Gold Package",
+    text: "I am currently on day 29 post hair transplant with Medical Center Turkey and could not be happier with the service. I could not have asked for a better experience from start to finish. I can honestly say they deserve 5 stars for the service they provide. I would highly recommend it — great people and with reasonable prices as well!",
+  },
+  {
+    name: "S.H.",
+    source: "Trustpilot · ES · December 2024",
+    pkg: "Premium Package",
+    text: "Perfect procedure! All the procedures are perfectly organized. Pick-up from the airport, hotel check-in, preparation for a comfortable stay, postoperative care and explanation. The doctors and staff were kind and there was no anxiety. I'm looking forward to the growth of my hair in the future! Thank you.",
+  },
 ];
 
 export default function HairTransplantLanding() {
@@ -195,7 +212,7 @@ export default function HairTransplantLanding() {
                 href="#ht-form"
                 className="inline-flex items-center gap-2 border-2 border-white text-white font-semibold px-7 py-3.5 rounded-full hover:bg-white hover:text-brand transition-colors"
               >
-                + Start Your Experience
+                ✦ Start Your Experience
               </a>
               <a
                 href="https://wa.me/908508888911"
@@ -254,7 +271,8 @@ export default function HairTransplantLanding() {
                 )}
                 <div className="text-[10px] font-bold uppercase tracking-widest text-teal mb-1">{pkg.tier}</div>
                 <h3 className={`text-base font-bold mb-1 ${pkg.highlight ? "text-white" : "text-brand"}`}>{pkg.name}</h3>
-                <div className={`text-xl font-bold mb-5 ${pkg.highlight ? "text-white" : "text-brand"}`}>{pkg.price}</div>
+                <div className={`text-xl font-bold mb-1 ${pkg.highlight ? "text-white" : "text-brand"}`}>{pkg.price}</div>
+                <div className={`text-[11px] mb-5 ${pkg.highlight ? "text-white/60" : "text-gray-400"}`}>{pkg.subtitle}</div>
                 <ul className="space-y-2.5 flex-1 mb-6">
                   {pkg.inclusions.map((item, i) => (
                     <li key={i} className={`flex items-start gap-2 text-xs leading-relaxed ${pkg.highlight ? "text-white/85" : "text-gray-600"}`}>
@@ -288,10 +306,13 @@ export default function HairTransplantLanding() {
       {/* ── 3. BEFORE / AFTER ────────────────────────────────────── */}
       <section className="bg-gray-50 py-16 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-4">
             <span className="text-xs font-bold uppercase tracking-widest text-teal">Results</span>
             <h2 className="text-2xl sm:text-3xl font-bold text-brand mt-2">See the Difference. Judge for Yourself.</h2>
           </div>
+          <p className="text-center text-sm text-gray-500 max-w-xl mx-auto mb-12">
+            Every result is from a real Medical Center Turkey patient. Natural hairlines, natural growth — no filters, no tricks.
+          </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {[1, 2, 3, 4, 5, 6, 8, 9].map((n) => (
               <div key={n} className="rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm aspect-[4/3] relative">
@@ -304,12 +325,26 @@ export default function HairTransplantLanding() {
               </div>
             ))}
           </div>
+          <div className="text-center mt-10">
+            <p className="text-sm text-gray-500 mb-4">Ready to write your own before &amp; after story?</p>
+            <a
+              href="#ht-form"
+              className="inline-flex items-center gap-2 bg-brand text-white font-semibold px-7 py-3.5 rounded-full hover:bg-[#154d8a] transition-colors"
+            >
+              Get Your Free Consultation <ArrowRight size={15} />
+            </a>
+          </div>
         </div>
       </section>
 
       {/* ── 4. TRUST BLOCKS ──────────────────────────────────────── */}
       <section className="bg-white py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="text-xs font-bold uppercase tracking-widest text-teal">17 Years of Experience</span>
+            <h2 className="text-2xl sm:text-3xl font-bold text-brand mt-2 mb-3">We Answer Every Question. Before You Even Ask.</h2>
+            <p className="text-gray-500 text-sm max-w-2xl mx-auto">Most patients arrive nervous and full of doubts. They leave confident. Because we&apos;ve spent 17 years removing every single question mark from this journey.</p>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {trustBlocks.map((b) => (
               <div key={b.title} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
@@ -327,10 +362,13 @@ export default function HairTransplantLanding() {
       {/* ── 5. YOUR JOURNEY ──────────────────────────────────────── */}
       <section className="bg-gray-50 py-16 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-4">
             <span className="text-xs font-bold uppercase tracking-widest text-teal">Step by Step</span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-brand mt-2">Your Journey</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-brand mt-2">3 Days. Life-Changing Results.</h2>
           </div>
+          <p className="text-center text-sm text-gray-500 max-w-xl mx-auto mb-12">
+            Your entire Istanbul experience is planned, coordinated, and supported by our team.
+          </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-5 gap-4 mb-8">
             {journeySteps.map((step, i) => (
@@ -361,10 +399,13 @@ export default function HairTransplantLanding() {
       {/* ── 6. TESTIMONIALS ──────────────────────────────────────── */}
       <section className="bg-white py-16 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-4">
             <span className="text-xs font-bold uppercase tracking-widest text-teal">Patient Reviews</span>
             <h2 className="text-2xl sm:text-3xl font-bold text-brand mt-2">What Our Patients Say</h2>
           </div>
+          <p className="text-center text-sm text-gray-500 max-w-xl mx-auto mb-12">
+            Unprompted reviews from patients who trusted us with their hair transplant experience in Istanbul.
+          </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {testimonials.map((r) => (
               <div key={r.name} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
@@ -376,7 +417,7 @@ export default function HairTransplantLanding() {
                 <p className="text-sm text-gray-600 leading-relaxed mb-5">&ldquo;{r.text}&rdquo;</p>
                 <div>
                   <div className="text-sm font-bold text-brand">{r.name}</div>
-                  <div className="text-xs text-gray-400">{r.country} · {r.pkg}</div>
+                  <div className="text-xs text-gray-400 mt-0.5">{r.source}</div>
                 </div>
               </div>
             ))}
@@ -387,10 +428,13 @@ export default function HairTransplantLanding() {
       {/* ── 7. WHY MCT ───────────────────────────────────────────── */}
       <section className="bg-gray-50 py-16 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-4">
             <span className="text-xs font-bold uppercase tracking-widest text-teal">Why Us</span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-brand mt-2">Why Patients Choose MCT</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-brand mt-2">Why Patients Choose Medical Center Turkey</h2>
           </div>
+          <p className="text-center text-sm text-gray-500 max-w-xl mx-auto mb-12">
+            We built this industry. We know exactly what can go wrong — and we&apos;ve eliminated it from your journey.
+          </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {whyMCT.map((item) => (
               <div key={item.title} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
@@ -402,16 +446,27 @@ export default function HairTransplantLanding() {
               </div>
             ))}
           </div>
+
+          {/* GO Definition */}
+          <div className="mt-8 bg-brand rounded-2xl p-6 sm:p-8 text-center">
+            <div className="text-xs font-bold uppercase tracking-widest text-teal mb-3">What is a GO — Gentle Organiser?</div>
+            <p className="text-white/80 text-sm max-w-2xl mx-auto leading-relaxed">
+              Every patient gets a dedicated English-speaking coordinator who handles your transfers, translates at the hospital, stays with you during your procedure, and is available 24/7 throughout your stay.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* ── 8. FAQ ───────────────────────────────────────────────── */}
       <section className="bg-white py-16 sm:py-24">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12">
+          <div className="text-center mb-4">
             <span className="text-xs font-bold uppercase tracking-widest text-teal">FAQ</span>
             <h2 className="text-2xl sm:text-3xl font-bold text-brand mt-2">Frequently Asked Questions</h2>
           </div>
+          <p className="text-center text-sm text-gray-500 max-w-xl mx-auto mb-12">
+            The most common questions from our international patients — answered honestly.
+          </p>
           <div className="space-y-2">
             {faqs.map((faq, i) => (
               <div
@@ -444,7 +499,16 @@ export default function HairTransplantLanding() {
           <div className="bg-white rounded-3xl shadow-xl shadow-brand/5 p-8 sm:p-10">
             <span className="text-xs font-bold uppercase tracking-widest text-teal">Free Consultation</span>
             <h2 className="text-2xl sm:text-3xl font-bold text-brand mt-1 mb-2">Start Your Hair Transplant Journey</h2>
-            <p className="text-gray-400 text-sm mb-8 leading-relaxed">Fill in the form and we will get back to you within 24 hours — no commitment required.</p>
+            <p className="text-gray-400 text-sm mb-2 leading-relaxed">Send us your details and photos. Our team will review your case and recommend the right package — completely free, no pressure, no commitment.</p>
+
+            <div className="flex flex-wrap gap-4 mb-8 mt-4">
+              <a href="https://wa.me/908508888911" target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-[#25D366] text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-[#1ebe5a] transition-colors">
+                <MessageCircle size={15} /> 💬 WhatsApp Us Directly
+              </a>
+            </div>
+
+            <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 pb-4 border-b border-gray-100">Get Your Free Hair Analysis</div>
 
             <form className="space-y-4" onSubmit={e => e.preventDefault()}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -462,7 +526,7 @@ export default function HairTransplantLanding() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Email</label>
+                  <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Email Address</label>
                   <input type="email" required value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="john@example.com"
                     className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-teal focus:bg-white transition-all" />
                 </div>
@@ -474,20 +538,20 @@ export default function HairTransplantLanding() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Package</label>
+                <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Which package are you interested in?</label>
                 <select value={form.pkg} onChange={e => setForm({ ...form, pkg: e.target.value })}
                   className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm text-gray-800 focus:outline-none focus:border-teal focus:bg-white transition-all">
-                  <option value="">Select a package</option>
-                  <option value="Premium — From €1,400">Premium — From €1,400</option>
-                  <option value="Gold — From €1,700">Gold — From €1,700</option>
-                  <option value="Hassle-Free — From €1,870">Hassle-Free — From €1,870</option>
-                  <option value="Exclusive — From €3,300">Exclusive — From €3,300</option>
+                  <option value="">Select a package...</option>
+                  <option value="Premium Package — From €1,400">Premium Package — From €1,400</option>
+                  <option value="Gold Package — From €1,700">Gold Package — From €1,700</option>
+                  <option value="Hassle-Free Package — From €1,870">Hassle-Free Package — From €1,870</option>
+                  <option value="Exclusive Package — From €3,300">Exclusive Package — From €3,300</option>
                   <option value="Not sure yet">Not sure yet</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Message</label>
+                <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Your Message (optional)</label>
                 <textarea rows={4} value={form.message} onChange={e => setForm({ ...form, message: e.target.value })}
                   placeholder="Tell us about your hair loss situation, your questions, or any details you'd like to share..."
                   className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-teal focus:bg-white transition-all resize-none" />
@@ -502,27 +566,27 @@ export default function HairTransplantLanding() {
                 <button type="button" onClick={handleEmail}
                   className="flex items-center justify-center gap-2 bg-brand text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:bg-[#154d8a] transition-colors shadow-lg shadow-brand/20">
                   <Send size={15} />
-                  Send Request
+                  ✦ Send My Free Consultation Request
                 </button>
               </div>
 
               <p className="text-xs text-gray-300 pt-1">
-                Your information is kept strictly confidential. We never share patient data with third parties.
+                No commitment required · No spam · We reply within 24 hours
               </p>
             </form>
 
             <div className="mt-8 pt-8 border-t border-gray-50 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
               <div>
-                <div className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">WhatsApp</div>
-                <a href="https://wa.me/908508888911" target="_blank" rel="noopener noreferrer" className="text-sm text-teal font-semibold hover:underline">+90 850 888 8911</a>
+                <div className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Phone</div>
+                <a href="tel:+908508888911" className="text-sm text-teal font-semibold hover:underline">+90 850 888 89 11</a>
               </div>
               <div>
                 <div className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Email</div>
                 <a href="mailto:hello@medicalcenterturkey.com" className="text-sm text-teal font-semibold hover:underline">hello@medicalcenterturkey.com</a>
               </div>
               <div>
-                <div className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Response Time</div>
-                <span className="text-sm text-gray-600">Within 24 hours</span>
+                <div className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Location</div>
+                <span className="text-sm text-gray-600">Ataşehir, Istanbul, Turkey</span>
               </div>
             </div>
           </div>
