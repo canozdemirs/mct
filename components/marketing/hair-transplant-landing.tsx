@@ -228,11 +228,32 @@ export default function HairTransplantLanding() {
             Hair Transplant <span style={{ color: "#A3C6CF" }}>Turkey.</span><br />
             Done Right. From Start to Finish.
           </h1>
-          <p style={{ fontSize: "clamp(16px, 2vw, 19px)", color: "rgba(255,255,255,0.75)", maxWidth: 600, margin: "0 auto 40px" }}>
+          <p style={{ fontSize: "clamp(16px, 2vw, 19px)", color: "rgba(255,255,255,0.75)", maxWidth: 600, margin: "0 auto 44px" }}>
             You fly to Istanbul. We take care of everything else — the surgery, the hotel, the transfers, the aftercare. You just focus on your results.
           </p>
 
-          <div ref={statsRef} className="flex justify-center gap-12 mt-16 flex-wrap">
+          {/* Hair follicle icon */}
+          <div className="flex justify-center mb-12">
+            <svg viewBox="0 0 100 100" width="90" height="90" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="50" cy="50" r="46" fill="rgba(255,255,255,0.06)" stroke="#A3C6CF" strokeWidth="3" />
+              <path d="M 8 64 Q 28 56 50 59 Q 72 56 92 64 L 92 96 Q 50 98 8 96 Z" fill="rgba(163,198,207,0.25)" />
+              <path d="M 8 64 Q 28 56 50 59 Q 72 56 92 64" fill="none" stroke="#A3C6CF" strokeWidth="1.5" />
+              <ellipse cx="31" cy="68" rx="5" ry="7" fill="rgba(255,255,255,0.1)" stroke="#A3C6CF" strokeWidth="1.2" />
+              <circle cx="31" cy="72" r="3" fill="#A3C6CF" />
+              <path d="M 29 62 Q 28 45 27 28" stroke="white" strokeWidth="3" strokeLinecap="round" fill="none" opacity="0.7" />
+              <path d="M 33 62 Q 34 45 35 30" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.4" />
+              <ellipse cx="50" cy="66" rx="6" ry="8" fill="rgba(255,255,255,0.1)" stroke="#A3C6CF" strokeWidth="1.2" />
+              <circle cx="50" cy="71" r="3.5" fill="#A3C6CF" />
+              <path d="M 48 59 Q 47 38 46 16" stroke="white" strokeWidth="3.5" strokeLinecap="round" fill="none" opacity="0.9" />
+              <path d="M 52 59 Q 53 38 54 18" stroke="white" strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.5" />
+              <ellipse cx="69" cy="68" rx="5" ry="7" fill="rgba(255,255,255,0.1)" stroke="#A3C6CF" strokeWidth="1.2" />
+              <circle cx="69" cy="72" r="3" fill="#A3C6CF" />
+              <path d="M 67 62 Q 66 46 65 31" stroke="white" strokeWidth="3" strokeLinecap="round" fill="none" opacity="0.7" />
+              <path d="M 71 62 Q 72 46 73 33" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.4" />
+            </svg>
+          </div>
+
+          <div ref={statsRef} className="flex justify-center gap-12 mt-4 flex-wrap">
             <div className="text-center">
               <div style={{ fontSize: 30, fontWeight: 800, color: "#A3C6CF" }}>{statsVisible ? countYears : 0}</div>
               <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>Years in Health Tourism</div>
