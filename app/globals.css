@@ -51,6 +51,10 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --brand: #1b5fa8;
   --teal: #1ab3c8;
