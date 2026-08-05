@@ -6,6 +6,131 @@ import Link from "next/link";
 import { Check, MessageCircle, X } from "lucide-react";
 import { ConsultationForm } from "./consultation-form";
 
+function TreatmentIcon({ name }: { name: string }) {
+  const s = { stroke: "white", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, fill: "none" };
+  const icons: Record<string, React.ReactNode> = {
+    "Hair Transplant": (
+      <svg viewBox="0 0 32 32" width="28" height="28">
+        <ellipse cx="10" cy="23" rx="3.5" ry="4.5" {...s} />
+        <circle cx="10" cy="26" r="1.8" fill="white" stroke="none" />
+        <line x1="9" y1="18" x2="8" y2="8" {...s} strokeWidth={2} />
+        <line x1="11" y1="18" x2="12" y2="9" {...s} />
+        <ellipse cx="16" cy="22" rx="4" ry="5" {...s} />
+        <circle cx="16" cy="26" r="2" fill="white" stroke="none" />
+        <line x1="15" y1="17" x2="14" y2="5" {...s} strokeWidth={2.5} />
+        <line x1="17" y1="17" x2="18" y2="6" {...s} />
+        <ellipse cx="22" cy="23" rx="3.5" ry="4.5" {...s} />
+        <circle cx="22" cy="26" r="1.8" fill="white" stroke="none" />
+        <line x1="21" y1="18" x2="20" y2="9" {...s} strokeWidth={2} />
+        <line x1="23" y1="18" x2="24" y2="10" {...s} />
+      </svg>
+    ),
+    "All-on-4 Dental Implants": (
+      <svg viewBox="0 0 32 32" width="28" height="28">
+        {[7, 13, 19, 25].map((x) => (
+          <g key={x}>
+            <rect x={x - 2} y="6" width="4" height="10" rx="2" {...s} />
+            <line x1={x} y1="16" x2={x} y2="20" {...s} />
+            <line x1={x - 3} y1="20" x2={x + 3} y2="20" {...s} />
+            <line x1={x - 2} y1="22" x2={x + 2} y2="22" {...s} />
+            <line x1={x - 1} y1="24" x2={x + 1} y2="24" {...s} />
+          </g>
+        ))}
+      </svg>
+    ),
+    "Dental Implant": (
+      <svg viewBox="0 0 32 32" width="28" height="28">
+        <path d="M 11 6 Q 10 4 13 4 Q 16 3 19 4 Q 22 4 21 6 Q 20 10 19 14 Q 18 18 16 18 Q 14 18 13 14 Q 12 10 11 6 Z" {...s} />
+        <line x1="16" y1="18" x2="16" y2="22" {...s} />
+        <line x1="12" y1="22" x2="20" y2="22" {...s} />
+        <line x1="13" y1="25" x2="19" y2="25" {...s} />
+        <line x1="14" y1="28" x2="18" y2="28" {...s} />
+      </svg>
+    ),
+    "Rhinoplasty": (
+      <svg viewBox="0 0 32 32" width="28" height="28">
+        <path d="M 16 4 Q 16 8 14 14 Q 12 20 10 22 Q 8 24 10 26 Q 12 28 16 27 Q 20 28 22 26 Q 24 24 22 22 Q 20 20 18 14 Q 16 8 16 4 Z" {...s} />
+        <path d="M 10 26 Q 12 24 16 25 Q 20 24 22 26" {...s} />
+      </svg>
+    ),
+    "Breast Augmentation": (
+      <svg viewBox="0 0 32 32" width="28" height="28">
+        <path d="M 4 20 Q 4 10 10 8 Q 14 7 16 12 Q 18 7 22 8 Q 28 10 28 20 Q 28 26 22 27 Q 18 28 16 25 Q 14 28 10 27 Q 4 26 4 20 Z" {...s} />
+      </svg>
+    ),
+    "Liposuction (3 Areas)": (
+      <svg viewBox="0 0 32 32" width="28" height="28">
+        <path d="M 12 4 Q 10 8 10 12 Q 10 16 13 18 Q 11 20 11 24 Q 11 28 13 29" {...s} />
+        <path d="M 20 4 Q 22 8 22 12 Q 22 16 19 18 Q 21 20 21 24 Q 21 28 19 29" {...s} />
+        <line x1="10" y1="12" x2="7" y2="13" {...s} />
+        <line x1="22" y1="12" x2="25" y2="13" {...s} />
+        <line x1="13" y1="18" x2="19" y2="18" {...s} strokeWidth={1.5} />
+        <line x1="11" y1="24" x2="8" y2="25" {...s} />
+        <line x1="21" y1="24" x2="24" y2="25" {...s} />
+      </svg>
+    ),
+    "Gynecomastia": (
+      <svg viewBox="0 0 32 32" width="28" height="28">
+        <path d="M 6 14 Q 6 8 10 7 Q 14 6 16 10 Q 18 6 22 7 Q 26 8 26 14 Q 26 20 22 22 Q 19 23 16 22 Q 13 23 10 22 Q 6 20 6 14 Z" {...s} />
+        <circle cx="11.5" cy="14" r="1.5" fill="white" stroke="none" />
+        <circle cx="20.5" cy="14" r="1.5" fill="white" stroke="none" />
+        <line x1="10" y1="22" x2="10" y2="27" {...s} />
+        <line x1="22" y1="22" x2="22" y2="27" {...s} />
+        <line x1="8" y1="27" x2="24" y2="27" {...s} />
+      </svg>
+    ),
+    "LASIK Eye Surgery": (
+      <svg viewBox="0 0 32 32" width="28" height="28">
+        <path d="M 4 16 Q 10 8 16 8 Q 22 8 28 16 Q 22 24 16 24 Q 10 24 4 16 Z" {...s} />
+        <circle cx="16" cy="16" r="4" {...s} />
+        <circle cx="16" cy="16" r="1.5" fill="white" stroke="none" />
+        <line x1="24" y1="8" x2="28" y2="4" {...s} strokeWidth={2} stroke="#A3C6CF" />
+        <line x1="26" y1="10" x2="30" y2="6" {...s} strokeWidth={1.5} stroke="#A3C6CF" />
+      </svg>
+    ),
+    "Cataract Surgery": (
+      <svg viewBox="0 0 32 32" width="28" height="28">
+        <path d="M 4 16 Q 10 8 16 8 Q 22 8 28 16 Q 22 24 16 24 Q 10 24 4 16 Z" {...s} />
+        <circle cx="16" cy="16" r="5" {...s} />
+        <circle cx="16" cy="16" r="2" fill="white" stroke="none" />
+        <path d="M 20 12 Q 23 10 24 7" {...s} strokeWidth={1.5} />
+        <path d="M 22 16 Q 26 16 28 14" {...s} strokeWidth={1.5} />
+      </svg>
+    ),
+    "IVF": (
+      <svg viewBox="0 0 32 32" width="28" height="28">
+        <circle cx="16" cy="16" r="8" {...s} />
+        <circle cx="16" cy="16" r="3" {...s} />
+        <circle cx="16" cy="16" r="1" fill="white" stroke="none" />
+        <line x1="16" y1="4" x2="16" y2="8" {...s} />
+        <line x1="24" y1="8" x2="21" y2="11" {...s} />
+        <line x1="28" y1="16" x2="24" y2="16" {...s} />
+        <line x1="24" y1="24" x2="21" y2="21" {...s} />
+        <line x1="16" y1="28" x2="16" y2="24" {...s} />
+        <line x1="8" y1="24" x2="11" y2="21" {...s} />
+        <line x1="4" y1="16" x2="8" y2="16" {...s} />
+        <line x1="8" y1="8" x2="11" y2="11" {...s} />
+      </svg>
+    ),
+    "Blepharoplasty": (
+      <svg viewBox="0 0 32 32" width="28" height="28">
+        <path d="M 4 16 Q 10 8 16 8 Q 22 8 28 16" {...s} />
+        <path d="M 4 16 Q 10 22 16 22 Q 22 22 28 16" {...s} />
+        <circle cx="16" cy="16" r="4" {...s} />
+        <circle cx="16" cy="16" r="1.5" fill="white" stroke="none" />
+        <path d="M 8 10 Q 12 7 16 8 Q 20 7 24 10" {...s} strokeWidth={2.5} />
+      </svg>
+    ),
+    "Check-Up": (
+      <svg viewBox="0 0 32 32" width="28" height="28">
+        <polyline points="2,16 7,16 10,8 13,24 16,12 19,20 22,16 30,16" {...s} strokeWidth={2} />
+        <circle cx="16" cy="28" r="2" fill="white" stroke="none" />
+      </svg>
+    ),
+  };
+  return icons[name] ?? null;
+}
+
 const treatments = [
   {
     name: "Hair Transplant",
@@ -216,6 +341,9 @@ export function Packages() {
                     priority={i === 0}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                  <div className="absolute top-3 left-3 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(5,57,128,0.55)", backdropFilter: "blur(6px)" }}>
+                    <TreatmentIcon name={t.name} />
+                  </div>
                   <div className="absolute bottom-0 left-0 right-0 p-4">
                     <h3 className="text-base font-bold text-white leading-tight">{t.name}</h3>
                   </div>
