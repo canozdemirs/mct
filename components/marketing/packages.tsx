@@ -340,12 +340,12 @@ export function Packages() {
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     priority={i === 0}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-                  <div className="absolute top-3 left-3 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(5,57,128,0.55)", backdropFilter: "blur(6px)" }}>
-                    <TreatmentIcon name={t.name} />
-                  </div>
-                  <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <h3 className="text-base font-bold text-white leading-tight">{t.name}</h3>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 flex items-center gap-2.5">
+                    <div className="shrink-0 w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: "rgba(5,57,128,0.6)", backdropFilter: "blur(6px)" }}>
+                      <TreatmentIcon name={t.name} />
+                    </div>
+                    <h3 className="text-sm font-bold text-white leading-tight">{t.name}</h3>
                   </div>
                 </div>
 
