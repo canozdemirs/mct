@@ -10,7 +10,7 @@ const treatments = [
   {
     name: "Hair Transplant",
     price: "From €1,700",
-    image: "/treatments/hair-transplant-v7.jpg",
+    image: "/treatments/hair-transplant/v7.jpg",
     inclusions: [
       "FUE / DHI technique",
       "Hospital coordination",
@@ -23,7 +23,7 @@ const treatments = [
   {
     name: "All-on-4 Dental Implants",
     price: "From €1,500",
-    image: "/treatments/hollywood-smile.jpg",
+    image: "/treatments/hollywood-smile/card.jpg",
     inclusions: [
       "Full-arch fixed prosthesis",
       "Titanium implants",
@@ -36,7 +36,7 @@ const treatments = [
   {
     name: "Dental Implant",
     price: "From €400",
-    image: "/treatments/dental-implant.jpg",
+    image: "/treatments/dental-implant/card.jpg",
     inclusions: [
       "Titanium implant",
       "Hospital coordination",
@@ -48,7 +48,7 @@ const treatments = [
   {
     name: "Rhinoplasty",
     price: "From €3,000",
-    image: "/treatments/rhinoplasty.jpg",
+    image: "/treatments/rhinoplasty/card.jpg",
     inclusions: [
       "Operation",
       "Hospital coordination",
@@ -61,7 +61,7 @@ const treatments = [
   {
     name: "Breast Augmentation",
     price: "From €5,000",
-    image: "/treatments/breast-augmentation-v3.jpg",
+    image: "/treatments/breast-augmentation/v3.jpg",
     inclusions: [
       "Silicone implants included",
       "Hospital coordination",
@@ -74,7 +74,7 @@ const treatments = [
   {
     name: "Liposuction (3 Areas)",
     price: "From €2,900",
-    image: "/treatments/liposuction.jpg",
+    image: "/treatments/liposuction/card.jpg",
     inclusions: [
       "Operation",
       "Hospital coordination",
@@ -87,7 +87,7 @@ const treatments = [
   {
     name: "Gynecomastia",
     price: "From €2,700",
-    image: "/treatments/gynecomastia-v2.jpg",
+    image: "/treatments/gynecomastia/v2.jpg",
     inclusions: [
       "Liposuction + gland removal",
       "Hospital coordination",
@@ -100,7 +100,7 @@ const treatments = [
   {
     name: "LASIK Eye Surgery",
     price: "From €1,600",
-    image: "/treatments/blepharoplasty-v4.jpg",
+    image: "/treatments/blepharoplasty/v4.jpg",
     inclusions: [
       "Operation",
       "Hospital coordination",
@@ -112,7 +112,7 @@ const treatments = [
   {
     name: "Cataract Surgery",
     price: "From €5,500",
-    image: "/treatments/cataract.jpg",
+    image: "/treatments/cataract/card.jpg",
     inclusions: [
       "Operation",
       "Choice of lens (Multifocal, Toric, etc.)",
@@ -124,7 +124,7 @@ const treatments = [
   {
     name: "IVF",
     price: "From €4,150",
-    image: "/treatments/ivf.jpg",
+    image: "/treatments/ivf/card.jpg",
     inclusions: [
       "Standard IVF protocol",
       "Hospital coordination",
@@ -136,7 +136,7 @@ const treatments = [
   {
     name: "Blepharoplasty",
     price: "From €2,050",
-    image: "/treatments/blepharoplasty-v2.jpg",
+    image: "/treatments/blepharoplasty/v2.jpg",
     inclusions: [
       "Upper / lower eyelid surgery",
       "Hospital coordination",
@@ -149,7 +149,7 @@ const treatments = [
   {
     name: "Check-Up",
     price: "From €1,100",
-    image: "/treatments/checkup.jpg",
+    image: "/treatments/checkup/card.jpg",
     inclusions: [
       "Full blood panel",
       "Cardiac screening",
