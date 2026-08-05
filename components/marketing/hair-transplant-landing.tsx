@@ -204,6 +204,10 @@ export default function HairTransplantLanding() {
   const countPatients = useCountUp(5000, 2000, statsVisible);
   const countAftercare = useCountUp(12, 1200, statsVisible);
 
+  const scrollToForm = () => {
+    document.getElementById("ht-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   const handleWhatsApp = () => {
     const text = `Hello MCT,%0A%0AName: ${form.name}%0ACountry: ${form.country}%0AEmail: ${form.email}%0APhone: ${form.phone}%0APackage: ${form.pkg}%0A%0A${form.message}`;
     window.open(`https://wa.me/908508888911?text=${text}`, "_blank");
@@ -317,14 +321,14 @@ export default function HairTransplantLanding() {
                     ))}
                   </ul>
                 </div>
-                <a href="#ht-form" style={{
-                  display: "block", textAlign: "center", margin: "8px 28px 28px", padding: 14, borderRadius: 8, fontWeight: 700, fontSize: 15, textDecoration: "none", transition: "all .2s",
+                <button onClick={scrollToForm} style={{
+                  display: "block", width: "100%", textAlign: "center", margin: "8px 28px 28px", padding: 14, borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: "pointer", transition: "all .2s",
                   ...(pkg.cta === "gold"
-                    ? { background: "#053980", color: "#fff" }
+                    ? { background: "#053980", color: "#fff", border: "none" }
                     : { background: "transparent", color: "#053980", border: "1.5px solid rgba(5,57,128,0.3)" })
                 }}>
                   Get Started
-                </a>
+                </button>
               </div>
             ))}
           </div>
@@ -358,9 +362,9 @@ export default function HairTransplantLanding() {
           </div>
           <div style={{ textAlign: "center", marginTop: 48 }}>
             <p style={{ fontSize: 16, color: "#6B7C8D", marginBottom: 20 }}>Ready to write your own before &amp; after story?</p>
-            <a href="#ht-form" style={{ background: "#053980", color: "#fff", padding: "16px 36px", borderRadius: 8, fontWeight: 700, fontSize: 16, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <button onClick={scrollToForm} style={{ background: "#053980", color: "#fff", padding: "16px 36px", borderRadius: 8, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 8 }}>
               Get Your Free Consultation <ArrowRight size={16} />
-            </a>
+            </button>
           </div>
         </div>
       </section>
