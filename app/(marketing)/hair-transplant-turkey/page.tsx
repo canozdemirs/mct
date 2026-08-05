@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Nav } from "@/components/marketing/nav";
-import { Footer } from "@/components/marketing/footer";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import HairTransplantLanding from "@/components/marketing/hair-transplant-landing";
 
@@ -17,7 +16,6 @@ export default function HairTransplantTurkeyPage() {
       <main>
         <HairTransplantLanding />
       </main>
-      <Footer />
       <WhatsAppFloat />
     </>
   );
