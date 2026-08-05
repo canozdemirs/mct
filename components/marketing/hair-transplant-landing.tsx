@@ -215,7 +215,11 @@ export default function HairTransplantLanding() {
 
   const handleEmail = () => {
     const body = `Hello MCT,\n\nName: ${form.name}\nCountry: ${form.country}\nEmail: ${form.email}\nPhone: ${form.phone}\nPackage: ${form.pkg}\n\n${form.message}`;
-    window.location.href = `mailto:hello@medicalcenterturkey.com?subject=${encodeURIComponent("Hair Transplant Inquiry")}&body=${encodeURIComponent(body)}`;
+    const a = document.createElement("a");
+    a.href = `mailto:hello@medicalcenterturkey.com?subject=${encodeURIComponent("Hair Transplant Inquiry")}&body=${encodeURIComponent(body)}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   return (
