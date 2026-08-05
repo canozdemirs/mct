@@ -470,7 +470,7 @@ export default function HairTransplantLanding() {
       </section>
 
       {/* ── 8. FAQ + FORM ────────────────────────────────────────── */}
-      <section id="ht-form" style={{ background: "linear-gradient(135deg, #053980, #031e46)", padding: "80px 20px" }}>
+      <section id="ht-form" style={{ background: "linear-gradient(135deg, #053980, #031e46)", padding: "80px 20px", scrollMarginTop: "72px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
 
