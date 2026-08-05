@@ -204,6 +204,10 @@ export default function HairTransplantLanding() {
   const countPatients = useCountUp(5000, 2000, statsVisible);
   const countAftercare = useCountUp(12, 1200, statsVisible);
 
+  const scrollToForm = () => {
+    document.getElementById("ht-form-box")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   const handleWhatsApp = () => {
     const text = `Hello MCT,%0A%0AName: ${form.name}%0ACountry: ${form.country}%0AEmail: ${form.email}%0APhone: ${form.phone}%0APackage: ${form.pkg}%0A%0A${form.message}`;
     window.open(`https://wa.me/908508888911?text=${text}`, "_blank");
@@ -317,14 +321,14 @@ export default function HairTransplantLanding() {
                     ))}
                   </ul>
                 </div>
-                <a href="#ht-form" style={{
-                  display: "block", textAlign: "center", margin: "8px 28px 28px", padding: 14, borderRadius: 8, fontWeight: 700, fontSize: 15, textDecoration: "none", transition: "all .2s",
+                <button onClick={scrollToForm} style={{
+                  display: "block", width: "100%", textAlign: "center", margin: "8px 28px 28px", padding: 14, borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: "pointer", transition: "all .2s",
                   ...(pkg.cta === "gold"
-                    ? { background: "#053980", color: "#fff" }
+                    ? { background: "#053980", color: "#fff", border: "none" }
                     : { background: "transparent", color: "#053980", border: "1.5px solid rgba(5,57,128,0.3)" })
                 }}>
                   Get Started
-                </a>
+                </button>
               </div>
             ))}
           </div>
@@ -501,7 +505,7 @@ export default function HairTransplantLanding() {
             </div>
 
             {/* Right — Form */}
-            <div style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 16, overflow: "hidden" }}>
+            <div id="ht-form-box" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 16, overflow: "hidden", scrollMarginTop: "80px" }}>
               <div style={{ padding: "24px 32px", borderBottom: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)" }}>
                 <div style={{ fontSize: 18, fontWeight: 800, color: "#fff" }}>Get Your Free Hair Analysis</div>
                 <div style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>We&apos;ll respond within 24 hours</div>
