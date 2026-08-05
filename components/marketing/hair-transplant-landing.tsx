@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Check, MessageCircle, Send, ArrowRight } from "lucide-react";
+import { useForm } from "@formspree/react";
+import { Check, MessageCircle, Send, ArrowRight, CheckCircle } from "lucide-react";
 import Image from "next/image";
 
 function useCountUp(target: number, duration = 1800, start = false) {
@@ -187,6 +188,7 @@ const testimonials = [
 export default function HairTransplantLanding() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [form, setForm] = useState({ name: "", country: "", email: "", phone: "", pkg: "", message: "" });
+  const [fsState, handleFormspreeSubmit] = useForm("maewyylb");
   const [statsVisible, setStatsVisible] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
 
@@ -213,13 +215,18 @@ export default function HairTransplantLanding() {
     window.open(`https://wa.me/908508888911?text=${text}`, "_blank");
   };
 
-  const handleEmail = () => {
-    const body = `Hello MCT,\n\nName: ${form.name}\nCountry: ${form.country}\nEmail: ${form.email}\nPhone: ${form.phone}\nPackage: ${form.pkg}\n\n${form.message}`;
-    const a = document.createElement("a");
-    a.href = `mailto:hello@medicalcenterturkey.com?subject=${encodeURIComponent("Hair Transplant Inquiry")}&body=${encodeURIComponent(body)}`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+  const handleEmail = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    await handleFormspreeSubmit({
+      name: form.name,
+      country: form.country,
+      email: form.email,
+      phone: form.phone,
+      package: form.pkg,
+      message: form.message,
+      _subject: `Hair Transplant Inquiry — Medical Center Turkey`,
+      _replyto: form.email,
+    } as never);
   };
 
   return (
@@ -516,6 +523,13 @@ export default function HairTransplantLanding() {
                 <div style={{ fontSize: 18, fontWeight: 800, color: "#fff" }}>Get Your Free Hair Analysis</div>
                 <div style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>We&apos;ll respond within 24 hours</div>
               </div>
+              {fsState.succeeded ? (
+                <div style={{ padding: 48, textAlign: "center" }}>
+                  <CheckCircle size={48} style={{ color: "#A3C6CF", margin: "0 auto 16px" }} />
+                  <div style={{ fontSize: 18, fontWeight: 800, color: "#fff", marginBottom: 8 }}>Request Sent!</div>
+                  <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)" }}>We&apos;ve received your request and will get back to you within 24 hours.</p>
+                </div>
+              ) : (
               <form style={{ padding: 32, display: "flex", flexDirection: "column", gap: 16 }} onSubmit={e => e.preventDefault()}>
                 <div className="grid grid-cols-2 gap-4">
                   {[
@@ -563,13 +577,14 @@ export default function HairTransplantLanding() {
                     style={{ flex: 1, background: "#25D366", color: "#fff", padding: "14px 20px", borderRadius: 8, fontWeight: 700, fontSize: 15, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                     <MessageCircle size={16} /> Send via WhatsApp
                   </button>
-                  <button type="button" onClick={handleEmail}
-                    style={{ flex: 1, background: "#2884C0", color: "#fff", padding: "14px 20px", borderRadius: 8, fontWeight: 700, fontSize: 15, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-                    <Send size={16} /> Send My Consultation Request
+                  <button type="button" onClick={handleEmail} disabled={fsState.submitting}
+                    style={{ flex: 1, background: "#2884C0", color: "#fff", padding: "14px 20px", borderRadius: 8, fontWeight: 700, fontSize: 15, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, opacity: fsState.submitting ? 0.6 : 1 }}>
+                    <Send size={16} /> {fsState.submitting ? "Sending..." : "Send My Consultation Request"}
                   </button>
                 </div>
                 <p style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", textAlign: "center" }}>No commitment required · No spam · We reply within 24 hours</p>
               </form>
+              )}
             </div>
 
           </div>

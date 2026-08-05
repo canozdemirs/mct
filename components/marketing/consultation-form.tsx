@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { MessageCircle, Send } from "lucide-react";
+import { useForm, ValidationError } from "@formspree/react";
+import { MessageCircle, Send, CheckCircle } from "lucide-react";
 
 export const TREATMENT_OPTIONS = [
   "Hair Transplant", "Rhinoplasty", "Breast Augmentation", "Gynecomastia",
@@ -15,6 +16,7 @@ interface ConsultationFormProps {
 }
 
 export function ConsultationForm({ initialTreatment = "", onSuccess }: ConsultationFormProps) {
+  const [state, handleFormspreeSubmit] = useForm("maewyylb");
   const [form, setForm] = useState({
     name: "", email: "", phone: "", treatment: initialTreatment, message: "",
   });
@@ -25,11 +27,29 @@ export function ConsultationForm({ initialTreatment = "", onSuccess }: Consultat
     onSuccess?.();
   };
 
-  const handleEmail = () => {
-    const body = `Hello MCT,\n\nName: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nTreatment: ${form.treatment}\n\n${form.message}`;
-    window.location.href = `mailto:hello@medicalcenterturkey.com?subject=${encodeURIComponent(`Quote Request: ${form.treatment}`)}&body=${encodeURIComponent(body)}`;
+  const handleEmail = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await handleFormspreeSubmit({
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      treatment: form.treatment,
+      message: form.message,
+      _subject: `Quote Request: ${form.treatment} — Medical Center Turkey`,
+      _replyto: form.email,
+    } as never);
     onSuccess?.();
   };
+
+  if (state.succeeded) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 text-center gap-4">
+        <CheckCircle size={48} className="text-teal" />
+        <h3 className="text-lg font-bold text-brand">Request Sent!</h3>
+        <p className="text-sm text-gray-500 max-w-xs">We&apos;ve received your consultation request and will get back to you within 24 hours.</p>
+      </div>
+    );
+  }
 
   return (
     <form className="space-y-4" onSubmit={e => e.preventDefault()}>
@@ -67,6 +87,7 @@ export function ConsultationForm({ initialTreatment = "", onSuccess }: Consultat
           placeholder="john@example.com"
           className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-teal focus:bg-white transition-all"
         />
+        <ValidationError field="email" errors={state.errors} className="text-red-500 text-xs mt-1" />
       </div>
 
       <div>
@@ -104,10 +125,11 @@ export function ConsultationForm({ initialTreatment = "", onSuccess }: Consultat
         <button
           type="button"
           onClick={handleEmail}
-          className="flex items-center justify-center gap-2 bg-brand text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:bg-[#154d8a] transition-colors shadow-lg shadow-brand/20"
+          disabled={state.submitting}
+          className="flex items-center justify-center gap-2 bg-brand text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:bg-[#154d8a] transition-colors shadow-lg shadow-brand/20 disabled:opacity-60"
         >
           <Send size={15} />
-          Send Request
+          {state.submitting ? "Sending..." : "Send Request"}
         </button>
       </div>
 
