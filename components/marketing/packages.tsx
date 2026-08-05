@@ -215,16 +215,16 @@ export function Packages() {
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     priority={i === 0}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-4">
                     <h3 className="text-base font-bold text-white leading-tight">{t.name}</h3>
-                    <span className="text-white/80 text-xs font-semibold mt-0.5 block">{t.price}</span>
                   </div>
                 </div>
 
                 {/* Back */}
                 <div className="flip-card-back absolute inset-0 rounded-2xl bg-white border-2 border-teal flex flex-col p-4 shadow-lg">
-                  <h3 className="text-sm font-bold text-brand mb-2.5">{t.name}</h3>
+                  <h3 className="text-sm font-bold text-brand">{t.name}</h3>
+                  <span className="text-teal text-xs font-bold mb-2.5 block">{t.price}</span>
                   <ul className="space-y-1.5 flex-1">
                     {t.inclusions.map((item) => (
                       <li key={item} className="flex items-start gap-1.5 text-xs text-gray-700">
