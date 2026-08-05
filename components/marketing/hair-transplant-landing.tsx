@@ -228,16 +228,18 @@ export default function HairTransplantLanding() {
             Hair Transplant <span style={{ color: "#A3C6CF" }}>Turkey.</span><br />
             Done Right. From Start to Finish.
           </h1>
-          <p style={{ fontSize: "clamp(16px, 2vw, 19px)", color: "rgba(255,255,255,0.75)", maxWidth: 600, margin: "0 auto 44px" }}>
+          <p style={{ fontSize: "clamp(16px, 2vw, 19px)", color: "rgba(255,255,255,0.75)", maxWidth: 600, margin: "0 auto 40px" }}>
             You fly to Istanbul. We take care of everything else — the surgery, the hotel, the transfers, the aftercare. You just focus on your results.
           </p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <a href="#ht-form" style={{ background: "#fff", color: "#053980", padding: "16px 36px", borderRadius: 8, fontWeight: 700, fontSize: 16, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8, transition: "all .2s" }}>
-              ✦ Start Your Experience
-            </a>
-            <a href="https://wa.me/908508888911" target="_blank" rel="noopener noreferrer" style={{ background: "#25D366", color: "#fff", padding: "16px 36px", borderRadius: 8, fontWeight: 700, fontSize: 16, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8 }}>
-              <MessageCircle size={18} /> WhatsApp Us
-            </a>
+
+          {/* Hair follicle visual indicator */}
+          <div className="flex items-end justify-center gap-1.5" style={{ marginBottom: 40 }}>
+            {[28, 38, 48, 56, 48, 38, 28].map((h, i) => (
+              <div key={i} className="flex flex-col items-center gap-1">
+                <div style={{ width: 3, height: h, background: "linear-gradient(to top, #A3C6CF, rgba(163,198,207,0.3))", borderRadius: 999 }} />
+                <div style={{ width: 7, height: 7, borderRadius: "50%", background: "rgba(163,198,207,0.5)", border: "1px solid #A3C6CF" }} />
+              </div>
+            ))}
           </div>
           <div ref={statsRef} className="flex justify-center gap-12 mt-16 flex-wrap">
             <div className="text-center">
