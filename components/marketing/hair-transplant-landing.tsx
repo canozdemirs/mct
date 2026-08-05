@@ -218,7 +218,7 @@ export default function HairTransplantLanding() {
     <>
       {/* ── 1. HERO ─────────────────────────────────────────────── */}
       <section className="relative min-h-screen flex items-center justify-center text-center px-5 pt-12 pb-24">
-        <Image src="/mct_head_office.jpg" alt="Medical Center Turkey Istanbul" fill className="object-cover" priority />
+        <Image src="/mct_head_office.jpg" alt="Medical Center Turkey Istanbul" fill className="object-cover" priority sizes="100vw" />
         <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(5,57,128,0.45) 0%, rgba(5,57,128,0.65) 55%, rgba(3,30,70,0.95) 100%)" }} />
         <div className="relative max-w-4xl mx-auto w-full" style={{ marginTop: "-30px" }}>
           <div className="inline-block mb-7" style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.35)", color: "#fff", fontSize: 12, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase", padding: "8px 18px", borderRadius: 100 }}>
@@ -343,6 +343,7 @@ export default function HairTransplantLanding() {
                   alt={`Hair transplant before and after result ${n}`}
                   fill
                   className="object-cover"
+                  sizes="(max-width: 768px) 50vw, 25vw"
                 />
               </div>
             ))}
@@ -413,7 +414,7 @@ export default function HairTransplantLanding() {
 
       {/* ── 6. WHY MCT ───────────────────────────────────────────── */}
       <section className="relative py-24 px-5">
-        <Image src="/mct_head_office.jpg" alt="" fill className="object-cover" />
+        <Image src="/mct_head_office.jpg" alt="" fill className="object-cover" sizes="100vw" />
         <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(4,40,90,0.88) 0%, rgba(4,40,90,0.82) 100%)" }} />
         <div className="relative" style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#A3C6CF", marginBottom: 14 }}>Why Us</div>
