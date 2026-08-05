@@ -317,7 +317,7 @@ export default function HairTransplantLanding() {
             {[1, 2, 3, 4, 5, 6, 8, 9].map((n) => (
               <div key={n} className="rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm aspect-[4/3] relative">
                 <Image
-                  src={`/treatments/hair-transplant/landing/before-after-${n}.webp`}
+                  src={`/treatments/hair-transplant/landing/hair_transplant-before-and-after-${n}.webp`}
                   alt={`Hair transplant before and after result ${n}`}
                   fill
                   className="object-cover"
