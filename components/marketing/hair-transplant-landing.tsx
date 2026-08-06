@@ -69,7 +69,7 @@ const packages = [
     badge: "MOST POPULAR",
     cta: "gold",
     inclusions: [
-      "Everything in Premium",
+      "Everything in Gold Package",
       "Sedation — Performed Under Light Sleep · Pain Free",
       "Private Airport Transfers",
       "2 Nights @ 4-Star Hotel",
