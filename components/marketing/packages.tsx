@@ -369,6 +369,13 @@ export function Packages() {
                       >
                         View Package →
                       </Link>
+                    ) : t.name === "All-on-4 Dental Implants" ? (
+                      <Link
+                        href="/all-on-4-dental-implants-turkey"
+                        className="flex items-center justify-center gap-1.5 bg-teal text-white text-xs font-semibold px-3 py-2 rounded-full hover:bg-[#159fb3] transition-colors w-full"
+                      >
+                        View Package →
+                      </Link>
                     ) : (
                       <button
                         onClick={() => setSelected(t.name)}
