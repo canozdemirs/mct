@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useForm } from "@formspree/react";
 import { Check, MessageCircle, Send, ArrowRight, CheckCircle } from "lucide-react";
 import Image from "next/image";
+import HairTransplantVideoHero from "@/components/marketing/HairTransplantVideoHero";
 
 function useCountUp(target: number, duration = 1800, start = false) {
   const [count, setCount] = useState(0);
@@ -306,6 +307,12 @@ export default function HairTransplantLanding() {
         </div>
       </section>
 
+
+      {/* ── VIDEO HERO ──────────────────────────────────────────── */}
+      <HairTransplantVideoHero
+        videoSrc="/Videos/hair-transplant-promo.mp4"
+        posterSrc="/Videos/video-poster.jpg"
+      />
 
       {/* ── 2. PACKAGES ─────────────────────────────────────────── */}
       <section style={{ background: "#fff", padding: "80px 20px" }}>
