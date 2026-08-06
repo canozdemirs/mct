@@ -289,6 +289,20 @@ export default function HairTransplantLanding() {
               <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>Aftercare Support</div>
             </div>
           </div>
+
+          {/* Trust badges */}
+          <div className="flex justify-center flex-wrap gap-3 mt-10">
+            {[
+              { label: "Ministry of Health Certified" },
+              { label: "TÜRSAB Licensed" },
+              { label: "★ 4.9 Trustpilot" },
+            ].map((b) => (
+              <div key={b.label} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.25)", borderRadius: 100, padding: "7px 16px" }}>
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6.5" fill="#A3C6CF" /><path d="M3.5 6.5L5.5 8.5L9.5 4.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                <span style={{ fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.90)", letterSpacing: 0.3 }}>{b.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
