@@ -226,8 +226,8 @@ export default function HairTransplantVideoHero({
 
       {/* CTAs */}
       <div className="relative max-w-4xl mx-auto mt-8 md:mt-10 flex flex-col items-center gap-4">
-        <a
-          href="#consultation"
+        <button
+          type="button"
           onClick={onCtaClick}
           className="inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold text-white text-base md:text-lg shadow-lg shadow-[#1b5fa8]/30 hover:shadow-xl hover:shadow-[#1b5fa8]/40 hover:-translate-y-0.5 transition-all"
           style={{
@@ -235,7 +235,7 @@ export default function HairTransplantVideoHero({
           }}
         >
           Get Free Hair Analysis
-        </a>
+        </button>
 
         <a
           href={`https://wa.me/${whatsappNumber}`}

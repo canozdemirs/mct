@@ -312,6 +312,7 @@ export default function HairTransplantLanding() {
       <HairTransplantVideoHero
         videoSrc="/Videos/hair-transplant-promo.mp4"
         posterSrc="/Videos/video-poster.jpg"
+        onCtaClick={scrollToForm}
       />
 
       {/* ── 2. PACKAGES ─────────────────────────────────────────── */}
