@@ -124,7 +124,7 @@ const faqs = [
   },
   {
     q: "What is the difference between FUE and DHI hair transplant techniques?",
-    a: "Both techniques are modern and highly effective — the right choice depends on your individual case. FUE (Follicular Unit Extraction) is the gold standard method where grafts are extracted individually and implanted into the recipient area. DHI (Direct Hair Implantation) uses a specialised implanter pen to place grafts directly without creating incisions first, which can offer more precise angle and direction control. DHI is available on any of our packages for an additional €250.",
+    a: "Both techniques are modern and highly effective — the right choice depends on your individual case. FUE (Follicular Unit Extraction) is the gold standard method where grafts are extracted individually and implanted into the recipient area. DHI (Direct Hair Implantation) uses a specialised implanter pen to place grafts directly without creating incisions first, which can offer more precise angle and direction control. DHI is available on any of our packages for an additional €150.",
   },
   {
     q: "Is a hair transplant in Turkey safe? How do I know the quality is reliable?",
@@ -346,7 +346,7 @@ export default function HairTransplantLanding() {
           </div>
 
           <div style={{ background: "#F4F8FB", border: "1px solid rgba(87,136,172,0.25)", borderRadius: 10, padding: "16px 24px", fontSize: 14, color: "#6B7C8D", marginTop: 28, textAlign: "center" }}>
-            <strong style={{ color: "#053980" }}>DHI Technique</strong>: Available with an additional €250 fee on any package. Credit card payments carry a 10% surcharge.
+            <strong style={{ color: "#053980" }}>DHI Technique</strong>: Available with an additional €150 fee on any package. Credit card payments carry a 10% surcharge.
           </div>
         </div>
       </section>
