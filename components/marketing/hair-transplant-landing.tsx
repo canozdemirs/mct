@@ -39,7 +39,7 @@ const packages = [
       "Aesthetic Hospital",
       "Warranty Certificate",
       "Translator / Interpreter",
-      "GOs Day Care Assistance",
+      "GO's Day Care Assistance",
     ],
   },
   {
