@@ -540,6 +540,7 @@ export default function HairTransplantLanding() {
 
             {/* Right — Form */}
             <div id="ht-form-box" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 16, overflow: "hidden", scrollMarginTop: "80px" }}>
+              <div id="consultation" />
               <div style={{ padding: "24px 32px", borderBottom: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)" }}>
                 <div style={{ fontSize: 18, fontWeight: 800, color: "#fff" }}>Get Your Free Hair Analysis</div>
                 <div style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>We&apos;ll respond within 24 hours</div>
