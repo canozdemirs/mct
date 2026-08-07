@@ -25,7 +25,7 @@ const packages = [
   {
     tier: "Entry",
     name: "Premium Package",
-    price: "3,000",
+    price: "2,500",
     subtitle: "Surgery only · No hidden fees",
     highlight: false,
     badge: null as string | null,
@@ -44,7 +44,7 @@ const packages = [
   {
     tier: "Complete",
     name: "Hassle-Free Package",
-    price: "3,800",
+    price: "3,000",
     subtitle: "All-inclusive · 7 nights stay",
     highlight: true,
     badge: "MOST POPULAR",
@@ -60,7 +60,7 @@ const packages = [
   {
     tier: "Luxury",
     name: "Executive Package",
-    price: "5,500",
+    price: "4,200",
     subtitle: "Full VIP experience · Istanbul included",
     highlight: false,
     badge: null as string | null,
@@ -83,7 +83,7 @@ const faqs = [
   },
   {
     q: "How much does rhinoplasty cost in Turkey with Medical Center Turkey?",
-    a: "Our Premium Package starts from €3,000 and covers the surgery and hospital stay. The Hassle-Free Package is €3,800 and adds 7 nights hotel, private transfers, and a dedicated coordinator — making your entire Istanbul stay completely self-contained. Our Executive Package is €5,500 and includes 5-star hotel accommodation and the full Istanbul VIP experience. Final pricing may vary slightly depending on your case complexity — we provide a personalised quote after your free consultation.",
+    a: "Our Premium Package starts from €2,500 and covers the surgery and hospital stay. The Hassle-Free Package is €3,000 and adds 7 nights hotel, private transfers, and a dedicated coordinator — making your entire Istanbul stay completely self-contained. Our Executive Package is €4,200 and includes 5-star hotel accommodation and the full Istanbul VIP experience. Final pricing may vary slightly depending on your case complexity — we provide a personalised quote after your free consultation.",
   },
   {
     q: "How many days do I need to stay in Istanbul for rhinoplasty?",
@@ -573,9 +573,9 @@ export default function RhinoplastyLanding() {
                     <select value={form.pkg} onChange={e => setForm({ ...form, pkg: e.target.value })}
                       style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, padding: "12px 16px", fontSize: 14, color: "#fff", outline: "none" }}>
                       <option value="" style={{ color: "#000" }}>Select a package...</option>
-                      <option value="Premium Package — From €3,000" style={{ color: "#000" }}>Premium Package — From €3,000</option>
-                      <option value="Hassle-Free Package — From €3,800" style={{ color: "#000" }}>Hassle-Free Package — From €3,800</option>
-                      <option value="Executive Package — From €5,500" style={{ color: "#000" }}>Executive Package — From €5,500</option>
+                      <option value="Premium Package — From €2,500" style={{ color: "#000" }}>Premium Package — From €2,500</option>
+                      <option value="Hassle-Free Package — From €3,000" style={{ color: "#000" }}>Hassle-Free Package — From €3,000</option>
+                      <option value="Executive Package — From €4,200" style={{ color: "#000" }}>Executive Package — From €4,200</option>
                       <option value="Not sure yet" style={{ color: "#000" }}>Not sure yet</option>
                     </select>
                   </div>
