@@ -95,7 +95,7 @@ const SUB_SERVICES: Record<string, SubService[]> = {
     { name: "Dental Filling", price: 100, defaultDays: 4 },
     { name: "Root Canal Treatment", price: 120, defaultDays: 5 },
     { name: "Dental Implant", price: 400, defaultDays: 7 },
-    { name: "All-on-4 Dental Implants", price: 1500, defaultDays: 9 },
+    { name: "All-on-4 Dental Implants", price: 1500, defaultDays: 7 },
     { name: "Zirconia Crown", price: 250, defaultDays: 7 },
     { name: "Veneers", price: 250, defaultDays: 7 },
     { name: "Cleaning & Whitening", price: 220, defaultDays: 4 },
