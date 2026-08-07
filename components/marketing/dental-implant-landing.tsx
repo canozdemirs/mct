@@ -383,7 +383,7 @@ export default function DentalImplantLanding() {
               "/treatments/dental-implant/before-after/dental-implant-result-1.png",
               "/treatments/dental-implant/before-after/dental-implant-result-2.png",
               "/treatments/dental-implant/before-after/dental-implant-result-3.png",
-              "/treatments/dental-implant/before-after/dental-implant-result-1.png",
+              "/treatments/dental-implant/before-after/dental-implant-result-4.png",
             ].map((src, i) => (
               <div key={i} style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 4px 16px rgba(5,57,128,0.08)", background: "#fff", aspectRatio: "1/1", position: "relative" }}>
                 <Image
