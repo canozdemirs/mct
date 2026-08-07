@@ -37,7 +37,6 @@ const packages = [
       "General Anaesthesia",
       "1 Night Hospital Stay (Post-Op)",
       "Post-Op Medication & Compression Garment",
-      "Warranty Certificate",
       "Translator / Interpreter",
       "GO Assistance on Surgery Day",
     ],
@@ -80,7 +79,7 @@ const packages = [
 const faqs = [
   {
     q: "What is included in the Medical Center Turkey breast augmentation package?",
-    a: "Our Hassle-Free Package covers everything from arrival to recovery. This includes the breast augmentation surgery, premium silicone implants, pre-operative blood tests and examination, general anaesthesia, 1 night post-operative hospital stay, all post-op medication and compression garment, private two-way airport transfers, 7 nights at a 4-star hotel, daily breakfast, a dedicated English-speaking GO (Gentle Organiser) coordinator throughout your stay, official warranty certificate, and 12 months of online aftercare support. No hidden fees — one clear price covers everything.",
+    a: "Our Hassle-Free Package covers everything from arrival to recovery. This includes the breast augmentation surgery, premium silicone implants, pre-operative blood tests and examination, general anaesthesia, 1 night post-operative hospital stay, all post-op medication and compression garment, private two-way airport transfers, 7 nights at a 4-star hotel, daily breakfast, a dedicated English-speaking GO (Gentle Organiser) coordinator throughout your stay, and 12 months of online aftercare support. No hidden fees — one clear price covers everything.",
   },
   {
     q: "How much does breast augmentation cost in Turkey with Medical Center Turkey?",
@@ -100,7 +99,7 @@ const faqs = [
   },
   {
     q: "Is breast augmentation in Turkey safe?",
-    a: "Safety is our non-negotiable priority. We work exclusively with hospitals holding the Turkish Ministry of Health's Health Tourism Authorization Certificate — the highest accreditation standard in Turkey. Our partner surgeons are board-certified plastic surgeons with extensive experience in breast surgery for international patients. Every procedure comes with an official written warranty certificate.",
+    a: "Safety is our non-negotiable priority. We work exclusively with hospitals holding the Turkish Ministry of Health's Health Tourism Authorization Certificate — the highest accreditation standard in Turkey. Our partner surgeons are board-certified plastic surgeons with extensive experience in breast surgery for international patients.",
   },
   {
     q: "Why should I choose Medical Center Turkey?",
@@ -132,11 +131,6 @@ const trustBlocks = [
     title: "Since 2018. 5,000+ Patients.",
     desc: "Serving international patients from the USA, UK, and Europe since 2018. Experience you can trust.",
   },
-  {
-    icon: "✅",
-    title: "Warranty Certificate",
-    desc: "Every breast augmentation comes with an official written warranty certificate — your guarantee that we stand behind every result.",
-  },
 ];
 
 const whyMCT = [
@@ -144,7 +138,6 @@ const whyMCT = [
   { icon: "🎧", title: "Dedicated GO Coordinator", desc: "Your personal 'Gentle Organiser' from airport arrival to departure. You are never alone." },
   { icon: "★", title: "Zero Question Marks", desc: "We've heard every question. Since 2018 we have the answers before you even ask them." },
   { icon: "⚡", title: "Implants Always Included", desc: "Premium silicone implants are always included in the price. No surprises, no hidden upgrade costs." },
-  { icon: "📄", title: "Warranty Certificate", desc: "Official written guarantee for your procedure — complete peace of mind." },
   { icon: "🛡️", title: "Ministry of Health Approved", desc: "Exclusively partnered with Ministry of Health approved hospitals. No shortcuts. No compromises." },
 ];
 

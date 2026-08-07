@@ -36,7 +36,6 @@ const packages = [
       "General Anaesthesia",
       "1 Night Hospital Stay (Post-Op)",
       "Post-Op Medication & Nasal Splint",
-      "Warranty Certificate",
       "Translator / Interpreter",
       "GO Assistance on Surgery Day",
     ],
@@ -79,7 +78,7 @@ const packages = [
 const faqs = [
   {
     q: "What is included in the Medical Center Turkey rhinoplasty package?",
-    a: "Our Hassle-Free Package covers everything you need from arrival to recovery. This includes the rhinoplasty surgery (open or closed technique), pre-operative blood tests and examination, general anaesthesia, 1 night post-operative hospital stay, all post-op medication and nasal splint, private two-way airport transfers, 7 nights at a 4-star hotel, daily breakfast, a dedicated English-speaking GO (Gentle Organiser) coordinator throughout your stay, official warranty certificate, and 12 months of online aftercare support. No hidden fees — one clear price covers everything.",
+    a: "Our Hassle-Free Package covers everything you need from arrival to recovery. This includes the rhinoplasty surgery (open or closed technique), pre-operative blood tests and examination, general anaesthesia, 1 night post-operative hospital stay, all post-op medication and nasal splint, private two-way airport transfers, 7 nights at a 4-star hotel, daily breakfast, a dedicated English-speaking GO (Gentle Organiser) coordinator throughout your stay, and 12 months of online aftercare support. No hidden fees — one clear price covers everything.",
   },
   {
     q: "How much does rhinoplasty cost in Turkey with Medical Center Turkey?",
@@ -95,7 +94,7 @@ const faqs = [
   },
   {
     q: "Is rhinoplasty in Turkey safe? How do I know the quality is reliable?",
-    a: "Safety is our non-negotiable priority. We work exclusively with hospitals holding the Turkish Ministry of Health's Health Tourism Authorization Certificate. Our partner surgeons are board-certified specialists with extensive experience in rhinoplasty for international patients. Turkey is one of the world's leading destinations for rhinoplasty, combining highly skilled surgeons, modern facilities, and significantly lower costs than the UK, USA, or Western Europe. Every procedure comes with an official written warranty certificate.",
+    a: "Safety is our non-negotiable priority. We work exclusively with hospitals holding the Turkish Ministry of Health's Health Tourism Authorization Certificate. Our partner surgeons are board-certified specialists with extensive experience in rhinoplasty for international patients. Turkey is one of the world's leading destinations for rhinoplasty, combining highly skilled surgeons, modern facilities, and significantly lower costs than the UK, USA, or Western Europe.",
   },
   {
     q: "Why should I choose Medical Center Turkey?",
@@ -131,11 +130,6 @@ const trustBlocks = [
     title: "Since 2018. 5,000+ Patients.",
     desc: "Serving international patients from the USA, UK, and Europe since 2018. Experience you can trust.",
   },
-  {
-    icon: "✅",
-    title: "Warranty Certificate",
-    desc: "Every rhinoplasty comes with an official written warranty certificate — your guarantee that we stand behind every result.",
-  },
 ];
 
 const whyMCT = [
@@ -143,7 +137,6 @@ const whyMCT = [
   { icon: "🎧", title: "Dedicated GO Coordinator", desc: "Your personal 'Gentle Organiser' from airport arrival to departure. You are never alone." },
   { icon: "★", title: "Zero Question Marks", desc: "We've heard every question. Since 2018 we have the answers before you even ask them." },
   { icon: "⚡", title: "Board-Certified Surgeons", desc: "We work exclusively with board-certified plastic and ENT surgeons with extensive international patient experience." },
-  { icon: "📄", title: "Warranty Certificate", desc: "Official written guarantee for your procedure — complete peace of mind." },
   { icon: "🛡️", title: "Ministry of Health Approved", desc: "Exclusively partnered with Ministry of Health approved hospitals. No shortcuts. No compromises." },
 ];
 
