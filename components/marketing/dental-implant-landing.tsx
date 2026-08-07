@@ -379,16 +379,11 @@ export default function DentalImplantLanding() {
             <p style={{ fontSize: 16, color: "#6B7C8D" }}>Every result is from a real Medical Center Turkey patient. Natural smiles, real transformations — no filters, no tricks.</p>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-            {[
-              "/treatments/all-on-4/before-after/all-on-4-result-1.png",
-              "/treatments/all-on-4/before-after/all-on-4-result-2.png",
-              "/treatments/all-on-4/before-after/all-on-4-result-3.png",
-              "/treatments/all-on-4/before-after/all-on-4-result-4.png",
-            ].map((src, i) => (
-              <div key={i} style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 4px 16px rgba(5,57,128,0.08)", background: "#fff", aspectRatio: "1/1", position: "relative" }}>
+            {[1, 2, 3, 4].map((n) => (
+              <div key={n} style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 4px 16px rgba(5,57,128,0.08)", background: "#fff", aspectRatio: "1/1", position: "relative" }}>
                 <Image
-                  src={src}
-                  alt={`Dental implant before and after result ${i + 1} — Medical Center Turkey patient`}
+                  src="/treatments/dental-implant/before-after/dental-implant-result-1.png"
+                  alt={`Dental implant before and after result ${n} — Medical Center Turkey patient`}
                   fill
                   className="object-cover object-top"
                   sizes="(max-width: 768px) 50vw, 25vw"
