@@ -25,7 +25,7 @@ const packages = [
   {
     tier: "Entry",
     name: "Premium Package",
-    price: "5,000",
+    price: "4,500",
     subtitle: "Surgery only · No hidden fees",
     highlight: false,
     badge: null as string | null,
@@ -45,7 +45,7 @@ const packages = [
   {
     tier: "Complete",
     name: "Hassle-Free Package",
-    price: "5,800",
+    price: "5,000",
     subtitle: "All-inclusive · 7 nights stay",
     highlight: true,
     badge: "MOST POPULAR",
@@ -61,7 +61,7 @@ const packages = [
   {
     tier: "Luxury",
     name: "Executive Package",
-    price: "7,500",
+    price: "6,200",
     subtitle: "Full VIP experience · Istanbul included",
     highlight: false,
     badge: null as string | null,
@@ -84,7 +84,7 @@ const faqs = [
   },
   {
     q: "How much does breast augmentation cost in Turkey with Medical Center Turkey?",
-    a: "Our Premium Package starts from €5,000 and covers the surgery, premium silicone implants, and hospital stay. The Hassle-Free Package is €5,800 and adds 7 nights hotel, private transfers, and a dedicated coordinator. The Executive Package is €7,500 and includes 5-star accommodation and the full Istanbul VIP experience. Silicone implants are always included — there are no hidden costs for the implants themselves.",
+    a: "Our Premium Package starts from €4,500 and covers the surgery, premium silicone implants, and hospital stay. The Hassle-Free Package is €5,000 and adds 7 nights hotel, private transfers, and a dedicated coordinator. The Executive Package is €6,200 and includes 5-star accommodation and the full Istanbul VIP experience. Silicone implants are always included — there are no hidden costs for the implants themselves.",
   },
   {
     q: "How many days do I need to stay in Istanbul for breast augmentation?",
@@ -574,9 +574,9 @@ export default function BreastAugmentationLanding() {
                     <select value={form.pkg} onChange={e => setForm({ ...form, pkg: e.target.value })}
                       style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, padding: "12px 16px", fontSize: 14, color: "#fff", outline: "none" }}>
                       <option value="" style={{ color: "#000" }}>Select a package...</option>
-                      <option value="Premium Package — From €5,000" style={{ color: "#000" }}>Premium Package — From €5,000</option>
-                      <option value="Hassle-Free Package — From €5,800" style={{ color: "#000" }}>Hassle-Free Package — From €5,800</option>
-                      <option value="Executive Package — From €7,500" style={{ color: "#000" }}>Executive Package — From €7,500</option>
+                      <option value="Premium Package — From €4,500" style={{ color: "#000" }}>Premium Package — From €4,500</option>
+                      <option value="Hassle-Free Package — From €5,000" style={{ color: "#000" }}>Hassle-Free Package — From €5,000</option>
+                      <option value="Executive Package — From €6,200" style={{ color: "#000" }}>Executive Package — From €6,200</option>
                       <option value="Not sure yet" style={{ color: "#000" }}>Not sure yet</option>
                     </select>
                   </div>
