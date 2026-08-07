@@ -375,12 +375,12 @@ export default function BreastAugmentationLanding() {
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
             {[1, 2, 3, 4].map((n) => (
-              <div key={n} style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 4px 16px rgba(5,57,128,0.08)", background: "#E8EFF6", aspectRatio: "1/1", position: "relative" }}>
+              <div key={n} style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 4px 16px rgba(5,57,128,0.08)", background: "#fff", aspectRatio: "1/1", position: "relative" }}>
                 <Image
                   src={`/treatments/breast-augmentation/before-after/ba-result-${n}.png`}
                   alt={`Breast augmentation before and after result ${n} — Medical Center Turkey patient`}
                   fill
-                  className="object-cover object-center"
+                  className="object-cover object-top"
                   sizes="(max-width: 768px) 50vw, 25vw"
                 />
               </div>
