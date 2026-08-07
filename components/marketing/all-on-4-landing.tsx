@@ -374,7 +374,7 @@ export default function AllOnFourLanding() {
             <p style={{ fontSize: 16, color: "#6B7C8D" }}>Every result is from a real Medical Center Turkey patient. Natural smiles, real transformations — no filters, no tricks.</p>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
+            {[1, 2, 3, 4].map((n) => (
               <div key={n} style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 4px 16px rgba(5,57,128,0.08)", background: "#E8EFF6", aspectRatio: "1/1", position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <Image
                   src={`/treatments/all-on-4/before-after/all-on-4-result-${n}.webp`}
