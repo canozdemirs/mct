@@ -373,17 +373,18 @@ export default function AllOnFourLanding() {
             <h2 style={{ fontSize: "clamp(26px,4vw,42px)", fontWeight: 800, color: "#053980", lineHeight: 1.2, marginBottom: 14 }}>See the Difference. Judge for Yourself.</h2>
             <p style={{ fontSize: 16, color: "#6B7C8D" }}>Every result is from a real Medical Center Turkey patient. Natural smiles, real transformations — no filters, no tricks.</p>
           </div>
-          <div className="flex justify-center">
-            <div style={{ borderRadius: 20, overflow: "hidden", boxShadow: "0 8px 32px rgba(5,57,128,0.12)", maxWidth: 420, width: "100%" }}>
-              <Image
-                src="/treatments/all-on-4/before-after/all-on-4-result-1.png"
-                alt="All-on-4 dental implant before and after result — Medical Center Turkey patient"
-                width={420}
-                height={560}
-                className="w-full h-auto"
-                sizes="(max-width: 768px) 100vw, 420px"
-              />
-            </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+            {[1, 2, 3, 4].map((n) => (
+              <div key={n} style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 4px 16px rgba(5,57,128,0.08)", background: "#fff", aspectRatio: "1/1", position: "relative" }}>
+                <Image
+                  src="/treatments/all-on-4/before-after/all-on-4-result-1.png"
+                  alt={`All-on-4 dental implant before and after result ${n} — Medical Center Turkey patient`}
+                  fill
+                  className="object-cover object-top"
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                />
+              </div>
+            ))}
           </div>
           <div style={{ textAlign: "center", marginTop: 48 }}>
             <p style={{ fontSize: 16, color: "#6B7C8D", marginBottom: 20 }}>Ready to start your own transformation?</p>
