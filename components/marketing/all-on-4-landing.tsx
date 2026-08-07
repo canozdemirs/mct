@@ -373,20 +373,17 @@ export default function AllOnFourLanding() {
             <h2 style={{ fontSize: "clamp(26px,4vw,42px)", fontWeight: 800, color: "#053980", lineHeight: 1.2, marginBottom: 14 }}>See the Difference. Judge for Yourself.</h2>
             <p style={{ fontSize: 16, color: "#6B7C8D" }}>Every result is from a real Medical Center Turkey patient. Natural smiles, real transformations — no filters, no tricks.</p>
           </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-            {[1, 2, 3, 4].map((n) => (
-              <div key={n} style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 4px 16px rgba(5,57,128,0.08)", background: "#E8EFF6", aspectRatio: "1/1", position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Image
-                  src={`/treatments/all-on-4/before-after/all-on-4-result-${n}.webp`}
-                  alt={`All-on-4 dental implant before and after result ${n}`}
-                  fill
-                  className="object-cover object-center"
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                  onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
-                />
-                <span style={{ fontSize: 12, color: "#5788AC", fontWeight: 600, position: "absolute" }}>Result {n}</span>
-              </div>
-            ))}
+          <div className="flex justify-center">
+            <div style={{ borderRadius: 20, overflow: "hidden", boxShadow: "0 8px 32px rgba(5,57,128,0.12)", maxWidth: 420, width: "100%" }}>
+              <Image
+                src="/treatments/all-on-4/before-after/all-on-4-result-1.png"
+                alt="All-on-4 dental implant before and after result — Medical Center Turkey patient"
+                width={420}
+                height={560}
+                className="w-full h-auto"
+                sizes="(max-width: 768px) 100vw, 420px"
+              />
+            </div>
           </div>
           <div style={{ textAlign: "center", marginTop: 48 }}>
             <p style={{ fontSize: 16, color: "#6B7C8D", marginBottom: 20 }}>Ready to start your own transformation?</p>
