@@ -377,8 +377,8 @@ export default function AllOnFourLanding() {
             {[
               "/treatments/all-on-4/before-after/all-on-4-result-1.png",
               "/treatments/all-on-4/before-after/all-on-4-result-2.png",
-              "/treatments/all-on-4/before-after/all-on-4-result-1.png",
-              "/treatments/all-on-4/before-after/all-on-4-result-2.png",
+              "/treatments/all-on-4/before-after/all-on-4-result-3.png",
+              "/treatments/all-on-4/before-after/all-on-4-result-4.png",
             ].map((src, i) => (
               <div key={i} style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 4px 16px rgba(5,57,128,0.08)", background: "#fff", aspectRatio: "1/1", position: "relative" }}>
                 <Image
