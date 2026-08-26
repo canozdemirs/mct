@@ -25,7 +25,7 @@ const packages = [
   {
     tier: "Entry",
     name: "Premium Package",
-    price: "1,900",
+    price: "2,150",
     subtitle: "Surgery only · Up to 3 areas",
     highlight: false,
     badge: null as string | null,
@@ -43,7 +43,7 @@ const packages = [
   {
     tier: "Complete",
     name: "Hassle-Free Package",
-    price: "2,300",
+    price: "2,600",
     subtitle: "All-inclusive · 5 nights stay",
     highlight: true,
     badge: "MOST POPULAR",
@@ -59,7 +59,7 @@ const packages = [
   {
     tier: "Luxury",
     name: "Executive Package",
-    price: "3,500",
+    price: "3,600",
     subtitle: "Full VIP experience · Istanbul included",
     highlight: false,
     badge: null as string | null,
@@ -82,7 +82,7 @@ const faqs = [
   },
   {
     q: "How much does liposuction cost in Turkey with Medical Center Turkey?",
-    a: "Our Premium Package starts from €1,900 and covers the surgery, hospital stay, anaesthesia and compression garment. The Hassle-Free Package is €2,300 and adds 5 nights hotel, private transfers, and a dedicated coordinator. The Executive Package is €3,500 and includes 5-star accommodation and the full Istanbul VIP experience.",
+    a: "Our Premium Package starts from €2,150 and covers the surgery, hospital stay, anaesthesia and compression garment. The Hassle-Free Package is €2,600 and adds 5 nights hotel, private transfers, and a dedicated coordinator. The Executive Package is €3,600 and includes 5-star accommodation and the full Istanbul VIP experience.",
   },
   {
     q: "Which body areas can be treated with liposuction?",
@@ -574,9 +574,9 @@ export default function LiposuctionLanding() {
                     <select value={form.pkg} onChange={e => setForm({ ...form, pkg: e.target.value })}
                       style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, padding: "12px 16px", fontSize: 14, color: "#fff", outline: "none" }}>
                       <option value="" style={{ color: "#000" }}>Select a package...</option>
-                      <option value="Premium Package — From €1,900" style={{ color: "#000" }}>Premium Package — From €1,900</option>
-                      <option value="Hassle-Free Package — From €2,300" style={{ color: "#000" }}>Hassle-Free Package — From €2,300</option>
-                      <option value="Executive Package — From €3,500" style={{ color: "#000" }}>Executive Package — From €3,500</option>
+                      <option value="Premium Package — From €2,150" style={{ color: "#000" }}>Premium Package — From €2,150</option>
+                      <option value="Hassle-Free Package — From €2,600" style={{ color: "#000" }}>Hassle-Free Package — From €2,600</option>
+                      <option value="Executive Package — From €3,600" style={{ color: "#000" }}>Executive Package — From €3,600</option>
                       <option value="Not sure yet" style={{ color: "#000" }}>Not sure yet</option>
                     </select>
                   </div>
