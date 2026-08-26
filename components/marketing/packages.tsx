@@ -411,6 +411,13 @@ export function Packages() {
                       >
                         View Package →
                       </Link>
+                    ) : t.name === "LASIK Eye Surgery" ? (
+                      <Link
+                        href="/lasik-eye-surgery-turkey"
+                        className="flex items-center justify-center gap-1.5 bg-teal text-white text-xs font-semibold px-3 py-2 rounded-full hover:bg-[#159fb3] transition-colors w-full"
+                      >
+                        View Package →
+                      </Link>
                     ) : (
                       <button
                         onClick={() => setSelected(t.name)}
