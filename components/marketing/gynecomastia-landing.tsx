@@ -362,7 +362,37 @@ export default function GynecomastiaLanding() {
         </div>
       </section>
 
-      {/* ── 3. TRUST ─────────────────────────────────────────────── */}
+      {/* ── 3. BEFORE / AFTER ───────────────────────────────────── */}
+      <section style={{ background: "#F4F8FB", padding: "80px 20px" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <div style={{ maxWidth: 640, marginBottom: 52 }}>
+            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Real Results · Real Patients</div>
+            <h2 style={{ fontSize: "clamp(26px,4vw,42px)", fontWeight: 800, color: "#053980", lineHeight: 1.2, marginBottom: 14 }}>See the Difference. Judge for Yourself.</h2>
+            <p style={{ fontSize: 16, color: "#6B7C8D" }}>Every result is from a real Medical Center Turkey patient. Real transformations — no filters, no tricks.</p>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
+              <div key={n} style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 4px 16px rgba(5,57,128,0.08)", background: "#fff", aspectRatio: "1/1", position: "relative" }}>
+                <Image
+                  src={`/treatments/gynecomastia/before-after/gynecomastia-result-${n}.jpg`}
+                  alt={`Gynecomastia before and after result ${n} — Medical Center Turkey patient`}
+                  fill
+                  className="object-cover object-top"
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                />
+              </div>
+            ))}
+          </div>
+          <div style={{ textAlign: "center", marginTop: 48 }}>
+            <p style={{ fontSize: 16, color: "#6B7C8D", marginBottom: 20 }}>Ready to start your transformation?</p>
+            <button onClick={scrollToForm} style={{ background: "#053980", color: "#fff", padding: "16px 36px", borderRadius: 8, fontWeight: 700, fontSize: 16, border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 8 }}>
+              Get Your Free Consultation <ArrowRight size={16} />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 4. TRUST ─────────────────────────────────────────────── */}
       <section style={{ background: "#F4F8FB", padding: "80px 20px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Since 2018</div>
