@@ -141,19 +141,19 @@ const recoveryTimeline = [
 
 const testimonials = [
   {
-    name: "Patient — USA",
-    source: "Google Review · US · Placeholder",
-    text: "I travelled from the US and Medical Center Turkey made everything seamless. My coordinator was with me every step — airport, hotel, hospital. The surgeon was exceptional. I am absolutely thrilled with my result.",
+    name: "Sarah Resende",
+    source: "Trustpilot · AU · January 2023",
+    text: "John and the nurses were so kind. I felt comfortable, safe and well informed the entire time. I am extremely happy with the results of the septorhinoplasty performed by Dr Erbil Kilic, I appreciated his feedback and expertise and never thought I could love my nose as much as I do now. Strangers have even commented on how perfect my nose is, which is something that never happened before!",
   },
   {
-    name: "Patient — United Kingdom",
-    source: "Trustpilot · GB · Placeholder",
-    text: "I was nervous about having surgery abroad but this team put me completely at ease. The hospital was modern, the surgeon was professional and kind, and my GO handled everything so I never felt lost or alone.",
+    name: "HZ Haider",
+    source: "Trustpilot · TR · January 2025",
+    text: "I had a rhinoplasty done at Medical Center Turkey, and the entire process was seamless! The team was professional, and the results exceeded my expectations. Highly recommend them!",
   },
   {
-    name: "Patient — Canada",
-    source: "Google Review · CA · Placeholder",
-    text: "The price difference compared to Canada was significant but the quality was exactly the same — actually better in terms of personal attention. My result is natural and exactly what I wanted. Highly recommend.",
+    name: "Simran Dhingra",
+    source: "Trustpilot · GB · August 2022",
+    text: "I had a wonderful experience with this company. My Case manager Can was amazing to work with and very kind and supportive. I travelled alone but he made me feel at ease through my duration in Istanbul. My rhinoplasty went smoothly and I am very happy with how my nose is looking now.",
   },
 ];
 

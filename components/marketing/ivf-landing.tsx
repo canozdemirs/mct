@@ -142,23 +142,7 @@ const recoveryTimeline = [
   { val: "12 Months", label: "Full aftercare support" },
 ];
 
-const testimonials = [
-  {
-    name: "Patient — United Kingdom",
-    source: "Google Review · GB",
-    text: "After two failed IVF cycles at home, we came to Medical Center Turkey as a last hope. The clinic was world-class, the embryologist kept us updated every single day, and our GO made us feel completely supported throughout. We are now expecting our first child. We cannot thank this team enough.",
-  },
-  {
-    name: "Patient — USA",
-    source: "Trustpilot · US",
-    text: "IVF in the US was simply unaffordable for us. Medical Center Turkey offered the same — honestly higher — standard of care at a fraction of the price. The monitoring was thorough, the laboratory was advanced, and the team was warm and professional throughout. We got our positive test 12 days after transfer.",
-  },
-  {
-    name: "Patient — Ireland",
-    source: "Google Review · IE",
-    text: "I was terrified about going through IVF abroad but this team removed every single worry. The coordinator was with me at every appointment, the doctor explained everything in detail, and I never felt alone. The whole experience was far better than our clinic back home.",
-  },
-];
+const testimonials: {name: string; source: string; text: string}[] = [];
 
 export default function IVFLanding() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
@@ -286,6 +270,7 @@ export default function IVFLanding() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 2. PACKAGES ─────────────────────────────────────────── */}
       <section style={{ background: "#fff", padding: "80px 20px" }}>
@@ -393,6 +378,7 @@ export default function IVFLanding() {
       </section>
 
       {/* ── 5. TESTIMONIALS ──────────────────────────────────────── */}
+      {testimonials.length > 0 && (
       <section style={{ background: "#F4F8FB", padding: "80px 20px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Patient Stories</div>
@@ -416,6 +402,7 @@ export default function IVFLanding() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 6. WHY MCT ───────────────────────────────────────────── */}
       <section className="relative py-20 px-5">

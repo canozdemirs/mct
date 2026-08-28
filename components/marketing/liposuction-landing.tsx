@@ -142,19 +142,14 @@ const recoveryTimeline = [
 
 const testimonials = [
   {
-    name: "Patient — United Kingdom",
-    source: "Google Review · GB",
-    text: "I had three areas treated and the results have been incredible. The whole experience was so much smoother than I expected — from the airport pickup to the hospital to the hotel, everything was taken care of. My coordinator was with me every step of the way.",
+    name: "Linda Ann Wilson",
+    source: "Trustpilot · GB · January 2025",
+    text: "I had liposuction, stomach muscle repair and abdominoplasty in early October 2024. Prior to surgery I was insulin-dependant type II diabetic with extremely high and erratic blood sugars. My mobility was very restricted. Thanks to the super surgeon and the terrific care team, I'm now being weaned off all medications; I have greatly improved mobility; and am no longer considered 'high risk' for stroke or heart-attack. Every aspect of the services provided from initial enquiry to post-operative care following my return to the UK, has been exemplary.",
   },
   {
-    name: "Patient — USA",
-    source: "Trustpilot · US",
-    text: "The price compared to the US was a fraction of the cost, but the quality and care were honestly better than I expected. The surgeon was meticulous, the hospital was modern, and the aftercare has been excellent. I am thrilled with my result.",
-  },
-  {
-    name: "Patient — Canada",
-    source: "Google Review · CA",
-    text: "I was nervous about going abroad for surgery but Medical Center Turkey made the whole process feel completely safe. My GO coordinator was amazing — she handled everything and was always reachable. Couldn't recommend them more highly.",
+    name: "David Rudd",
+    source: "Trustpilot · AU · October 2023",
+    text: "Having a client manager was excellent (Can 'John' Ozdemir). John took all the stress out of the process and was a reassuring presence while in a foreign environment. The surgeon was amazing — providing abdomen, flank and pubis liposuction that looks fantastic. I have a flat and natural looking stomach that I'm really happy with (even after only 4 weeks).",
   },
 ];
 
@@ -423,7 +418,7 @@ export default function LiposuctionLanding() {
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Patient Reviews</div>
           <h2 style={{ fontSize: "clamp(26px,4vw,42px)", fontWeight: 800, color: "#053980", lineHeight: 1.2, marginBottom: 14 }}>What Our Patients Say</h2>
           <p style={{ fontSize: 16, color: "#6B7C8D", maxWidth: 560, marginBottom: 52 }}>Unprompted reviews from patients who trusted us with their liposuction experience in Istanbul.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {testimonials.map((r) => (
               <div key={r.name} style={{ background: "#fff", border: "1px solid rgba(87,136,172,0.15)", borderRadius: 16, padding: 28 }}>
                 <div className="flex gap-0.5 mb-4">

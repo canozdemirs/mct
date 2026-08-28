@@ -143,23 +143,7 @@ const recoveryTimeline = [
   { val: "12 Months", label: "Full aftercare support" },
 ];
 
-const testimonials = [
-  {
-    name: "Patient — United Kingdom",
-    source: "Google Review · GB",
-    text: "I had been unhappy with my heavy upper eyelids for years. The team at Medical Center Turkey made the whole process completely stress-free. My GO was exceptional — from the airport to the clinic to discharge. The result has taken years off my appearance and I couldn't be happier.",
-  },
-  {
-    name: "Patient — USA",
-    source: "Trustpilot · US",
-    text: "Having all 4 eyelids done at once made total sense and the price in Turkey was a fraction of what I was quoted at home. The surgeon was meticulous and the hospital was immaculate. My coordinator was with me every step. The results are absolutely natural.",
-  },
-  {
-    name: "Patient — Canada",
-    source: "Google Review · CA",
-    text: "I was nervous about travelling abroad for surgery but this team removed every concern. The pre-op consultation was thorough, every question was answered, and my GO made me feel completely looked after. My eyes look refreshed and natural — exactly what I wanted.",
-  },
-];
+const testimonials: {name: string; source: string; text: string}[] = [];
 
 export default function BlepharoplastyLanding() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
@@ -283,6 +267,7 @@ export default function BlepharoplastyLanding() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 2. PACKAGES ─────────────────────────────────────────── */}
       <section style={{ background: "#fff", padding: "80px 20px" }}>
@@ -390,6 +375,7 @@ export default function BlepharoplastyLanding() {
       </section>
 
       {/* ── 5. TESTIMONIALS ──────────────────────────────────────── */}
+      {testimonials.length > 0 && (
       <section style={{ background: "#F4F8FB", padding: "80px 20px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Patient Reviews</div>
@@ -413,6 +399,7 @@ export default function BlepharoplastyLanding() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 6. WHY MCT ───────────────────────────────────────────── */}
       <section className="relative py-20 px-5">

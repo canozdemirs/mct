@@ -140,23 +140,7 @@ const recoveryTimeline = [
   { val: "12 Months", label: "Full aftercare support" },
 ];
 
-const testimonials = [
-  {
-    name: "Patient — United Kingdom",
-    source: "Google Review · GB",
-    text: "I had been self-conscious about this for years. The team at Medical Center Turkey made the whole process so smooth and professional. My coordinator was with me every step — from the airport to the hospital to discharge. The result has completely changed my confidence.",
-  },
-  {
-    name: "Patient — USA",
-    source: "Trustpilot · US",
-    text: "The price in the US was completely out of reach for me. Medical Center Turkey delivered the same — honestly better — standard of care at a fraction of the cost. The surgeon was thorough and patient, the hospital was modern, and I'm thrilled with my result.",
-  },
-  {
-    name: "Patient — Ireland",
-    source: "Google Review · IE",
-    text: "I was nervous about travelling abroad for surgery but this team made me feel completely safe. Every question was answered before I even asked. My GO was incredible throughout the entire stay. I'd recommend them without hesitation.",
-  },
-];
+const testimonials: {name: string; source: string; text: string}[] = [];
 
 export default function GynecomastiaLanding() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
@@ -278,6 +262,7 @@ export default function GynecomastiaLanding() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 2. PACKAGES ─────────────────────────────────────────── */}
       <section style={{ background: "#fff", padding: "80px 20px" }}>
@@ -415,6 +400,7 @@ export default function GynecomastiaLanding() {
       </section>
 
       {/* ── 5. TESTIMONIALS ──────────────────────────────────────── */}
+      {testimonials.length > 0 && (
       <section style={{ background: "#F4F8FB", padding: "80px 20px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Patient Reviews</div>
@@ -438,6 +424,7 @@ export default function GynecomastiaLanding() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 6. WHY MCT ───────────────────────────────────────────── */}
       <section className="relative py-20 px-5">

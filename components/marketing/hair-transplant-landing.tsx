@@ -163,19 +163,24 @@ const recoveryTimeline = [
 
 const testimonials = [
   {
-    name: "Sena Alkan",
-    source: "Google Review · GR · November 2025",
-    text: "My husband had his hair transplant at Medical Center Turkey and we are extremely happy with the whole experience. From the moment we arrived in Istanbul, everything was perfectly organized – the transfers, the hotel, and the clinic. The team was very professional, kind and attentive. They truly exceeded our expectations!",
+    name: "Manish Parmar",
+    source: "Trustpilot · CA · December 2024",
+    text: "My case manager Mr. Can (John) Ozdemir was very professional and detailed in our initial correspondence. He is very organized and exceeds all standards of customer satisfaction and comfort. I was not nervous at all traveling from Toronto to Istanbul because I was confident that John had everything under control; from booking all appointments, picking me up from the airport and informing me of what to expect in detail. He answered all of my questions many times to make sure I understood the whole process before and after the hair transplant. I will be going back in a year to complete my 2nd session with this great team.",
   },
   {
-    name: "Stylez",
-    source: "Google Review · CA · May 2024",
-    text: "I am currently on day 29 post hair transplant with Medical Center Turkey and could not be happier with the service. I could not have asked for a better experience from start to finish. I can honestly say they deserve 5 stars for the service they provide. I would highly recommend it — great people and with reasonable prices as well!",
+    name: "Veronica J. S",
+    source: "Trustpilot · NO · July 2022",
+    text: "We had a very positive experience with the exclusive package with Turkey medical center, from the beginning to the end of our stay in Istanbul. Can picked us up at the airport and took us back to the airport on the last day. The day my husband had the hair transplant, Can was with him the whole time and took him safe back to the hotel after. He took us sightseeing exciting places and restaurants with great food the day after the operation. My husband has felt safe from he booked to operation to now, when he is home and recovering.",
   },
   {
-    name: "S.H.",
-    source: "Trustpilot · ES · December 2024",
-    text: "Perfect procedure! All the procedures are perfectly organized. Pick-up from the airport, hotel check-in, preparation for a comfortable stay, postoperative care and explanation. The doctors and staff were kind and there was no anxiety. I'm looking forward to the growth of my hair in the future! Thank you.",
+    name: "Michael Mccloud",
+    source: "Trustpilot · US · June 2024",
+    text: "If you're looking for a professional clinic for hair transplants in Istanbul, this is the one. Can the patient rep is highly communicative and professional, shows up on time and escorts you through the whole process from start to finish. This is not a transplant mill — these are highly trained and skilled medical professionals. After the initial examination, the surgery is scheduled the next morning. And you're back in the hotel that afternoon with new hair. Can't recommend enough.",
+  },
+  {
+    name: "Glenn Thompson",
+    source: "Trustpilot · GB · February 2024",
+    text: "Would recommend to anyone wanting a hair transplant. You get your own local assistant who picks you up from the airport, takes you to hotel, takes you to clinic and back. My host (a fantastic chap called Can) is amazing and really puts so much effort into making sure you are okay. The value for money is amazing as the package includes hotel, transplant, additional treatments and all transport.",
   },
 ];
 
@@ -471,7 +476,7 @@ export default function HairTransplantLanding() {
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Patient Reviews</div>
           <h2 style={{ fontSize: "clamp(26px,4vw,42px)", fontWeight: 800, color: "#053980", lineHeight: 1.2, marginBottom: 14 }}>What Our Patients Say</h2>
           <p style={{ fontSize: 16, color: "#6B7C8D", maxWidth: 560, marginBottom: 52 }}>Unprompted reviews from patients who trusted us with their hair transplant experience in Istanbul.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {testimonials.map((r) => (
               <div key={r.name} style={{ background: "#F4F8FB", border: "1px solid rgba(87,136,172,0.15)", borderRadius: 16, padding: 28 }}>
                 <div className="flex gap-0.5 mb-4">

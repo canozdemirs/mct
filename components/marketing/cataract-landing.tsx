@@ -142,19 +142,9 @@ const recoveryTimeline = [
 
 const testimonials = [
   {
-    name: "Patient — United Kingdom",
-    source: "Google Review · GB",
-    text: "I had been struggling with cataracts for two years — the waiting list at home was endless. Medical Center Turkey arranged everything perfectly. The surgeon was outstanding, the hospital was modern and spotless, and I could see clearly the very next morning. My GO was with me at every step. Absolutely first-class.",
-  },
-  {
-    name: "Patient — USA",
-    source: "Trustpilot · US",
-    text: "The cost of cataract surgery in the US was simply out of reach for me. Medical Center Turkey delivered an exceptional standard of care at a fraction of the price. The lens consultation was thorough, the surgery was painless, and the coordinator made the whole experience completely stress-free.",
-  },
-  {
-    name: "Patient — Ireland",
-    source: "Google Review · IE",
-    text: "I was nervous about travelling abroad for eye surgery, but the team put every concern to rest immediately. The pre-op examination was the most thorough I've ever had. Surgery was quick and painless. I woke up the next day seeing the world clearly for the first time in years. Highly recommended.",
+    name: "ann Black",
+    source: "Trustpilot · IE · January 2023",
+    text: "My sister & i went for lens replacement, the staff at the hospital were very efficient and we were very happy with the care that we were given. Everything was so organized, our transport, at the hotel Dedeman, we had a lovely stay there the staff were very helpful and friendly and the food was delicious and reasonably priced. I would have no hesitation in recommending anyone travelling to Turkey for surgery.",
   },
 ];
 
@@ -393,7 +383,7 @@ export default function CataractLanding() {
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Patient Reviews</div>
           <h2 style={{ fontSize: "clamp(26px,4vw,42px)", fontWeight: 800, color: "#053980", lineHeight: 1.2, marginBottom: 14 }}>What Our Patients Say</h2>
           <p style={{ fontSize: 16, color: "#6B7C8D", maxWidth: 560, marginBottom: 52 }}>Unprompted reviews from patients who trusted us with their cataract surgery in Istanbul.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 max-w-xl mx-auto">
             {testimonials.map((r) => (
               <div key={r.name} style={{ background: "#fff", border: "1px solid rgba(87,136,172,0.15)", borderRadius: 16, padding: 28 }}>
                 <div className="flex gap-0.5 mb-4">

@@ -144,19 +144,9 @@ const recoveryTimeline = [
 
 const testimonials = [
   {
-    name: "Patient — USA",
-    source: "Google Review · US · Placeholder",
-    text: "I came to Istanbul for two implants and the experience was seamless from start to finish. The GO coordinator was with me every step of the way. The clinic was modern, the surgeon was excellent, and the price was a fraction of what I was quoted at home.",
-  },
-  {
-    name: "Patient — United Kingdom",
-    source: "Trustpilot · GB · Placeholder",
-    text: "I was nervous about getting dental implants abroad but Medical Center Turkey made it completely stress-free. The hotel, transfers, and hospital were all world-class. I left with a temporary crown and couldn't be happier.",
-  },
-  {
-    name: "Patient — Canada",
-    source: "Google Review · CA · Placeholder",
-    text: "The whole process — from my first WhatsApp message to landing back in Canada — was handled professionally. My coordinator answered every question immediately. The implant looks and feels perfect.",
+    name: "Beyza Türk",
+    source: "Trustpilot · TR · August 2022",
+    text: "I would not trust anybody else to touch me since I am the 1% who everything will go wrong for. The hospital stay was the most enjoyable experience I've ever had. The staff at Medical Center Turkey treated me like family and demanded nothing less than the finest. The staff was kind and pleasant when I arrived for my appointment, and they truly took the time to size me properly for my dental implants. My operation was a huge success, and the final appearance is gorgeous and natural-looking. The speed of my healing was also amazing. You may put your faith in Medical Center Turkey if you're considering getting dental implants.",
   },
 ];
 
@@ -433,7 +423,7 @@ export default function DentalImplantLanding() {
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Patient Reviews</div>
           <h2 style={{ fontSize: "clamp(26px,4vw,42px)", fontWeight: 800, color: "#053980", lineHeight: 1.2, marginBottom: 14 }}>What Our Patients Say</h2>
           <p style={{ fontSize: 16, color: "#6B7C8D", maxWidth: 560, marginBottom: 52 }}>Unprompted reviews from patients who trusted us with their dental implant experience in Istanbul.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 max-w-xl mx-auto">
             {testimonials.map((r) => (
               <div key={r.name} style={{ background: "#F4F8FB", border: "1px solid rgba(87,136,172,0.15)", borderRadius: 16, padding: 28 }}>
                 <div className="flex gap-0.5 mb-4">

@@ -139,23 +139,7 @@ const recoveryTimeline = [
   { val: "12 Months", label: "Full aftercare support" },
 ];
 
-const testimonials = [
-  {
-    name: "Patient — United Kingdom",
-    source: "Google Review · GB",
-    text: "I wore glasses for 25 years. After LASIK with Medical Center Turkey I woke up the next morning and could read the clock across the room. The whole process from inquiry to surgery was seamless — my GO was exceptional throughout. I genuinely cannot recommend them enough.",
-  },
-  {
-    name: "Patient — USA",
-    source: "Trustpilot · US",
-    text: "LASIK in the US was going to cost me over $4,000. Medical Center Turkey delivered the same standard — honestly better — at a fraction of the cost. The hospital was state-of-the-art, the surgeon was brilliant, and the aftercare was thorough. Best decision I've ever made.",
-  },
-  {
-    name: "Patient — Canada",
-    source: "Google Review · CA",
-    text: "I was nervous about having surgery abroad but this team completely removed every doubt. The pre-op examination was incredibly thorough, the surgeon took time to explain everything, and my coordinator was with me every step. My vision is now better than 20/20.",
-  },
-];
+const testimonials: {name: string; source: string; text: string}[] = [];
 
 export default function LasikLanding() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
@@ -278,6 +262,7 @@ export default function LasikLanding() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 2. PACKAGES ─────────────────────────────────────────── */}
       <section style={{ background: "#fff", padding: "80px 20px" }}>
@@ -385,6 +370,7 @@ export default function LasikLanding() {
       </section>
 
       {/* ── 5. TESTIMONIALS ──────────────────────────────────────── */}
+      {testimonials.length > 0 && (
       <section style={{ background: "#F4F8FB", padding: "80px 20px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Patient Reviews</div>
@@ -408,6 +394,7 @@ export default function LasikLanding() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 6. WHY MCT ───────────────────────────────────────────── */}
       <section className="relative py-20 px-5">

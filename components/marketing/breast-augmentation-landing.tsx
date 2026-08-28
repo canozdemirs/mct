@@ -140,23 +140,7 @@ const recoveryTimeline = [
   { val: "12 Months", label: "Full aftercare support" },
 ];
 
-const testimonials = [
-  {
-    name: "Patient — USA",
-    source: "Google Review · US · Placeholder",
-    text: "The entire experience exceeded every expectation. My coordinator was incredible — she handled everything from the airport to the hospital to the hotel. My surgeon was world-class and I am absolutely thrilled with my result.",
-  },
-  {
-    name: "Patient — United Kingdom",
-    source: "Trustpilot · GB · Placeholder",
-    text: "I was nervous about having surgery abroad but Medical Center Turkey made me feel completely safe and looked after. The hospital was modern, the surgeon was warm and professional, and the GO coordinator was with me every step of the way.",
-  },
-  {
-    name: "Patient — Canada",
-    source: "Google Review · CA · Placeholder",
-    text: "The price compared to Canada was remarkable — but the quality and care were even better than I expected. The implants were premium, the result is natural, and the aftercare has been exceptional. Couldn't recommend more highly.",
-  },
-];
+const testimonials: {name: string; source: string; text: string}[] = [];
 
 export default function BreastAugmentationLanding() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
@@ -279,6 +263,7 @@ export default function BreastAugmentationLanding() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 2. PACKAGES ─────────────────────────────────────────── */}
       <section style={{ background: "#fff", padding: "80px 20px" }}>
@@ -415,6 +400,7 @@ export default function BreastAugmentationLanding() {
       </section>
 
       {/* ── 6. TESTIMONIALS ──────────────────────────────────────── */}
+      {testimonials.length > 0 && (
       <section style={{ background: "#fff", padding: "80px 20px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Patient Reviews</div>
@@ -438,6 +424,7 @@ export default function BreastAugmentationLanding() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 7. WHY MCT ───────────────────────────────────────────── */}
       <section className="relative py-20 px-5">

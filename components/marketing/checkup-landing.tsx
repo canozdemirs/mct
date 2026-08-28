@@ -173,23 +173,7 @@ const journeySteps = [
   { num: "5", title: "Day 3 — Departure", desc: "Fly home with a complete digital copy of all your results in English and 12 months of online aftercare support from our team." },
 ];
 
-const testimonials = [
-  {
-    name: "Patient — United Kingdom",
-    source: "Google Review · GB",
-    text: "I had been putting off a proper health check for years. Medical Center Turkey made the whole experience completely effortless. My GO accompanied me to every single appointment — there was no confusion, no waiting, no stress. The hospital was world-class and I received my full results the same day, explained clearly in English.",
-  },
-  {
-    name: "Patient — USA",
-    source: "Trustpilot · US",
-    text: "The VIP package was extraordinary value. In the US, the same level of screening — MRI, gastroscopy, colonoscopy, cardiac stress test — would have cost me over $15,000. At Medical Center Turkey it was a fraction of that price, with a level of care and coordination that surpassed anything I've experienced at home.",
-  },
-  {
-    name: "Patient — Canada",
-    source: "Google Review · CA",
-    text: "My wife and I did the Plus check-up together. Everything was pre-arranged — we moved through our appointments simultaneously and were done by early afternoon. The results consultation was thorough and reassuring. We will absolutely be returning annually.",
-  },
-];
+const testimonials: {name: string; source: string; text: string}[] = [];
 
 type PackageData = {
   name: string;
@@ -408,6 +392,7 @@ export default function CheckUpLanding() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 2. PACKAGES ─────────────────────────────────────────── */}
       <section style={{ background: "#fff", padding: "80px 20px" }}>
@@ -490,6 +475,7 @@ export default function CheckUpLanding() {
       </section>
 
       {/* ── 5. TESTIMONIALS ──────────────────────────────────────── */}
+      {testimonials.length > 0 && (
       <section style={{ background: "#F4F8FB", padding: "80px 20px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Patient Reviews</div>
@@ -511,6 +497,7 @@ export default function CheckUpLanding() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 6. WHY MCT ───────────────────────────────────────────── */}
       <section className="relative py-20 px-5">
