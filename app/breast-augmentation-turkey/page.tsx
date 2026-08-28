@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/marketing/nav";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import BreastAugmentationLanding from "@/components/marketing/breast-augmentation-landing";
-import { Breadcrumb } from "@/components/marketing/breadcrumb";
 import {
   generateFAQSchema,
   generateProductsSchema,
@@ -58,7 +57,6 @@ export default function BreastAugmentationPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <Nav />
-      <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Packages", href: "/#packages" }, { label: "Breast Augmentation Turkey" }]} />
       <main>
         <BreastAugmentationLanding />
       </main>

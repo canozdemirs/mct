@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/marketing/nav";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import AllOnFourLanding from "@/components/marketing/all-on-4-landing";
-import { Breadcrumb } from "@/components/marketing/breadcrumb";
 import {
   generateFAQSchema,
   generateProductsSchema,
@@ -58,7 +57,6 @@ export default function AllOnFourPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <Nav />
-      <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Packages", href: "/#packages" }, { label: "All-on-4 Dental Implants Turkey" }]} />
       <main>
         <AllOnFourLanding />
       </main>
