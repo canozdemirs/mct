@@ -262,7 +262,6 @@ export default function GynecomastiaLanding() {
           </div>
         </div>
       </section>
-      )}
 
       {/* ── 2. PACKAGES ─────────────────────────────────────────── */}
       <section style={{ background: "#fff", padding: "80px 20px" }}>

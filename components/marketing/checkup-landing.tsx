@@ -392,7 +392,6 @@ export default function CheckUpLanding() {
           </div>
         </div>
       </section>
-      )}
 
       {/* ── 2. PACKAGES ─────────────────────────────────────────── */}
       <section style={{ background: "#fff", padding: "80px 20px" }}>
