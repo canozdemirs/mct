@@ -9,6 +9,7 @@ import { HospitalNetwork } from "@/components/marketing/hospital-network";
 import { ContactBar } from "@/components/marketing/contact-bar";
 import { Footer } from "@/components/marketing/footer";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
+import { generateOrganizationSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: "Medical Center Turkey — International Patient Center | Istanbul",
@@ -21,9 +22,12 @@ export const metadata: Metadata = {
   },
 };
 
+const organizationSchema = generateOrganizationSchema();
+
 export default function HomePage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
       <Nav />
       <main>
         <Hero />
