@@ -123,7 +123,7 @@ const whyMCT = [
   { icon: "★", title: "Zero Question Marks", desc: "We've heard every question. We have the answers before you even ask them." },
   { icon: "⚡", title: "Premium Titanium Implants", desc: "We use only globally recognised titanium implant systems — the same brands used in the UK and USA." },
   { icon: "📄", title: "Warranty Certificate", desc: "Official written guarantee for your implant — complete peace of mind." },
-  { icon: "🛡️", title: "Ministry of Health Approved", desc: "Exclusively partnered with Ministry of Health approved hospitals. No shortcuts. No compromises." },
+  { icon: "🛡️", title: "Ministry of Health Authorized", desc: "We operate under official authorization from the Turkish Ministry of Health. No shortcuts. No compromises." },
 ];
 
 const journeySteps = [
@@ -255,7 +255,7 @@ export default function DentalImplantLanding() {
           {/* Trust badges */}
           <div className="flex justify-center flex-wrap gap-3 mt-10">
             {[
-              { label: "Ministry of Health Certified" },
+              { label: "Ministry of Health Authorized" },
               { label: "TÜRSAB Licensed" },
               { label: "★ 4.9 Trustpilot" },
             ].map((b) => (

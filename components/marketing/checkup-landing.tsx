@@ -389,7 +389,7 @@ export default function CheckUpLanding() {
           </div>
 
           <div className="flex justify-center flex-wrap gap-3 mt-10">
-            {["Ministry of Health Certified", "TÜRSAB Licensed", "★ 4.9 Trustpilot"].map((b) => (
+            {["Ministry of Health Authorized", "TÜRSAB Licensed", "★ 4.9 Trustpilot"].map((b) => (
               <div key={b} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.25)", borderRadius: 100, padding: "7px 16px" }}>
                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6.5" fill="#A3C6CF" /><path d="M3.5 6.5L5.5 8.5L9.5 4.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                 <span style={{ fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.90)", letterSpacing: 0.3 }}>{b}</span>
@@ -514,7 +514,7 @@ export default function CheckUpLanding() {
               { icon: "★", title: "Zero Question Marks", desc: "We've heard every question. We have the answers before you even ask them." },
               { icon: "📋", title: "Results in English", desc: "All reports, imaging, and specialist consultations are provided in English. A senior physician reviews findings with you before departure." },
               { icon: "⚡", title: "All in One Day", desc: "Standard and Plus check-ups are fully completed in a single day — no multiple trips, no weeks of waiting for results." },
-              { icon: "🛡️", title: "Ministry of Health Approved", desc: "Exclusively partnered with Ministry of Health approved hospitals. No shortcuts. No compromises." },
+              { icon: "🛡️", title: "Ministry of Health Authorized", desc: "We operate under official authorization from the Turkish Ministry of Health. No shortcuts. No compromises." },
             ].map((item) => (
               <div key={item.title} style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 12, padding: "24px 22px" }}>
                 <div style={{ fontSize: 28, marginBottom: 12 }}>{item.icon}</div>

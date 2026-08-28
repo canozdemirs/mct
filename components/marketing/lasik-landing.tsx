@@ -121,7 +121,7 @@ const whyMCT = [
   { icon: "★", title: "Zero Question Marks", desc: "We've heard every question. We have the answers before you even ask them." },
   { icon: "👁️", title: "Latest Laser Technology", desc: "Wavefront-guided laser technology for the most precise, personalised correction of your unique prescription." },
   { icon: "⚡", title: "15-Minute Procedure", desc: "The laser treatment itself takes approximately 15 minutes for both eyes — with most patients seeing clearly within hours." },
-  { icon: "🛡️", title: "Ministry of Health Approved", desc: "Exclusively partnered with Ministry of Health approved hospitals. No shortcuts. No compromises." },
+  { icon: "🛡️", title: "Ministry of Health Authorized", desc: "We operate under official authorization from the Turkish Ministry of Health. No shortcuts. No compromises." },
 ];
 
 const journeySteps = [
@@ -248,7 +248,7 @@ export default function LasikLanding() {
 
           <div className="flex justify-center flex-wrap gap-3 mt-10">
             {[
-              { label: "Ministry of Health Certified" },
+              { label: "Ministry of Health Authorized" },
               { label: "TÜRSAB Licensed" },
               { label: "★ 4.9 Trustpilot" },
             ].map((b) => (

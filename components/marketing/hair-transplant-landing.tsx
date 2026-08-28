@@ -143,7 +143,7 @@ const whyMCT = [
   { icon: "★", title: "Zero Question Marks", desc: "We answer every concern before you board the plane. We've heard every question — and we have the answers." },
   { icon: "⚡", title: "Fast Recovery", desc: "Back to daily life in 2 days. Most patients don't miss more than a long weekend." },
   { icon: "📄", title: "Warranty Certificate", desc: "Every hair transplant comes with an official warranty certificate — your written guarantee for peace of mind." },
-  { icon: "🛡️", title: "Ministry of Health Approved", desc: "We work exclusively with Turkish Ministry of Health approved hospitals. No shortcuts. No compromises." },
+  { icon: "🛡️", title: "Ministry of Health Authorized", desc: "We operate under official authorization from the Turkish Ministry of Health. No shortcuts. No compromises." },
 ];
 
 const journeySteps = [
@@ -283,7 +283,7 @@ export default function HairTransplantLanding() {
           {/* Trust badges */}
           <div className="flex justify-center flex-wrap gap-3 mt-10">
             {[
-              { label: "Ministry of Health Certified" },
+              { label: "Ministry of Health Authorized" },
               { label: "TÜRSAB Licensed" },
               { label: "★ 4.9 Trustpilot" },
             ].map((b) => (

@@ -122,7 +122,7 @@ const whyMCT = [
   { icon: "★", title: "Zero Question Marks", desc: "We've heard every question. We have the answers before you even ask them." },
   { icon: "🔬", title: "Advanced Embryology Lab", desc: "State-of-the-art embryology laboratory with time-lapse incubators and PGT-A genetic testing available." },
   { icon: "💊", title: "Medication Protocol Included", desc: "Stimulation monitoring and luteal phase support medication are included. No surprise costs mid-cycle." },
-  { icon: "🛡️", title: "Ministry of Health Approved", desc: "Exclusively partnered with Ministry of Health approved fertility clinics. No shortcuts. No compromises." },
+  { icon: "🛡️", title: "Ministry of Health Authorized", desc: "Exclusively partnered with Ministry of Health approved fertility clinics. No shortcuts. No compromises." },
 ];
 
 const journeySteps = [
@@ -256,7 +256,7 @@ export default function IVFLanding() {
 
           <div className="flex justify-center flex-wrap gap-3 mt-10">
             {[
-              { label: "Ministry of Health Certified" },
+              { label: "Ministry of Health Authorized" },
               { label: "TÜRSAB Licensed" },
               { label: "★ 4.9 Trustpilot" },
             ].map((b) => (

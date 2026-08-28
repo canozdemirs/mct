@@ -13,8 +13,8 @@ const signals = [
   },
   {
     icon: ShieldCheck,
-    stat: "Certified Partners",
-    label: "Ministry of Health certified partner hospitals only",
+    stat: "MoH Authorized",
+    label: "We operate under official authorization from the Turkish Ministry of Health.",
   },
   {
     icon: Layers,

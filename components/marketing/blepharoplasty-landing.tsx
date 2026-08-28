@@ -124,7 +124,7 @@ const whyMCT = [
   { icon: "★", title: "Zero Question Marks", desc: "We've heard every question. We have the answers before you even ask them." },
   { icon: "👁️", title: "Upper & Lower Combined", desc: "All 4 eyelids treated in a single procedure — one anaesthesia, one recovery, one trip to Istanbul." },
   { icon: "⚡", title: "Hidden Incisions", desc: "Incisions placed within natural eyelid folds — scars become virtually invisible within months." },
-  { icon: "🛡️", title: "Ministry of Health Approved", desc: "Exclusively partnered with Ministry of Health approved hospitals. No shortcuts. No compromises." },
+  { icon: "🛡️", title: "Ministry of Health Authorized", desc: "We operate under official authorization from the Turkish Ministry of Health. No shortcuts. No compromises." },
 ];
 
 const journeySteps = [
@@ -253,7 +253,7 @@ export default function BlepharoplastyLanding() {
 
           <div className="flex justify-center flex-wrap gap-3 mt-10">
             {[
-              { label: "Ministry of Health Certified" },
+              { label: "Ministry of Health Authorized" },
               { label: "TÜRSAB Licensed" },
               { label: "★ 4.9 Trustpilot" },
             ].map((b) => (

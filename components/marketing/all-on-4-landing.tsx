@@ -119,7 +119,7 @@ const whyMCT = [
   { icon: "★", title: "Zero Question Marks", desc: "We've heard every question. We have the answers before you even ask them." },
   { icon: "⚡", title: "Fixed Teeth in Days, Not Months", desc: "Same-day fixed temporary prosthesis with the All-on-4 protocol. You leave with teeth." },
   { icon: "📄", title: "Warranty Certificate", desc: "Official written guarantee for your All-on-4 procedure — complete peace of mind." },
-  { icon: "🛡️", title: "Ministry of Health Approved", desc: "Exclusively partnered with Ministry of Health approved hospitals. No shortcuts. No compromises." },
+  { icon: "🛡️", title: "Ministry of Health Authorized", desc: "We operate under official authorization from the Turkish Ministry of Health. No shortcuts. No compromises." },
 ];
 
 const journeySteps = [
@@ -249,7 +249,7 @@ export default function AllOnFourLanding() {
           {/* Trust badges */}
           <div className="flex justify-center flex-wrap gap-3 mt-10">
             {[
-              { label: "Ministry of Health Certified" },
+              { label: "Ministry of Health Authorized" },
               { label: "TÜRSAB Licensed" },
               { label: "★ 4.9 Trustpilot" },
             ].map((b) => (
