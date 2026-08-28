@@ -335,6 +335,19 @@ export default function LiposuctionLanding() {
           <div style={{ background: "#F4F8FB", border: "1px solid rgba(87,136,172,0.25)", borderRadius: 10, padding: "16px 24px", fontSize: 14, color: "#6B7C8D", marginTop: 28, textAlign: "center" }}>
             Final treatment suitability is determined by your surgeon following pre-operative examination. Credit card payments carry a 10% surcharge.
           </div>
+
+
+          <div style={{ textAlign: "center", marginTop: 20 }}>
+            <a
+              href="/#packages"
+              style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#fff", border: "1.5px solid rgba(87,136,172,0.35)", color: "#5788AC", borderRadius: 100, padding: "11px 26px", fontSize: 14, fontWeight: 600, textDecoration: "none", transition: "all .2s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "#053980"; (e.currentTarget as HTMLAnchorElement).style.color = "#053980"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(87,136,172,0.35)"; (e.currentTarget as HTMLAnchorElement).style.color = "#5788AC"; }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+              View All Treatment Packages
+            </a>
+          </div>
         </div>
       </section>
 
