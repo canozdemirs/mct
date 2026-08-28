@@ -30,9 +30,7 @@ const packages = [
 ];
 
 const testimonials = [
-  { name: "Patient — USA", text: "I came to Istanbul for two implants and the experience was seamless from start to finish. The GO coordinator was with me every step of the way. The clinic was modern, the surgeon was excellent, and the price was a fraction of what I was quoted at home.", rating: 5 },
-  { name: "Patient — United Kingdom", text: "I was nervous about getting dental implants abroad but Medical Center Turkey made it completely stress-free. The hotel, transfers, and hospital were all world-class. I left with a temporary crown and couldn't be happier.", rating: 5 },
-  { name: "Patient — Canada", text: "The whole process — from my first WhatsApp message to landing back in Canada — was handled professionally. My coordinator answered every question immediately. The implant looks and feels perfect.", rating: 5 },
+  { name: "Beyza Türk", text: "I would not trust anybody else to touch me since I am the 1% who everything will go wrong for. The hospital stay was the most enjoyable experience I've ever had. The staff at Medical Center Turkey treated me like family and demanded nothing less than the finest. The staff was kind and pleasant when I arrived for my appointment, and they truly took the time to size me properly for my dental implants. My operation was a huge success, and the final appearance is gorgeous and natural-looking. The speed of my healing was also amazing. You may put your faith in Medical Center Turkey if you're considering getting dental implants.", rating: 5 },
 ];
 
 const faqSchema = generateFAQSchema(faqs);

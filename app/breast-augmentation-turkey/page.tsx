@@ -5,7 +5,6 @@ import BreastAugmentationLanding from "@/components/marketing/breast-augmentatio
 import {
   generateFAQSchema,
   generateProductsSchema,
-  generateReviewSchema,
   generateBreadcrumbSchema,
 } from "@/lib/schema";
 
@@ -29,15 +28,8 @@ const packages = [
   { name: "Breast Augmentation Executive Package", price: "6200", description: "Full VIP breast augmentation experience — all Hassle-Free inclusions plus 5-star hotel, Istanbul city tour, fine dining and priority scheduling.", url: PAGE_URL, currency: "EUR" as const },
 ];
 
-const testimonials = [
-  { name: "Patient — USA", text: "The entire experience exceeded every expectation. My coordinator was incredible — she handled everything from the airport to the hospital to the hotel. My surgeon was world-class and I am absolutely thrilled with my result.", rating: 5 },
-  { name: "Patient — United Kingdom", text: "I was nervous about having surgery abroad but Medical Center Turkey made me feel completely safe and looked after. The hospital was modern, the surgeon was warm and professional, and the GO coordinator was with me every step of the way.", rating: 5 },
-  { name: "Patient — Canada", text: "The price compared to Canada was remarkable — but the quality and care were even better than I expected. The implants were premium, the result is natural, and the aftercare has been exceptional. Couldn't recommend more highly.", rating: 5 },
-];
-
 const faqSchema = generateFAQSchema(faqs);
 const productsSchema = generateProductsSchema(packages);
-const reviewSchema = generateReviewSchema("Breast Augmentation Turkey — Medical Center Turkey", testimonials);
 const breadcrumbSchema = generateBreadcrumbSchema([
   { name: "Home", url: "https://medicalcenterturkey.com" },
   { name: "Breast Augmentation Turkey", url: PAGE_URL },
@@ -54,7 +46,6 @@ export default function BreastAugmentationPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productsSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <Nav />
       <main>

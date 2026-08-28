@@ -142,7 +142,7 @@ const recoveryTimeline = [
 
 const testimonials = [
   {
-    name: "ann Black",
+    name: "Ann Black",
     source: "Trustpilot · IE · January 2023",
     text: "My sister & i went for lens replacement, the staff at the hospital were very efficient and we were very happy with the care that we were given. Everything was so organized, our transport, at the hotel Dedeman, we had a lovely stay there the staff were very helpful and friendly and the food was delicious and reasonably priced. I would have no hesitation in recommending anyone travelling to Turkey for surgery.",
   },

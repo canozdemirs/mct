@@ -30,9 +30,7 @@ const packages = [
 ];
 
 const testimonials = [
-  { name: "Patient — United Kingdom", text: "I had been struggling with cataracts for two years — the waiting list at home was endless. Medical Center Turkey arranged everything perfectly. The surgeon was outstanding, the hospital was modern and spotless, and I could see clearly the very next morning. My GO was with me at every step. Absolutely first-class.", rating: 5 },
-  { name: "Patient — USA", text: "The cost of cataract surgery in the US was simply out of reach for me. Medical Center Turkey delivered an exceptional standard of care at a fraction of the price. The lens consultation was thorough, the surgery was painless, and the coordinator made the whole experience completely stress-free.", rating: 5 },
-  { name: "Patient — Ireland", text: "I was nervous about travelling abroad for eye surgery, but the team put every concern to rest immediately. The pre-op examination was the most thorough I've ever had. Surgery was quick and painless. I woke up the next day seeing the world clearly for the first time in years. Highly recommended.", rating: 5 },
+  { name: "Ann Black", text: "My sister & i went for lens replacement, the staff at the hospital were very efficient and we were very happy with the care that we were given. Everything was so organized, our transport, at the hotel Dedeman, we had a lovely stay there the staff were very helpful and friendly and the food was delicious and reasonably priced. I would have no hesitation in recommending anyone travelling to Turkey for surgery.", rating: 5 },
 ];
 
 const faqSchema = generateFAQSchema(faqs);

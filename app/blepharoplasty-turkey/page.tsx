@@ -5,7 +5,6 @@ import BlepharoplastyLanding from "@/components/marketing/blepharoplasty-landing
 import {
   generateFAQSchema,
   generateProductsSchema,
-  generateReviewSchema,
   generateBreadcrumbSchema,
 } from "@/lib/schema";
 
@@ -29,15 +28,8 @@ const packages = [
   { name: "Blepharoplasty Executive Package", price: "3200", description: "Full VIP blepharoplasty experience — all 4 eyelids plus 5-star hotel, Istanbul city tour, fine dining and priority scheduling.", url: PAGE_URL, currency: "EUR" as const },
 ];
 
-const testimonials = [
-  { name: "Patient — United Kingdom", text: "I had been unhappy with my heavy upper eyelids for years. The team at Medical Center Turkey made the whole process completely stress-free. My GO was exceptional — from the airport to the clinic to discharge. The result has taken years off my appearance and I couldn't be happier.", rating: 5 },
-  { name: "Patient — USA", text: "Having all 4 eyelids done at once made total sense and the price in Turkey was a fraction of what I was quoted at home. The surgeon was meticulous and the hospital was immaculate. My coordinator was with me every step. The results are absolutely natural.", rating: 5 },
-  { name: "Patient — Canada", text: "I was nervous about travelling abroad for surgery but this team removed every concern. The pre-op consultation was thorough, every question was answered, and my GO made me feel completely looked after. My eyes look refreshed and natural — exactly what I wanted.", rating: 5 },
-];
-
 const faqSchema = generateFAQSchema(faqs);
 const productsSchema = generateProductsSchema(packages);
-const reviewSchema = generateReviewSchema("Blepharoplasty Turkey — Medical Center Turkey", testimonials);
 const breadcrumbSchema = generateBreadcrumbSchema([
   { name: "Home", url: "https://medicalcenterturkey.com" },
   { name: "Blepharoplasty Turkey", url: PAGE_URL },
@@ -54,7 +46,6 @@ export default function BlepharoplastyPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productsSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <Nav />
       <main>

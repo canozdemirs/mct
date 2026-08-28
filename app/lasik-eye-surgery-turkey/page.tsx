@@ -5,7 +5,6 @@ import LasikLanding from "@/components/marketing/lasik-landing";
 import {
   generateFAQSchema,
   generateProductsSchema,
-  generateReviewSchema,
   generateBreadcrumbSchema,
 } from "@/lib/schema";
 
@@ -29,15 +28,8 @@ const packages = [
   { name: "LASIK Eye Surgery Executive Package", price: "2900", description: "Full VIP LASIK experience — all Hassle-Free inclusions plus 5-star hotel, Istanbul city tour, fine dining and priority scheduling.", url: PAGE_URL, currency: "EUR" as const },
 ];
 
-const testimonials = [
-  { name: "Patient — United Kingdom", text: "I wore glasses for 25 years. After LASIK with Medical Center Turkey I woke up the next morning and could read the clock across the room. The whole process from inquiry to surgery was seamless — my GO was exceptional throughout. I genuinely cannot recommend them enough.", rating: 5 },
-  { name: "Patient — USA", text: "LASIK in the US was going to cost me over $4,000. Medical Center Turkey delivered the same standard — honestly better — at a fraction of the cost. The hospital was state-of-the-art, the surgeon was brilliant, and the aftercare was thorough. Best decision I've ever made.", rating: 5 },
-  { name: "Patient — Canada", text: "I was nervous about having surgery abroad but this team completely removed every doubt. The pre-op examination was incredibly thorough, the surgeon took time to explain everything, and my coordinator was with me every step. My vision is now better than 20/20.", rating: 5 },
-];
-
 const faqSchema = generateFAQSchema(faqs);
 const productsSchema = generateProductsSchema(packages);
-const reviewSchema = generateReviewSchema("LASIK Eye Surgery Turkey — Medical Center Turkey", testimonials);
 const breadcrumbSchema = generateBreadcrumbSchema([
   { name: "Home", url: "https://medicalcenterturkey.com" },
   { name: "LASIK Eye Surgery Turkey", url: PAGE_URL },
@@ -54,7 +46,6 @@ export default function LasikPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productsSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <Nav />
       <main>

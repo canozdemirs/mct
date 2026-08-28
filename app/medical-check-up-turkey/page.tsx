@@ -5,7 +5,6 @@ import CheckUpLanding from "@/components/marketing/checkup-landing";
 import {
   generateFAQSchema,
   generateProductsSchema,
-  generateReviewSchema,
   generateBreadcrumbSchema,
 } from "@/lib/schema";
 
@@ -34,15 +33,8 @@ const packages = [
   { name: "Pediatric Medical Check-Up", price: "550", description: "Children's comprehensive health assessment (ages 3–17): pediatrics, ENT and eye specialist consultations, ECG, abdominal ultrasound, blood panel covering growth, immunity, thyroid and nutritional markers.", url: PAGE_URL, currency: "USD" as const },
 ];
 
-const testimonials = [
-  { name: "Patient — United Kingdom", text: "I had been putting off a proper health check for years. Medical Center Turkey made the whole experience completely effortless. My GO accompanied me to every single appointment — there was no confusion, no waiting, no stress. The hospital was world-class and I received my full results the same day, explained clearly in English.", rating: 5 },
-  { name: "Patient — USA", text: "The VIP package was extraordinary value. In the US, the same level of screening — MRI, gastroscopy, colonoscopy, cardiac stress test — would have cost me over $15,000. At Medical Center Turkey it was a fraction of that price, with a level of care and coordination that surpassed anything I've experienced at home.", rating: 5 },
-  { name: "Patient — Canada", text: "My wife and I did the Plus check-up together. Everything was pre-arranged — we moved through our appointments simultaneously and were done by early afternoon. The results consultation was thorough and reassuring. We will absolutely be returning annually.", rating: 5 },
-];
-
 const faqSchema = generateFAQSchema(faqs);
 const productsSchema = generateProductsSchema(packages);
-const reviewSchema = generateReviewSchema("Medical Check-Up Turkey — Medical Center Turkey", testimonials);
 const breadcrumbSchema = generateBreadcrumbSchema([
   { name: "Home", url: "https://medicalcenterturkey.com" },
   { name: "Medical Check-Up Turkey", url: PAGE_URL },
@@ -59,7 +51,6 @@ export default function CheckUpPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productsSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <Nav />
       <main>

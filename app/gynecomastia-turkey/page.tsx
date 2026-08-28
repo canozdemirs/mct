@@ -5,7 +5,6 @@ import GynecomastiaLanding from "@/components/marketing/gynecomastia-landing";
 import {
   generateFAQSchema,
   generateProductsSchema,
-  generateReviewSchema,
   generateBreadcrumbSchema,
 } from "@/lib/schema";
 
@@ -29,15 +28,8 @@ const packages = [
   { name: "Gynecomastia Executive Package", price: "3800", description: "Full VIP gynecomastia experience — all Hassle-Free inclusions plus 5-star hotel, Istanbul city tour, fine dining and priority scheduling.", url: PAGE_URL, currency: "EUR" as const },
 ];
 
-const testimonials = [
-  { name: "Patient — United Kingdom", text: "I had been self-conscious about this for years. The team at Medical Center Turkey made the whole process so smooth and professional. My coordinator was with me every step — from the airport to the hospital to discharge. The result has completely changed my confidence.", rating: 5 },
-  { name: "Patient — USA", text: "The price in the US was completely out of reach for me. Medical Center Turkey delivered the same — honestly better — standard of care at a fraction of the cost. The surgeon was thorough and patient, the hospital was modern, and I'm thrilled with my result.", rating: 5 },
-  { name: "Patient — Ireland", text: "I was nervous about travelling abroad for surgery but this team made me feel completely safe. Every question was answered before I even asked. My GO was incredible throughout the entire stay. I'd recommend them without hesitation.", rating: 5 },
-];
-
 const faqSchema = generateFAQSchema(faqs);
 const productsSchema = generateProductsSchema(packages);
-const reviewSchema = generateReviewSchema("Gynecomastia Surgery Turkey — Medical Center Turkey", testimonials);
 const breadcrumbSchema = generateBreadcrumbSchema([
   { name: "Home", url: "https://medicalcenterturkey.com" },
   { name: "Gynecomastia Turkey", url: PAGE_URL },
@@ -54,7 +46,6 @@ export default function GynecomastiaPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productsSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <Nav />
       <main>

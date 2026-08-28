@@ -5,7 +5,6 @@ import IVFLanding from "@/components/marketing/ivf-landing";
 import {
   generateFAQSchema,
   generateProductsSchema,
-  generateReviewSchema,
   generateBreadcrumbSchema,
 } from "@/lib/schema";
 
@@ -29,15 +28,8 @@ const packages = [
   { name: "IVF Executive Package", price: "5200", description: "Full VIP IVF experience — all Hassle-Free inclusions plus 5-star hotel, Istanbul city tour, fine dining and priority scheduling.", url: PAGE_URL, currency: "EUR" as const },
 ];
 
-const testimonials = [
-  { name: "Patient — United Kingdom", text: "After two failed IVF cycles at home, we came to Medical Center Turkey as a last hope. The clinic was world-class, the embryologist kept us updated every single day, and our GO made us feel completely supported throughout. We are now expecting our first child. We cannot thank this team enough.", rating: 5 },
-  { name: "Patient — USA", text: "IVF in the US was simply unaffordable for us. Medical Center Turkey offered the same — honestly higher — standard of care at a fraction of the price. The monitoring was thorough, the laboratory was advanced, and the team was warm and professional throughout. We got our positive test 12 days after transfer.", rating: 5 },
-  { name: "Patient — Ireland", text: "I was terrified about going through IVF abroad but this team removed every single worry. The coordinator was with me at every appointment, the doctor explained everything in detail, and I never felt alone. The whole experience was far better than our clinic back home.", rating: 5 },
-];
-
 const faqSchema = generateFAQSchema(faqs);
 const productsSchema = generateProductsSchema(packages);
-const reviewSchema = generateReviewSchema("IVF Treatment Turkey — Medical Center Turkey", testimonials);
 const breadcrumbSchema = generateBreadcrumbSchema([
   { name: "Home", url: "https://medicalcenterturkey.com" },
   { name: "IVF Treatment Turkey", url: PAGE_URL },
@@ -54,7 +46,6 @@ export default function IVFPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productsSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <Nav />
       <main>

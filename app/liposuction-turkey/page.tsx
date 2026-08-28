@@ -30,9 +30,8 @@ const packages = [
 ];
 
 const testimonials = [
-  { name: "Patient — United Kingdom", text: "I had three areas treated and the results have been incredible. The whole experience was so much smoother than I expected — from the airport pickup to the hospital to the hotel, everything was taken care of. My coordinator was with me every step of the way.", rating: 5 },
-  { name: "Patient — USA", text: "The price compared to the US was a fraction of the cost, but the quality and care were honestly better than I expected. The surgeon was meticulous, the hospital was modern, and the aftercare has been excellent. I am thrilled with my result.", rating: 5 },
-  { name: "Patient — Canada", text: "I was nervous about going abroad for surgery but Medical Center Turkey made the whole process feel completely safe. My GO coordinator was amazing — she handled everything and was always reachable. Couldn't recommend them more highly.", rating: 5 },
+  { name: "Linda Ann Wilson", text: "I had liposuction, stomach muscle repair and abdominoplasty in early October 2024. Prior to surgery I was insulin-dependant type II diabetic with extremely high and erratic blood sugars. My mobility was very restricted. Thanks to the super surgeon and the terrific care team, I'm now being weaned off all medications; I have greatly improved mobility; and am no longer considered 'high risk' for stroke or heart-attack. Every aspect of the services provided from initial enquiry to post-operative care following my return to the UK, has been exemplary.", rating: 5 },
+  { name: "David Rudd", text: "Having a client manager was excellent (Can 'John' Ozdemir). John took all the stress out of the process and was a reassuring presence while in a foreign environment. The surgeon was amazing — providing abdomen, flank and pubis liposuction that looks fantastic. I have a flat and natural looking stomach that I'm really happy with (even after only 4 weeks).", rating: 5 },
 ];
 
 const faqSchema = generateFAQSchema(faqs);
