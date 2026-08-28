@@ -3,8 +3,8 @@ import { Clock, Globe, ShieldCheck, Layers } from "lucide-react";
 const signals = [
   {
     icon: Clock,
-    stat: "Since 2018",
-    label: "7+ years coordinating international health tourism",
+    stat: "7+ Years",
+    label: "Coordinating international health tourism worldwide",
   },
   {
     icon: Globe,

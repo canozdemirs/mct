@@ -127,8 +127,8 @@ const trustBlocks = [
   },
   {
     icon: "📋",
-    title: "Since 2018. 5,000+ Patients.",
-    desc: "Serving international patients from the USA, UK, and Europe since 2018. Experience you can trust.",
+    title: "5,000+ International Patients.",
+    desc: "Serving international patients from the USA, UK, and Europe. Experience you can trust.",
   },
   {
     icon: "🛡️",
@@ -140,7 +140,7 @@ const trustBlocks = [
 const whyMCT = [
   { icon: "✓", title: "Truly Hassle-Free", desc: "Every detail handled — no research, no coordination, no stress on your end." },
   { icon: "🎧", title: "Dedicated GO Coordinator", desc: "Your personal 'Gentle Organiser' from airport arrival to departure. You are never alone." },
-  { icon: "★", title: "Zero Question Marks", desc: "We've heard every question. Since 2018 we have the answers before you even ask them." },
+  { icon: "★", title: "Zero Question Marks", desc: "We've heard every question. We have the answers before you even ask them." },
   { icon: "⚡", title: "Combined Technique", desc: "Liposuction and gland removal performed together in a single procedure for complete, lasting results." },
   { icon: "👕", title: "Compression Vest Included", desc: "Your post-operative compression vest is always included — fitted and explained before you leave the hospital." },
   { icon: "🛡️", title: "Ministry of Health Approved", desc: "Exclusively partnered with Ministry of Health approved hospitals. No shortcuts. No compromises." },
@@ -231,7 +231,7 @@ export default function GynecomastiaLanding() {
         <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(5,57,128,0.45) 0%, rgba(5,57,128,0.65) 55%, rgba(3,30,70,0.95) 100%)" }} />
         <div className="relative max-w-4xl mx-auto w-full">
           <div className="inline-block mb-7" style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.35)", color: "#fff", fontSize: 12, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase", padding: "8px 18px", borderRadius: 100 }}>
-            Istanbul&apos;s Complete Gynecomastia Experience · Since 2018
+            Istanbul&apos;s Complete Gynecomastia Experience
           </div>
           <h1 className="font-extrabold leading-tight text-white" style={{ fontSize: "clamp(34px, 6vw, 64px)", lineHeight: 1.1, maxWidth: 820, margin: "0 auto 24px" }}>
             Gynecomastia Surgery <span style={{ color: "#A3C6CF" }}>Turkey.</span><br />
@@ -253,10 +253,6 @@ export default function GynecomastiaLanding() {
           </div>
 
           <div className="flex justify-center gap-8 mt-4 flex-wrap" ref={statsRef}>
-            <div className="text-center">
-              <div style={{ fontSize: 30, fontWeight: 800, color: "#A3C6CF" }}>2018</div>
-              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>Since</div>
-            </div>
             <div className="text-center">
               <div style={{ fontSize: 30, fontWeight: 800, color: "#A3C6CF" }}>
                 {statsVisible ? (countPatients >= 5000 ? "5,000+" : countPatients.toLocaleString()) : "0"}
@@ -395,9 +391,9 @@ export default function GynecomastiaLanding() {
       {/* ── 4. TRUST ─────────────────────────────────────────────── */}
       <section style={{ background: "#F4F8FB", padding: "80px 20px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Since 2018</div>
+          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Our Patients</div>
           <h2 style={{ fontSize: "clamp(26px,4vw,42px)", fontWeight: 800, color: "#053980", lineHeight: 1.2, marginBottom: 14 }}>We Answer Every Question. Before You Even Ask.</h2>
-          <p style={{ fontSize: 16, color: "#6B7C8D", maxWidth: 560, marginBottom: 52 }}>Most patients arrive nervous and full of doubts. They leave confident. Because since 2018, we&apos;ve been removing every single question mark from this journey.</p>
+          <p style={{ fontSize: 16, color: "#6B7C8D", maxWidth: 560, marginBottom: 52 }}>Most patients arrive nervous and full of doubts. They leave confident. Because we&apos;ve been removing every single question mark from this journey.</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {trustBlocks.map((b) => (
               <div key={b.title} style={{ background: "#fff", border: "1px solid rgba(87,136,172,0.15)", borderRadius: 12, padding: "28px 22px", textAlign: "center", boxShadow: "0 2px 8px rgba(5,57,128,0.04)" }}>

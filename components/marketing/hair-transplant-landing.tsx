@@ -113,7 +113,7 @@ const faqs = [
   },
   {
     q: "Why should I choose Medical Center Turkey?",
-    a: "When you book with Medical Center Turkey, you don't feel like a medical tourist in a foreign country — you feel like a VIP being taken care of at home. From the moment you land in Istanbul to the moment you fly back, someone is always by your side. Your personal English-speaking GO coordinator handles everything: transfers, hotel, hospital, translations, meals, and any question you have along the way. You never have to figure anything out alone. We've been doing this since 2018, and our entire system is built around one goal — making sure you feel safe, comfortable, and looked after every single step of the way.",
+    a: "When you book with Medical Center Turkey, you don't feel like a medical tourist in a foreign country — you feel like a VIP being taken care of at home. From the moment you land in Istanbul to the moment you fly back, someone is always by your side. Your personal English-speaking GO coordinator handles everything: transfers, hotel, hospital, translations, meals, and any question you have along the way. You never have to figure anything out alone. And our entire system is built around one goal — making sure you feel safe, comfortable, and looked after every single step of the way.",
   },
   {
     q: "Do I need to be in Istanbul for the procedure? Can it be done remotely or locally?",
@@ -129,7 +129,7 @@ const faqs = [
   },
   {
     q: "Is a hair transplant in Turkey safe? How do I know the quality is reliable?",
-    a: "Safety is our number one priority. We work exclusively with hospitals and clinics approved by the Turkish Ministry of Health — we do not compromise on this. Turkey is one of the world's leading destinations for hair transplant procedures, with highly experienced surgeons and modern facilities at a fraction of the cost of the UK or USA. Medical Center Turkey has been operating since 2018 with over 5,000 international patients treated through our network. Every hair transplant comes with an official warranty certificate.",
+    a: "Safety is our number one priority. We work exclusively with hospitals and clinics approved by the Turkish Ministry of Health — we do not compromise on this. Turkey is one of the world's leading destinations for hair transplant procedures, with highly experienced surgeons and modern facilities at a fraction of the cost of the UK or USA. Medical Center Turkey has been operating with over 5,000 international patients treated through our network. Every hair transplant comes with an official warranty certificate.",
   },
   {
     q: "When will I see the final results of my hair transplant?",
@@ -139,15 +139,15 @@ const faqs = [
 
 const trustBlocks = [
   { icon: "🎖️", title: "Dual Health Tourism Certification", desc: "Both our agency and our partner hospital hold Turkey's official Health Tourism Authorization Certificate — the highest accreditation standard issued by the Ministry of Health." },
-  { icon: "🌍", title: "World's First Package System", desc: "We pioneered the all-inclusive health tourism package model in 2018. No one has more experience doing this right." },
-  { icon: "📋", title: "Trusted Since 2018. 5,000+ Patients.", desc: "Operating since 2018 with over 5,000 international patients from the USA, UK, and Europe. Experience you can trust." },
+  { icon: "🌍", title: "World's First Package System", desc: "We pioneered the all-inclusive health tourism package model . No one has more experience doing this right." },
+  { icon: "📋", title: "Trusted 5,000+ International Patients.", desc: "Operating with over 5,000 international patients from the USA, UK, and Europe. Experience you can trust." },
   { icon: "✅", title: "Warranty Certificate", desc: "Every hair transplant comes with an official written warranty certificate — your guarantee that we stand behind every result we deliver." },
 ];
 
 const whyMCT = [
   { icon: "✓", title: "Truly Hassle-Free", desc: "From first message to final result — every detail is handled. No research, no coordination, no stress on your end." },
   { icon: "🎧", title: "Dedicated GO Coordinator", desc: "Your personal 'Gentle Organiser' is with you from airport arrival to departure. You are never alone." },
-  { icon: "★", title: "Zero Question Marks", desc: "We answer every concern before you board the plane. Since 2018 we've heard every question — and we have the answers." },
+  { icon: "★", title: "Zero Question Marks", desc: "We answer every concern before you board the plane. We've heard every question — and we have the answers." },
   { icon: "⚡", title: "Fast Recovery", desc: "Back to daily life in 2 days. Most patients don't miss more than a long weekend." },
   { icon: "📄", title: "Warranty Certificate", desc: "Every hair transplant comes with an official warranty certificate — your written guarantee for peace of mind." },
   { icon: "🛡️", title: "Ministry of Health Approved", desc: "We work exclusively with Turkish Ministry of Health approved hospitals. No shortcuts. No compromises." },
@@ -237,7 +237,7 @@ export default function HairTransplantLanding() {
         <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(5,57,128,0.45) 0%, rgba(5,57,128,0.65) 55%, rgba(3,30,70,0.95) 100%)" }} />
         <div className="relative max-w-4xl mx-auto w-full">
           <div className="inline-block mb-7" style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.35)", color: "#fff", fontSize: 12, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase", padding: "8px 18px", borderRadius: 100 }}>
-            Istanbul&apos;s Complete Hair Transplant Experience · Since 2018
+            Istanbul&apos;s Complete Hair Transplant Experience
           </div>
           <h1 className="font-extrabold leading-tight text-white" style={{ fontSize: "clamp(34px, 6vw, 64px)", lineHeight: 1.1, maxWidth: 820, margin: "0 auto 24px" }}>
             Hair Transplant <span style={{ color: "#A3C6CF" }}>Turkey.</span><br />
@@ -269,10 +269,6 @@ export default function HairTransplantLanding() {
           </div>
 
           <div ref={statsRef} className="flex justify-center gap-12 mt-4 flex-wrap">
-            <div className="text-center">
-              <div style={{ fontSize: 30, fontWeight: 800, color: "#A3C6CF" }}>2018</div>
-              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>Since</div>
-            </div>
             <div className="text-center">
               <div style={{ fontSize: 30, fontWeight: 800, color: "#A3C6CF" }}>
                 {statsVisible ? (countPatients >= 5000 ? "5,000+" : countPatients.toLocaleString()) : "0"}
@@ -406,9 +402,9 @@ export default function HairTransplantLanding() {
       {/* ── 4. TRUST ─────────────────────────────────────────────── */}
       <section style={{ background: "#fff", padding: "80px 20px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Since 2018</div>
+          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Our Patients</div>
           <h2 style={{ fontSize: "clamp(26px,4vw,42px)", fontWeight: 800, color: "#053980", lineHeight: 1.2, marginBottom: 14 }}>We Answer Every Question. Before You Even Ask.</h2>
-          <p style={{ fontSize: 16, color: "#6B7C8D", maxWidth: 560, marginBottom: 52 }}>Most patients arrive nervous and full of doubts. They leave confident. Because since 2018, we&apos;ve been removing every single question mark from this journey.</p>
+          <p style={{ fontSize: 16, color: "#6B7C8D", maxWidth: 560, marginBottom: 52 }}>Most patients arrive nervous and full of doubts. They leave confident. Because we&apos;ve been removing every single question mark from this journey.</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {trustBlocks.map((b) => (
               <div key={b.title} style={{ background: "#fff", border: "1px solid rgba(87,136,172,0.15)", borderRadius: 12, padding: "28px 22px", textAlign: "center", boxShadow: "0 2px 8px rgba(5,57,128,0.04)" }}>
