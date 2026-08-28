@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/marketing/nav";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import IVFLanding from "@/components/marketing/ivf-landing";
+import { Breadcrumb } from "@/components/marketing/breadcrumb";
 import {
   generateFAQSchema,
   generateProductsSchema,
@@ -57,6 +58,7 @@ export default function IVFPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <Nav />
+      <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Packages", href: "/#packages" }, { label: "IVF Treatment Turkey" }]} />
       <main>
         <IVFLanding />
       </main>

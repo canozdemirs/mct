@@ -122,7 +122,7 @@ const whyMCT = [
   { icon: "★", title: "Zero Question Marks", desc: "We've heard every question. We have the answers before you even ask them." },
   { icon: "🔬", title: "Advanced Embryology Lab", desc: "State-of-the-art embryology laboratory with time-lapse incubators and PGT-A genetic testing available." },
   { icon: "💊", title: "Medication Protocol Included", desc: "Stimulation monitoring and luteal phase support medication are included. No surprise costs mid-cycle." },
-  { icon: "🛡️", title: "Ministry of Health Authorized", desc: "Exclusively partnered with Ministry of Health approved fertility clinics. No shortcuts. No compromises." },
+  { icon: "🛡️", title: "Ministry of Health Authorized", desc: "We operate under official authorization from the Turkish Ministry of Health. No shortcuts. No compromises." },
 ];
 
 const journeySteps = [
