@@ -114,29 +114,6 @@ const faqs = [
   },
 ];
 
-const trustBlocks = [
-  {
-    icon: "🎖️",
-    title: "Dual Health Tourism Certification",
-    desc: "Both our agency and our partner hospital hold Turkey's official Health Tourism Authorization Certificate — the highest accreditation standard issued by the Ministry of Health.",
-  },
-  {
-    icon: "🌍",
-    title: "World's First Package System",
-    desc: "We pioneered the all-inclusive health tourism package model. No one has more experience doing this right.",
-  },
-  {
-    icon: "📋",
-    title: "5,000+ International Patients.",
-    desc: "Serving international patients from the USA, UK, and Europe. Experience you can trust.",
-  },
-  {
-    icon: "🛡️",
-    title: "Board-Certified Surgeons",
-    desc: "We work exclusively with board-certified plastic surgeons with extensive chest contouring experience for international patients.",
-  },
-];
-
 const whyMCT = [
   { icon: "✓", title: "Truly Hassle-Free", desc: "Every detail handled — no research, no coordination, no stress on your end." },
   { icon: "🎧", title: "Dedicated GO Coordinator", desc: "Your personal 'Gentle Organiser' from airport arrival to departure. You are never alone." },
@@ -387,25 +364,6 @@ export default function GynecomastiaLanding() {
           </div>
         </div>
       </section>
-
-      {/* ── 4. TRUST ─────────────────────────────────────────────── */}
-      <section style={{ background: "#F4F8FB", padding: "80px 20px" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: "uppercase", color: "#5788AC", marginBottom: 14 }}>Our Patients</div>
-          <h2 style={{ fontSize: "clamp(26px,4vw,42px)", fontWeight: 800, color: "#053980", lineHeight: 1.2, marginBottom: 14 }}>We Answer Every Question. Before You Even Ask.</h2>
-          <p style={{ fontSize: 16, color: "#6B7C8D", maxWidth: 560, marginBottom: 52 }}>Most patients arrive nervous and full of doubts. They leave confident. Because we&apos;ve been removing every single question mark from this journey.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {trustBlocks.map((b) => (
-              <div key={b.title} style={{ background: "#fff", border: "1px solid rgba(87,136,172,0.15)", borderRadius: 12, padding: "28px 22px", textAlign: "center", boxShadow: "0 2px 8px rgba(5,57,128,0.04)" }}>
-                <div style={{ fontSize: 32, marginBottom: 14 }}>{b.icon}</div>
-                <h3 style={{ fontSize: 15, fontWeight: 700, color: "#053980", marginBottom: 8 }}>{b.title}</h3>
-                <p style={{ fontSize: 13, color: "#6B7C8D" }}>{b.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── 4. JOURNEY ───────────────────────────────────────────── */}
       <section style={{ background: "#fff", padding: "80px 20px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
