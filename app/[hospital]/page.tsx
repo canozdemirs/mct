@@ -7,6 +7,7 @@ import { Footer } from "@/components/marketing/footer";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import { HospitalGallery } from "@/components/marketing/hospital-gallery";
 import { GroupLogo } from "@/components/marketing/group-logo";
+import { ConsultationForm } from "@/components/marketing/consultation-form";
 import {
   hospitalGroups,
   getHospitalBySlug,
@@ -388,6 +389,18 @@ export default async function HospitalPage({ params }: PageProps) {
             </aside>
           </div>
         </div>
+
+        {/* Consultation form */}
+        <section id="consultation" className="bg-white border-t border-slate-100 py-14">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <span className="text-xs font-bold uppercase tracking-widest text-teal">Free Consultation</span>
+              <h2 className="text-2xl font-bold text-brand mt-2 mb-2">Get Treatment at {hospital.name}</h2>
+              <p className="text-sm text-gray-400">Fill in the form and we&apos;ll get back to you within 24 hours — no commitment required.</p>
+            </div>
+            <ConsultationForm initialTreatment="" />
+          </div>
+        </section>
       </main>
       <Footer />
       <WhatsAppFloat />
