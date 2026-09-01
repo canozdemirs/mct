@@ -34,7 +34,7 @@ const items = [
   {
     id: "quote",
     href: "/treatment-prices-in-turkey",
-    label: "Get a Quote",
+    label: "Create Your Package",
     icon: <Calculator size={22} className="text-[#1b5fa8]" />,
     iconBg: "bg-blue-50",
     content: (
