@@ -20,6 +20,7 @@ export function ConsultationForm({ initialTreatment = "", onSuccess }: Consultat
   const [form, setForm] = useState({
     name: "", email: "", phone: "", treatment: initialTreatment, message: "",
   });
+  const [agreed, setAgreed] = useState(false);
 
   const handleWhatsApp = () => {
     const text = `Hello MCT,%0A%0AName: ${form.name}%0AEmail: ${form.email}%0APhone: ${form.phone}%0ATreatment: ${form.treatment}%0A%0A${form.message}`;
@@ -113,11 +114,32 @@ export function ConsultationForm({ initialTreatment = "", onSuccess }: Consultat
         />
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3 pt-2">
+      <label className="flex items-start gap-2.5 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={agreed}
+          onChange={e => setAgreed(e.target.checked)}
+          className="mt-0.5 shrink-0 accent-teal"
+        />
+        <span className="text-xs text-gray-400 leading-relaxed">
+          I agree to Medical Center Turkey&apos;s{" "}
+          <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 hover:text-gray-700">
+            Terms and Conditions
+          </a>
+          , I have read the{" "}
+          <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 hover:text-gray-700">
+            Privacy Policy
+          </a>{" "}
+          and I agree that my given details including health data may be processed by Medical Center Turkey for the purpose of obtaining quotes.
+        </span>
+      </label>
+
+      <div className="flex flex-col sm:flex-row gap-3 pt-1">
         <button
           type="button"
           onClick={handleWhatsApp}
-          className="flex items-center justify-center gap-2 bg-[#25D366] text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:bg-[#1ebe5a] transition-colors shadow-lg shadow-[#25D366]/20"
+          disabled={!agreed}
+          className="flex items-center justify-center gap-2 bg-[#25D366] text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:bg-[#1ebe5a] transition-colors shadow-lg shadow-[#25D366]/20 disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <MessageCircle size={15} />
           Send via WhatsApp
@@ -125,17 +147,13 @@ export function ConsultationForm({ initialTreatment = "", onSuccess }: Consultat
         <button
           type="button"
           onClick={handleEmail}
-          disabled={state.submitting}
-          className="flex items-center justify-center gap-2 bg-brand text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:bg-[#154d8a] transition-colors shadow-lg shadow-brand/20 disabled:opacity-60"
+          disabled={state.submitting || !agreed}
+          className="flex items-center justify-center gap-2 bg-brand text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:bg-[#154d8a] transition-colors shadow-lg shadow-brand/20 disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <Send size={15} />
           {state.submitting ? "Sending..." : "Send Request"}
         </button>
       </div>
-
-      <p className="text-xs text-gray-300 pt-1">
-        Your information is kept strictly confidential. We never share patient data with third parties.
-      </p>
     </form>
   );
 }
