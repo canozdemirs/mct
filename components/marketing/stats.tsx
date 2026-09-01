@@ -5,9 +5,9 @@ import { Users, Building2, Star, ThumbsUp } from "lucide-react";
 
 const stats = [
   {
-    value: 15000,
-    prefix: "+",
-    suffix: "",
+    value: 5000,
+    prefix: "",
+    suffix: "+",
     label: "Patients Served",
     decimals: 0,
     icon: Users,
