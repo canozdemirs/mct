@@ -134,7 +134,7 @@ function TreatmentIcon({ name }: { name: string }) {
 const treatments = [
   {
     name: "Hair Transplant",
-    price: "From €1,700",
+    price: "From €1,400",
     image: "/treatments/hair-transplant/v7.jpg",
     inclusions: [
       "FUE / DHI technique",
@@ -172,7 +172,7 @@ const treatments = [
   },
   {
     name: "Rhinoplasty",
-    price: "From €3,000",
+    price: "From €2,500",
     image: "/treatments/rhinoplasty/card.jpg",
     inclusions: [
       "Operation",
@@ -185,7 +185,7 @@ const treatments = [
   },
   {
     name: "Breast Augmentation",
-    price: "From €5,000",
+    price: "From €4,500",
     image: "/treatments/breast-augmentation/v3.jpg",
     inclusions: [
       "Silicone implants included",
@@ -198,7 +198,7 @@ const treatments = [
   },
   {
     name: "Liposuction (3 Areas)",
-    price: "From €2,900",
+    price: "From €2,150",
     image: "/treatments/liposuction/card.jpg",
     inclusions: [
       "Operation",
@@ -211,7 +211,7 @@ const treatments = [
   },
   {
     name: "Gynecomastia",
-    price: "From €2,700",
+    price: "From €2,200",
     image: "/treatments/gynecomastia/v2.jpg",
     inclusions: [
       "Liposuction + gland removal",
@@ -236,7 +236,7 @@ const treatments = [
   },
   {
     name: "Cataract Surgery",
-    price: "From €5,500",
+    price: "From €4,000",
     image: "/treatments/cataract/card.jpg",
     inclusions: [
       "Operation",
@@ -248,7 +248,7 @@ const treatments = [
   },
   {
     name: "IVF",
-    price: "From €4,150",
+    price: "From €3,000",
     image: "/treatments/ivf/card.jpg",
     inclusions: [
       "Standard IVF protocol",
@@ -260,7 +260,7 @@ const treatments = [
   },
   {
     name: "Blepharoplasty",
-    price: "From €2,050",
+    price: "From €1,600",
     image: "/treatments/blepharoplasty/v2.jpg",
     inclusions: [
       "Upper / lower eyelid surgery",
@@ -273,7 +273,7 @@ const treatments = [
   },
   {
     name: "Check-Up",
-    price: "From €1,100",
+    price: "From $550",
     image: "/treatments/checkup/card.jpg",
     inclusions: [
       "Full blood panel",
