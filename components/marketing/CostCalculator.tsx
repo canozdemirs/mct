@@ -609,8 +609,15 @@ export default function CostCalculator() {
               className="mt-0.5"
             />
             <span>
-              I agree to Medical Center Turkey's Terms and Conditions, I have read the Privacy
-              Policy and I agree that my given details including health data may be processed
+              I agree to Medical Center Turkey&apos;s{" "}
+              <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-900">
+                Terms and Conditions
+              </a>
+              , I have read the{" "}
+              <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-900">
+                Privacy Policy
+              </a>{" "}
+              and I agree that my given details including health data may be processed
               by Medical Center Turkey for the purpose of obtaining quotes.
             </span>
           </label>
