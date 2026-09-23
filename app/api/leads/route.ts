@@ -64,7 +64,7 @@ function brandEmailShell(bodyHtml: string): string {
             <tr>
               <td style="padding:18px 40px;background-color:#f9fafb;text-align:center;">
                 <p style="margin:0;color:#9ca3af;font-size:11px;">
-                  Medical Center Turkey &middot; International Patient Center &amp; Health Tourism Coordinator
+                  Medical Center Turkey &middot; International Patient Center
                 </p>
               </td>
             </tr>
