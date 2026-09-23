@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useCountryDialCode } from "./use-country-dial-code";
+import { validateRequiredLeadFields, type LeadFieldErrors } from "@/lib/validation";
 
 export type LandingLeadFormState = {
   name: string;
@@ -15,16 +17,41 @@ const emptyForm: LandingLeadFormState = { name: "", country: "", email: "", phon
 
 // Shared submission logic for the ~12 near-identical treatment landing page
 // forms — each page keeps its own JSX/styling, this just centralizes the
-// POST to /api/leads so we don't duplicate the same fetch/error handling
-// in every file.
+// POST to /api/leads, field validation, and dial-code sync so we don't
+// duplicate the same logic in every file.
 export function useLandingLeadForm(treatment: string) {
   const [form, setForm] = useState<LandingLeadFormState>(emptyForm);
   const [agreed, setAgreed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState("");
+  const [touched, setTouched] = useState<Partial<Record<keyof LeadFieldErrors, boolean>>>({});
+
+  useCountryDialCode(form.country, form.phone, (phone) => setForm((f) => ({ ...f, phone })));
+
+  function markTouched(field: keyof LeadFieldErrors) {
+    setTouched((t) => ({ ...t, [field]: true }));
+  }
+
+  const currentErrors = validateRequiredLeadFields({
+    name: form.name,
+    email: form.email,
+    phone: form.phone,
+    country: form.country,
+  });
+  const isValid = Object.keys(currentErrors).length === 0;
+
+  function fieldError(field: keyof LeadFieldErrors) {
+    return touched[field] ? currentErrors[field] : undefined;
+  }
 
   async function submitLead() {
+    setTouched({ name: true, email: true, phone: true, country: true });
+    if (Object.keys(currentErrors).length > 0) {
+      setError("Please fix the highlighted fields.");
+      return false;
+    }
+
     setSubmitting(true);
     setError("");
     try {
@@ -32,11 +59,11 @@ export function useLandingLeadForm(treatment: string) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          source: `${treatment} Landing Page`,
+          source: `Landing Page: ${treatment}`,
           name: form.name,
-          email: form.email || undefined,
-          phone: form.phone || undefined,
-          country: form.country || undefined,
+          email: form.email,
+          phone: form.phone,
+          country: form.country,
           treatment,
           message: form.message || undefined,
           details: form.pkg ? { package: form.pkg } : undefined,
@@ -64,6 +91,7 @@ export function useLandingLeadForm(treatment: string) {
     if (!ok) return;
     const text = `Hello MCT,%0A%0AName: ${form.name}%0ACountry: ${form.country}%0AEmail: ${form.email}%0APhone: ${form.phone}%0APackage: ${form.pkg}%0A%0A${form.message}`;
     window.open(`https://wa.me/908508888911?text=${text}`, "_blank");
+    setSucceeded(true);
   }
 
   async function handleEmail(e: React.MouseEvent) {
@@ -73,5 +101,18 @@ export function useLandingLeadForm(treatment: string) {
     if (ok) setSucceeded(true);
   }
 
-  return { form, setForm, agreed, setAgreed, submitting, succeeded, error, handleWhatsApp, handleEmail };
+  return {
+    form,
+    setForm,
+    agreed,
+    setAgreed,
+    submitting,
+    succeeded,
+    error,
+    isValid,
+    fieldError,
+    markTouched,
+    handleWhatsApp,
+    handleEmail,
+  };
 }

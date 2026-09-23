@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 import { sendEmail } from "@/lib/email";
+import { validateRequiredLeadFields } from "@/lib/validation";
 
 const ADMIN_RECIPIENT = "hello@medicalcenterturkey.com";
 const WHATSAPP_LINK = "https://wa.me/908508888911";
@@ -19,15 +20,6 @@ function isRateLimited(ip: string): boolean {
   recent.push(now);
   rateLimitLog.set(ip, recent);
   return recent.length > RATE_LIMIT_MAX;
-}
-
-function isValidEmail(email: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function isValidPhone(phone: string): boolean {
-  const digits = phone.replace(/[^0-9]/g, "");
-  return digits.length >= 7 && digits.length <= 15;
 }
 
 function escapeHtml(value: string): string {
@@ -230,19 +222,16 @@ export async function POST(req: NextRequest) {
   const name = (body.name || "").trim();
   const email = (body.email || "").trim();
   const phone = (body.phone || "").trim();
+  const country = (body.country || "").trim();
   const source = (body.source || "").trim();
 
-  if (!source || !name) {
+  if (!source) {
     return NextResponse.json({ error: "Please fill in all required fields." }, { status: 400 });
   }
-  if (!email && !phone) {
-    return NextResponse.json({ error: "Please provide an email or a phone number." }, { status: 400 });
-  }
-  if (email && !isValidEmail(email)) {
-    return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 });
-  }
-  if (phone && !isValidPhone(phone)) {
-    return NextResponse.json({ error: "Please enter a valid phone number." }, { status: 400 });
+  const fieldErrors = validateRequiredLeadFields({ name, email, phone, country });
+  const firstError = Object.values(fieldErrors)[0];
+  if (firstError) {
+    return NextResponse.json({ error: firstError }, { status: 400 });
   }
 
   const adminSupabase = createClient(
@@ -257,7 +246,7 @@ export async function POST(req: NextRequest) {
       name,
       email: email || null,
       phone: phone || null,
-      country: body.country || null,
+      country: country || null,
       treatment: body.treatment || null,
       message: body.message || null,
       details: body.details || {},
@@ -274,7 +263,7 @@ export async function POST(req: NextRequest) {
 
   // Emails are best-effort from here — a failure must never undo the saved lead.
   try {
-    const adminEmail = buildAdminEmail({ ...body, source, name, email, phone, id: inserted.id });
+    const adminEmail = buildAdminEmail({ ...body, source, name, email, phone, country, id: inserted.id });
     await sendEmail({
       to: ADMIN_RECIPIENT,
       subject: adminEmail.subject,

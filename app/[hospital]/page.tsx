@@ -398,7 +398,7 @@ export default async function HospitalPage({ params }: PageProps) {
               <h2 className="text-2xl font-bold text-brand mt-2 mb-2">Get Treatment at {hospital.name}</h2>
               <p className="text-sm text-gray-400">Fill in the form and we&apos;ll get back to you within 48 hours — no commitment required.</p>
             </div>
-            <ConsultationForm initialTreatment="" source={hospital.name} />
+            <ConsultationForm initialTreatment="" source={`Hospital Page: ${hospital.name}`} />
           </div>
         </section>
       </main>

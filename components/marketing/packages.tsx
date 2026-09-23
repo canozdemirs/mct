@@ -300,7 +300,7 @@ function QuoteModal({ name, onClose }: { name: string; onClose: () => void }) {
           </button>
         </div>
         <div className="px-6 py-5">
-          <ConsultationForm initialTreatment={name} onSuccess={onClose} />
+          <ConsultationForm initialTreatment={name} source={`Package Card: ${name}`} onClose={onClose} />
         </div>
       </div>
     </div>

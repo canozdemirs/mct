@@ -32,7 +32,7 @@ export function ConsultationModalProvider({ children }: { children: React.ReactN
               </button>
             </div>
             <div className="px-8 py-6">
-              <ConsultationForm onSuccess={() => setOpen(false)} />
+              <ConsultationForm source="Get Quote Popup" onClose={() => setOpen(false)} />
             </div>
           </div>
         </div>

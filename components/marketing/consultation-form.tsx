@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { MessageCircle, Send, CheckCircle } from "lucide-react";
+import { MessageCircle, Send } from "lucide-react";
+import { CountrySelect } from "@/components/marketing/country-select";
+import { PhoneInput } from "@/components/marketing/phone-input";
+import { FieldError } from "@/components/marketing/field-error";
+import { FormSuccessMessage } from "@/components/marketing/form-success-message";
+import { useCountryDialCode } from "@/lib/hooks/use-country-dial-code";
+import { validateRequiredLeadFields, type LeadFieldErrors } from "@/lib/validation";
 
 export const TREATMENT_OPTIONS = [
   "Hair Transplant", "Rhinoplasty", "Breast Augmentation", "Gynecomastia",
@@ -13,18 +19,37 @@ interface ConsultationFormProps {
   initialTreatment?: string;
   source?: string;
   onSuccess?: () => void;
+  onClose?: () => void;
 }
 
-export function ConsultationForm({ initialTreatment = "", source = "", onSuccess }: ConsultationFormProps) {
-  const [form, setForm] = useState({
-    name: "", email: "", phone: "", treatment: initialTreatment, message: "",
-  });
+const emptyForm = { name: "", email: "", phone: "", country: "", treatment: "", message: "" };
+
+export function ConsultationForm({ initialTreatment = "", source = "", onSuccess, onClose }: ConsultationFormProps) {
+  const [form, setForm] = useState({ ...emptyForm, treatment: initialTreatment });
   const [agreed, setAgreed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState("");
+  const [touched, setTouched] = useState<Partial<Record<keyof LeadFieldErrors, boolean>>>({});
+
+  useCountryDialCode(form.country, form.phone, (phone) => setForm((f) => ({ ...f, phone })));
+
+  function markTouched(field: keyof LeadFieldErrors) {
+    setTouched((t) => ({ ...t, [field]: true }));
+  }
+
+  const currentErrors = validateRequiredLeadFields({ name: form.name, email: form.email, phone: form.phone, country: form.country });
+
+  function fieldError(field: keyof LeadFieldErrors) {
+    return touched[field] ? currentErrors[field] : undefined;
+  }
 
   async function submitLead() {
+    setTouched({ name: true, email: true, phone: true, country: true });
+    if (Object.keys(currentErrors).length > 0) {
+      setError("Please fix the highlighted fields.");
+      return false;
+    }
     setSubmitting(true);
     setError("");
     try {
@@ -34,8 +59,9 @@ export function ConsultationForm({ initialTreatment = "", source = "", onSuccess
         body: JSON.stringify({
           source: source || "Consultation Form",
           name: form.name,
-          email: form.email || undefined,
-          phone: form.phone || undefined,
+          email: form.email,
+          phone: form.phone,
+          country: form.country,
           treatment: form.treatment || undefined,
           message: form.message || undefined,
           consent: agreed,
@@ -62,8 +88,9 @@ export function ConsultationForm({ initialTreatment = "", source = "", onSuccess
     if (!ok) return;
 
     const sourceLine = source ? `%0ASource: ${encodeURIComponent(source)}` : "";
-    const text = `Hello MCT,%0A%0AName: ${form.name}%0AEmail: ${form.email}%0APhone: ${form.phone}%0ATreatment: ${form.treatment}${sourceLine}%0A%0A${form.message}`;
+    const text = `Hello MCT,%0A%0AName: ${form.name}%0AEmail: ${form.email}%0APhone: ${form.phone}%0ACountry: ${form.country}%0ATreatment: ${form.treatment}${sourceLine}%0A%0A${form.message}`;
     window.open(`https://wa.me/908508888911?text=${text}`, "_blank");
+    setSucceeded(true);
     onSuccess?.();
   }
 
@@ -77,51 +104,49 @@ export function ConsultationForm({ initialTreatment = "", source = "", onSuccess
   }
 
   if (succeeded) {
-    return (
-      <div className="flex flex-col items-center justify-center py-12 text-center gap-4">
-        <CheckCircle size={48} className="text-teal" />
-        <h3 className="text-lg font-bold text-brand">Request Sent!</h3>
-        <p className="text-sm text-gray-500 max-w-xs">We&apos;ve received your consultation request and will get back to you within 48 hours.</p>
-      </div>
-    );
+    return <FormSuccessMessage name={form.name} email={form.email} onClose={onClose} />;
   }
 
   return (
     <form className="space-y-4" onSubmit={e => e.preventDefault()}>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Full Name</label>
+          <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Full Name *</label>
           <input
             type="text"
-            required
             value={form.name}
             onChange={e => setForm({ ...form, name: e.target.value })}
+            onBlur={() => markTouched("name")}
             placeholder="John Smith"
             className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-teal focus:bg-white transition-all"
           />
+          <FieldError message={fieldError("name")} />
         </div>
         <div>
-          <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Phone</label>
-          <input
-            type="tel"
-            value={form.phone}
-            onChange={e => setForm({ ...form, phone: e.target.value })}
-            placeholder="+1 234 567 8900"
-            className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-teal focus:bg-white transition-all"
-          />
+          <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Country *</label>
+          <CountrySelect value={form.country} onChange={(v) => setForm({ ...form, country: v })} onBlur={() => markTouched("country")} />
+          <FieldError message={fieldError("country")} />
         </div>
       </div>
 
-      <div>
-        <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Email</label>
-        <input
-          type="email"
-          required
-          value={form.email}
-          onChange={e => setForm({ ...form, email: e.target.value })}
-          placeholder="john@example.com"
-          className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-teal focus:bg-white transition-all"
-        />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Email *</label>
+          <input
+            type="email"
+            value={form.email}
+            onChange={e => setForm({ ...form, email: e.target.value })}
+            onBlur={() => markTouched("email")}
+            placeholder="john@example.com"
+            className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-teal focus:bg-white transition-all"
+          />
+          <FieldError message={fieldError("email")} />
+        </div>
+        <div>
+          <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Phone *</label>
+          <PhoneInput value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} onBlur={() => markTouched("phone")} />
+          <FieldError message={fieldError("phone")} />
+        </div>
       </div>
 
       <div>

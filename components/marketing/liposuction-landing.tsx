@@ -1,9 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Check, MessageCircle, Send, ArrowRight, CheckCircle } from "lucide-react";
+import { Check, MessageCircle, Send, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { useLandingLeadForm } from "@/lib/hooks/use-landing-lead-form";
+import { CountrySelect } from "@/components/marketing/country-select";
+import { PhoneInput } from "@/components/marketing/phone-input";
+import { FieldError } from "@/components/marketing/field-error";
+import { FormSuccessMessage } from "@/components/marketing/form-success-message";
 
 function useCountUp(target: number, duration = 1800, start = false) {
   const [count, setCount] = useState(0);
@@ -155,7 +159,7 @@ const testimonials = [
 
 export default function LiposuctionLanding() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
-  const { form, setForm, agreed, setAgreed, submitting, succeeded, error, handleWhatsApp, handleEmail } =
+  const { form, setForm, agreed, setAgreed, submitting, succeeded, error, fieldError, markTouched, handleWhatsApp, handleEmail } =
     useLandingLeadForm("Liposuction");
   const [statsVisible, setStatsVisible] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
@@ -482,36 +486,34 @@ export default function LiposuctionLanding() {
                 <div style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>We&apos;ll respond within 48 hours</div>
               </div>
               {succeeded ? (
-                <div style={{ padding: 48, textAlign: "center" }}>
-                  <CheckCircle size={48} style={{ color: "#A3C6CF", margin: "0 auto 16px" }} />
-                  <div style={{ fontSize: 18, fontWeight: 800, color: "#fff", marginBottom: 8 }}>Request Sent!</div>
-                  <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)" }}>We&apos;ve received your request and will get back to you within 48 hours.</p>
-                </div>
+                <FormSuccessMessage variant="dark" name={form.name} email={form.email} />
               ) : (
                 <form style={{ padding: 32, display: "flex", flexDirection: "column", gap: 16 }} onSubmit={e => e.preventDefault()}>
                   <div className="grid grid-cols-2 gap-4">
-                    {[
-                      { label: "Full Name", key: "name", type: "text", ph: "John Smith" },
-                      { label: "Country", key: "country", type: "text", ph: "United Kingdom" },
-                    ].map((f) => (
-                      <div key={f.key}>
-                        <label style={{ fontSize: 13, fontWeight: 600, color: "#fff", display: "block", marginBottom: 6 }}>{f.label}</label>
-                        <input type={f.type} placeholder={f.ph} value={form[f.key as keyof typeof form]} onChange={e => setForm({ ...form, [f.key]: e.target.value })}
-                          style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, padding: "12px 16px", fontSize: 14, color: "#fff", outline: "none" }} />
-                      </div>
-                    ))}
+                    <div>
+                      <label style={{ fontSize: 13, fontWeight: 600, color: "#fff", display: "block", marginBottom: 6 }}>Full Name *</label>
+                      <input type="text" placeholder="John Smith" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} onBlur={() => markTouched("name")}
+                        style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, padding: "12px 16px", fontSize: 14, color: "#fff", outline: "none" }} />
+                      <FieldError variant="dark" message={fieldError("name")} />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: 13, fontWeight: 600, color: "#fff", display: "block", marginBottom: 6 }}>Country *</label>
+                      <CountrySelect variant="dark" value={form.country} onChange={(v) => setForm({ ...form, country: v })} onBlur={() => markTouched("country")} />
+                      <FieldError variant="dark" message={fieldError("country")} />
+                    </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    {[
-                      { label: "Email Address", key: "email", type: "email", ph: "john@example.com" },
-                      { label: "WhatsApp / Phone", key: "phone", type: "tel", ph: "+1 234 567 8900" },
-                    ].map((f) => (
-                      <div key={f.key}>
-                        <label style={{ fontSize: 13, fontWeight: 600, color: "#fff", display: "block", marginBottom: 6 }}>{f.label}</label>
-                        <input type={f.type} placeholder={f.ph} value={form[f.key as keyof typeof form]} onChange={e => setForm({ ...form, [f.key]: e.target.value })}
-                          style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, padding: "12px 16px", fontSize: 14, color: "#fff", outline: "none" }} />
-                      </div>
-                    ))}
+                    <div>
+                      <label style={{ fontSize: 13, fontWeight: 600, color: "#fff", display: "block", marginBottom: 6 }}>Email Address *</label>
+                      <input type="email" placeholder="john@example.com" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} onBlur={() => markTouched("email")}
+                        style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, padding: "12px 16px", fontSize: 14, color: "#fff", outline: "none" }} />
+                      <FieldError variant="dark" message={fieldError("email")} />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: 13, fontWeight: 600, color: "#fff", display: "block", marginBottom: 6 }}>WhatsApp / Phone *</label>
+                      <PhoneInput variant="dark" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} onBlur={() => markTouched("phone")} />
+                      <FieldError variant="dark" message={fieldError("phone")} />
+                    </div>
                   </div>
                   <div>
                     <label style={{ fontSize: 13, fontWeight: 600, color: "#fff", display: "block", marginBottom: 6 }}>Which package are you interested in?</label>

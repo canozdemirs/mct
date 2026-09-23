@@ -1,6 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { COUNTRIES } from "@/lib/constants";
+import { PhoneInput } from "@/components/marketing/phone-input";
+import { FieldError } from "@/components/marketing/field-error";
+import { FormSuccessMessage } from "@/components/marketing/form-success-message";
+import { useCountryDialCode } from "@/lib/hooks/use-country-dial-code";
+import { validateRequiredLeadFields, type LeadFieldErrors } from "@/lib/validation";
 
 /**
  * MCT Türkiye'de Tedavi Maliyeti Hesaplama
@@ -230,38 +236,6 @@ const SUB_SERVICES: Record<string, SubService[]> = {
   ],
 };
 
-const COUNTRIES = [
-  "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda",
-  "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain",
-  "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia",
-  "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso",
-  "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic",
-  "Chad", "Chile", "China", "Colombia", "Comoros", "Congo (Republic of the)",
-  "Congo (Democratic Republic of the)", "Costa Rica", "Croatia", "Cuba", "Cyprus",
-  "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador",
-  "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia",
-  "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece",
-  "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary",
-  "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Ivory Coast",
-  "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kosovo", "Kuwait",
-  "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein",
-  "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta",
-  "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco",
-  "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal",
-  "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea",
-  "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Palestine", "Panama",
-  "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar",
-  "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia",
-  "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe",
-  "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia",
-  "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan",
-  "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan",
-  "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago",
-  "Tunisia", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine",
-  "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan",
-  "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe", "Other",
-];
-
 // NOT: Fiyat rakamları (transport/konaklama/yemek/İstanbul turu) bilinçli
 // olarak bu component içinde artık HESAPLANMIYOR/GÖSTERİLMİYOR — "Estimated
 // Cost" bölümü sadece kullanıcının seçimlerinin özeti. Kesin fiyat MCT
@@ -296,11 +270,24 @@ export default function CostCalculator() {
 
   const [agreed, setAgreed] = useState(false);
   const [name, setName] = useState("");
-  const [contactMethod, setContactMethod] = useState<"whatsapp" | "email">("whatsapp");
-  const [contactValue, setContactValue] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [touched, setTouched] = useState<Partial<Record<keyof LeadFieldErrors, boolean>>>({});
+
+  useCountryDialCode(country, phone, setPhone);
+
+  function markTouched(field: keyof LeadFieldErrors) {
+    setTouched((t) => ({ ...t, [field]: true }));
+  }
+
+  const currentErrors = validateRequiredLeadFields({ name, email, phone, country });
+
+  function fieldError(field: keyof LeadFieldErrors) {
+    return touched[field] ? currentErrors[field] : undefined;
+  }
 
   function handleCategoryChange(id: string) {
     const next = TREATMENT_CATEGORIES.find((c) => c.id === id)!;
@@ -375,7 +362,7 @@ export default function CostCalculator() {
   }
 
   function whatsappHref() {
-    const msg = `${summaryText()}\n\nMy WhatsApp/phone: ${contactValue}`;
+    const msg = `${summaryText()}\n\nMy WhatsApp/phone: ${phone}`;
     return `https://wa.me/908508888911?text=${encodeURIComponent(msg)}`;
   }
 
@@ -405,6 +392,11 @@ export default function CostCalculator() {
   }
 
   async function submitLead() {
+    setTouched({ name: true, email: true, phone: true, country: true });
+    if (Object.keys(currentErrors).length > 0) {
+      setSubmitError("Please fix the highlighted fields.");
+      return false;
+    }
     setSubmitting(true);
     setSubmitError("");
     try {
@@ -414,9 +406,9 @@ export default function CostCalculator() {
         body: JSON.stringify({
           source: "Cost Calculator",
           name,
-          email: contactMethod === "email" ? contactValue : undefined,
-          phone: contactMethod === "whatsapp" ? contactValue : undefined,
-          country: country || undefined,
+          email,
+          phone,
+          country,
           treatment: category?.name,
           details: leadDetails(),
           consent: agreed,
@@ -437,13 +429,18 @@ export default function CostCalculator() {
     }
   }
 
-  async function handleSend() {
-    if (submitting || !(name && contactValue)) return;
+  async function handleWhatsApp() {
+    if (submitting) return;
     const ok = await submitLead();
     if (!ok) return;
-    if (contactMethod === "whatsapp") {
-      window.open(whatsappHref(), "_blank");
-    }
+    window.open(whatsappHref(), "_blank");
+    setSubmitted(true);
+  }
+
+  async function handleEmailSend() {
+    if (submitting) return;
+    const ok = await submitLead();
+    if (!ok) return;
     setSubmitted(true);
   }
 
@@ -458,12 +455,14 @@ export default function CostCalculator() {
           <select
             value={country}
             onChange={(e) => setCountry(e.target.value)}
+            onBlur={() => markTouched("country")}
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2"
             style={{ ["--tw-ring-color" as any]: BRAND_BLUE }}
           >
             <option value="" disabled hidden>Which country's passport do you hold?</option>
             {COUNTRIES.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
+          <FieldError message={fieldError("country")} />
         </div>
 
         {/* Service type */}
@@ -688,84 +687,77 @@ export default function CostCalculator() {
           </label>
 
           {agreed && (
-            <div className="mt-4 space-y-3">
-              <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
-                  Your Name
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Full name"
-                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2"
-                  style={{ ["--tw-ring-color" as any]: BRAND_BLUE }}
-                />
+            submitted ? (
+              <div className="mt-4">
+                <FormSuccessMessage name={name} email={email} />
               </div>
+            ) : (
+              <div className="mt-4 space-y-3">
+                <div>
+                  <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
+                    Your Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    onBlur={() => markTouched("name")}
+                    placeholder="Full name"
+                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2"
+                    style={{ ["--tw-ring-color" as any]: BRAND_BLUE }}
+                  />
+                  <FieldError message={fieldError("name")} />
+                </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
-                  How should we contact you?
-                </label>
+                <div>
+                  <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
+                    Your Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onBlur={() => markTouched("email")}
+                    placeholder="you@example.com"
+                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2"
+                    style={{ ["--tw-ring-color" as any]: BRAND_BLUE }}
+                  />
+                  <FieldError message={fieldError("email")} />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
+                    Your WhatsApp / Phone Number *
+                  </label>
+                  <PhoneInput value={phone} onChange={setPhone} onBlur={() => markTouched("phone")} />
+                  <FieldError message={fieldError("phone")} />
+                </div>
+
+                {submitError && (
+                  <p className="text-sm text-red-600 font-medium mb-2">{submitError}</p>
+                )}
                 <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { id: "whatsapp" as const, label: "WhatsApp" },
-                    { id: "email" as const, label: "Email" },
-                  ].map((opt) => (
-                    <button
-                      key={opt.id}
-                      type="button"
-                      onClick={() => { setContactMethod(opt.id); setContactValue(""); }}
-                      className={`rounded-lg border px-3 py-2 text-sm transition-colors ${
-                        contactMethod === opt.id
-                          ? "text-white border-transparent"
-                          : "text-slate-500 border-slate-300 hover:border-slate-400"
-                      }`}
-                      style={contactMethod === opt.id ? { background: BRAND_TEAL } : undefined}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: BRAND_BLUE }}>
-                  {contactMethod === "whatsapp" ? "Your WhatsApp / Phone Number" : "Your Email Address"}
-                </label>
-                <input
-                  type={contactMethod === "whatsapp" ? "tel" : "email"}
-                  value={contactValue}
-                  onChange={(e) => setContactValue(e.target.value)}
-                  placeholder={contactMethod === "whatsapp" ? "+44 7XXX XXXXXX" : "you@example.com"}
-                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2"
-                  style={{ ["--tw-ring-color" as any]: BRAND_BLUE }}
-                />
-              </div>
-
-              {submitted ? (
-                <div className="rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-800 text-center font-medium">
-                  Request sent — we&apos;ll be in touch shortly.
-                </div>
-              ) : (
-                <>
-                  {submitError && (
-                    <p className="text-sm text-red-600 font-medium mb-2">{submitError}</p>
-                  )}
                   <button
                     type="button"
-                    disabled={!(name && contactValue) || submitting}
-                    onClick={handleSend}
-                    className={`inline-flex w-full justify-center rounded-lg py-2.5 text-white font-medium ${
-                      name && contactValue && !submitting ? "" : "opacity-50 cursor-not-allowed"
-                    }`}
+                    disabled={submitting}
+                    onClick={handleWhatsApp}
+                    className="inline-flex justify-center rounded-lg py-2.5 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ background: "#25D366" }}
+                  >
+                    {submitting ? "Sending..." : "Send via WhatsApp"}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={submitting}
+                    onClick={handleEmailSend}
+                    className="inline-flex justify-center rounded-lg py-2.5 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{ background: BRAND_TEAL }}
                   >
-                    {submitting ? "Sending..." : contactMethod === "whatsapp" ? "Send via WhatsApp" : "Send via Email"}
+                    {submitting ? "Sending..." : "Send via Email"}
                   </button>
-                </>
-              )}
-            </div>
+                </div>
+              </div>
+            )
           )}
         </div>
       </div>

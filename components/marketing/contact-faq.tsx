@@ -57,7 +57,7 @@ export function ContactFAQ() {
             <h2 className="text-2xl sm:text-3xl font-bold text-brand mb-2">Get Your Free Treatment Plan</h2>
             <p className="text-gray-400 text-sm mb-8 leading-relaxed">Fill in the form and we will get back to you within 48 hours — no commitment required.</p>
 
-            <ConsultationForm />
+            <ConsultationForm source="Homepage" />
           </div>
 
           {/* FAQ */}
