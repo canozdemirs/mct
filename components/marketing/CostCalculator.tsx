@@ -298,6 +298,9 @@ export default function CostCalculator() {
   const [name, setName] = useState("");
   const [contactMethod, setContactMethod] = useState<"whatsapp" | "email">("whatsapp");
   const [contactValue, setContactValue] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
   function handleCategoryChange(id: string) {
     const next = TREATMENT_CATEGORIES.find((c) => c.id === id)!;
@@ -376,10 +379,72 @@ export default function CostCalculator() {
     return `https://wa.me/908508888911?text=${encodeURIComponent(msg)}`;
   }
 
-  function mailtoHref() {
-    const subject = `Personalized Quote Request — ${category?.name || "Treatment"}`;
-    const body = `${summaryText()}\n\nMy email: ${contactValue}`;
-    return `mailto:hello@medicalcenterturkey.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  function leadDetails() {
+    const transportLabel =
+      transportOption === "none" ? "None" : transportOption === "one-way" ? "One Way" : "Two Way";
+    const accommodationLabel =
+      accommodationTier === "none" ? "None" : accommodationTier === "4star" ? "4 Star Hotel" : "5 Star Hotel";
+    const foodLabel =
+      [meals.breakfast && "Breakfast", meals.lunch && "Lunch", meals.dinner && "Dinner"]
+        .filter(Boolean)
+        .join(", ") || "None";
+    const selectedSubService = subServiceOptions?.find((s) => s.name === subService);
+
+    return {
+      country,
+      category: category?.name,
+      subService: selectedSubService?.name,
+      nights: days,
+      travellers,
+      transport: transportLabel,
+      accommodation: accommodationLabel,
+      food: foodLabel,
+      istanbulTour: istanbulTour ? "Added" : "Not added",
+      estimatedTotal: formatEUR(totalCost),
+    };
+  }
+
+  async function submitLead() {
+    setSubmitting(true);
+    setSubmitError("");
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          source: "Cost Calculator",
+          name,
+          email: contactMethod === "email" ? contactValue : undefined,
+          phone: contactMethod === "whatsapp" ? contactValue : undefined,
+          country: country || undefined,
+          treatment: category?.name,
+          details: leadDetails(),
+          consent: agreed,
+          page_url: typeof window !== "undefined" ? window.location.href : undefined,
+        }),
+      });
+      const json = await res.json() as { ok?: boolean; error?: string };
+      if (!res.ok) {
+        setSubmitError(json.error || "Something went wrong. Please try again.");
+        return false;
+      }
+      return true;
+    } catch {
+      setSubmitError("Network error. Please try again.");
+      return false;
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function handleSend() {
+    if (submitting || !(name && contactValue)) return;
+    const ok = await submitLead();
+    if (!ok) return;
+    if (contactMethod === "whatsapp") {
+      window.open(whatsappHref(), "_blank");
+    }
+    setSubmitted(true);
   }
 
   return (
@@ -614,7 +679,7 @@ export default function CostCalculator() {
                 Terms and Conditions
               </a>
               , I have read the{" "}
-              <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-900">
+              <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-900">
                 Privacy Policy
               </a>{" "}
               and I agree that my given details including health data may be processed
@@ -678,19 +743,28 @@ export default function CostCalculator() {
                 />
               </div>
 
-              <a
-                href={name && contactValue ? (contactMethod === "whatsapp" ? whatsappHref() : mailtoHref()) : undefined}
-                target={contactMethod === "whatsapp" ? "_blank" : undefined}
-                rel="noopener noreferrer"
-                aria-disabled={!(name && contactValue)}
-                onClick={(e) => { if (!(name && contactValue)) e.preventDefault(); }}
-                className={`inline-flex w-full justify-center rounded-lg py-2.5 text-white font-medium ${
-                  name && contactValue ? "" : "opacity-50 cursor-not-allowed"
-                }`}
-                style={{ background: BRAND_TEAL }}
-              >
-                {contactMethod === "whatsapp" ? "Send via WhatsApp" : "Send via Email"}
-              </a>
+              {submitted ? (
+                <div className="rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-800 text-center font-medium">
+                  Request sent — we&apos;ll be in touch shortly.
+                </div>
+              ) : (
+                <>
+                  {submitError && (
+                    <p className="text-sm text-red-600 font-medium mb-2">{submitError}</p>
+                  )}
+                  <button
+                    type="button"
+                    disabled={!(name && contactValue) || submitting}
+                    onClick={handleSend}
+                    className={`inline-flex w-full justify-center rounded-lg py-2.5 text-white font-medium ${
+                      name && contactValue && !submitting ? "" : "opacity-50 cursor-not-allowed"
+                    }`}
+                    style={{ background: BRAND_TEAL }}
+                  >
+                    {submitting ? "Sending..." : contactMethod === "whatsapp" ? "Send via WhatsApp" : "Send via Email"}
+                  </button>
+                </>
+              )}
             </div>
           )}
         </div>

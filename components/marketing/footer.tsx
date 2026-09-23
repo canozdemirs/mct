@@ -1,8 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { CertificateLightbox } from "./certificate-lightbox";
+import { useConsultationModal } from "./consultation-modal";
 
 export function Footer() {
+  const { openConsultation } = useConsultationModal();
+
   return (
     <footer
       className="relative text-white overflow-hidden"
@@ -58,7 +63,6 @@ export function Footer() {
                 { label: "Hospitals", href: "/hospitals-in-turkey" },
                 { label: "Cost Calculator", href: "/treatment-prices-in-turkey" },
                 { label: "Blog", href: "/blog" },
-                { label: "Get Quote", href: "#consultation" },
               ].map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="hover:text-white transition-colors">
@@ -66,6 +70,11 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <button onClick={openConsultation} className="hover:text-white transition-colors">
+                  Get Quote
+                </button>
+              </li>
             </ul>
 
             <ul className="space-y-2.5 text-sm text-white/55 mt-6">
@@ -75,8 +84,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/confidentiality" className="hover:text-white transition-colors">
-                  Confidentiality
+                <Link href="/privacy-policy" className="hover:text-white transition-colors">
+                  Privacy Policy
                 </Link>
               </li>
             </ul>
@@ -107,7 +116,7 @@ export function Footer() {
 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-xs text-white/30">
             <p>© {new Date().getFullYear()} Medical Center Turkey. All rights reserved.</p>
             <div className="flex gap-6">
-              <Link href="#" className="hover:text-white/60 transition-colors">
+              <Link href="/privacy-policy" className="hover:text-white/60 transition-colors">
                 Privacy Policy
               </Link>
               <Link href="/terms" className="hover:text-white/60 transition-colors">

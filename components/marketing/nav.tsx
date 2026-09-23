@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { useConsultationModal } from "./consultation-modal";
 
 export function Nav() {
+  const { openConsultation } = useConsultationModal();
+
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,7 +31,7 @@ export function Nav() {
             <Link href="/hospitals-in-turkey" className="text-sm font-semibold text-brand hover:text-teal transition-colors">Hospitals</Link>
             <Link href="/treatment-prices-in-turkey" className="text-sm font-semibold text-brand hover:text-teal transition-colors">Cost Calculator</Link>
             <Link href="/blog" className="text-sm font-semibold text-brand hover:text-teal transition-colors">Blog</Link>
-            <Link href="#consultation" className="text-sm font-semibold text-brand hover:text-teal transition-colors">Get Quote</Link>
+            <button onClick={openConsultation} className="text-sm font-semibold text-brand hover:text-teal transition-colors">Get Quote</button>
           </nav>
 
           {/* Right — CTA */}
@@ -47,7 +52,7 @@ export function Nav() {
           <Link href="/hospitals-in-turkey" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Hospitals</Link>
           <Link href="/treatment-prices-in-turkey" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Cost Calculator</Link>
           <Link href="/blog" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Blog</Link>
-          <Link href="#consultation" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Get Quote</Link>
+          <button onClick={openConsultation} className="text-xs font-semibold text-brand hover:text-teal transition-colors">Get Quote</button>
         </div>
 
       </div>

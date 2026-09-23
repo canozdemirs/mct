@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useForm, ValidationError } from "@formspree/react";
 import { MessageCircle, Send, CheckCircle } from "lucide-react";
 
 export const TREATMENT_OPTIONS = [
@@ -12,37 +11,72 @@ export const TREATMENT_OPTIONS = [
 
 interface ConsultationFormProps {
   initialTreatment?: string;
+  source?: string;
   onSuccess?: () => void;
 }
 
-export function ConsultationForm({ initialTreatment = "", onSuccess }: ConsultationFormProps) {
-  const [state, handleFormspreeSubmit] = useForm("maewyylb");
+export function ConsultationForm({ initialTreatment = "", source = "", onSuccess }: ConsultationFormProps) {
   const [form, setForm] = useState({
     name: "", email: "", phone: "", treatment: initialTreatment, message: "",
   });
   const [agreed, setAgreed] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [succeeded, setSucceeded] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleWhatsApp = () => {
-    const text = `Hello MCT,%0A%0AName: ${form.name}%0AEmail: ${form.email}%0APhone: ${form.phone}%0ATreatment: ${form.treatment}%0A%0A${form.message}`;
+  async function submitLead() {
+    setSubmitting(true);
+    setError("");
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          source: source || "Consultation Form",
+          name: form.name,
+          email: form.email || undefined,
+          phone: form.phone || undefined,
+          treatment: form.treatment || undefined,
+          message: form.message || undefined,
+          consent: agreed,
+          page_url: typeof window !== "undefined" ? window.location.href : undefined,
+        }),
+      });
+      const json = await res.json() as { ok?: boolean; error?: string };
+      if (!res.ok) {
+        setError(json.error || "Something went wrong. Please try again.");
+        return false;
+      }
+      return true;
+    } catch {
+      setError("Network error. Please try again.");
+      return false;
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function handleWhatsApp() {
+    if (submitting) return;
+    const ok = await submitLead();
+    if (!ok) return;
+
+    const sourceLine = source ? `%0ASource: ${encodeURIComponent(source)}` : "";
+    const text = `Hello MCT,%0A%0AName: ${form.name}%0AEmail: ${form.email}%0APhone: ${form.phone}%0ATreatment: ${form.treatment}${sourceLine}%0A%0A${form.message}`;
     window.open(`https://wa.me/908508888911?text=${text}`, "_blank");
     onSuccess?.();
-  };
+  }
 
-  const handleEmail = async (e: React.FormEvent) => {
+  async function handleEmail(e: React.FormEvent) {
     e.preventDefault();
-    await handleFormspreeSubmit({
-      name: form.name,
-      email: form.email,
-      phone: form.phone,
-      treatment: form.treatment,
-      message: form.message,
-      _subject: `Quote Request: ${form.treatment} — Medical Center Turkey`,
-      _replyto: form.email,
-    } as never);
+    if (submitting) return;
+    const ok = await submitLead();
+    if (!ok) return;
+    setSucceeded(true);
     onSuccess?.();
-  };
+  }
 
-  if (state.succeeded) {
+  if (succeeded) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center gap-4">
         <CheckCircle size={48} className="text-teal" />
@@ -88,7 +122,6 @@ export function ConsultationForm({ initialTreatment = "", onSuccess }: Consultat
           placeholder="john@example.com"
           className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:border-teal focus:bg-white transition-all"
         />
-        <ValidationError field="email" errors={state.errors} className="text-red-500 text-xs mt-1" />
       </div>
 
       <div>
@@ -127,31 +160,35 @@ export function ConsultationForm({ initialTreatment = "", onSuccess }: Consultat
             Terms and Conditions
           </a>
           , I have read the{" "}
-          <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 hover:text-gray-700">
+          <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 hover:text-gray-700">
             Privacy Policy
           </a>{" "}
           and I agree that my given details including health data may be processed by Medical Center Turkey for the purpose of obtaining quotes.
         </span>
       </label>
 
+      {error && (
+        <p className="text-red-600 text-xs font-medium">{error}</p>
+      )}
+
       <div className="flex flex-col sm:flex-row gap-3 pt-1">
         <button
           type="button"
           onClick={handleWhatsApp}
-          disabled={!agreed}
+          disabled={!agreed || submitting}
           className="flex items-center justify-center gap-2 bg-[#25D366] text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:bg-[#1ebe5a] transition-colors shadow-lg shadow-[#25D366]/20 disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <MessageCircle size={15} />
-          Send via WhatsApp
+          {submitting ? "Sending..." : "Send via WhatsApp"}
         </button>
         <button
           type="button"
           onClick={handleEmail}
-          disabled={state.submitting || !agreed}
+          disabled={submitting || !agreed}
           className="flex items-center justify-center gap-2 bg-brand text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:bg-[#154d8a] transition-colors shadow-lg shadow-brand/20 disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <Send size={15} />
-          {state.submitting ? "Sending..." : "Send Request"}
+          {submitting ? "Sending..." : "Send Request"}
         </button>
       </div>
     </form>

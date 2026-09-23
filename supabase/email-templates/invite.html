@@ -1,0 +1,69 @@
+<!--
+  Supabase Dashboard -> Authentication -> Emails -> "Invite user" template.
+  Subject suggestion: You're invited to the Medical Center Turkey Partner Program
+
+  NOTE: I don't have visibility into whatever HTML is currently configured in
+  your Supabase dashboard, so this isn't a literal edit of it — it's a fresh
+  template built to match the site's brand colors (navy #0d2d52, blue
+  #1b5fa8, teal #1ab3c8). Swap in your real logo URL where marked below.
+-->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f3f4f6;padding:32px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+  <tr>
+    <td align="center">
+      <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:16px;overflow:hidden;max-width:480px;width:100%;">
+        <tr>
+          <td style="background:linear-gradient(135deg,#0d2d52,#1b5fa8);padding:32px 40px;text-align:center;">
+            <!-- Replace with your hosted logo URL if you have one, e.g. https://medicalcenterturkey.com/mct_logo_white.png -->
+            <span style="color:#ffffff;font-size:20px;font-weight:700;letter-spacing:0.02em;">Medical Center Turkey</span>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:40px;">
+            <p style="margin:0 0 4px;color:#1ab3c8;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">
+              Partner Program
+            </p>
+            <h1 style="margin:0 0 20px;color:#0d2d52;font-size:22px;font-weight:800;">
+              You're Invited
+            </h1>
+            <p style="margin:0 0 16px;color:#374151;font-size:15px;line-height:1.6;">
+              {{ if .Data.full_name }}Hi {{ .Data.full_name }},{{ else }}Hi,{{ end }}
+            </p>
+            <p style="margin:0 0 28px;color:#374151;font-size:15px;line-height:1.6;">
+              Your Medical Center Turkey Partner account has been approved. Set your password below to activate
+              your account and start referring patients through your Partner Portal.
+            </p>
+            <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 28px;">
+              <tr>
+                <td style="border-radius:999px;background-color:#1b5fa8;">
+                  <a
+                    href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=invite&next=/partner-portal/set-password"
+                    style="display:inline-block;padding:14px 32px;color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;border-radius:999px;"
+                  >
+                    Set Your Password
+                  </a>
+                </td>
+              </tr>
+            </table>
+            <p style="margin:0 0 8px;color:#9ca3af;font-size:12px;line-height:1.6;">
+              If the button above doesn't work, copy and paste this link into your browser:
+            </p>
+            <p style="margin:0 0 28px;color:#1b5fa8;font-size:12px;line-height:1.6;word-break:break-all;">
+              {{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=invite&next=/partner-portal/set-password
+            </p>
+            <p style="margin:0;color:#9ca3af;font-size:12px;line-height:1.6;">
+              This link will expire after a period of time for security reasons. If you weren't expecting this
+              invitation, you can safely ignore this email.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:20px 40px;background-color:#f9fafb;text-align:center;">
+            <p style="margin:0;color:#9ca3af;font-size:11px;">
+              Medical Center Turkey &middot; International Patient Center &amp; Health Tourism Coordinator
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

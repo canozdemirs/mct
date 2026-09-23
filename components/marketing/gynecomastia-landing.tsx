@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useForm } from "@formspree/react";
 import { Check, MessageCircle, Send, ArrowRight, CheckCircle } from "lucide-react";
 import Image from "next/image";
+import { useLandingLeadForm } from "@/lib/hooks/use-landing-lead-form";
 
 function useCountUp(target: number, duration = 1800, start = false) {
   const [count, setCount] = useState(0);
@@ -144,8 +144,8 @@ const testimonials: {name: string; source: string; text: string}[] = [];
 
 export default function GynecomastiaLanding() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
-  const [form, setForm] = useState({ name: "", country: "", email: "", phone: "", pkg: "", message: "" });
-  const [fsState, handleFormspreeSubmit] = useForm("maewyylb");
+  const { form, setForm, agreed, setAgreed, submitting, succeeded, error, handleWhatsApp, handleEmail } =
+    useLandingLeadForm("Gynecomastia");
   const [statsVisible, setStatsVisible] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
 
@@ -165,24 +165,6 @@ export default function GynecomastiaLanding() {
     document.getElementById("gyn-form-box")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const handleWhatsApp = () => {
-    const text = `Hello MCT,%0A%0AName: ${form.name}%0ACountry: ${form.country}%0AEmail: ${form.email}%0APhone: ${form.phone}%0APackage: ${form.pkg}%0A%0A${form.message}`;
-    window.open(`https://wa.me/908508888911?text=${text}`, "_blank");
-  };
-
-  const handleEmail = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    await handleFormspreeSubmit({
-      name: form.name,
-      country: form.country,
-      email: form.email,
-      phone: form.phone,
-      package: form.pkg,
-      message: form.message,
-      _subject: `Gynecomastia Inquiry — Medical Center Turkey`,
-      _replyto: form.email,
-    } as never);
-  };
 
   return (
     <>
@@ -487,7 +469,7 @@ export default function GynecomastiaLanding() {
                 <div style={{ fontSize: 18, fontWeight: 800, color: "#fff" }}>Get Your Free Consultation</div>
                 <div style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>We&apos;ll respond within 24 hours</div>
               </div>
-              {fsState.succeeded ? (
+              {succeeded ? (
                 <div style={{ padding: 48, textAlign: "center" }}>
                   <CheckCircle size={48} style={{ color: "#A3C6CF", margin: "0 auto 16px" }} />
                   <div style={{ fontSize: 18, fontWeight: 800, color: "#fff", marginBottom: 8 }}>Request Sent!</div>
@@ -535,14 +517,32 @@ export default function GynecomastiaLanding() {
                     <textarea rows={3} placeholder="Tell us about your concerns or ask any questions..." value={form.message} onChange={e => setForm({ ...form, message: e.target.value })}
                       style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, padding: "12px 16px", fontSize: 14, color: "#fff", outline: "none", resize: "vertical" }} />
                   </div>
+                  <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer" }}>
+                    <input
+                      type="checkbox"
+                      checked={agreed}
+                      onChange={e => setAgreed(e.target.checked)}
+                      style={{ marginTop: 2, accentColor: "#1ab3c8", flexShrink: 0 }}
+                    />
+                    <span style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", lineHeight: 1.5 }}>
+                      I agree to Medical Center Turkey&apos;s{" "}
+                      <a href="/terms" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.65)", textDecoration: "underline" }}>Terms and Conditions</a>
+                      , I have read the{" "}
+                      <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.65)", textDecoration: "underline" }}>Privacy Policy</a>
+                      {" "}and I agree that my given details including health data may be processed by Medical Center Turkey for the purpose of obtaining quotes.
+                    </span>
+                  </label>
+                  {error && (
+                    <p style={{ fontSize: 12, color: "#fca5a5", fontWeight: 600 }}>{error}</p>
+                  )}
                   <div className="flex flex-col sm:flex-row gap-3">
-                    <button type="button" onClick={handleWhatsApp}
-                      style={{ flex: 1, background: "#25D366", color: "#fff", padding: "14px 20px", borderRadius: 8, fontWeight: 700, fontSize: 15, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-                      <MessageCircle size={16} /> Send via WhatsApp
+                    <button type="button" onClick={handleWhatsApp} disabled={!agreed || submitting}
+                      style={{ flex: 1, background: "#25D366", color: "#fff", padding: "14px 20px", borderRadius: 8, fontWeight: 700, fontSize: 15, border: "none", cursor: agreed ? "pointer" : "not-allowed", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, opacity: agreed ? 1 : 0.4 }}>
+                      <MessageCircle size={16} /> {submitting ? "Sending..." : "Send via WhatsApp"}
                     </button>
-                    <button type="button" onClick={handleEmail} disabled={fsState.submitting}
-                      style={{ flex: 1, background: "#2884C0", color: "#fff", padding: "14px 20px", borderRadius: 8, fontWeight: 700, fontSize: 15, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, opacity: fsState.submitting ? 0.6 : 1 }}>
-                      <Send size={16} /> {fsState.submitting ? "Sending..." : "Send My Consultation Request"}
+                    <button type="button" onClick={handleEmail} disabled={submitting || !agreed}
+                      style={{ flex: 1, background: "#2884C0", color: "#fff", padding: "14px 20px", borderRadius: 8, fontWeight: 700, fontSize: 15, border: "none", cursor: agreed ? "pointer" : "not-allowed", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, opacity: agreed ? 1 : 0.4 }}>
+                      <Send size={16} /> {submitting ? "Sending..." : "Send My Consultation Request"}
                     </button>
                   </div>
                   <p style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", textAlign: "center" }}>No commitment required · No spam · We reply within 24 hours</p>
