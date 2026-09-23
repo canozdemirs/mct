@@ -467,13 +467,13 @@ export default function GynecomastiaLanding() {
               <div id="consultation" />
               <div style={{ padding: "24px 32px", borderBottom: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)" }}>
                 <div style={{ fontSize: 18, fontWeight: 800, color: "#fff" }}>Get Your Free Consultation</div>
-                <div style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>We&apos;ll respond within 24 hours</div>
+                <div style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>We&apos;ll respond within 48 hours</div>
               </div>
               {succeeded ? (
                 <div style={{ padding: 48, textAlign: "center" }}>
                   <CheckCircle size={48} style={{ color: "#A3C6CF", margin: "0 auto 16px" }} />
                   <div style={{ fontSize: 18, fontWeight: 800, color: "#fff", marginBottom: 8 }}>Request Sent!</div>
-                  <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)" }}>We&apos;ve received your request and will get back to you within 24 hours.</p>
+                  <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)" }}>We&apos;ve received your request and will get back to you within 48 hours.</p>
                 </div>
               ) : (
                 <form style={{ padding: 32, display: "flex", flexDirection: "column", gap: 16 }} onSubmit={e => e.preventDefault()}>
@@ -545,7 +545,7 @@ export default function GynecomastiaLanding() {
                       <Send size={16} /> {submitting ? "Sending..." : "Send My Consultation Request"}
                     </button>
                   </div>
-                  <p style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", textAlign: "center" }}>No commitment required · No spam · We reply within 24 hours</p>
+                  <p style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", textAlign: "center" }}>No commitment required · No spam · We reply within 48 hours</p>
                 </form>
               )}
             </div>

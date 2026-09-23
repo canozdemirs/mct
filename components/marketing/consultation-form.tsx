@@ -81,7 +81,7 @@ export function ConsultationForm({ initialTreatment = "", source = "", onSuccess
       <div className="flex flex-col items-center justify-center py-12 text-center gap-4">
         <CheckCircle size={48} className="text-teal" />
         <h3 className="text-lg font-bold text-brand">Request Sent!</h3>
-        <p className="text-sm text-gray-500 max-w-xs">We&apos;ve received your consultation request and will get back to you within 24 hours.</p>
+        <p className="text-sm text-gray-500 max-w-xs">We&apos;ve received your consultation request and will get back to you within 48 hours.</p>
       </div>
     );
   }

@@ -25,7 +25,7 @@ export function ConsultationModalProvider({ children }: { children: React.ReactN
               <div>
                 <span className="inline-block text-xs font-bold uppercase tracking-widest text-teal mb-2">Free Consultation</span>
                 <h3 className="text-2xl font-bold text-brand">Get Your Free Treatment Plan</h3>
-                <p className="text-gray-400 text-sm mt-1 leading-relaxed">Fill in the form and we will get back to you within 24 hours — no commitment required.</p>
+                <p className="text-gray-400 text-sm mt-1 leading-relaxed">Fill in the form and we will get back to you within 48 hours — no commitment required.</p>
               </div>
               <button onClick={() => setOpen(false)} className="shrink-0 mt-1 text-gray-400 hover:text-gray-600 transition-colors">
                 <X size={22} />

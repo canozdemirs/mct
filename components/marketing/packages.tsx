@@ -293,7 +293,7 @@ function QuoteModal({ name, onClose }: { name: string; onClose: () => void }) {
           <div>
             <span className="text-xs font-bold uppercase tracking-widest text-teal">Free Consultation</span>
             <h3 className="text-xl font-bold text-brand mt-0.5">Get Your Free Treatment Plan</h3>
-            <p className="text-xs text-gray-400 mt-1">We&apos;ll get back to you within 24 hours — no commitment required.</p>
+            <p className="text-xs text-gray-400 mt-1">We&apos;ll get back to you within 48 hours — no commitment required.</p>
           </div>
           <button onClick={onClose} className="shrink-0 mt-1 text-gray-400 hover:text-gray-600 transition-colors" aria-label="Close">
             <X size={20} />

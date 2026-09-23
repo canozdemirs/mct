@@ -175,7 +175,7 @@ function buildPatientEmail(name: string) {
     <p style="margin:0 0 16px;color:#374151;font-size:15px;line-height:1.6;">Hi ${escapeHtml(name)},</p>
     <p style="margin:0 0 24px;color:#374151;font-size:15px;line-height:1.6;">
       Thank you for reaching out to Medical Center Turkey. We've received your request and one of our
-      patient coordinators will get back to you within 24 hours.
+      patient coordinators will get back to you within 48 hours.
     </p>
     <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 8px;">
       <tr>
@@ -194,7 +194,7 @@ function buildPatientEmail(name: string) {
   const text = [
     `Hi ${name},`,
     "",
-    "Thank you for reaching out to Medical Center Turkey. We've received your request and one of our patient coordinators will get back to you within 24 hours.",
+    "Thank you for reaching out to Medical Center Turkey. We've received your request and one of our patient coordinators will get back to you within 48 hours.",
     "",
     `Message us on WhatsApp: ${WHATSAPP_LINK}`,
     "",
