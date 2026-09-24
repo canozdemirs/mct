@@ -170,6 +170,20 @@ All new development must happen inside the Next.js platform.
 
 ---
 
+# Database & Migration Rules
+
+Every new table migration must include explicit GRANT statements in the same file that creates the table.
+
+`service_role` always receives the privileges it needs.
+
+`anon` and `authenticated` receive only the privileges actually required, and those are further constrained by RLS policies.
+
+Sensitive tables (leads, partner data, commissions) remain accessible only via `service_role`. No grants to `anon` or `authenticated`.
+
+This applies to every table going forward, without exception.
+
+---
+
 # Legacy Platform
 
 Current live website:

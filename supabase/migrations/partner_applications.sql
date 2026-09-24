@@ -42,3 +42,10 @@ CREATE TABLE IF NOT EXISTS partners (
 -- direct reads/writes of applicant PII through the public anon key.
 ALTER TABLE partner_applications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE partners ENABLE ROW LEVEL SECURITY;
+
+-- Explicit service_role grants (no anon/authenticated grants — see above).
+-- Written out explicitly rather than relying on default privileges, so a
+-- fresh environment set up from these migration files alone doesn't end up
+-- with tables the app's own service-role client can't reach.
+GRANT ALL ON partner_applications TO service_role;
+GRANT ALL ON partners TO service_role;
