@@ -42,7 +42,10 @@ export function getRealCategories(): { name: string; count: number }[] {
 export function searchBlogPosts(query: string, category: string | null): BlogPostMeta[] {
   const q = query.trim().toLowerCase();
   return SORTED_BLOG_POSTS.filter((post) => {
-    const matchesQuery = q === "" || post.title.toLowerCase().includes(q);
+    const matchesQuery =
+      q === "" ||
+      post.title.toLowerCase().includes(q) ||
+      post.seoDescription.toLowerCase().includes(q);
     const matchesCategory = !category || post.categories.includes(category);
     return matchesQuery && matchesCategory;
   });

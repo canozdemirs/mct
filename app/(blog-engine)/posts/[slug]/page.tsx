@@ -50,7 +50,18 @@ export default async function BlogPostPage({ params }: PageProps) {
   if (!post) notFound();
 
   const canonicalUrl = `https://www.medicalcenterturkey.com/${post.slug}`;
-  const html = readFileSync(path.join(process.cwd(), "content", "blog", `${slug}.html`), "utf-8");
+  // The imported WordPress HTML links its "Treatment Cost Calculator" /
+  // "click here to calculate" CTAs (652 occurrences across the archive) to
+  // the absolute live production URL. That domain still serves the old
+  // WordPress site until the real cutover, so following this link today
+  // (on any host -- preview, localhost, or even a Next.js production
+  // deploy before DNS cutover) lands on WordPress's own calculator, not
+  // this app's. Rewritten here, once, at build time, to the app's own
+  // relative route -- resolves correctly on every host this app is served
+  // from, with no per-article content-file edits. Scoped to this one exact
+  // literal URL only; nothing else in the article HTML is touched.
+  const html = readFileSync(path.join(process.cwd(), "content", "blog", `${slug}.html`), "utf-8")
+    .replaceAll("https://www.medicalcenterturkey.com/treatment-prices-in-turkey/", "/treatment-prices-in-turkey");
   const articleSchema = generateArticleSchema({
     title: post.title,
     description: post.seoDescription,
@@ -80,7 +91,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           </p>
           <BlogArticleContent
             html={html}
-            className="space-y-5 text-gray-600 leading-relaxed text-[15px] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-brand [&_h2]:mt-10 [&_h2]:mb-3 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-brand [&_h3]:mt-8 [&_h3]:mb-2 [&_h4]:text-lg [&_h4]:font-bold [&_h4]:text-brand [&_h4]:mt-6 [&_h4]:mb-2 [&_img]:rounded-xl [&_img]:w-full [&_img]:h-auto [&_figure]:my-6 [&_figcaption]:text-xs [&_figcaption]:text-gray-400 [&_figcaption]:mt-2 [&_ul]:list-disc [&_ul]:list-outside [&_ul]:ml-5 [&_ul]:space-y-1.5 [&_a]:text-teal [&_a]:underline [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-gray-100 [&_td]:p-2 [&_th]:border [&_th]:border-gray-100 [&_th]:p-2 [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:rounded-xl"
+            className="blog-article-body space-y-5 text-gray-600 leading-relaxed text-[15px] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-brand [&_h2]:mt-10 [&_h2]:mb-3 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-brand [&_h3]:mt-8 [&_h3]:mb-2 [&_h4]:text-lg [&_h4]:font-bold [&_h4]:text-brand [&_h4]:mt-6 [&_h4]:mb-2 [&_img]:rounded-xl [&_img]:w-full [&_img]:h-auto [&_figure]:my-6 [&_figcaption]:text-xs [&_figcaption]:text-gray-400 [&_figcaption]:mt-2 [&_ul]:list-disc [&_ul]:list-outside [&_ul]:ml-5 [&_ul]:space-y-1.5 [&_a]:text-teal [&_a]:underline [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-gray-100 [&_td]:p-2 [&_th]:border [&_th]:border-gray-100 [&_th]:p-2 [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:rounded-xl"
           />
         </article>
       </main>

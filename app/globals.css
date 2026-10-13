@@ -162,3 +162,22 @@ html {
 .flip-card-back {
   transform: rotateY(180deg);
 }
+
+/* Blog article body: two CTA banner graphics imported from WordPress
+   ("Treatment Cost Calculator" and "Request a FREE Consultation") were
+   designed at a modest inline size (native widths from ~523px up to
+   ~1330px), but the shared article typography (.blog-article-body img)
+   stretches every image to the full article width -- correct for real
+   content photos, but it visibly oversizes/upscales these two specific CTA
+   graphics. Both appear with a stable, identical `alt` attribute across
+   hundreds of articles, so this single rule fixes all of them at once with
+   no per-article HTML edits. Capped below every native resolution found,
+   so this only ever downscales, never upscales. */
+.blog-article-body img[alt="Treatment Cost Calculator"],
+.blog-article-body img[alt="Request a FREE Consultation"] {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  display: block;
+  margin: 1.5rem auto;
+}

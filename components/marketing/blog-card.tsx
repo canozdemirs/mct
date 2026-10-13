@@ -17,8 +17,6 @@ function formatDate(date: string) {
 }
 
 export function BlogCard({ post, priority = false }: { post: BlogCardData; priority?: boolean }) {
-  const primaryCategory = post.categories[0];
-
   return (
     <Link
       href={`/${post.slug}`}
@@ -39,11 +37,9 @@ export function BlogCard({ post, priority = false }: { post: BlogCardData; prior
             <ImageOff className="text-gray-300" size={32} />
           </div>
         )}
-        {primaryCategory && (
-          <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-[11px] font-bold uppercase tracking-wide text-brand px-2.5 py-1 rounded-full">
-            {primaryCategory}
-          </span>
-        )}
+        {/* Category badge over the thumbnail removed per request -- the
+            underlying post.categories data (SEO relationships, category
+            filter) is untouched, only the visible overlay is gone. */}
       </div>
       <div className="flex flex-col flex-1 p-5">
         <p className="text-xs text-gray-400 mb-2">{formatDate(post.date)}</p>

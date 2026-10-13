@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Search, X } from "lucide-react";
+import { Search, X, ChevronDown } from "lucide-react";
 import { BlogCard, type BlogCardData } from "./blog-card";
 
 const RESULTS_PER_PAGE = 12;
@@ -50,52 +50,62 @@ export function BlogSearchFilter({
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row gap-3 mb-6">
-        <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search articles by title..."
-            aria-label="Search blog articles"
-            className="w-full bg-gray-50 border border-gray-100 rounded-xl pl-11 pr-10 py-3 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-teal focus:bg-white transition-all"
-          />
-          {query && (
-            <button
-              type="button"
-              onClick={() => setQuery("")}
-              aria-label="Clear search"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            >
-              <X size={16} />
-            </button>
-          )}
+      {/* Compact filter bar: search (left) + category "Type" dropdown
+          (right) on desktop, stacked on mobile. Replaces the old separate
+          search row + wrapping category-pill row. */}
+      <div className="flex flex-col sm:flex-row gap-3 mb-10">
+        <div className="flex-1">
+          <label htmlFor="blog-search-input" className="hidden sm:block text-[11px] font-semibold uppercase tracking-wide text-transparent mb-1">
+            Search
+          </label>
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+            <input
+              id="blog-search-input"
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search articles..."
+              aria-label="Search blog articles"
+              className="w-full bg-gray-50 border border-gray-100 rounded-xl pl-11 pr-10 py-3 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-teal focus:bg-white transition-all"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                aria-label="Clear search"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                <X size={16} />
+              </button>
+            )}
+          </div>
         </div>
-      </div>
 
-      <div className="flex flex-wrap gap-2 mb-10" role="group" aria-label="Filter by category">
-        <button
-          type="button"
-          onClick={() => setCategory(null)}
-          className={`px-4 py-2 rounded-full text-xs font-semibold transition-colors ${
-            category === null ? "bg-brand text-white" : "bg-gray-50 text-gray-500 hover:bg-gray-100"
-          }`}
-        >
-          All Articles
-        </button>
-        {categories.map((c) => (
-          <button
-            key={c.name}
-            type="button"
-            onClick={() => setCategory(c.name)}
-            className={`px-4 py-2 rounded-full text-xs font-semibold transition-colors ${
-              category === c.name ? "bg-brand text-white" : "bg-gray-50 text-gray-500 hover:bg-gray-100"
-            }`}
-          >
-            {c.name} <span className="opacity-60">({c.count})</span>
-          </button>
-        ))}
+        <div className="sm:w-56 shrink-0">
+          <label htmlFor="blog-category-filter" className="block text-[11px] font-semibold uppercase tracking-wide text-gray-400 mb-1">
+            Type
+          </label>
+          <div className="relative">
+            <select
+              id="blog-category-filter"
+              value={category ?? ""}
+              onChange={(e) => setCategory(e.target.value || null)}
+              className="w-full appearance-none bg-gray-50 border border-gray-100 rounded-xl pl-4 pr-10 py-3 text-sm text-gray-800 focus:outline-none focus:border-teal focus:bg-white transition-all cursor-pointer"
+            >
+              <option value="">All categories</option>
+              {categories.map((c) => (
+                <option key={c.name} value={c.name}>
+                  {c.name} ({c.count})
+                </option>
+              ))}
+            </select>
+            <ChevronDown
+              className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+              size={16}
+            />
+          </div>
+        </div>
       </div>
 
       {!active && children}

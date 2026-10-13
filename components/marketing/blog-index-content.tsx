@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
 import { BlogCard } from "./blog-card";
 import { BlogPagination } from "./blog-pagination";
 import { BlogSearchFilter } from "./blog-search-filter";
@@ -19,33 +17,14 @@ export function BlogIndexContent({
 
   return (
     <main className="bg-white min-h-screen">
-      {/* Breadcrumb */}
-      <div className="bg-white border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <nav className="flex items-center gap-1.5 text-sm text-gray-400" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-gray-600 transition-colors">
-              Home
-            </Link>
-            <ChevronRight size={13} />
-            <span className="text-gray-600 font-medium">Blog</span>
-          </nav>
-        </div>
-      </div>
-
-      {/* Hero */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-8 text-center">
-        <span className="inline-block text-xs font-bold uppercase tracking-widest text-teal mb-3">
-          Medical Center Turkey
-        </span>
-        <h1 className="text-3xl sm:text-4xl font-bold text-brand mb-4">Medical Center Turkey Blog</h1>
-        <p className="text-gray-500 text-base max-w-2xl mx-auto">
-          Explore expert insights, treatment guides, patient information, and the latest articles about healthcare
-          and medical tourism in Turkey.
-        </p>
-      </div>
+      {/* Visible breadcrumb and intro heading/description were removed per
+          request -- this sr-only h1 is the page's only heading now, kept
+          for accessible document structure. The SEO <title> (set in
+          app/blog/page.tsx's metadata) is separate and untouched. */}
+      <h1 className="sr-only">Medical Center Turkey Blog</h1>
 
       {/* Search, filters, grid, pagination */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-20">
         <BlogSearchFilter categories={categories}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {posts.map((post, i) => (
