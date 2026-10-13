@@ -3,36 +3,30 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ShieldCheck, Globe, Award, UserCheck, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { MedicalTourismTurkeyProcess } from "./medical-tourism-turkey-process";
 import { ConsultationForm } from "./consultation-form";
-import { MailtoWithReference } from "./mailto-with-reference";
 import { MEDICAL_TOURISM_TURKEY_FAQS as faqs } from "@/lib/medical-tourism-turkey-content";
 
-// Phase: TR mini-site redesign. The English homepage's hero (components/
-// marketing/hero.tsx) is a single flat image (public/hero-son.png) with its
-// headline, subheadline, top trust-badge row AND bottom feature row all
-// baked into the pixels -- there is no HTML/CSS text to translate, and no
-// textless source version of that exact photo exists in the repo (checked
-// public/hero-image1.png too -- same problem). Reusing it here would either
-// (a) show English text with no Turkish equivalent, or (b) force Turkish
-// text directly on top of the existing baked English text, which collides
-// visually. Per the brief's own fallback instruction, the original file is
-// left untouched; this page instead reuses public/istanbul_hero.webp (an
-// existing, already-in-repo, textless Istanbul skyline photo -- not a newly
-// generated/unrelated stock image) as the background for a real HTML/CSS
-// text overlay, keeping the same design APPROACH as the English homepage
-// (full-bleed photo + gradient scrim + white/gold text + pill CTAs) even
-// though the specific photo differs. Flagged explicitly in the report.
-const trustBadges = [
-  { icon: ShieldCheck, title: "Sağlık Turizmi Yetki Belgesi", subtitle: "AK-1494" },
-  { icon: Globe, title: "TÜRSAB Üyesi", subtitle: "No: 18274" },
-  // "Hospitals" (plural) deliberately, not "Medical Center Turkey" itself --
-  // MCT is a coordinator, not a JCI-accredited provider. Subtitle makes the
-  // partner-hospital scope explicit (see CLAUDE.md "Partner Hospital Rules").
-  { icon: Award, title: "JCI Akreditasyonlu Hastaneler", subtitle: "Ortak Hastanelerimiz" },
-  { icon: UserCheck, title: "VIP Hasta Koordinasyonu", subtitle: "7/24 Destek" },
-];
+// Phase: TR mini-site Hero, final. public/hero-tr.png is a Turkish-localized
+// version of the English hero-son.png scene, supplied as a finished asset --
+// headline, subheadline, the 4 trust badges and the bottom 5-item feature
+// strip are all already baked into it in Turkish. Rendered at its natural
+// 1536x1024 ratio (w-full h-auto, same non-cropping pattern components/
+// marketing/hero.tsx already uses for the English version) so it is never
+// cropped or distorted at any width -- mobile included. No HTML text is
+// layered on top of it (would duplicate what's already in the image); the
+// two CTA pill shapes baked into the image are instead given real,
+// keyboard-focusable <Link>/<a> hit areas positioned over them in percent
+// coordinates (measured directly from the image's pixels), so they scale
+// together with the image at any viewport width and stay functional.
+// The separate HTML trust-badge row that used to sit above this section
+// was removed -- the image's own top strip already shows the same 4 badges,
+// and keeping both would duplicate them (see the brief's own instruction).
+const CTA_HOTSPOTS = [
+  { href: "/hospitals-in-turkey", label: "Hastanelerimiz", left: 4, top: 63.3, width: 16.3, height: 7.6, internal: true },
+  { href: "#iletisim", label: "İletişime Geçin", left: 22.1, top: 63.3, width: 15.8, height: 7.6, internal: false },
+] as const;
 
 export function MedicalTourismTurkeyLanding() {
   const [aboutExpanded, setAboutExpanded] = useState(false);
@@ -40,71 +34,43 @@ export function MedicalTourismTurkeyLanding() {
 
   return (
     <div lang="tr">
-      {/* In-page anchor nav */}
-      <nav className="border-b border-gray-100 bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-12 flex items-center justify-center gap-6 overflow-x-auto">
-          <a href="#hero" className="text-xs font-semibold text-brand hover:text-teal whitespace-nowrap">Ana Sayfa</a>
-          <a href="#hakkimizda" className="text-xs font-semibold text-brand hover:text-teal whitespace-nowrap">Hakkımızda</a>
-          <a href="#surec" className="text-xs font-semibold text-brand hover:text-teal whitespace-nowrap">Süreç</a>
-          <a href="#sss" className="text-xs font-semibold text-brand hover:text-teal whitespace-nowrap">SSS</a>
-          <a href="#iletisim" className="text-xs font-semibold text-brand hover:text-teal whitespace-nowrap">İletişim</a>
-        </div>
-      </nav>
+      {/* The in-page anchor nav that used to live here was removed -- it
+          duplicated the page header (two stacked nav bars). Its links now
+          live in MedicalTourismTurkeyNav's own center nav instead; the
+          section ids below (#hero, #hakkimizda, #surec, #sss, #iletisim)
+          are unchanged so those header links still scroll correctly. */}
 
-      {/* Trust badges -- mirrors the row the English hero image bakes in at
-          its top, rebuilt here as real, translatable HTML/CSS. */}
-      <section id="hero" className="py-6 px-4 sm:px-6 lg:px-8 bg-white border-b border-gray-100">
-        <div className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6">
-          {trustBadges.map(({ icon: Icon, title, subtitle }) => (
-            <div key={title} className="flex flex-col items-center text-center gap-2">
-              <Icon className="text-teal" size={26} />
-              <div className="text-xs sm:text-sm font-bold text-brand leading-snug">{title}</div>
-              <div className="text-[11px] sm:text-xs text-gray-400">{subtitle}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Hero */}
-      <section className="relative overflow-hidden min-h-[440px] sm:min-h-[520px] lg:min-h-[600px] flex items-center">
+      {/* Hero -- see the file-level comment above for how the CTA hotspots
+          are positioned over the image's own baked-in buttons. */}
+      <section id="hero" className="relative w-full overflow-hidden bg-brand-dark">
         <Image
-          src="/istanbul_hero.webp"
-          alt="İstanbul"
-          fill
+          src="/hero-tr.png"
+          alt="Türkiye'de Ayrıcalıklı Sağlık Hizmeti — Medical Center Turkey: İstanbul'da doktor ve hasta görüşmesi, Galata Kulesi manzarası, sağlık turizmi yetki belgesi, TÜRSAB üyeliği, JCI akreditasyonlu ortak hastaneler ve VIP hasta koordinasyonu"
+          width={1536}
+          height={1024}
           priority
           sizes="100vw"
-          className="object-cover"
+          className="w-full h-auto block"
         />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(100deg, rgba(13,45,82,0.94) 0%, rgba(13,45,82,0.82) 35%, rgba(13,45,82,0.55) 65%, rgba(13,45,82,0.25) 100%)",
-          }}
-        />
-        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 w-full">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white max-w-2xl mb-5 leading-tight">
-            Türkiye&apos;de Ayrıcalıklı Sağlık Hizmeti
-          </h1>
-          <p className="text-white/80 max-w-xl mb-8 text-base sm:text-lg leading-relaxed">
-            Uluslararası Standartlarda Tedavi. Size Özel Sağlık Hizmetleri. Sağlığınız Önceliğimiz.
-          </p>
-          <div className="flex flex-wrap items-center gap-3">
+        {CTA_HOTSPOTS.map((cta) =>
+          cta.internal ? (
             <Link
-              href="/hospitals-in-turkey"
-              className="px-6 py-3 rounded-full bg-white text-brand font-semibold text-sm hover:bg-gray-100 transition-colors"
-            >
-              Hastanelerimiz
-            </Link>
+              key={cta.href}
+              href={cta.href}
+              aria-label={cta.label}
+              className="absolute rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+              style={{ left: `${cta.left}%`, top: `${cta.top}%`, width: `${cta.width}%`, height: `${cta.height}%` }}
+            />
+          ) : (
             <a
-              href="#iletisim"
-              className="px-6 py-3 rounded-full font-semibold text-sm text-white transition-colors"
-              style={{ background: "linear-gradient(135deg, #1ab3c8, #1b5fa8)" }}
-            >
-              İletişime Geçin
-            </a>
-          </div>
-        </div>
+              key={cta.href}
+              href={cta.href}
+              aria-label={cta.label}
+              className="absolute rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+              style={{ left: `${cta.left}%`, top: `${cta.top}%`, width: `${cta.width}%`, height: `${cta.height}%` }}
+            />
+          )
+        )}
       </section>
 
       {/* Biz Kimiz? */}
@@ -228,15 +194,6 @@ export function MedicalTourismTurkeyLanding() {
               </div>
             </div>
 
-          </div>
-
-          <div className="mt-10 text-center text-sm text-gray-500 space-y-1">
-            <p>Barbaros Mah. Al Zambak Sk. Varyap Meridian Grand Tower A Blok No:2 D:226, Ataşehir / İstanbul</p>
-            <p>
-              <a href="tel:+908508888911" className="text-brand font-semibold hover:text-teal">+90 850 888 89 11</a>
-              {" · "}
-              <MailtoWithReference address="hello@medicalcenterturkey.com" subject="Medical Tourism Inquiry" className="text-brand font-semibold hover:text-teal">hello@medicalcenterturkey.com</MailtoWithReference>
-            </p>
           </div>
         </div>
       </section>

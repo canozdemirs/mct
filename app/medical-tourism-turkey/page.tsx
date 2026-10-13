@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Nav } from "@/components/marketing/nav";
+import { MedicalTourismTurkeyNav } from "@/components/marketing/medical-tourism-turkey-nav";
 import { Footer } from "@/components/marketing/footer";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import { MedicalTourismTurkeyLanding } from "@/components/marketing/medical-tourism-turkey-landing";
@@ -13,6 +13,11 @@ import { MEDICAL_TOURISM_TURKEY_FAQS } from "@/lib/medical-tourism-turkey-conten
 // wrapped in <div lang="tr"> instead (see MedicalTourismTurkeyLanding).
 // No explicit `robots` metadata here — inherits noindex/nofollow from the
 // root layout, same as every other page during this pre-launch phase.
+//
+// Uses MedicalTourismTurkeyNav instead of the global <Nav /> (English
+// header) so this page shows exactly one navigation bar instead of two
+// stacked headers. The global Nav component itself is untouched and still
+// used everywhere else.
 
 const PAGE_URL = "https://www.medicalcenterturkey.com/medical-tourism-turkey";
 
@@ -36,7 +41,7 @@ export default function MedicalTourismTurkeyPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <Nav />
+      <MedicalTourismTurkeyNav />
       <main>
         <MedicalTourismTurkeyLanding />
       </main>
