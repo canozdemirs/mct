@@ -163,21 +163,64 @@ html {
   transform: rotateY(180deg);
 }
 
-/* Blog article body: two CTA banner graphics imported from WordPress
-   ("Treatment Cost Calculator" and "Request a FREE Consultation") were
-   designed at a modest inline size (native widths from ~523px up to
-   ~1330px), but the shared article typography (.blog-article-body img)
-   stretches every image to the full article width -- correct for real
-   content photos, but it visibly oversizes/upscales these two specific CTA
-   graphics. Both appear with a stable, identical `alt` attribute across
-   hundreds of articles, so this single rule fixes all of them at once with
-   no per-article HTML edits. Capped below every native resolution found,
-   so this only ever downscales, never upscales. */
+/* Blog article body: image layout & spacing.
+   The imported WordPress HTML is structurally inconsistent -- an <img> may
+   sit bare in the flow, or be wrapped in <a>, <p>, or <figure> (checked
+   across a sample of the archive). Rather than special-case each wrapper,
+   every rule below targets the <img> itself, which always exists and
+   always has real intrinsic pixel dimensions, and is paired with a
+   `:has()` rule that zeroes out any wrapper's OWN vertical margin so
+   spacing is never doubled regardless of which wrapper (if any) is
+   present.
+   - `width: auto` + `max-width` (not `width: 100%`) means a small native
+     image displays at its own natural size -- never stretched up -- while
+     a large one is capped down; height follows automatically, so aspect
+     ratio is never distorted.
+   - 650px is a deliberate cap, not a hard rule for every image: it's
+     comfortably below the typical imported photo's native width (checked:
+     most run 900px-1500px+), so this only ever downscales. A handful of
+     wide comparison/infographic images are capped the same way; see the
+     report for this phase for any case that needed a different treatment.
+   - Margin is the normal-image default (32px desktop / 24px mobile,
+     applied around every image uniformly for a consistent rhythm);
+     the two CTA banners below only override max-width, inheriting this
+     same margin instead of carrying their own. */
+.blog-article-body img {
+  display: block;
+  width: auto;
+  max-width: min(100%, 650px);
+  height: auto;
+  margin: 2rem auto;
+}
+
+@media (max-width: 639px) {
+  .blog-article-body img {
+    margin: 1.5rem auto;
+  }
+}
+
+.blog-article-body :is(p, a, figure):has(> img:only-child) {
+  display: block;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Two CTA banner graphics ("Treatment Cost Calculator" and the now-removed
+   "Request a FREE Consultation" -- its selector is kept here in case a
+   future article still carries one) were designed at a modest inline size
+   but would otherwise inherit the 650px cap above; both appear with a
+   stable, identical `alt` attribute across hundreds of articles, so this
+   single rule narrows just the width for all of them at once, no
+   per-article HTML edits. Still well below their native resolutions, so
+   this only ever downscales, never upscales.
+   `width: 100%` here (re-asserted, not just inherited `auto` from the
+   general rule above) is deliberate: on a narrow mobile viewport the
+   article column itself is well under 420px, and `max-width` alone is a
+   fixed ceiling that doesn't know the container's actual width -- without
+   `width: 100%` this banner would overflow a mobile layout, which was
+   caught by an 8-article overflow check and fixed here. */
 .blog-article-body img[alt="Treatment Cost Calculator"],
 .blog-article-body img[alt="Request a FREE Consultation"] {
   width: 100%;
   max-width: 420px;
-  height: auto;
-  display: block;
-  margin: 1.5rem auto;
 }

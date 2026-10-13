@@ -113,7 +113,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           </p>
           <BlogArticleContent
             html={html}
-            className="blog-article-body space-y-5 text-gray-600 leading-relaxed text-[15px] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-brand [&_h2]:mt-10 [&_h2]:mb-3 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-brand [&_h3]:mt-8 [&_h3]:mb-2 [&_h4]:text-lg [&_h4]:font-bold [&_h4]:text-brand [&_h4]:mt-6 [&_h4]:mb-2 [&_img]:rounded-xl [&_img]:w-full [&_img]:h-auto [&_figure]:my-6 [&_figcaption]:text-xs [&_figcaption]:text-gray-400 [&_figcaption]:mt-2 [&_ul]:list-disc [&_ul]:list-outside [&_ul]:ml-5 [&_ul]:space-y-1.5 [&_a]:text-teal [&_a]:underline [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-gray-100 [&_td]:p-2 [&_th]:border [&_th]:border-gray-100 [&_th]:p-2 [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:rounded-xl"
+            className="blog-article-body space-y-5 text-gray-600 leading-relaxed text-[15px] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-brand [&_h2]:mt-10 [&_h2]:mb-3 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-brand [&_h3]:mt-8 [&_h3]:mb-2 [&_h4]:text-lg [&_h4]:font-bold [&_h4]:text-brand [&_h4]:mt-6 [&_h4]:mb-2 [&_img]:rounded-xl [&_figcaption]:text-xs [&_figcaption]:text-gray-400 [&_figcaption]:mt-2 [&_ul]:list-disc [&_ul]:list-outside [&_ul]:ml-5 [&_ul]:space-y-1.5 [&_a]:text-teal [&_a]:underline [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-gray-100 [&_td]:p-2 [&_th]:border [&_th]:border-gray-100 [&_th]:p-2 [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:rounded-xl"
           />
         </article>
       </main>
