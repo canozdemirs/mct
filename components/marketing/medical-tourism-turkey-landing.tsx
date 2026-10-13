@@ -2,31 +2,27 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { MedicalTourismTurkeyProcess } from "./medical-tourism-turkey-process";
 import { ConsultationForm } from "./consultation-form";
 import { MEDICAL_TOURISM_TURKEY_FAQS as faqs } from "@/lib/medical-tourism-turkey-content";
 
-// Phase: TR mini-site Hero, final. public/hero-tr.png is a Turkish-localized
-// version of the English hero-son.png scene, supplied as a finished asset --
-// headline, subheadline, the 4 trust badges and the bottom 5-item feature
-// strip are all already baked into it in Turkish. Rendered at its natural
-// 1536x1024 ratio (w-full h-auto, same non-cropping pattern components/
-// marketing/hero.tsx already uses for the English version) so it is never
-// cropped or distorted at any width -- mobile included. No HTML text is
-// layered on top of it (would duplicate what's already in the image); the
-// two CTA pill shapes baked into the image are instead given real,
-// keyboard-focusable <Link>/<a> hit areas positioned over them in percent
-// coordinates (measured directly from the image's pixels), so they scale
-// together with the image at any viewport width and stay functional.
-// The separate HTML trust-badge row that used to sit above this section
-// was removed -- the image's own top strip already shows the same 4 badges,
-// and keeping both would duplicate them (see the brief's own instruction).
-const CTA_HOTSPOTS = [
-  { href: "/hospitals-in-turkey", label: "Hastanelerimiz", left: 4, top: 63.3, width: 16.3, height: 7.6, internal: true },
-  { href: "#iletisim", label: "İletişime Geçin", left: 22.1, top: 63.3, width: 15.8, height: 7.6, internal: false },
-] as const;
+// Phase: TR mini-site Hero, final (no CTA). public/hero-tr.png is a
+// Turkish-localized version of the English hero-son.png scene, supplied as
+// a finished asset -- headline, subheadline, the 4 trust badges and the
+// bottom 5-item feature strip are all already baked into it in Turkish.
+// The two CTA buttons that an earlier version of this image had baked in
+// were removed from the image itself (by whoever produces it) rather than
+// just hidden, and the clickable hotspots that used to sit over them were
+// removed from this component to match -- the image is purely illustrative
+// here, with no functional element layered on top of it. The pre-edit
+// version is kept at public/hero-tr-with-buttons-backup.png.
+// Rendered at its natural 1536x1024 ratio (w-full h-auto, same
+// non-cropping pattern components/marketing/hero.tsx already uses for the
+// English version) so it is never cropped or distorted at any width --
+// mobile included. The separate HTML trust-badge row that used to sit
+// above this section was removed earlier -- the image's own top strip
+// already shows the same 4 badges, and keeping both would duplicate them.
 
 export function MedicalTourismTurkeyLanding() {
   const [aboutExpanded, setAboutExpanded] = useState(false);
@@ -40,8 +36,7 @@ export function MedicalTourismTurkeyLanding() {
           section ids below (#hero, #hakkimizda, #surec, #sss, #iletisim)
           are unchanged so those header links still scroll correctly. */}
 
-      {/* Hero -- see the file-level comment above for how the CTA hotspots
-          are positioned over the image's own baked-in buttons. */}
+      {/* Hero -- purely illustrative image, no overlay, no CTA. */}
       <section id="hero" className="relative w-full overflow-hidden bg-brand-dark">
         <Image
           src="/hero-tr.png"
@@ -52,25 +47,6 @@ export function MedicalTourismTurkeyLanding() {
           sizes="100vw"
           className="w-full h-auto block"
         />
-        {CTA_HOTSPOTS.map((cta) =>
-          cta.internal ? (
-            <Link
-              key={cta.href}
-              href={cta.href}
-              aria-label={cta.label}
-              className="absolute rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
-              style={{ left: `${cta.left}%`, top: `${cta.top}%`, width: `${cta.width}%`, height: `${cta.height}%` }}
-            />
-          ) : (
-            <a
-              key={cta.href}
-              href={cta.href}
-              aria-label={cta.label}
-              className="absolute rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
-              style={{ left: `${cta.left}%`, top: `${cta.top}%`, width: `${cta.width}%`, height: `${cta.height}%` }}
-            />
-          )
-        )}
       </section>
 
       {/* Biz Kimiz? */}
