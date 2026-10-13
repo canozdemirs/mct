@@ -1,10 +1,13 @@
 // Shared, pure helpers for the /blog index — used by both the static
-// paginated pages (app/blog/page.tsx, app/blog/page/[page]/page.tsx) and
-// the server-side search API (app/api/blog-search/route.ts). No content
-// bodies are touched here, only the lightweight metadata already in
-// lib/blog-index.generated.ts (title/slug/date/excerpt/category/image).
+// paginated pages (app/blog/page.tsx, app/blog/page/[page]/page.tsx), the
+// server-side search API (app/api/blog-search/route.ts), and the article
+// detail page (app/(blog-engine)/posts/[slug]/page.tsx, via getPostBySlug
+// below). No content bodies are touched here, only the lightweight
+// metadata already in lib/blog-index.generated.ts
+// (title/slug/date/excerpt/category/image).
 
 import { BLOG_POSTS, type BlogPostMeta } from "./blog-index.generated";
+import { CATEGORY_OVERRIDES } from "./blog-category-overrides";
 
 export const POSTS_PER_PAGE = 12;
 
@@ -13,7 +16,15 @@ function toTimestamp(date: string): number {
   return new Date(date.replace(" ", "T") + "Z").getTime();
 }
 
-export const SORTED_BLOG_POSTS: BlogPostMeta[] = [...BLOG_POSTS].sort(
+// CATEGORY_OVERRIDES is applied once, here, so every consumer of
+// SORTED_BLOG_POSTS (listing, search, sitemap, the article page via
+// getPostBySlug) sees the corrected categories consistently — the
+// auto-generated BLOG_POSTS array itself is never mutated.
+const POSTS_WITH_CATEGORY_OVERRIDES: BlogPostMeta[] = BLOG_POSTS.map((post) =>
+  CATEGORY_OVERRIDES[post.slug] ? { ...post, categories: CATEGORY_OVERRIDES[post.slug] } : post
+);
+
+export const SORTED_BLOG_POSTS: BlogPostMeta[] = [...POSTS_WITH_CATEGORY_OVERRIDES].sort(
   (a, b) => toTimestamp(b.date) - toTimestamp(a.date)
 );
 
@@ -22,6 +33,10 @@ export const TOTAL_BLOG_PAGES = Math.ceil(SORTED_BLOG_POSTS.length / POSTS_PER_P
 export function getBlogPage(page: number): BlogPostMeta[] {
   const start = (page - 1) * POSTS_PER_PAGE;
   return SORTED_BLOG_POSTS.slice(start, start + POSTS_PER_PAGE);
+}
+
+export function getPostBySlug(slug: string): BlogPostMeta | undefined {
+  return SORTED_BLOG_POSTS.find((p) => p.slug === slug);
 }
 
 /** Real WordPress categories, as actually assigned on the posts — never

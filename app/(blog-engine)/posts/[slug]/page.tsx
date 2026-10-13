@@ -8,6 +8,7 @@ import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import { BlogArticleContent } from "@/components/marketing/blog-article-content";
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/schema";
 import { BLOG_POSTS } from "@/lib/blog-index.generated";
+import { getPostBySlug } from "@/lib/blog-listing";
 
 // This route is reached only via a proxy.ts rewrite from the public
 // root-level URL (/<slug>). Its own canonical always points back to that
@@ -22,17 +23,13 @@ import { BLOG_POSTS } from "@/lib/blog-index.generated";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
-function getPost(slug: string) {
-  return BLOG_POSTS.find((p) => p.slug === slug);
-}
-
 export async function generateStaticParams() {
   return BLOG_POSTS.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = getPostBySlug(slug);
   if (!post) return {};
 
   return {
@@ -46,7 +43,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = getPostBySlug(slug);
   if (!post) notFound();
 
   const canonicalUrl = `https://www.medicalcenterturkey.com/${post.slug}`;
