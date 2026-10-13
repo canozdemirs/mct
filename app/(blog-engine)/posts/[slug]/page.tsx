@@ -60,8 +60,33 @@ export default async function BlogPostPage({ params }: PageProps) {
   // relative route -- resolves correctly on every host this app is served
   // from, with no per-article content-file edits. Scoped to this one exact
   // literal URL only; nothing else in the article HTML is touched.
+  //
+  // The "Request a FREE Consultation" banner (a separate CTA from the
+  // calculator one above) is removed entirely per request -- same
+  // build-time, no-per-file-edit approach. The imported HTML has several
+  // structural variants of this banner across the archive: most are
+  // <a href="..."><img alt="Request a FREE Consultation" .../></a> (href
+  // itself varies -- "#", the calculator URL, even one unrelated Wikipedia
+  // link -- all still removed since the match is on the img's alt, not the
+  // href), some wrap the <img> in an extra <span> inside the <a>, a few
+  // have no <a> at all (a bare <img>, sometimes inside a stray <p>), and
+  // one has a trailing space inside the alt attribute itself. The two
+  // passes below handle the anchor-wrapped variants first, then whatever
+  // bare/paragraph-wrapped <img> is left -- verified against all 608
+  // articles (scripts not kept) to leave zero remaining occurrences while
+  // never touching the separate calculator banner. Replacement is a blank
+  // line, not an empty string, matching the surrounding paragraph-break
+  // convention so no doubled or zero gap is left behind.
   const html = readFileSync(path.join(process.cwd(), "content", "blog", `${slug}.html`), "utf-8")
-    .replaceAll("https://www.medicalcenterturkey.com/treatment-prices-in-turkey/", "/treatment-prices-in-turkey");
+    .replaceAll("https://www.medicalcenterturkey.com/treatment-prices-in-turkey/", "/treatment-prices-in-turkey")
+    .replace(
+      /\s*<a\s+href="[^"]*"[^>]*>\s*(?:<span>)?\s*<img[^>]*alt="Request a FREE Consultation\s*"[^>]*\/?>\s*(?:<\/span>)?\s*<\/a>\s*/g,
+      "\n\n"
+    )
+    .replace(
+      /\s*(?:<p>)?\s*<img[^>]*alt="Request a FREE Consultation\s*"[^>]*\/?>\s*(?:<\/p>)?\s*/g,
+      "\n\n"
+    );
   const articleSchema = generateArticleSchema({
     title: post.title,
     description: post.seoDescription,
