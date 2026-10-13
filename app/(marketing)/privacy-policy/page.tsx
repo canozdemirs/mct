@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import { Nav } from "@/components/marketing/nav";
 import { Footer } from "@/components/marketing/footer";
+import { MailtoWithReference } from "@/components/marketing/mailto-with-reference";
 
 export const metadata: Metadata = {
   title: "Privacy Policy — Medical Center Turkey",
   description:
     "Privacy Policy of Medical Center Turkey. Learn how we collect, use, store, and protect your personal data in connection with our international patient coordination services.",
+  alternates: {
+    canonical: "https://www.medicalcenterturkey.com/privacy-policy",
+  },
 };
 
 export default function PrivacyPolicyPage() {
@@ -56,9 +60,9 @@ export default function PrivacyPolicyPage() {
               <p className="text-gray-600 mb-3">Istanbul, Türkiye</p>
               <p>
                 <span className="text-gray-500 text-sm">Email: </span>
-                <a href="mailto:hello@medicalcenterturkey.com" className="text-teal hover:underline font-medium">
+                <MailtoWithReference address="hello@medicalcenterturkey.com" subject="Privacy Policy Inquiry" className="text-teal hover:underline font-medium">
                   hello@medicalcenterturkey.com
-                </a>
+                </MailtoWithReference>
               </p>
             </div>
             <p className="mb-3">
@@ -395,9 +399,9 @@ export default function PrivacyPolicyPage() {
             </ul>
             <p className="mb-3">
               Requests may be submitted to:{" "}
-              <a href="mailto:hello@medicalcenterturkey.com" className="text-teal hover:underline font-medium">
+              <MailtoWithReference address="hello@medicalcenterturkey.com" subject="Data Subject Rights Request" className="text-teal hover:underline font-medium">
                 hello@medicalcenterturkey.com
-              </a>
+              </MailtoWithReference>
             </p>
             <p className="mb-3">
               MCT may request appropriate information to verify your identity before responding. Requests will be answered within thirty (30) days of receipt, or such other period prescribed by applicable KVKK legislation.
@@ -438,9 +442,9 @@ export default function PrivacyPolicyPage() {
             </p>
             <p>
               If you believe that personal data relating to a minor has been provided to MCT without the required parental, guardian, or other legally required authorization, please contact us at{" "}
-              <a href="mailto:hello@medicalcenterturkey.com" className="text-teal hover:underline font-medium">
+              <MailtoWithReference address="hello@medicalcenterturkey.com" subject="Minor Data Concern" className="text-teal hover:underline font-medium">
                 hello@medicalcenterturkey.com
-              </a>
+              </MailtoWithReference>
               .
             </p>
           </section>
@@ -484,9 +488,9 @@ export default function PrivacyPolicyPage() {
               <p className="text-gray-600 mb-3">Istanbul, Türkiye</p>
               <p>
                 <span className="text-gray-500 text-sm">Email: </span>
-                <a href="mailto:hello@medicalcenterturkey.com" className="text-teal hover:underline font-medium">
+                <MailtoWithReference address="hello@medicalcenterturkey.com" subject="Privacy Policy Inquiry" className="text-teal hover:underline font-medium">
                   hello@medicalcenterturkey.com
-                </a>
+                </MailtoWithReference>
               </p>
             </div>
             <p className="mt-4 text-sm text-gray-400">

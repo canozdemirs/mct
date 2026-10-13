@@ -8,7 +8,7 @@ import {
   generateBreadcrumbSchema,
 } from "@/lib/schema";
 
-const PAGE_URL = "https://medicalcenterturkey.com/lasik-eye-surgery-turkey";
+const PAGE_URL = "https://www.medicalcenterturkey.com/lasik-eye-surgery-turkey";
 
 const faqs = [
   { q: "What is included in the Medical Center Turkey LASIK package?", a: "Our Hassle-Free Package covers everything from arrival to recovery. This includes LASIK surgery on both eyes using wavefront-guided laser technology, a full pre-operative eye examination, local anaesthetic drops, post-operative eye drops and protective goggles, a day-after follow-up appointment, private two-way airport transfers, 3 nights at a 4-star hotel, daily breakfast, a dedicated English-speaking GO (Gentle Organiser) coordinator throughout your stay, and 12 months of online aftercare support. One clear price — no hidden fees." },
@@ -31,14 +31,14 @@ const packages = [
 const faqSchema = generateFAQSchema(faqs);
 const productsSchema = generateProductsSchema(packages);
 const breadcrumbSchema = generateBreadcrumbSchema([
-  { name: "Home", url: "https://medicalcenterturkey.com" },
+  { name: "Home", url: "https://www.medicalcenterturkey.com" },
   { name: "LASIK Eye Surgery Turkey", url: PAGE_URL },
 ]);
 
 export const metadata: Metadata = {
   title: "LASIK Eye Surgery Turkey | All-Inclusive Packages from €1,600 | Medical Center Turkey",
   description: "LASIK eye surgery in Istanbul with Medical Center Turkey. All-inclusive packages from €1,600 — surgery (both eyes), hotel, transfers & 12 months aftercare included. Ministry of Health authorized hospitals. Board-certified ophthalmologists.",
-  robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
+  alternates: { canonical: PAGE_URL },
 };
 
 export default function LasikPage() {

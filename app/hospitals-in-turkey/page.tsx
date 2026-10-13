@@ -9,10 +9,8 @@ export const metadata: Metadata = {
   title: "Partner Hospitals in Turkey | Medical Center Turkey",
   description:
     "Medical Center Turkey coordinates treatment at leading hospital groups across Istanbul, Ankara and Antalya. One point of contact from first consultation to your safe return home.",
-  robots: {
-    index: false,
-    follow: false,
-    googleBot: { index: false, follow: false },
+  alternates: {
+    canonical: "https://www.medicalcenterturkey.com/hospitals-in-turkey",
   },
 };
 

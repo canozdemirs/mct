@@ -8,7 +8,7 @@ import {
   generateBreadcrumbSchema,
 } from "@/lib/schema";
 
-const PAGE_URL = "https://medicalcenterturkey.com/gynecomastia-turkey";
+const PAGE_URL = "https://www.medicalcenterturkey.com/gynecomastia-turkey";
 
 const faqs = [
   { q: "What is included in the Medical Center Turkey gynecomastia package?", a: "Our Hassle-Free Package covers everything from arrival to recovery. This includes the gynecomastia surgery (liposuction combined with glandular tissue removal), pre-operative blood tests and examination, general anaesthesia, 1 night post-operative hospital stay, all post-op medication and compression vest, private two-way airport transfers, 5 nights at a 4-star hotel, daily breakfast, a dedicated English-speaking GO (Gentle Organiser) coordinator throughout your stay, and 12 months of online aftercare support. No hidden fees — one clear price covers everything." },
@@ -31,14 +31,14 @@ const packages = [
 const faqSchema = generateFAQSchema(faqs);
 const productsSchema = generateProductsSchema(packages);
 const breadcrumbSchema = generateBreadcrumbSchema([
-  { name: "Home", url: "https://medicalcenterturkey.com" },
+  { name: "Home", url: "https://www.medicalcenterturkey.com" },
   { name: "Gynecomastia Turkey", url: PAGE_URL },
 ]);
 
 export const metadata: Metadata = {
   title: "Gynecomastia Surgery Turkey | All-Inclusive Packages from €2,200 | Medical Center Turkey",
   description: "Gynecomastia surgery in Istanbul with Medical Center Turkey. All-inclusive packages from €2,200 — surgery, hotel, transfers & 12 months aftercare included. Ministry of Health authorized hospitals.",
-  robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
+  alternates: { canonical: PAGE_URL },
 };
 
 export default function GynecomastiaPage() {

@@ -9,7 +9,7 @@ import {
   generateBreadcrumbSchema,
 } from "@/lib/schema";
 
-const PAGE_URL = "https://medicalcenterturkey.com/all-on-4-dental-implants-turkey";
+const PAGE_URL = "https://www.medicalcenterturkey.com/all-on-4-dental-implants-turkey";
 
 const faqs = [
   { q: "What is included in the Medical Center Turkey All-on-4 package?", a: "Our Hassle-Free Package is our most comprehensive option and includes: the All-on-4 implant surgery (4 implants + fixed temporary prosthesis), 3D panoramic X-ray and pre-surgical consultation, local anaesthesia, post-operative medication, private two-way airport transfers, 7 nights at a 4-star hotel, daily breakfast, a dedicated English-speaking GO (Gentle Organiser) coordinator throughout your entire stay, official warranty certificate, and 12 months of online aftercare support after you return home. No hidden fees — one clear price covers everything." },
@@ -37,14 +37,14 @@ const faqSchema = generateFAQSchema(faqs);
 const productsSchema = generateProductsSchema(packages);
 const reviewSchema = generateReviewSchema("All-on-4 Dental Implants Turkey — Medical Center Turkey", testimonials);
 const breadcrumbSchema = generateBreadcrumbSchema([
-  { name: "Home", url: "https://medicalcenterturkey.com" },
+  { name: "Home", url: "https://www.medicalcenterturkey.com" },
   { name: "All-on-4 Dental Implants Turkey", url: PAGE_URL },
 ]);
 
 export const metadata: Metadata = {
   title: "All-on-4 Dental Implants Turkey | All-Inclusive Packages from €1,500 | Medical Center Turkey",
   description: "All-on-4 dental implants in Istanbul with Medical Center Turkey. Fixed teeth in 7 days from €1,500 — surgery, hotel, transfers & 12 months aftercare included. Ministry of Health authorized hospitals.",
-  robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
+  alternates: { canonical: PAGE_URL },
 };
 
 export default function AllOnFourPage() {

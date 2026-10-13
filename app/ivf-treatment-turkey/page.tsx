@@ -8,7 +8,7 @@ import {
   generateBreadcrumbSchema,
 } from "@/lib/schema";
 
-const PAGE_URL = "https://medicalcenterturkey.com/ivf-treatment-turkey";
+const PAGE_URL = "https://www.medicalcenterturkey.com/ivf-treatment-turkey";
 
 const faqs = [
   { q: "What is included in the Medical Center Turkey IVF package?", a: "Our Hassle-Free Package covers one complete IVF cycle from start to finish. This includes the initial consultation and assessment, all hormonal blood tests and ultrasound monitoring appointments, egg retrieval (OPU) under sedation, sperm analysis and preparation, embryo culture and transfer, luteal phase support medication, private two-way airport transfers, 14 nights at a 4-star hotel, daily breakfast, a dedicated English-speaking GO (Gentle Organiser) coordinator throughout your stay, and 12 months of online aftercare support. One clear price — no hidden fees." },
@@ -31,14 +31,14 @@ const packages = [
 const faqSchema = generateFAQSchema(faqs);
 const productsSchema = generateProductsSchema(packages);
 const breadcrumbSchema = generateBreadcrumbSchema([
-  { name: "Home", url: "https://medicalcenterturkey.com" },
+  { name: "Home", url: "https://www.medicalcenterturkey.com" },
   { name: "IVF Treatment Turkey", url: PAGE_URL },
 ]);
 
 export const metadata: Metadata = {
   title: "IVF Treatment Turkey | All-Inclusive Packages from €3,000 | Medical Center Turkey",
   description: "IVF treatment in Istanbul with Medical Center Turkey. All-inclusive packages from €3,000 — one complete IVF cycle, hotel, transfers & 12 months aftercare included. Ministry of Health authorized fertility clinics.",
-  robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
+  alternates: { canonical: PAGE_URL },
 };
 
 export default function IVFPage() {

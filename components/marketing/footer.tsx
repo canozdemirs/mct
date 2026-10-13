@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { CertificateLightbox } from "./certificate-lightbox";
 import { useConsultationModal } from "./consultation-modal";
+import { reopenConsentBanner } from "@/components/analytics/consent-banner";
 
 export function Footer() {
   const { openConsultation } = useConsultationModal();
@@ -122,6 +123,13 @@ export function Footer() {
               <Link href="/terms" className="hover:text-white/60 transition-colors">
                 Terms & Conditions
               </Link>
+              <button
+                type="button"
+                onClick={reopenConsentBanner}
+                className="hover:text-white/60 transition-colors"
+              >
+                Cookie Preferences
+              </button>
             </div>
           </div>
         </div>

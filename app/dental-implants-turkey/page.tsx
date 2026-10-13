@@ -9,7 +9,7 @@ import {
   generateBreadcrumbSchema,
 } from "@/lib/schema";
 
-const PAGE_URL = "https://medicalcenterturkey.com/dental-implants-turkey";
+const PAGE_URL = "https://www.medicalcenterturkey.com/dental-implants-turkey";
 
 const faqs = [
   { q: "What is included in the Medical Center Turkey dental implant package?", a: "Our Hassle-Free Package is our most complete option and includes: the titanium dental implant surgery, 3D panoramic X-ray and pre-surgical consultation, local anaesthesia, temporary crown where applicable, post-operative medication, private two-way airport transfers, 5 nights at a 4-star hotel, daily breakfast, a dedicated English-speaking GO (Gentle Organiser) coordinator throughout your stay, official warranty certificate, and 12 months of online aftercare support. No hidden fees — one clear price covers everything." },
@@ -37,14 +37,14 @@ const faqSchema = generateFAQSchema(faqs);
 const productsSchema = generateProductsSchema(packages);
 const reviewSchema = generateReviewSchema("Dental Implants Turkey — Medical Center Turkey", testimonials);
 const breadcrumbSchema = generateBreadcrumbSchema([
-  { name: "Home", url: "https://medicalcenterturkey.com" },
+  { name: "Home", url: "https://www.medicalcenterturkey.com" },
   { name: "Dental Implants Turkey", url: PAGE_URL },
 ]);
 
 export const metadata: Metadata = {
   title: "Dental Implants Turkey | All-Inclusive Packages from €400 | Medical Center Turkey",
   description: "Dental implants in Istanbul with Medical Center Turkey. Premium titanium implants from €400 — all-inclusive packages with hotel, transfers & warranty certificate. Ministry of Health authorized hospitals.",
-  robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
+  alternates: { canonical: PAGE_URL },
 };
 
 export default function DentalImplantsPage() {

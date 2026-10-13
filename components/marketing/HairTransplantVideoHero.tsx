@@ -2,13 +2,14 @@
 
 import { useRef, useState, useEffect } from "react";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
+import { openWhatsAppTransition, WHATSAPP_GENERIC_MESSAGE } from "@/lib/attribution";
 
 /**
  * HairTransplantVideoHero
  * -------------------------------------------------------------
  * Premium, glassmorphism video section for the Hair Transplant
  * Packages page. Drop this above (or as part of) the packages
- * section on /hair-transplant-turkey.
+ * section on /hair-transplant-packages.
  *
  * USAGE:
  *   <HairTransplantVideoHero
@@ -239,6 +240,7 @@ export default function HairTransplantVideoHero({
 
         <a
           href={`https://wa.me/${whatsappNumber}`}
+          onClick={(e) => { e.preventDefault(); openWhatsAppTransition(WHATSAPP_GENERIC_MESSAGE); }}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm md:text-base font-medium text-white/90 bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-md transition-colors"

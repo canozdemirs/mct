@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useCountryDialCode } from "./use-country-dial-code";
 import { validateRequiredLeadFields, type LeadFieldErrors } from "@/lib/validation";
+import { openWhatsAppTransition, getCapturedAttribution } from "@/lib/attribution";
+import { trackGenerateLead } from "@/lib/analytics";
 
 export type LandingLeadFormState = {
   name: string;
@@ -58,6 +60,7 @@ export function useLandingLeadForm(treatment: string) {
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        keepalive: true,
         body: JSON.stringify({
           source: `Landing Page: ${treatment}`,
           name: form.name,
@@ -69,6 +72,7 @@ export function useLandingLeadForm(treatment: string) {
           details: form.pkg ? { package: form.pkg } : undefined,
           consent: agreed,
           page_url: typeof window !== "undefined" ? window.location.href : undefined,
+          ...getCapturedAttribution(),
         }),
       });
       const json = await res.json() as { ok?: boolean; error?: string };
@@ -76,6 +80,7 @@ export function useLandingLeadForm(treatment: string) {
         setError(json.error || "Something went wrong. Please try again.");
         return false;
       }
+      trackGenerateLead();
       return true;
     } catch {
       setError("Network error. Please try again.");
@@ -85,13 +90,26 @@ export function useLandingLeadForm(treatment: string) {
     }
   }
 
-  async function handleWhatsApp() {
+  function handleWhatsApp() {
     if (submitting) return;
-    const ok = await submitLead();
-    if (!ok) return;
-    const text = `Hello MCT,%0A%0AName: ${form.name}%0ACountry: ${form.country}%0AEmail: ${form.email}%0APhone: ${form.phone}%0APackage: ${form.pkg}%0A%0A${form.message}`;
-    window.open(`https://wa.me/908508888911?text=${text}`, "_blank");
-    setSucceeded(true);
+    setTouched({ name: true, email: true, phone: true, country: true });
+    if (Object.keys(currentErrors).length > 0) {
+      setError("Please fix the highlighted fields.");
+      return;
+    }
+
+    // Phase 5K-A: same reasoning as consultation-form.tsx's handleWhatsApp
+    // -- open the transition tab synchronously first, let the lead save
+    // run alongside it rather than gating it. Message content/structure
+    // unchanged from before.
+    const message = `Hello MCT,\n\nName: ${form.name}\nCountry: ${form.country}\nEmail: ${form.email}\nPhone: ${form.phone}\nPackage: ${form.pkg}\n\n${form.message}`;
+    openWhatsAppTransition(message);
+
+    setSubmitting(true);
+    submitLead().then((ok) => {
+      setSubmitting(false);
+      if (ok) setSucceeded(true);
+    });
   }
 
   async function handleEmail(e: React.MouseEvent) {

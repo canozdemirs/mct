@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import { Nav } from "@/components/marketing/nav";
 import { Footer } from "@/components/marketing/footer";
+import { MailtoWithReference } from "@/components/marketing/mailto-with-reference";
 
 export const metadata: Metadata = {
   title: "Terms & Conditions — Medical Center Turkey",
   description:
     "Terms and conditions governing the use of Medical Center Turkey's international patient coordination and health tourism services.",
+  alternates: {
+    canonical: "https://www.medicalcenterturkey.com/terms",
+  },
 };
 
 export default function TermsPage() {
@@ -545,9 +549,9 @@ export default function TermsPage() {
               <p className="text-gray-600 mb-3">Istanbul, Türkiye</p>
               <p>
                 <span className="text-gray-500 text-sm">Email: </span>
-                <a href="mailto:hello@medicalcenterturkey.com" className="text-teal hover:underline font-medium">
+                <MailtoWithReference address="hello@medicalcenterturkey.com" subject="Terms and Conditions Inquiry" className="text-teal hover:underline font-medium">
                   hello@medicalcenterturkey.com
-                </a>
+                </MailtoWithReference>
               </p>
             </div>
             <p className="mt-4 text-sm text-gray-400">

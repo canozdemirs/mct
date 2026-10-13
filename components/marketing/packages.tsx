@@ -364,7 +364,7 @@ export function Packages() {
                   <div className="mt-3">
                     {t.name === "Hair Transplant" ? (
                       <Link
-                        href="/hair-transplant-turkey"
+                        href="/hair-transplant-packages"
                         className="flex items-center justify-center gap-1.5 bg-teal text-white text-xs font-semibold px-3 py-2 rounded-full hover:bg-[#159fb3] transition-colors w-full"
                       >
                         View Package →

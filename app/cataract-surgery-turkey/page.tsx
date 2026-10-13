@@ -9,7 +9,7 @@ import {
   generateBreadcrumbSchema,
 } from "@/lib/schema";
 
-const PAGE_URL = "https://medicalcenterturkey.com/cataract-surgery-turkey";
+const PAGE_URL = "https://www.medicalcenterturkey.com/cataract-surgery-turkey";
 
 const faqs = [
   { q: "What is included in the Medical Center Turkey cataract surgery package?", a: "Our Hassle-Free Package covers everything from arrival to recovery. This includes cataract surgery on both eyes with a premium intraocular lens (IOL), a full pre-operative eye examination and biometry measurements, local anaesthesia, post-operative eye drops and protective goggles, a day-after follow-up appointment, private two-way airport transfers, 4 nights at a 4-star hotel, daily breakfast, a dedicated English-speaking GO (Gentle Organiser) coordinator throughout your stay, and 12 months of online aftercare support. One clear price — no hidden fees." },
@@ -37,14 +37,14 @@ const faqSchema = generateFAQSchema(faqs);
 const productsSchema = generateProductsSchema(packages);
 const reviewSchema = generateReviewSchema("Cataract Surgery Turkey — Medical Center Turkey", testimonials);
 const breadcrumbSchema = generateBreadcrumbSchema([
-  { name: "Home", url: "https://medicalcenterturkey.com" },
+  { name: "Home", url: "https://www.medicalcenterturkey.com" },
   { name: "Cataract Surgery Turkey", url: PAGE_URL },
 ]);
 
 export const metadata: Metadata = {
   title: "Cataract Surgery Turkey | All-Inclusive Packages from €4,000 | Medical Center Turkey",
   description: "Cataract surgery in Istanbul with Medical Center Turkey. All-inclusive packages from €4,000 — surgery (both eyes), premium IOL, hotel, transfers & 12 months aftercare included. Ministry of Health authorized hospitals.",
-  robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
+  alternates: { canonical: PAGE_URL },
 };
 
 export default function CataractPage() {

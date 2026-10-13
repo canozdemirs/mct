@@ -8,7 +8,7 @@ import {
   generateBreadcrumbSchema,
 } from "@/lib/schema";
 
-const PAGE_URL = "https://medicalcenterturkey.com/blepharoplasty-turkey";
+const PAGE_URL = "https://www.medicalcenterturkey.com/blepharoplasty-turkey";
 
 const faqs = [
   { q: "What is included in the Medical Center Turkey blepharoplasty package?", a: "Our Hassle-Free Package covers all 4 eyelids (upper and lower blepharoplasty) in a single procedure. It includes pre-operative blood tests and examination, anaesthesia, post-operative medication and eye drops, private two-way airport transfers, 5 nights at a 4-star hotel, daily breakfast, a dedicated English-speaking GO (Gentle Organiser) coordinator throughout your stay, and 12 months of online aftercare support. One clear price — no hidden fees." },
@@ -31,14 +31,14 @@ const packages = [
 const faqSchema = generateFAQSchema(faqs);
 const productsSchema = generateProductsSchema(packages);
 const breadcrumbSchema = generateBreadcrumbSchema([
-  { name: "Home", url: "https://medicalcenterturkey.com" },
+  { name: "Home", url: "https://www.medicalcenterturkey.com" },
   { name: "Blepharoplasty Turkey", url: PAGE_URL },
 ]);
 
 export const metadata: Metadata = {
   title: "Blepharoplasty Turkey | Eyelid Surgery Packages from €1,600 | Medical Center Turkey",
   description: "Blepharoplasty in Istanbul with Medical Center Turkey. All-inclusive packages from €1,600 — upper or lower eyelid surgery, hotel, transfers & 12 months aftercare included. Ministry of Health authorized hospitals.",
-  robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
+  alternates: { canonical: PAGE_URL },
 };
 
 export default function BlepharoplastyPage() {

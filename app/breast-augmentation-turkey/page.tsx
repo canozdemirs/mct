@@ -8,7 +8,7 @@ import {
   generateBreadcrumbSchema,
 } from "@/lib/schema";
 
-const PAGE_URL = "https://medicalcenterturkey.com/breast-augmentation-turkey";
+const PAGE_URL = "https://www.medicalcenterturkey.com/breast-augmentation-turkey";
 
 const faqs = [
   { q: "What is included in the Medical Center Turkey breast augmentation package?", a: "Our Hassle-Free Package covers everything from arrival to recovery. This includes the breast augmentation surgery, premium silicone implants, pre-operative blood tests and examination, general anaesthesia, 1 night post-operative hospital stay, all post-op medication and compression garment, private two-way airport transfers, 7 nights at a 4-star hotel, daily breakfast, a dedicated English-speaking GO (Gentle Organiser) coordinator throughout your stay, and 12 months of online aftercare support. No hidden fees — one clear price covers everything." },
@@ -31,14 +31,14 @@ const packages = [
 const faqSchema = generateFAQSchema(faqs);
 const productsSchema = generateProductsSchema(packages);
 const breadcrumbSchema = generateBreadcrumbSchema([
-  { name: "Home", url: "https://medicalcenterturkey.com" },
+  { name: "Home", url: "https://www.medicalcenterturkey.com" },
   { name: "Breast Augmentation Turkey", url: PAGE_URL },
 ]);
 
 export const metadata: Metadata = {
   title: "Breast Augmentation Turkey | All-Inclusive Packages from €4,500 | Medical Center Turkey",
   description: "Breast augmentation in Istanbul with Medical Center Turkey. All-inclusive packages from €4,500 — premium silicone implants always included, surgery, hotel, transfers & 12 months aftercare. Ministry of Health authorized hospitals.",
-  robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
+  alternates: { canonical: PAGE_URL },
 };
 
 export default function BreastAugmentationPage() {

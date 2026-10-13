@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { MapPin, Check, ChevronRight, MessageCircle, Send } from "lucide-react";
 import { Nav } from "@/components/marketing/nav";
+import { WhatsAppLink } from "@/components/marketing/whatsapp-link";
 import { Footer } from "@/components/marketing/footer";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import { HospitalGallery } from "@/components/marketing/hospital-gallery";
@@ -34,12 +35,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `${hospital.name} – Treatment for International Patients | Medical Center Turkey`,
     description: `${hospital.name} in ${location}, Turkey. Medical Center Turkey arranges treatment at this partner hospital for international patients — free consultation, transparent pricing, airport transfers, and full coordination from arrival to discharge.`,
     alternates: {
-      canonical: `/${hospital.slug}`,
-    },
-    robots: {
-      index: false,
-      follow: false,
-      googleBot: { index: false, follow: false },
+      canonical: `https://www.medicalcenterturkey.com/${hospital.slug}`,
     },
   };
 }
@@ -78,25 +74,25 @@ export default async function HospitalPage({ params }: PageProps) {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://medicalcenterturkey.com",
+        item: "https://www.medicalcenterturkey.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Hospitals in Turkey",
-        item: "https://medicalcenterturkey.com/hospitals-in-turkey",
+        item: "https://www.medicalcenterturkey.com/hospitals-in-turkey",
       },
       {
         "@type": "ListItem",
         position: 3,
         name: groupLabel,
-        item: `https://medicalcenterturkey.com/hospitals-in-turkey?group=${hospital.group}`,
+        item: `https://www.medicalcenterturkey.com/hospitals-in-turkey?group=${hospital.group}`,
       },
       {
         "@type": "ListItem",
         position: 4,
         name: hospital.name,
-        item: `https://medicalcenterturkey.com/${hospital.slug}`,
+        item: `https://www.medicalcenterturkey.com/${hospital.slug}`,
       },
     ],
   };
@@ -104,7 +100,7 @@ export default async function HospitalPage({ params }: PageProps) {
   const hospitalJsonLd: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Hospital",
-    "@id": `https://medicalcenterturkey.com/${hospital.slug}`,
+    "@id": `https://www.medicalcenterturkey.com/${hospital.slug}`,
     name: hospital.name,
     address: {
       "@type": "PostalAddress",
@@ -115,10 +111,10 @@ export default async function HospitalPage({ params }: PageProps) {
     },
     provider: {
       "@type": "MedicalOrganization",
-      "@id": "https://medicalcenterturkey.com",
+      "@id": "https://www.medicalcenterturkey.com",
       name: "Medical Center Turkey",
       description: "International Patient Center and Health Tourism Coordinator",
-      url: "https://medicalcenterturkey.com",
+      url: "https://www.medicalcenterturkey.com",
     },
   };
 
@@ -334,15 +330,10 @@ export default async function HospitalPage({ params }: PageProps) {
                   </p>
                 </div>
                 <div className="bg-white p-5 space-y-3">
-                  <a
-                    href="https://wa.me/908508888911"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full bg-[#25D366] text-white rounded-full py-3 font-semibold text-sm hover:bg-[#1fb55a] transition-colors"
-                  >
+                  <WhatsAppLink className="flex items-center justify-center gap-2 w-full bg-[#25D366] text-white rounded-full py-3 font-semibold text-sm hover:bg-[#1fb55a] transition-colors">
                     <MessageCircle size={16} />
                     WhatsApp Us
-                  </a>
+                  </WhatsAppLink>
                   <a
                     href="#consultation"
                     className="flex items-center justify-center gap-2 w-full bg-[#1b5fa8] text-white rounded-full py-3 font-semibold text-sm hover:bg-[#154d8a] transition-colors"

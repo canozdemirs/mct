@@ -8,7 +8,7 @@ import {
   generateBreadcrumbSchema,
 } from "@/lib/schema";
 
-const PAGE_URL = "https://medicalcenterturkey.com/medical-check-up-turkey";
+const PAGE_URL = "https://www.medicalcenterturkey.com/medical-check-up-turkey";
 
 const faqs = [
   { q: "How long does the check-up take?", a: "Standard and Plus check-ups are typically completed in a single day — usually 4 to 6 hours at the hospital. VIP check-ups, which include gastroscopy, colonoscopy, and MRI, require 2 days. The Pediatric check-up is completed in 3 to 4 hours. Your schedule is pre-arranged by our team so there is no waiting between appointments." },
@@ -36,14 +36,14 @@ const packages = [
 const faqSchema = generateFAQSchema(faqs);
 const productsSchema = generateProductsSchema(packages);
 const breadcrumbSchema = generateBreadcrumbSchema([
-  { name: "Home", url: "https://medicalcenterturkey.com" },
+  { name: "Home", url: "https://www.medicalcenterturkey.com" },
   { name: "Medical Check-Up Turkey", url: PAGE_URL },
 ]);
 
 export const metadata: Metadata = {
   title: "Medical Check-Up Turkey | Standard, Plus & VIP Packages from $550 | Medical Center Turkey",
   description: "Comprehensive medical check-up in Istanbul with Medical Center Turkey. Standard from $750, Plus from $1,200, VIP $2,700, Pediatric $550. Ministry of Health authorized hospitals. Results in English.",
-  robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
+  alternates: { canonical: PAGE_URL },
 };
 
 export default function CheckUpPage() {

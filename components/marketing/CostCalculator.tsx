@@ -7,6 +7,8 @@ import { FieldError } from "@/components/marketing/field-error";
 import { FormSuccessMessage } from "@/components/marketing/form-success-message";
 import { useCountryDialCode } from "@/lib/hooks/use-country-dial-code";
 import { validateRequiredLeadFields, type LeadFieldErrors } from "@/lib/validation";
+import { openWhatsAppTransition, getCapturedAttribution } from "@/lib/attribution";
+import { trackGenerateLead } from "@/lib/analytics";
 
 /**
  * MCT Türkiye'de Tedavi Maliyeti Hesaplama
@@ -59,7 +61,6 @@ const TREATMENT_CATEGORIES: TreatmentCategory[] = [
   { id: "plastic-surgery", name: "Plastic Surgery", defaultDays: 6 },
   { id: "radiation-oncology", name: "Radiation Oncology Surgery", defaultDays: 16 },
   { id: "rhinoplasty", name: "Rhinoplasty Surgery", defaultDays: 6 },
-  { id: "transplantation", name: "Transplantation Surgery", defaultDays: 23 },
   { id: "urology", name: "Urology Surgery", defaultDays: 7 },
   { id: "womens-diseases", name: "Women's Diseases Surgery", defaultDays: 7 },
   { id: "other", name: "Other", defaultDays: 7 },
@@ -216,12 +217,6 @@ const SUB_SERVICES: Record<string, SubService[]> = {
     { name: "Ethnic Rhinoplasty", defaultDays: 6 },
     { name: "Other" },
   ],
-  "transplantation": [
-    { name: "Kidney Transplant", price: 20000, defaultDays: 23 },
-    { name: "Liver Transplant", price: 35000, defaultDays: 30 },
-    { name: "Bone Marrow Transplant", price: 45000, defaultDays: 32 },
-    { name: "Other" },
-  ],
   "urology": [
     { name: "Kidney Stone Treatment", price: 2500, defaultDays: 5 },
     { name: "Prostate Surgery", price: 5500, defaultDays: 7 },
@@ -361,9 +356,8 @@ export default function CostCalculator() {
     );
   }
 
-  function whatsappHref() {
-    const msg = `${summaryText()}\n\nMy WhatsApp/phone: ${phone}`;
-    return `https://wa.me/908508888911?text=${encodeURIComponent(msg)}`;
+  function whatsappMessage() {
+    return `${summaryText()}\n\nMy WhatsApp/phone: ${phone}`;
   }
 
   function leadDetails() {
@@ -403,6 +397,7 @@ export default function CostCalculator() {
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        keepalive: true,
         body: JSON.stringify({
           source: "Cost Calculator",
           name,
@@ -413,6 +408,7 @@ export default function CostCalculator() {
           details: leadDetails(),
           consent: agreed,
           page_url: typeof window !== "undefined" ? window.location.href : undefined,
+          ...getCapturedAttribution(),
         }),
       });
       const json = await res.json() as { ok?: boolean; error?: string };
@@ -420,6 +416,7 @@ export default function CostCalculator() {
         setSubmitError(json.error || "Something went wrong. Please try again.");
         return false;
       }
+      trackGenerateLead();
       return true;
     } catch {
       setSubmitError("Network error. Please try again.");
@@ -429,12 +426,24 @@ export default function CostCalculator() {
     }
   }
 
-  async function handleWhatsApp() {
+  function handleWhatsApp() {
     if (submitting) return;
-    const ok = await submitLead();
-    if (!ok) return;
-    window.open(whatsappHref(), "_blank");
-    setSubmitted(true);
+    // Validation must run (and block on failure) BEFORE opening the
+    // transition tab -- submitLead() below also re-checks this, but that
+    // check must not be the only gate, or an invalid form would still open
+    // WhatsApp with incomplete data.
+    setTouched({ name: true, email: true, phone: true, country: true });
+    if (Object.keys(currentErrors).length > 0) {
+      setSubmitError("Please fix the highlighted fields.");
+      return;
+    }
+    // Phase 5K-A: open the transition tab synchronously first (see
+    // consultation-form.tsx's handleWhatsApp for the full rationale), let
+    // the lead save run alongside it rather than gating it.
+    openWhatsAppTransition(whatsappMessage());
+    submitLead().then((ok) => {
+      if (ok) setSubmitted(true);
+    });
   }
 
   async function handleEmailSend() {

@@ -35,7 +35,13 @@ export function Nav() {
           </nav>
 
           {/* Right — CTA */}
-          <div className="flex items-center shrink-0">
+          <div className="flex items-center gap-4 shrink-0">
+            <Link
+              href="/medical-tourism-turkey"
+              className="text-sm font-semibold text-brand hover:text-teal transition-colors"
+            >
+              🇹🇷 Türkçe
+            </Link>
             <Link
               href="/agency"
               className="px-4 py-2 rounded-full border border-brand text-brand text-sm font-semibold hover:bg-brand hover:text-white transition-colors"
@@ -47,12 +53,13 @@ export function Nav() {
         </div>
 
         {/* Mobile nav */}
-        <div className="lg:hidden border-t border-gray-100 py-2 flex items-center justify-center gap-6">
+        <div className="lg:hidden border-t border-gray-100 py-2 flex items-center justify-center gap-6 flex-wrap">
           <Link href="/" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Home</Link>
           <Link href="/hospitals-in-turkey" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Hospitals</Link>
           <Link href="/treatment-prices-in-turkey" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Cost Calculator</Link>
           <Link href="/blog" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Blog</Link>
           <button onClick={openConsultation} className="text-xs font-semibold text-brand hover:text-teal transition-colors">Get Quote</button>
+          <Link href="/medical-tourism-turkey" className="text-xs font-semibold text-brand hover:text-teal transition-colors">🇹🇷 Türkçe</Link>
         </div>
 
       </div>

@@ -1,4 +1,7 @@
+"use client";
+
 import { MessageCircle, Calculator } from "lucide-react";
+import { openWhatsAppTransition, WHATSAPP_GENERIC_MESSAGE } from "@/lib/attribution";
 
 const items = [
   {
@@ -52,13 +55,21 @@ export function ContactBar() {
 
         {/* First 3 items */}
         {items.map((item, i) => {
-          const Wrapper = item.href.startsWith("#") ? "a" : "a";
+          const isWhatsApp = item.id === "whatsapp";
           return (
             <a
               key={item.id}
               href={item.href}
               target={item.href.startsWith("http") ? "_blank" : undefined}
               rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+              onClick={
+                isWhatsApp
+                  ? (e) => {
+                      e.preventDefault();
+                      openWhatsAppTransition(WHATSAPP_GENERIC_MESSAGE);
+                    }
+                  : undefined
+              }
               className={`flex items-center gap-3 px-4 py-4 sm:px-6 sm:py-5 hover:bg-gray-100 transition-colors
                 ${i === 0 ? "border-b sm:border-b-0 border-r border-gray-200" : ""}
                 ${i === 1 ? "border-b sm:border-b-0 sm:border-r border-gray-200" : ""}

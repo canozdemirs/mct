@@ -5,6 +5,9 @@ import { AgencyPageClient } from "@/components/marketing/agency-page";
 export const metadata: Metadata = {
   title: "Partner Login | Medical Center Turkey",
   description: "MCT Partner Program — Apply to become a Medical Center Turkey partner or log in to your partner portal.",
+  alternates: {
+    canonical: "https://www.medicalcenterturkey.com/agency",
+  },
   robots: {
     index: false,
     follow: false,

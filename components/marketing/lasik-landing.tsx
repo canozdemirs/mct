@@ -1,5 +1,7 @@
 "use client";
 
+import { openWhatsAppTransition, WHATSAPP_GENERIC_MESSAGE } from "@/lib/attribution";
+
 import { useState, useEffect, useRef } from "react";
 import { Check, MessageCircle, Send } from "lucide-react";
 import Image from "next/image";
@@ -238,6 +240,7 @@ export default function LasikLanding() {
             </button>
             <a
               href="https://wa.me/908508888911"
+              onClick={(e) => { e.preventDefault(); openWhatsAppTransition(WHATSAPP_GENERIC_MESSAGE); }}
               target="_blank"
               rel="noopener noreferrer"
               style={{ background: "rgba(255,255,255,0.10)", color: "#fff", padding: "16px 28px", borderRadius: 100, fontWeight: 600, fontSize: 16, border: "1px solid rgba(255,255,255,0.25)", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none" }}

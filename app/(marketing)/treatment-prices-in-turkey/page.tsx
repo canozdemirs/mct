@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "Treatment Prices in Turkey - Medical Center Turkey",
   description:
     "Treatment Prices calculator is a great tool to get know treatment prices, accommodation and daily expenses in Turkey. Learn your cost.",
+  alternates: {
+    canonical: "https://www.medicalcenterturkey.com/treatment-prices-in-turkey",
+  },
 };
 
 export default function TreatmentPricesPage() {

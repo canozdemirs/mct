@@ -9,7 +9,7 @@ import {
   generateBreadcrumbSchema,
 } from "@/lib/schema";
 
-const PAGE_URL = "https://medicalcenterturkey.com/liposuction-turkey";
+const PAGE_URL = "https://www.medicalcenterturkey.com/liposuction-turkey";
 
 const faqs = [
   { q: "What is included in the Medical Center Turkey liposuction package?", a: "Our Hassle-Free Package covers everything from arrival to recovery. This includes the liposuction surgery (up to 3 body areas), pre-operative blood tests and examination, general anaesthesia, 1 night post-operative hospital stay, all post-op medication and compression garment, private two-way airport transfers, 5 nights at a 4-star hotel, daily breakfast, a dedicated English-speaking GO (Gentle Organiser) coordinator throughout your stay, and 12 months of online aftercare support. No hidden fees — one clear price covers everything." },
@@ -38,14 +38,14 @@ const faqSchema = generateFAQSchema(faqs);
 const productsSchema = generateProductsSchema(packages);
 const reviewSchema = generateReviewSchema("Liposuction Turkey — Medical Center Turkey", testimonials);
 const breadcrumbSchema = generateBreadcrumbSchema([
-  { name: "Home", url: "https://medicalcenterturkey.com" },
+  { name: "Home", url: "https://www.medicalcenterturkey.com" },
   { name: "Liposuction Turkey", url: PAGE_URL },
 ]);
 
 export const metadata: Metadata = {
   title: "Liposuction Turkey | All-Inclusive Packages from €2,150 | Medical Center Turkey",
   description: "Liposuction in Istanbul with Medical Center Turkey. All-inclusive packages from €2,150 — surgery (up to 3 areas), hotel, transfers & 12 months aftercare included. Ministry of Health authorized hospitals.",
-  robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
+  alternates: { canonical: PAGE_URL },
 };
 
 export default function LiposuctionPage() {

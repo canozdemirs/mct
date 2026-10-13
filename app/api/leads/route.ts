@@ -2,6 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 import { sendEmail } from "@/lib/email";
 import { validateRequiredLeadFields } from "@/lib/validation";
+import { reserveReferenceCode, createReferenceCodeWithRetry, isPlausibleTouchPayload, type TouchPayload } from "@/lib/attribution-server";
 
 const ADMIN_RECIPIENT = "hello@medicalcenterturkey.com";
 const WHATSAPP_LINK = "https://wa.me/908508888911";
@@ -78,6 +79,12 @@ type LeadPayload = {
   details?: Record<string, unknown>;
   page_url?: string;
   consent?: boolean;
+  // Phase 5K-C: optional, consent-gated marketing evidence already
+  // captured client-side (lib/attribution.ts's getCapturedAttribution()).
+  // Untrusted browser input, passed through to attribution-server.ts's
+  // own sanitization -- never trusted or interpreted here.
+  firstTouch?: unknown;
+  sessionTouch?: unknown;
 };
 
 function buildAdminEmail(lead: LeadPayload & { id: string }) {
@@ -239,6 +246,18 @@ export async function POST(req: NextRequest) {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
 
+  // Phase 5K-A: the reference code is decided BEFORE the lead insert (a
+  // best-effort uniqueness pre-check, not yet a real row -- see
+  // reserveReferenceCode()'s own comment) so it can be embedded in
+  // `details.reference_code` in the same insert patients and staff already
+  // see. The real lead_attributions row, linked by lead_id, is only
+  // created after the lead insert succeeds (below) -- never before, and
+  // its failure never affects the lead itself.
+  const referenceCode = await reserveReferenceCode(adminSupabase).catch((err) => {
+    console.error("reserveReferenceCode failed, continuing without one:", err);
+    return null;
+  });
+
   const { data: inserted, error: insertError } = await adminSupabase
     .from("leads")
     .insert({
@@ -249,7 +268,7 @@ export async function POST(req: NextRequest) {
       country: country || null,
       treatment: body.treatment || null,
       message: body.message || null,
-      details: body.details || {},
+      details: { ...(body.details || {}), ...(referenceCode ? { reference_code: referenceCode } : {}) },
       page_url: body.page_url || null,
       consent: !!body.consent,
     })
@@ -259,6 +278,21 @@ export async function POST(req: NextRequest) {
   if (insertError || !inserted) {
     console.error("Lead insert error:", insertError);
     return NextResponse.json({ error: "Something went wrong. Please try again." }, { status: 500 });
+  }
+
+  // Best-effort, non-blocking: a failure here must never undo or mask the
+  // already-successful lead insert above. Logged without any patient data
+  // (lead.id is an opaque UUID, not personal information).
+  if (referenceCode) {
+    try {
+      const touch = {
+        firstTouch: isPlausibleTouchPayload(body.firstTouch) ? (body.firstTouch as TouchPayload) : null,
+        sessionTouch: isPlausibleTouchPayload(body.sessionTouch) ? (body.sessionTouch as TouchPayload) : null,
+      };
+      await createReferenceCodeWithRetry(adminSupabase, "form", inserted.id, referenceCode, touch);
+    } catch (err) {
+      console.error(`lead_attributions linking failed for lead_id=${inserted.id}:`, err);
+    }
   }
 
   // Emails are best-effort from here — a failure must never undo the saved lead.

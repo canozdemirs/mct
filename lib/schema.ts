@@ -119,13 +119,42 @@ export function generateBreadcrumbSchema(items: BreadcrumbItem[]) {
   };
 }
 
+// Blog index pages only — reflects just what's actually rendered on the
+// page (name/description/url + how many blog posts exist in total), no
+// per-item listing (the cards themselves aren't structured-data-worthy on
+// their own; each article already carries its own BlogPosting schema on
+// its own page via generateArticleSchema).
+export function generateCollectionPageSchema({
+  name,
+  description,
+  url,
+  numberOfItems,
+}: {
+  name: string;
+  description: string;
+  url: string;
+  numberOfItems: number;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name,
+    description,
+    url,
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems,
+    },
+  };
+}
+
 export function generateOrganizationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "MedicalBusiness",
     name: "Medical Center Turkey",
-    url: "https://medicalcenterturkey.com",
-    logo: "https://medicalcenterturkey.com/mct-logo.png",
+    url: "https://www.medicalcenterturkey.com",
+    logo: "https://www.medicalcenterturkey.com/mct-logo.png",
     telephone: "+908508888911",
     address: {
       "@type": "PostalAddress",
@@ -142,6 +171,38 @@ export function generateOrganizationSchema() {
       "https://www.linkedin.com/company/medicalcenterturkey",
       "https://www.trustpilot.com/review/medicalcenterturkey.com",
     ],
+  };
+}
+
+export function generateArticleSchema(article: {
+  title: string;
+  description: string;
+  url: string;
+  datePublished: string;
+  dateModified?: string;
+  image?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: article.title,
+    description: article.description,
+    url: article.url,
+    datePublished: article.datePublished,
+    dateModified: article.dateModified || article.datePublished,
+    image: article.image,
+    author: {
+      "@type": "Organization",
+      name: "Medical Center Turkey",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Medical Center Turkey",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.medicalcenterturkey.com/mct-logo.png",
+      },
+    },
   };
 }
 
