@@ -178,9 +178,15 @@ Every new table migration must include explicit GRANT statements in the same fil
 
 `anon` and `authenticated` receive only the privileges actually required, and those are further constrained by RLS policies.
 
-Sensitive tables (leads, partner data, commissions) remain accessible only via `service_role`. No grants to `anon` or `authenticated`.
+`anon` never receives any grant on a sensitive table (leads, partner data, commissions), without exception.
 
-This applies to every table going forward, without exception.
+Sensitive tables default to `service_role`-only access. An `authenticated` grant on a sensitive table is permitted only as an explicit, reviewed exception — least-privilege, RLS-scoped per row, and column-scoped to exactly the fields that use case requires — never a blanket grant. Never broaden an existing `authenticated` grant or RLS policy beyond what was explicitly approved.
+
+## Approved Partner Data Security Architecture (2026-10-14)
+
+- `leads`, `partner_applications`, `partners`, `referral_status_history`: `service_role`-only, zero `anon`/`authenticated` grants.
+- `referrals`, `commissions`: approved exception. `authenticated` partners may read/write only rows tied to their own `partner_id` (resolved server-side via `current_partner_id()`, never client-supplied), enforced by RLS plus column-level grants — e.g. a partner can see a commission's final amount and status but never the net amount, institution, or percentage behind it, and can edit a referral's patient-facing fields only while it is still `status = 'new'`.
+- Anonymous (`anon`) access to all five partner/referral tables is prohibited.
 
 ---
 
