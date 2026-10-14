@@ -8,34 +8,44 @@
 
 import { BLOG_POSTS, type BlogPostMeta } from "./blog-index.generated";
 import { CATEGORY_OVERRIDES } from "./blog-category-overrides";
+import { LISTING_EXCERPTS } from "./blog-listing-excerpts";
 
 export const POSTS_PER_PAGE = 12;
+
+// `listingExcerpt` is deliberately separate from `seoDescription`: the SEO
+// <meta name="description">/JSON-LD text is untouched by this field. It's
+// optional — only slugs present in LISTING_EXCERPTS get one; every other
+// post keeps falling back to seoDescription on the card (see blog-card.tsx).
+export type BlogPostMetaWithExcerpt = BlogPostMeta & { listingExcerpt?: string };
 
 function toTimestamp(date: string): number {
   // post_date_gmt format: "YYYY-MM-DD HH:MM:SS" (UTC, no explicit offset).
   return new Date(date.replace(" ", "T") + "Z").getTime();
 }
 
-// CATEGORY_OVERRIDES is applied once, here, so every consumer of
-// SORTED_BLOG_POSTS (listing, search, sitemap, the article page via
-// getPostBySlug) sees the corrected categories consistently — the
-// auto-generated BLOG_POSTS array itself is never mutated.
-const POSTS_WITH_CATEGORY_OVERRIDES: BlogPostMeta[] = BLOG_POSTS.map((post) =>
-  CATEGORY_OVERRIDES[post.slug] ? { ...post, categories: CATEGORY_OVERRIDES[post.slug] } : post
-);
+// CATEGORY_OVERRIDES and LISTING_EXCERPTS are applied once, here, so every
+// consumer of SORTED_BLOG_POSTS (listing, search, sitemap, the article page
+// via getPostBySlug) sees the corrected categories / card excerpts
+// consistently — the auto-generated BLOG_POSTS array itself is never
+// mutated.
+const POSTS_WITH_OVERRIDES: BlogPostMetaWithExcerpt[] = BLOG_POSTS.map((post) => ({
+  ...post,
+  ...(CATEGORY_OVERRIDES[post.slug] ? { categories: CATEGORY_OVERRIDES[post.slug] } : null),
+  ...(LISTING_EXCERPTS[post.slug] ? { listingExcerpt: LISTING_EXCERPTS[post.slug] } : null),
+}));
 
-export const SORTED_BLOG_POSTS: BlogPostMeta[] = [...POSTS_WITH_CATEGORY_OVERRIDES].sort(
+export const SORTED_BLOG_POSTS: BlogPostMetaWithExcerpt[] = [...POSTS_WITH_OVERRIDES].sort(
   (a, b) => toTimestamp(b.date) - toTimestamp(a.date)
 );
 
 export const TOTAL_BLOG_PAGES = Math.ceil(SORTED_BLOG_POSTS.length / POSTS_PER_PAGE);
 
-export function getBlogPage(page: number): BlogPostMeta[] {
+export function getBlogPage(page: number): BlogPostMetaWithExcerpt[] {
   const start = (page - 1) * POSTS_PER_PAGE;
   return SORTED_BLOG_POSTS.slice(start, start + POSTS_PER_PAGE);
 }
 
-export function getPostBySlug(slug: string): BlogPostMeta | undefined {
+export function getPostBySlug(slug: string): BlogPostMetaWithExcerpt | undefined {
   return SORTED_BLOG_POSTS.find((p) => p.slug === slug);
 }
 
@@ -54,7 +64,7 @@ export function getRealCategories(): { name: string; count: number }[] {
     .sort((a, b) => b.count - a.count);
 }
 
-export function searchBlogPosts(query: string, category: string | null): BlogPostMeta[] {
+export function searchBlogPosts(query: string, category: string | null): BlogPostMetaWithExcerpt[] {
   const q = query.trim().toLowerCase();
   return SORTED_BLOG_POSTS.filter((post) => {
     const matchesQuery =

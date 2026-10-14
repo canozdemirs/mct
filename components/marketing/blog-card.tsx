@@ -7,6 +7,9 @@ export interface BlogCardData {
   title: string;
   date: string;
   seoDescription: string;
+  // Card-only summary text, independent of seoDescription (which stays the
+  // SEO meta/JSON-LD description). Falls back to seoDescription when unset.
+  listingExcerpt?: string;
   featuredImage: string | null;
   categories: string[];
 }
@@ -46,7 +49,7 @@ export function BlogCard({ post, priority = false }: { post: BlogCardData; prior
         <h3 className="text-base font-bold text-brand leading-snug mb-2 group-hover:text-teal transition-colors line-clamp-2">
           {post.title}
         </h3>
-        <p className="text-sm text-gray-500 leading-relaxed line-clamp-3">{post.seoDescription}</p>
+        <p className="text-sm text-gray-500 leading-relaxed line-clamp-3">{post.listingExcerpt ?? post.seoDescription}</p>
       </div>
     </Link>
   );

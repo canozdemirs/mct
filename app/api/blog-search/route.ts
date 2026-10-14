@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
     title: p.title,
     date: p.date,
     seoDescription: p.seoDescription,
+    listingExcerpt: p.listingExcerpt,
     featuredImage: p.featuredImage,
     categories: p.categories,
   }));
