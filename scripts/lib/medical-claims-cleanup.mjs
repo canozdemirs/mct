@@ -694,6 +694,34 @@ export const MEDICAL_CLAIMS_REPLACEMENTS = [
     replace: "",
     expectedCount: 1,
   },
+  // Phase 4 follow-up (2026-10-14): 3 image ALT attributes carried the same
+  // "Deliver Perfect Result" outcome-guarantee claim as the article's old
+  // title (already fixed separately via TITLE_SEO_OVERRIDES in
+  // import-blog-posts.mjs). Replaced with accurate, medically neutral
+  // descriptions of what each image actually shows (verified by viewing
+  // the images directly). Image files, src paths, width/height, slug and
+  // canonical are unchanged -- only the alt text.
+  {
+    slug: "why-breast-augmentations-deliver-perfect-results-in-turkey",
+    label: "ALT text, before/after comparison photo",
+    find: '<img src="/blog/why-breast-augmentations-deliver-perfect-results-in-turkey/BEFORE-1-1-300x167.png" alt="Why Breast Augmentations Deliver Perfect Result in Turkey?" width="910" height="507" />',
+    replace: '<img src="/blog/why-breast-augmentations-deliver-perfect-results-in-turkey/BEFORE-1-1-300x167.png" alt="Before and after comparison photo of a breast augmentation procedure" width="910" height="507" />',
+    expectedCount: 1,
+  },
+  {
+    slug: "why-breast-augmentations-deliver-perfect-results-in-turkey",
+    label: "ALT text, implant placement anatomy diagram",
+    find: '<img src="/blog/why-breast-augmentations-deliver-perfect-results-in-turkey/Adsiz-tasarim-1-2-300x167.png" alt="Why Breast Augmentations Deliver Perfect Result in Turkey?" width="950" height="529" />',
+    replace: '<img src="/blog/why-breast-augmentations-deliver-perfect-results-in-turkey/Adsiz-tasarim-1-2-300x167.png" alt="Diagram of breast implant placement showing the pectoralis major muscle and implant position" width="950" height="529" />',
+    expectedCount: 1,
+  },
+  {
+    slug: "why-breast-augmentations-deliver-perfect-results-in-turkey",
+    label: "ALT text, post-surgical compression garment photo",
+    find: '<img src="/blog/why-breast-augmentations-deliver-perfect-results-in-turkey/Adsiz-tasarim-2-2-300x167.png" alt="Why Breast Augmentations Deliver Perfect Result in Turkey?" width="903" height="503" />',
+    replace: '<img src="/blog/why-breast-augmentations-deliver-perfect-results-in-turkey/Adsiz-tasarim-2-2-300x167.png" alt="Woman wearing a post-surgical compression bra after breast augmentation" width="903" height="503" />',
+    expectedCount: 1,
+  },
 ];
 assertNoDuplicateRules(MEDICAL_CLAIMS_REPLACEMENTS);
 

@@ -78,6 +78,24 @@ const EXCLUDED_SLUGS = new Set([
   "how-much-is-a-kidney-transplant-surgery",
 ]);
 
+// Phase 4 follow-up (2026-10-14): persistent per-slug title/SEO overrides,
+// applied in the main import loop after the normal WordPress-title/
+// Yoast-SEO resolution (resolveSeoTitle/resolveSeoDescription). A full
+// re-import regenerates lib/blog-index.generated.ts from scratch from the
+// raw WXR export, which would otherwise silently reintroduce this
+// article's original title's "Deliver Perfect Results" outcome-guarantee
+// claim (CLAUDE.md: never guarantee/exaggerate results) on every future
+// re-run. Keep this minimal -- one entry per approved compliance fix.
+// Slug and canonical are untouched; only these 3 fields are overridden.
+const TITLE_SEO_OVERRIDES = {
+  "why-breast-augmentations-deliver-perfect-results-in-turkey": {
+    title: "Why Breast Augmentation in Turkey Is a Popular Choice for International Patients",
+    seoTitle: "Why Breast Augmentation in Turkey Is a Popular Choice for International Patients | MCT",
+    seoDescription:
+      "Why breast augmentation in Turkey is a popular choice for international patients, and everything you need to know before considering the procedure.",
+  },
+};
+
 // Prototype-phase set, kept so a non-IMPORT_ALL run reproduces exactly the
 // 5 already-reviewed articles deterministically.
 const TEST_SLUGS = [
@@ -799,12 +817,17 @@ async function main() {
     const seoTitle = resolveSeoTitle(meta, title, warnings);
     const seoDescription = resolveSeoDescription(meta, cleaned.after, title, warnings);
 
+    const titleSeoOverride = TITLE_SEO_OVERRIDES[slug];
+    const finalTitle = titleSeoOverride?.title ?? title;
+    const finalSeoTitle = titleSeoOverride?.seoTitle ?? seoTitle;
+    const finalSeoDescription = titleSeoOverride?.seoDescription ?? seoDescription;
+
     const internalHrefs = extractHrefs(localizedHtml).filter((h) => h.includes("medicalcenterturkey.com") || h.startsWith("/"));
 
     writeFileSync(path.join(CONTENT_DIR, `${slug}.html`), localizedHtml, "utf-8");
 
     indexEntries.push({
-      slug, title, date: dateGmt, seoTitle, seoDescription, featuredImage,
+      slug, title: finalTitle, date: dateGmt, seoTitle: finalSeoTitle, seoDescription: finalSeoDescription, featuredImage,
       categories: categories.filter((c) => c.domain === "category").map((c) => c.name),
       tags: categories.filter((c) => c.domain === "post_tag").map((c) => c.name),
       usedFallbackTitle: !meta["_yoast_wpseo_title"],
