@@ -29,8 +29,10 @@ export const metadata: Metadata = {
   // Phase 5K-D: the unconditional noindex this field carried has been
   // removed. On its own this field is now the real "approved default" —
   // no restriction, so any page that sets no robots field of its own
-  // (most of the 608 blog posts, legal pages, etc.) is indexable on
-  // production. Preview is protected by a SEPARATE, non-static mechanism
+  // (every one of the 608 blog posts, the homepage, every hospital page,
+  // every treatment page, legal pages, etc. — none currently sets its own
+  // robots field) is indexable the moment it's served on the production
+  // host. Preview is protected by a SEPARATE, non-static mechanism
   // instead: proxy.ts sets an X-Robots-Tag: noindex, nofollow response
   // header for any non-production host (lib/site-host.ts's
   // isProductionHost() — the same proven hostname check robots.ts/
@@ -39,10 +41,17 @@ export const metadata: Metadata = {
   // Doing it in proxy.ts rather than here keeps the whole site static —
   // making this a request-time check here (via generateMetadata()) would
   // force every one of the 608 blog posts and 38 hospital pages dynamic.
-  // Pages with their own deliberate noindex (homepage, /hospitals-in-turkey,
-  // every /[hospital], all 12 treatment pages) are UNAFFECTED by this
-  // change — they already set their own robots field, which always took
-  // precedence over this one regardless.
+  //
+  // Phase 4 follow-up (2026-10-14), correction: this comment previously
+  // claimed the homepage, /hospitals-in-turkey, every /[hospital], and all
+  // 12 treatment pages "already set their own robots field" and were
+  // therefore unaffected by this change. That was checked and found false
+  // — none of those pages (or any other page) sets a robots field. In
+  // practice this means indexing today is an all-or-nothing switch tied
+  // purely to hostname, not staged by page: the instant the production
+  // hostname serves this app, every page becomes indexable simultaneously.
+  // If a staged rollout across page categories is ever wanted, per-page
+  // robots overrides would need to be added — they do not exist today.
 };
 
 export default function RootLayout({

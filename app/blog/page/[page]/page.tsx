@@ -12,8 +12,11 @@ import { getBlogPage, SORTED_BLOG_POSTS, TOTAL_BLOG_PAGES } from "@/lib/blog-lis
 // `dynamicParams = false` makes it 404 rather than silently rendering a
 // duplicate of /blog under a second URL.
 //
-// No explicit `robots` here — inherits noindex/nofollow from the root
-// layout, same as every other page during this pre-launch phase.
+// No explicit `robots` here. The root layout sets none either (Phase
+// 5K-D) — pre-launch protection comes solely from proxy.ts, which sets
+// X-Robots-Tag: noindex, nofollow on any non-production host. Same as
+// every other page on the site (corrected 2026-10-14; this comment
+// previously described a layout-level noindex that no longer exists).
 
 type PageProps = { params: Promise<{ page: string }> };
 

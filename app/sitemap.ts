@@ -13,14 +13,21 @@ const BASE = `https://${PRODUCTION_HOST}`;
 // see lib/gone-paths.ts), /posts/[slug] (internal-only, see proxy.ts), and
 // admin/partner-portal/api/auth.
 //
-// Known open item for launch day (see Phase 5C report): several of these
-// pages — the homepage, /hospitals-in-turkey, every /[hospital] page, and
-// all 12 treatment pages — currently carry their own page-level
-// `robots: { index: false }` override in generateMetadata/metadata. That
-// override is NOT lifted automatically by this file or by changing the
-// root layout; it must be removed from each of those pages individually
-// as part of the real launch-day indexing flip, or they'll be listed here
-// while still actively telling crawlers not to index them.
+// Phase 4 follow-up (2026-10-14), correction: this comment previously
+// claimed the homepage, /hospitals-in-turkey, every /[hospital] page, and
+// all 12 treatment pages each carry their own page-level
+// `robots: { index: false }` override that would need removing at launch.
+// That was checked directly against every one of those page files and
+// found false — none of them sets a robots field. The real mechanism is
+// entirely in proxy.ts: any request whose Host header isn't the exact
+// production hostname (lib/site-host.ts's isProductionHost()) gets an
+// X-Robots-Tag: noindex, nofollow response header, regardless of page.
+// There is currently no page-level or staged indexing control — the
+// instant the production hostname serves this app, every URL listed below
+// becomes indexable simultaneously. That's a simple, correct design for a
+// single-day cutover; it only becomes a problem if a staged, page-by-page
+// rollout is ever wanted, since that would need new per-page robots
+// overrides that don't exist today.
 const STATIC_PATHS: { path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"] }[] = [
   { path: "/", priority: 1.0, changeFrequency: "weekly" },
   { path: "/hospitals-in-turkey", priority: 0.7, changeFrequency: "monthly" },

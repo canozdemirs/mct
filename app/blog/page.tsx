@@ -10,8 +10,11 @@ import { getBlogPage, SORTED_BLOG_POSTS, TOTAL_BLOG_PAGES } from "@/lib/blog-lis
 // route) — this file intentionally does not read a page param, it always
 // renders the first POSTS_PER_PAGE articles (newest first).
 //
-// No explicit `robots` here — inherits noindex/nofollow from the root
-// layout, same as every other page during this pre-launch phase.
+// No explicit `robots` here. The root layout sets none either (Phase
+// 5K-D) — pre-launch protection comes solely from proxy.ts, which sets
+// X-Robots-Tag: noindex, nofollow on any non-production host. Same as
+// every other page on the site (corrected 2026-10-14; this comment
+// previously described a layout-level noindex that no longer exists).
 
 const PAGE_URL = "https://www.medicalcenterturkey.com/blog";
 

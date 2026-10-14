@@ -11,8 +11,11 @@ import { MEDICAL_TOURISM_TURKEY_FAQS } from "@/lib/medical-tourism-turkey-conten
 // segment, no next-intl, no hreflang. Root layout's <html lang="en"> is
 // intentionally left unchanged (see report); this page's own content is
 // wrapped in <div lang="tr"> instead (see MedicalTourismTurkeyLanding).
-// No explicit `robots` metadata here — inherits noindex/nofollow from the
-// root layout, same as every other page during this pre-launch phase.
+// No explicit `robots` metadata here. The root layout sets none either
+// (Phase 5K-D) — pre-launch protection comes solely from proxy.ts, which
+// sets X-Robots-Tag: noindex, nofollow on any non-production host. Same
+// as every other page on the site (corrected 2026-10-14; this comment
+// previously described a layout-level noindex that no longer exists).
 //
 // Uses MedicalTourismTurkeyNav instead of the global <Nav /> (English
 // header) so this page shows exactly one navigation bar instead of two

@@ -60,11 +60,22 @@ const LIB_DIR = path.join(ROOT, "lib");
 // platform. Excluded here (not just deleted from content/) so a future
 // re-import can never regenerate them. See lib/gone-paths.ts for the
 // matching 410 rule and the Phase 5E report for full rationale.
+//
+// Phase 4 follow-up (2026-10-14): kidney-transplant-in-turkey and
+// how-much-is-a-kidney-transplant-surgery added — same compliance
+// rationale as the 3 above. Unlike those 3, neither exists as an actual
+// <item> in the current WXR export (verified directly: no matching <link>
+// or wp:post_name), so they were never part of the 612 published posts
+// counted below — adding them here is purely defensive, in case a future
+// WordPress export ever restores them. This is why EXPECTED_IMPORT_TOTAL
+// below is a literal 608, not EXPECTED_PUBLISHED_TOTAL - EXCLUDED_SLUGS.size.
 const EXCLUDED_SLUGS = new Set([
   "hair-transplant-turkey",
   "transplant-surgery-in-turkey-2025",
   "bone-marrow-transplantation-in-turkey",
   "how-long-is-bone-marrow-transplant",
+  "kidney-transplant-in-turkey",
+  "how-much-is-a-kidney-transplant-surgery",
 ]);
 
 // Prototype-phase set, kept so a non-IMPORT_ALL run reproduces exactly the
@@ -78,7 +89,12 @@ const TEST_SLUGS = [
 ];
 
 const EXPECTED_PUBLISHED_TOTAL = 612;
-const EXPECTED_IMPORT_TOTAL = EXPECTED_PUBLISHED_TOTAL - EXCLUDED_SLUGS.size; // 608 (Phase 5E)
+// Literal 608, not a formula off EXCLUDED_SLUGS.size (Phase 4 follow-up,
+// 2026-10-14): 2 of the 6 exclusions above (the kidney slugs) don't exist
+// in the current WXR's 612 published posts, so they never get subtracted
+// in practice — only the original 4 do. 612 - 4 = 608, matching the real
+// lib/blog-slugs.generated.ts count.
+const EXPECTED_IMPORT_TOTAL = 608;
 
 // ---------------------------------------------------------------------------
 // Link fixes (Phase 3, approved 2026-10-10) — applied to every article's

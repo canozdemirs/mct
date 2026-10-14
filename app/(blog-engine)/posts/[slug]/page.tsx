@@ -19,9 +19,12 @@ import { getAllHospitalSlugs } from "@/lib/hospitals";
 // proxy.ts redirects it to the public root URL before Next.js resolves a
 // route, so this page can stay fully static (generateStaticParams-only,
 // no request-time APIs).
-// It intentionally declares no `robots` metadata of its own — it inherits
-// noindex/nofollow from the root layout, same as every other page on the
-// site during this pre-launch phase.
+// It intentionally declares no `robots` metadata of its own. The root
+// layout sets none either (Phase 5K-D) — pre-launch protection comes
+// solely from proxy.ts, which sets X-Robots-Tag: noindex, nofollow on any
+// non-production host. Same as every other page on the site (corrected
+// 2026-10-14; this comment previously described a layout-level noindex
+// that no longer exists).
 
 type PageProps = { params: Promise<{ slug: string }> };
 
