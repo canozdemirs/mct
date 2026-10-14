@@ -176,19 +176,22 @@ html {
      image displays at its own natural size -- never stretched up -- while
      a large one is capped down; height follows automatically, so aspect
      ratio is never distorted.
-   - 650px is a deliberate cap, not a hard rule for every image: it's
-     comfortably below the typical imported photo's native width (checked:
-     most run 900px-1500px+), so this only ever downscales. A handful of
-     wide comparison/infographic images are capped the same way; see the
-     report for this phase for any case that needed a different treatment.
+   - 700px is a deliberate cap, not a hard rule for every image: a full
+     scan of all 2374 distinct content images referenced across the 608
+     articles (real on-disk pixel size, not the stale WordPress width/
+     height attributes) found 381 images above 700px and none between
+     400-699px that this cap would touch, so raising it from an earlier
+     650px to 700px only affects those already-large images, downscaling
+     them slightly less.
    - Margin is the normal-image default (32px desktop / 24px mobile,
      applied around every image uniformly for a consistent rhythm);
-     the two CTA banners below only override max-width, inheriting this
-     same margin instead of carrying their own. */
+     the two CTA banners below and the 300px-cluster rule further below
+     only override width/max-width, inheriting this same margin instead
+     of carrying their own. */
 .blog-article-body img {
   display: block;
   width: auto;
-  max-width: min(100%, 650px);
+  max-width: min(100%, 700px);
   height: auto;
   margin: 2rem auto;
 }
@@ -205,10 +208,53 @@ html {
   margin-bottom: 0;
 }
 
+/* The single largest cluster in the full-archive scan: 1871 of 2374
+   content images are exactly 300px wide -- WordPress's standard "medium"
+   thumbnail size, confirmed on disk, not just by the filename. They
+   displayed at natural size (300px) under the general rule above, which
+   looked small next to the ~700px column. Owner-approved controlled
+   upscale to 400px (1.33x) -- visually tested beforehand (300 vs 400 vs
+   450) and chosen as the safer of the two upscale options.
+   `img[src*="-300x"]` matches on WordPress's own thumbnail-naming
+   convention (e.g. "...-300x167.png"), which the scan confirmed is 100%
+   reliable in this archive: every file matching it is genuinely 300px
+   wide, and 1865 of the 1871 true-300px files carry it. It also
+   automatically excludes the two 300px-TALL (not wide) portrait outliers
+   (169x300, 287x300) -- their filenames end "169x300"/"287x300", which
+   does not contain the substring "300x", so forcing their width to 400px
+   (which would have stretched them to ~710px/~420px tall) never happens.
+   `max-width: min(100%, 400px)` (not a bare 400px) keeps this safe on
+   narrow mobile viewports, same reasoning as the CTA banner rule below.
+   One more genuine content image (gastric-balloon-in-turkey's
+   Adsiz-tasarim-3.png, a procedure diagram) is 300px wide but doesn't
+   carry the WordPress suffix, so it's listed explicitly below. The other
+   5 non-matching 300px files are all national flag icons (in
+   top-medical-travel-destinations) -- deliberately NOT included; a flag
+   has no fine detail to lose, but enlarging a small flag/map-style icon
+   past its natural size still isn't the kind of "photo looked too small"
+   problem this rule exists to fix, so they're left at their native 300px
+   via the general rule instead.
+   IMPORTANT: 324 of the 576 "Treatment Cost Calculator" banner files
+   (e.g. "Yeni-CC-Logo-1-Duzenlendi-300x300.png") also match `-300x` --
+   caught during a conflict check before shipping this. Both this rule and
+   the CTA-banner rule below have identical selector specificity (one
+   attribute selector + one type selector each), so without intervention
+   the one later in the file wins regardless of which is "more specific"
+   in intent. The CTA-banner rule is placed AFTER this one for exactly
+   that reason -- it must win that tie-break and keep those images at
+   420px, not fall through to 400px. Do not reorder these two rules. */
+.blog-article-body img[src*="-300x"],
+.blog-article-body img[src="/blog/gastric-balloon-in-turkey/Adsiz-tasarim-3.png"] {
+  width: 400px;
+  max-width: min(100%, 400px);
+}
+
 /* Two CTA banner graphics ("Treatment Cost Calculator" and the now-removed
    "Request a FREE Consultation" -- its selector is kept here in case a
    future article still carries one) were designed at a modest inline size
-   but would otherwise inherit the 650px cap above; both appear with a
+   but would otherwise inherit the 700px cap above (or the 400px rule
+   above, for the ~56% of calculator banners whose filename happens to
+   also match `-300x` -- see the long comment there); both appear with a
    stable, identical `alt` attribute across hundreds of articles, so this
    single rule narrows just the width for all of them at once, no
    per-article HTML edits. Still well below their native resolutions, so
@@ -218,7 +264,9 @@ html {
    article column itself is well under 420px, and `max-width` alone is a
    fixed ceiling that doesn't know the container's actual width -- without
    `width: 100%` this banner would overflow a mobile layout, which was
-   caught by an 8-article overflow check and fixed here. */
+   caught by an 8-article overflow check and fixed here.
+   This rule must stay AFTER the 300px-cluster rule above -- see that
+   rule's comment for why the source order here is load-bearing. */
 .blog-article-body img[alt="Treatment Cost Calculator"],
 .blog-article-body img[alt="Request a FREE Consultation"] {
   width: 100%;
