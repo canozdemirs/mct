@@ -542,25 +542,44 @@ export default async function BlogPostPage({ params }: PageProps) {
   if (!post) notFound();
 
   const canonicalUrl = `https://www.medicalcenterturkey.com/${post.slug}`;
-  // The imported WordPress HTML links its "Treatment Cost Calculator" /
-  // "click here to calculate" CTAs (652 occurrences across the archive) to
-  // the absolute live production URL. That domain still serves the old
-  // WordPress site until the real cutover, so following this link today
-  // (on any host -- preview, localhost, or even a Next.js production
-  // deploy before DNS cutover) lands on WordPress's own calculator, not
-  // this app's. Rewritten here, once, at build time, to the app's own
-  // relative route -- resolves correctly on every host this app is served
-  // from, with no per-article content-file edits. Scoped to this one exact
-  // literal URL only; nothing else in the article HTML is touched.
+  // The imported WordPress HTML links its pricing/package CTAs ("Treatment
+  // Cost Calculator" banners, "click here to calculate", "Click here for
+  // all inclusive", "EUR 1550 and see more packages", etc.) to absolute
+  // live-production URLs. That domain still serves the old WordPress site
+  // until the real cutover, so following any of these links today (on any
+  // host -- preview, localhost, or even a Next.js production deploy before
+  // DNS cutover) lands on WordPress's own pricing pages, not this app's.
+  // Rewritten here, once, at build time, to this app's own relative
+  // /treatment-prices-in-turkey route -- resolves correctly on every host
+  // this app is served from, with no per-article content-file edits.
+  //
+  // Three distinct legacy URLs were confirmed (via a full-archive scan) to
+  // all be the same kind of "view pricing / request a package" CTA, just
+  // authored at different times with different WordPress page slugs:
+  // /treatment-prices-in-turkey/ (598 articles), /hair-transplant-packages/
+  // (34 articles, e.g. the "Click here for all inclusive" link in
+  // daniels-hair-transplant-experience-in-turkey), and
+  // /rhinoplasty-packages/ (4 articles). All three get the exact same
+  // target. Scoped to these exact literal URLs only -- every other absolute
+  // medicalcenterturkey.com link in the archive points to a DIFFERENT real
+  // article's own page (e.g. /veneers-cost-in-turkey/ is that article's own
+  // slug, not a pricing-calculator reference) and is deliberately left
+  // untouched here; rewriting those is a separate, not-yet-approved task.
+  const LEGACY_PRICING_LINKS = [
+    "https://www.medicalcenterturkey.com/treatment-prices-in-turkey/",
+    "https://www.medicalcenterturkey.com/hair-transplant-packages/",
+    "https://www.medicalcenterturkey.com/rhinoplasty-packages/",
+  ];
+  let rawHtml = readFileSync(path.join(process.cwd(), "content", "blog", `${slug}.html`), "utf-8");
+  for (const legacyUrl of LEGACY_PRICING_LINKS) {
+    rawHtml = rawHtml.replaceAll(legacyUrl, "/treatment-prices-in-turkey");
+  }
   const html = splitLongParagraphs(
     applyManualContentFixes(
       slug,
       removeGenericMarketingFiller(
         removeTemplateIntro(
-          removeBannerImages(
-            readFileSync(path.join(process.cwd(), "content", "blog", `${slug}.html`), "utf-8")
-              .replaceAll("https://www.medicalcenterturkey.com/treatment-prices-in-turkey/", "/treatment-prices-in-turkey")
-          )
+          removeBannerImages(rawHtml)
         )
       )
     )
