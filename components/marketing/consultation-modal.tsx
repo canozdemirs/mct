@@ -4,17 +4,34 @@ import { createContext, useContext, useState } from "react";
 import { X } from "lucide-react";
 import { ConsultationForm } from "./consultation-form";
 
+// Site-wide lead-attribution fix (2026-10-14): openConsultation() now
+// accepts an optional source label. Every call site previously opened this
+// modal with no way to say where the patient was -- the form inside it
+// always used the hardcoded "Get Quote Popup" string, on every page on the
+// site, regardless of whether the patient was on a hospital page, a blog
+// article, or anywhere else. The two real call sites (whatsapp-float.tsx,
+// blog-article-content.tsx) now pass a page-aware label; any future call
+// site that doesn't pass one still gets the same generic fallback as
+// before, so this is purely additive.
 type ConsultationModalContextValue = {
-  openConsultation: () => void;
+  openConsultation: (source?: string) => void;
 };
 
 const ConsultationModalContext = createContext<ConsultationModalContextValue | null>(null);
 
+const DEFAULT_SOURCE = "Get Quote Popup";
+
 export function ConsultationModalProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [source, setSource] = useState(DEFAULT_SOURCE);
+
+  function openConsultation(nextSource?: string) {
+    setSource(nextSource || DEFAULT_SOURCE);
+    setOpen(true);
+  }
 
   return (
-    <ConsultationModalContext.Provider value={{ openConsultation: () => setOpen(true) }}>
+    <ConsultationModalContext.Provider value={{ openConsultation }}>
       {children}
 
       {open && (
@@ -32,7 +49,7 @@ export function ConsultationModalProvider({ children }: { children: React.ReactN
               </button>
             </div>
             <div className="px-8 py-6">
-              <ConsultationForm source="Get Quote Popup" onClose={() => setOpen(false)} />
+              <ConsultationForm source={source} onClose={() => setOpen(false)} />
             </div>
           </div>
         </div>

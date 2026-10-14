@@ -1,11 +1,22 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { MessageCircle, Send } from "lucide-react";
 import { useConsultationModal } from "./consultation-modal";
 import { openWhatsAppTransition, WHATSAPP_GENERIC_MESSAGE } from "@/lib/attribution";
 
+// Site-wide lead-attribution fix (2026-10-14): this component renders
+// identically on every page via a single <WhatsAppFloat /> call, so it has
+// no page-specific props to work with -- it derives its own context from
+// usePathname() instead, fixing the "Get Quote Popup" modal's source label
+// on every page that uses it without having to touch each one.
 export function WhatsAppFloat() {
   const { openConsultation } = useConsultationModal();
+  const pathname = usePathname();
+
+  function handleGetQuote() {
+    openConsultation(`Floating Get Quote (${pathname})`);
+  }
 
   function handleWhatsApp(e: React.MouseEvent) {
     e.preventDefault();
@@ -15,7 +26,7 @@ export function WhatsAppFloat() {
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
       <button
-        onClick={openConsultation}
+        onClick={handleGetQuote}
         className="flex flex-col items-center justify-center gap-1 bg-brand text-white w-16 h-16 rounded-2xl shadow-xl hover:bg-[#154d8a] transition-all hover:scale-105"
       >
         <Send size={18} />

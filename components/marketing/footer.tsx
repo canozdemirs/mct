@@ -2,12 +2,22 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { CertificateLightbox } from "./certificate-lightbox";
 import { useConsultationModal } from "./consultation-modal";
 import { reopenConsentBanner } from "@/components/analytics/consent-banner";
 
 export function Footer() {
   const { openConsultation } = useConsultationModal();
+  const pathname = usePathname();
+
+  // Site-wide lead-attribution fix (2026-10-14): same reasoning as
+  // whatsapp-float.tsx -- Footer renders identically on every page, so it
+  // derives its own page context from usePathname() rather than needing a
+  // prop threaded through every page that renders it.
+  function handleGetQuote() {
+    openConsultation(`Footer Get Quote (${pathname})`);
+  }
 
   return (
     <footer
@@ -72,7 +82,7 @@ export function Footer() {
                 </li>
               ))}
               <li>
-                <button onClick={openConsultation} className="hover:text-white transition-colors">
+                <button onClick={handleGetQuote} className="hover:text-white transition-colors">
                   Get Quote
                 </button>
               </li>

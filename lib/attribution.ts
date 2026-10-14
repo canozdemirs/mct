@@ -311,6 +311,30 @@ export function getCapturedAttribution(): { firstTouch: CapturedTouch | null; se
 }
 
 /**
+ * Site-wide lead-attribution fix (2026-10-14): every direct/quick WhatsApp
+ * entry point (floating buttons, contact bar, the 11 landing-page hero
+ * CTAs, the hospital-page sidebar link, the post-submit "message us"
+ * CTA) previously called this with a flat, page-agnostic message -- staff
+ * receiving the WhatsApp chat had no way to tell which hospital, treatment
+ * or blog article the patient had been looking at. Appending the clean
+ * page URL here, once, fixes all of those call sites together without
+ * touching each one individually. Deliberately origin+pathname only, never
+ * the full href -- the query string can carry UTM/gclid tracking
+ * parameters, and this line is appended to a message the patient
+ * themselves sees and sends, so no tracking parameter should ever be
+ * surfaced to them. The one call site that already builds a rich,
+ * page-aware message (consultation-form.tsx, which includes an explicit
+ * "Source: <label>" line) still benefits from this -- it gains a precise,
+ * clickable URL in addition to its existing human-readable label, not a
+ * duplicate of it.
+ */
+function appendPageContext(message: string): string {
+  if (typeof window === "undefined") return message;
+  const page = `${window.location.origin}${window.location.pathname}`;
+  return `${message}\n\nPage: ${page}`;
+}
+
+/**
  * Opens the WhatsApp transition route synchronously, in direct response to
  * a user click (must be called from inside the click handler itself, with
  * no `await` before it -- that is what keeps this from being treated as a
@@ -322,7 +346,7 @@ export function getCapturedAttribution(): { firstTouch: CapturedTouch | null; se
  * current tab otherwise.
  */
 export function openWhatsAppTransition(message: string): void {
-  writePendingWhatsAppMessage(message);
+  writePendingWhatsAppMessage(appendPageContext(message));
   // Fired exactly once per call -- this function is the single, shared
   // entry point used by all 15 WhatsApp links/buttons on the site, so
   // centralizing the event push here (rather than at each call site)

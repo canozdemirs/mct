@@ -2,10 +2,20 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useConsultationModal } from "./consultation-modal";
 
 export function Nav() {
   const { openConsultation } = useConsultationModal();
+  const pathname = usePathname();
+
+  // Site-wide lead-attribution fix (2026-10-14): same reasoning as
+  // whatsapp-float.tsx -- Nav renders identically on every page, so it
+  // derives its own page context from usePathname() rather than needing a
+  // prop threaded through every page that renders it.
+  function handleGetQuote() {
+    openConsultation(`Header Get Quote (${pathname})`);
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
@@ -31,7 +41,7 @@ export function Nav() {
             <Link href="/hospitals-in-turkey" className="text-sm font-semibold text-brand hover:text-teal transition-colors">Hospitals</Link>
             <Link href="/treatment-prices-in-turkey" className="text-sm font-semibold text-brand hover:text-teal transition-colors">Cost Calculator</Link>
             <Link href="/blog" className="text-sm font-semibold text-brand hover:text-teal transition-colors">Blog</Link>
-            <button onClick={openConsultation} className="text-sm font-semibold text-brand hover:text-teal transition-colors">Get Quote</button>
+            <button onClick={handleGetQuote} className="text-sm font-semibold text-brand hover:text-teal transition-colors">Get Quote</button>
           </nav>
 
           {/* Right — CTA */}
@@ -58,7 +68,7 @@ export function Nav() {
           <Link href="/hospitals-in-turkey" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Hospitals</Link>
           <Link href="/treatment-prices-in-turkey" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Cost Calculator</Link>
           <Link href="/blog" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Blog</Link>
-          <button onClick={openConsultation} className="text-xs font-semibold text-brand hover:text-teal transition-colors">Get Quote</button>
+          <button onClick={handleGetQuote} className="text-xs font-semibold text-brand hover:text-teal transition-colors">Get Quote</button>
           <Link href="/medical-tourism-turkey" className="text-xs font-semibold text-brand hover:text-teal transition-colors">🇹🇷 Türkçe</Link>
         </div>
 

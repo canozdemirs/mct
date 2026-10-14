@@ -13,14 +13,14 @@ import { useConsultationModal } from "./consultation-modal";
 // `click` on Enter, so no extra key handling is needed) and opens the same
 // modal every other "Get Quote" button on the site uses, without altering
 // any visible link text.
-export function BlogArticleContent({ html, className }: { html: string; className?: string }) {
+export function BlogArticleContent({ html, className, postTitle }: { html: string; className?: string; postTitle?: string }) {
   const { openConsultation } = useConsultationModal();
 
   function handleClick(e: React.MouseEvent<HTMLDivElement>) {
     const target = (e.target as HTMLElement).closest('[data-cta="consultation"]');
     if (target) {
       e.preventDefault();
-      openConsultation();
+      openConsultation(postTitle ? `Blog Article: ${postTitle}` : undefined);
     }
   }
 
