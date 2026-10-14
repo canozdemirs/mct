@@ -1,8 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Users, Building2, Star, ThumbsUp } from "lucide-react";
+import { Users, Star, ThumbsUp } from "lucide-react";
 
+// GEO trust fix (2026-10-14): "Partner Hospitals" (200) removed -- not
+// supported by any verifiable site data (lib/hospitals.ts documents 38
+// published hospital profiles; business owner confirmed 200 could not be
+// confirmed and should not be replaced with 38 either, since that number
+// means something different -- published profile count, not a partner
+// count). Google/Trustpilot ratings below are confirmed current and left
+// unchanged. Grid layout adjusted from 4 to 3 items accordingly (see
+// Stats() below) so neither breakpoint is left with an unbalanced slot.
 const stats = [
   {
     value: 5000,
@@ -11,15 +19,6 @@ const stats = [
     label: "Patients Served",
     decimals: 0,
     icon: Users,
-    static: false,
-  },
-  {
-    value: 200,
-    prefix: "+",
-    suffix: "",
-    label: "Partner Hospitals",
-    decimals: 0,
-    icon: Building2,
     static: false,
   },
   {
@@ -83,13 +82,13 @@ export function Stats() {
     <section className="bg-white pt-0 pb-12 -mt-14">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
-          className="rounded-2xl py-8 grid grid-cols-2 lg:grid-cols-4"
+          className="rounded-2xl py-8 grid grid-cols-1 sm:grid-cols-3"
           style={{ background: "linear-gradient(135deg, #1b5fa8 0%, #1ab3c8 100%)" }}
         >
           {stats.map((s, idx) => (
             <div
               key={s.label}
-              className={`flex flex-col items-center justify-center gap-2 py-4 px-6 text-center w-full ${idx < stats.length - 1 ? "border-r border-white/20" : ""}`}
+              className={`flex flex-col items-center justify-center gap-2 py-4 px-6 text-center w-full ${idx < stats.length - 1 ? "sm:border-r border-white/20" : ""}`}
             >
               {s.icon && <s.icon size={18} className="text-white/60" />}
               <div className="text-3xl sm:text-4xl font-bold text-white leading-none tabular-nums">

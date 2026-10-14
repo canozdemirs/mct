@@ -575,6 +575,19 @@ function LeftPanel() {
             >
               Join the Medical Center Turkey Partner Network and connect your patients with trusted healthcare providers in Türkiye. Our international patient team coordinates the entire journey — from initial consultation and hospital coordination to accommodation, airport transfers, and aftercare — so you can focus on what you do best: growing your business.
             </p>
+            {/* Pre-launch GEO fix (2026-10-14): English authorization
+                statement, approved by the business owner -- see
+                how-it-works.tsx for the same text and its sourcing note. */}
+            <p
+              style={{
+                color: "rgba(255,255,255,0.55)",
+                fontSize: 13,
+                lineHeight: 1.7,
+                marginBottom: 36,
+              }}
+            >
+              Medical Center Turkey is a health tourism intermediary organization authorized by the T.C. Ministry of Health of Turkey, providing consultancy, planning and coordination services to international patients seeking treatment in Turkey.
+            </p>
 
             {/* Benefits */}
             <div style={{ marginBottom: 40 }}>

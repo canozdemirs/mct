@@ -151,8 +151,17 @@ export function generateCollectionPageSchema({
 export function generateOrganizationSchema() {
   return {
     "@context": "https://schema.org",
-    "@type": "MedicalBusiness",
+    // Pre-launch GEO fix (2026-10-14): "MedicalBusiness" implied MCT itself
+    // delivers medical care, contradicting CLAUDE.md's explicit identity
+    // ("MCT is NOT a hospital/clinic/healthcare provider... an
+    // International Patient Center and Health Tourism Coordinator").
+    // "Organization" is schema.org's accurate, non-overclaiming type for a
+    // coordination company in this position -- it does not need a specific
+    // medical/business subtype to be valid or well-formed.
+    "@type": "Organization",
     name: "Medical Center Turkey",
+    description:
+      "Medical Center Turkey is an International Patient Center and Health Tourism Coordinator based in Istanbul, Turkey. It connects international patients with licensed, Ministry of Health certified healthcare providers and manages the complete treatment journey from first inquiry to aftercare. Medical Center Turkey is not a hospital, clinic or healthcare provider.",
     url: "https://www.medicalcenterturkey.com",
     logo: "https://www.medicalcenterturkey.com/mct-logo.png",
     telephone: "+908508888911",

@@ -33,6 +33,12 @@ export default async function HospitalsInTurkeyPage({ searchParams }: PageProps)
         {/* Filter + Grid */}
         <section className="pt-12 pb-16 bg-slate-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Pre-launch GEO fix (2026-10-14): English authorization
+                statement, approved by the business owner -- see
+                how-it-works.tsx for the same text and its sourcing note. */}
+            <p className="text-center text-sm text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed">
+              Medical Center Turkey is a health tourism intermediary organization authorized by the T.C. Ministry of Health of Turkey, providing consultancy, planning and coordination services to international patients seeking treatment in Turkey.
+            </p>
             <HospitalGrid hospitals={hospitals} initialGroup={initialGroup} />
           </div>
         </section>

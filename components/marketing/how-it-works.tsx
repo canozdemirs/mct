@@ -73,6 +73,15 @@ export function HowItWorks() {
             )}
           </div>
         </div>
+
+        {/* Pre-launch GEO fix (2026-10-14): English authorization statement,
+            approved by the business owner, translated faithfully from the
+            existing Turkish statement on /medical-tourism-turkey (no
+            certificate number invented, no claim that MCT performs medical
+            procedures). */}
+        <p className="mt-8 text-center text-xs text-gray-400 max-w-2xl mx-auto leading-relaxed">
+          Medical Center Turkey is a health tourism intermediary organization authorized by the T.C. Ministry of Health of Turkey, providing consultancy, planning and coordination services to international patients seeking treatment in Turkey.
+        </p>
       </div>
     </section>
   );
