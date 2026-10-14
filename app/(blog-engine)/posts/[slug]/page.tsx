@@ -9,6 +9,8 @@ import { BlogArticleContent } from "@/components/marketing/blog-article-content"
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/schema";
 import { BLOG_POSTS } from "@/lib/blog-index.generated";
 import { getPostBySlug } from "@/lib/blog-listing";
+import { BLOG_SLUGS } from "@/lib/blog-slugs.generated";
+import { getAllHospitalSlugs } from "@/lib/hospitals";
 
 // This route is reached only via a proxy.ts rewrite from the public
 // root-level URL (/<slug>). Its own canonical always points back to that
@@ -536,44 +538,93 @@ function applyManualContentFixes(slug: string, html: string): string {
   return result;
 }
 
+// A full internal-link audit (Phase 3) scanned every <a href> in the final
+// rendered content of all 608 articles against the real route surface
+// (608 blog slugs, 38 hospital slugs, every static/treatment page, and
+// proxy.ts's 410/redirect rules). 47 distinct internal destinations were
+// still written as absolute https://www.medicalcenterturkey.com/... URLs
+// instead of relative paths -- on any non-production host (preview,
+// localhost, a deploy before DNS cutover) these resolve to the live
+// WordPress site, not this app, same root cause as the pricing-link issue
+// fixed earlier. Three of them are an explicit "pricing/package CTA"
+// override rather than a same-slug cross-link:
+//   - /treatment-prices-in-turkey -- the Cost Calculator target (598
+//     articles) -- already correct, included here as a no-op for a single
+//     rewrite pass.
+//   - /hair-transplant-packages -- the business owner confirmed (Phase 3
+//     follow-up) that this dedicated, richer package page (its own prices,
+//     FAQs, testimonials) is the CORRECT target for these 36 links, not
+//     the generic calculator -- a deliberate reversal of this function's
+//     very first version, which sent these to /treatment-prices-in-turkey
+//     before that page's existence/accuracy had been confirmed.
+//   - /rhinoplasty-packages -- no equivalent dedicated page exists for
+//     rhinoplasty, so these 5 links still go to /treatment-prices-in-turkey
+//     (unchanged from the original fix).
+// Every other matched destination is a genuine cross-link to another real
+// page in this app (e.g. /veneers-cost-in-turkey is that article's own
+// slug, /memorial-sisli-hospital is a real hospital page) -- those just
+// get their host stripped, same slug, nothing else changes.
+//
+// Two more destinations from the same audit -- .../rhinoplasty-in-turkey/
+// (in 3d-rhinoplasty-surgery-cost-in-turkey) and .../liposuction-surgery-
+// in-turkey/ (in liposuction-in-turkey) -- don't match any real route
+// verbatim, but their mapping was confirmed unambiguous before adding the
+// override below, not guessed: in both source articles the link's own
+// anchor text/alt text and surrounding sentence are explicitly about that
+// exact treatment ("3D - Rhinoplasty is the aesthetic procedure...", an
+// image alt starting "Liposuc..." inside the Liposuction in Turkey
+// article), and /rhinoplasty-turkey and /liposuction-turkey are each this
+// app's one real, dedicated package page for that exact treatment (own
+// title, own pricing tiers, own FAQ) -- confirmed by reading both target
+// pages' source before adding these two lines.
+const LEGACY_HOST_PATTERN = /https:\/\/www\.medicalcenterturkey\.com\/([a-zA-Z0-9-]*)\/?(?=["])/g;
+const LEGACY_PATH_OVERRIDES: Record<string, string> = {
+  "rhinoplasty-packages": "/treatment-prices-in-turkey",
+  "rhinoplasty-in-turkey": "/rhinoplasty-turkey",
+  "liposuction-surgery-in-turkey": "/liposuction-turkey",
+};
+const INTERNAL_SAFE_SLUGS = new Set<string>([
+  "", // bare homepage link
+  "agency",
+  "hair-transplant-packages",
+  "privacy-policy",
+  "terms",
+  "treatment-prices-in-turkey",
+  "all-on-4-dental-implants-turkey",
+  "blepharoplasty-turkey",
+  "blog",
+  "breast-augmentation-turkey",
+  "cataract-surgery-turkey",
+  "dental-implants-turkey",
+  "gynecomastia-turkey",
+  "hospitals-in-turkey",
+  "ivf-treatment-turkey",
+  "lasik-eye-surgery-turkey",
+  "liposuction-turkey",
+  "medical-check-up-turkey",
+  "medical-tourism-turkey",
+  "rhinoplasty-turkey",
+  ...BLOG_SLUGS,
+  ...getAllHospitalSlugs(),
+]);
+
+function rewriteLegacyAbsoluteLinks(html: string): string {
+  return html.replace(LEGACY_HOST_PATTERN, (fullMatch, rawSlug: string) => {
+    if (rawSlug in LEGACY_PATH_OVERRIDES) return LEGACY_PATH_OVERRIDES[rawSlug];
+    if (INTERNAL_SAFE_SLUGS.has(rawSlug)) return rawSlug === "" ? "/" : `/${rawSlug}`;
+    return fullMatch;
+  });
+}
+
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) notFound();
 
   const canonicalUrl = `https://www.medicalcenterturkey.com/${post.slug}`;
-  // The imported WordPress HTML links its pricing/package CTAs ("Treatment
-  // Cost Calculator" banners, "click here to calculate", "Click here for
-  // all inclusive", "EUR 1550 and see more packages", etc.) to absolute
-  // live-production URLs. That domain still serves the old WordPress site
-  // until the real cutover, so following any of these links today (on any
-  // host -- preview, localhost, or even a Next.js production deploy before
-  // DNS cutover) lands on WordPress's own pricing pages, not this app's.
-  // Rewritten here, once, at build time, to this app's own relative
-  // /treatment-prices-in-turkey route -- resolves correctly on every host
-  // this app is served from, with no per-article content-file edits.
-  //
-  // Three distinct legacy URLs were confirmed (via a full-archive scan) to
-  // all be the same kind of "view pricing / request a package" CTA, just
-  // authored at different times with different WordPress page slugs:
-  // /treatment-prices-in-turkey/ (598 articles), /hair-transplant-packages/
-  // (34 articles, e.g. the "Click here for all inclusive" link in
-  // daniels-hair-transplant-experience-in-turkey), and
-  // /rhinoplasty-packages/ (4 articles). All three get the exact same
-  // target. Scoped to these exact literal URLs only -- every other absolute
-  // medicalcenterturkey.com link in the archive points to a DIFFERENT real
-  // article's own page (e.g. /veneers-cost-in-turkey/ is that article's own
-  // slug, not a pricing-calculator reference) and is deliberately left
-  // untouched here; rewriting those is a separate, not-yet-approved task.
-  const LEGACY_PRICING_LINKS = [
-    "https://www.medicalcenterturkey.com/treatment-prices-in-turkey/",
-    "https://www.medicalcenterturkey.com/hair-transplant-packages/",
-    "https://www.medicalcenterturkey.com/rhinoplasty-packages/",
-  ];
-  let rawHtml = readFileSync(path.join(process.cwd(), "content", "blog", `${slug}.html`), "utf-8");
-  for (const legacyUrl of LEGACY_PRICING_LINKS) {
-    rawHtml = rawHtml.replaceAll(legacyUrl, "/treatment-prices-in-turkey");
-  }
+  const rawHtml = rewriteLegacyAbsoluteLinks(
+    readFileSync(path.join(process.cwd(), "content", "blog", `${slug}.html`), "utf-8")
+  );
   const html = splitLongParagraphs(
     applyManualContentFixes(
       slug,
