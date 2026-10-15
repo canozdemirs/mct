@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Geist } from "next/font/google";
 import { ConsultationModalProvider } from "@/components/marketing/consultation-modal";
+import { ConsentDefaultInit } from "@/components/analytics/consent-default-init";
 import { GoogleTagManager } from "@/components/analytics/google-tag-manager";
 import { RouteChangeTracker } from "@/components/analytics/route-change-tracker";
 import { AttributionCapture } from "@/components/analytics/attribution-capture";
@@ -66,6 +67,7 @@ export default function RootLayout({
       className={`${geistSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col overflow-x-hidden">
+        <ConsentDefaultInit />
         <GoogleTagManager />
         <Suspense fallback={null}>
           <RouteChangeTracker />

@@ -20,13 +20,14 @@ const GTM_CONTAINER_ID = "GTM-KDKNM5D";
 // uncontrolled testing path exists at all today. A deliberate, separate,
 // explicitly-approved mechanism would be needed to test on preview later.
 //
-// Consent Mode v2 defaults are set via a tiny gtag-shim BEFORE gtm.js
-// loads (Google's documented pattern for GTM-only setups that still want
-// Consent Mode signals -- GTM reads the same dataLayer-based consent
-// commands regardless of whether a standalone gtag.js is also present).
-// Default is fully denied; a previously-stored choice (ConsentBanner) is
-// applied immediately afterward so a returning visitor who already
-// granted consent doesn't have to re-decide on every page load.
+// Post-launch fix (2026-10-15): the Consent Mode v2 DEFAULT is no longer
+// set here -- it moved to a synchronous, pre-hydration inline script (see
+// components/analytics/consent-default-init.tsx for the full why). By the
+// time this effect runs, window.dataLayer/window.gtag are already set up
+// and the default has already been pushed on production hosts. This effect
+// now only re-applies a returning visitor's previously STORED choice
+// (unchanged from before -- that part was never the problem) and triggers
+// the actual gtm.js load.
 export function GoogleTagManager() {
   const injected = useRef(false);
   // Starts false on both server and client render -- the <Script> tag
@@ -47,18 +48,13 @@ export function GoogleTagManager() {
       dataLayer: unknown[];
       gtag: (...args: unknown[]) => void;
     };
+    // Set up by ConsentDefaultInit's beforeInteractive script already on
+    // production -- these fallbacks only matter if that script somehow
+    // didn't run (defensive, not the primary path).
     w.dataLayer = w.dataLayer || [];
-    w.gtag = function gtag(...args: unknown[]) {
+    w.gtag = w.gtag || function gtag(...args: unknown[]) {
       w.dataLayer.push(args);
     };
-
-    w.gtag("consent", "default", {
-      analytics_storage: "denied",
-      ad_storage: "denied",
-      ad_user_data: "denied",
-      ad_personalization: "denied",
-      wait_for_update: 500,
-    });
 
     const stored = getStoredConsent();
     if (stored) {
