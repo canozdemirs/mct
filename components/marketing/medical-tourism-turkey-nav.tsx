@@ -24,9 +24,23 @@ export function MedicalTourismTurkeyNav() {
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
-          <Link href="/" className="shrink-0">
-            <Image src="/mct_logo.png" alt="Medical Center Turkey" width={160} height={44} priority />
+        {/* Main row (2026-10-15 redesign): flag + Partner Login now live
+            here, opposite the logo, at EVERY width -- previously
+            "hidden lg:flex" and duplicated inside the mobile hamburger
+            panel below. The hamburger toggle (page-section links only
+            now) stays in this same row, after Partner Login; logo and
+            Partner Login shrink on narrow screens so all four pieces fit
+            without wrapping. */}
+        <div className="flex items-center justify-between h-16 lg:h-20 gap-2">
+          <Link href="/" className="shrink-0 min-w-0">
+            <Image
+              src="/mct_logo.png"
+              alt="Medical Center Turkey"
+              width={160}
+              height={44}
+              priority
+              className="w-[100px] sm:w-[160px] h-auto"
+            />
           </Link>
 
           <nav className="hidden lg:flex items-center gap-8">
@@ -37,27 +51,31 @@ export function MedicalTourismTurkeyNav() {
             ))}
           </nav>
 
-          <div className="hidden lg:flex items-center gap-4 shrink-0">
-            <Link href="/" aria-label="Switch to English" className="text-sm font-semibold text-brand hover:text-teal transition-colors">
-              🇬🇧 English
+          <div className="flex items-center gap-1 sm:gap-3 shrink-0">
+            <Link
+              href="/"
+              aria-label="Switch to English"
+              className="flex items-center justify-center w-11 h-11 lg:w-12 lg:h-12 rounded-full text-2xl lg:text-3xl leading-none hover:bg-gray-50 transition-colors"
+            >
+              🇬🇧
             </Link>
             <Link
               href="/agency"
-              className="px-4 py-2 rounded-full border border-brand text-brand text-sm font-semibold hover:bg-brand hover:text-white transition-colors"
+              className="px-2 py-1.5 text-[11px] sm:px-4 sm:py-2 sm:text-sm rounded-full border border-brand text-brand font-semibold hover:bg-brand hover:text-white transition-colors whitespace-nowrap"
             >
               Partner Login
             </Link>
-          </div>
 
-          <button
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-expanded={open}
-            aria-label={open ? "Menüyü kapat" : "Menüyü aç"}
-            className="lg:hidden p-2 -mr-2 text-brand"
-          >
-            {open ? <X size={24} /> : <Menu size={24} />}
-          </button>
+            <button
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              aria-expanded={open}
+              aria-label={open ? "Menüyü kapat" : "Menüyü aç"}
+              className="lg:hidden flex items-center justify-center w-11 h-11 -mr-1.5 text-brand shrink-0"
+            >
+              {open ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
 
         {open && (
@@ -72,18 +90,6 @@ export function MedicalTourismTurkeyNav() {
                 {l.label}
               </a>
             ))}
-            <div className="flex items-center gap-4 pt-4 mt-1 border-t border-gray-100 w-full justify-center">
-              <Link href="/" onClick={() => setOpen(false)} aria-label="Switch to English" className="text-sm font-semibold text-brand hover:text-teal transition-colors">
-                🇬🇧 English
-              </Link>
-              <Link
-                href="/agency"
-                onClick={() => setOpen(false)}
-                className="px-4 py-2 rounded-full border border-brand text-brand text-sm font-semibold hover:bg-brand hover:text-white transition-colors"
-              >
-                Partner Login
-              </Link>
-            </div>
           </div>
         )}
       </div>
