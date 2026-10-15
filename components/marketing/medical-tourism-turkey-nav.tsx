@@ -34,7 +34,7 @@ export function MedicalTourismTurkeyNav() {
               width={160}
               height={44}
               priority
-              className="w-[100px] sm:w-[160px] h-auto"
+              className="w-[110px] sm:w-[160px] h-auto"
             />
           </Link>
 
