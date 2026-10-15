@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X } from "lucide-react";
 
 // Phase: TR mini-site header. Used by app/medical-tourism-turkey/page.tsx
 // IN PLACE OF the global <Nav /> (components/marketing/nav.tsx), which is
@@ -19,23 +17,15 @@ const navLinks = [
 ];
 
 export function MedicalTourismTurkeyNav() {
-  const [open, setOpen] = useState(false);
-
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main row (2026-10-15 redesign): flag + Partner Login now live
-            here, opposite the logo, at EVERY width -- previously
-            "hidden lg:flex" and duplicated inside the mobile hamburger
-            panel below. The hamburger toggle (page-section links only
-            now) stays in this same row, after Partner Login; logo and
-            Partner Login shrink on narrow screens so all four pieces fit
-            without wrapping.
-            2026-10-15 follow-up: flag glyph size reduced ~17-20% (text-2xl
-            -> text-xl mobile, text-3xl -> text-2xl desktop) per design
-            request; the w-11/h-11 (44x44, WCAG minimum) touch-target
-            container is intentionally left unchanged -- only the visual
-            glyph inside it shrank. */}
+
+        {/* Main row: flag + Partner Login live here, opposite the logo, at
+            EVERY width -- mirrors components/marketing/nav.tsx (English)
+            exactly. No hamburger toggle (2026-10-15 correction: the
+            hamburger/dropdown approach was a misunderstanding and has been
+            removed entirely -- see second row below). */}
         <div className="flex items-center justify-between h-16 lg:h-20 gap-2">
           <Link href="/" className="shrink-0 min-w-0">
             <Image
@@ -48,6 +38,7 @@ export function MedicalTourismTurkeyNav() {
             />
           </Link>
 
+          {/* Nav links — desktop only, center. Unchanged. */}
           <nav className="hidden lg:flex items-center gap-8">
             {navLinks.map((l) => (
               <a key={l.href} href={l.href} className="text-sm font-semibold text-brand hover:text-teal transition-colors">
@@ -70,39 +61,22 @@ export function MedicalTourismTurkeyNav() {
             >
               Partner Login
             </Link>
-
-            <button
-              type="button"
-              onClick={() => setOpen((v) => !v)}
-              aria-expanded={open}
-              aria-label={open ? "Menüyü kapat" : "Menüyü aç"}
-              className="lg:hidden flex items-center justify-center w-11 h-11 -mr-1.5 text-brand shrink-0"
-            >
-              {open ? <X size={24} /> : <Menu size={24} />}
-            </button>
           </div>
         </div>
 
-        {open && (
-          // relative z-10 (2026-10-15): no overlap was found in testing --
-          // the panel is already in normal document flow inside the
-          // sticky, z-50 header, which should place it above everything
-          // that follows in the DOM -- but an explicit stacking context
-          // here costs nothing and removes any doubt if some future
-          // addition to the page introduces a competing one.
-          <div className="relative z-10 lg:hidden border-t border-gray-100 py-5 flex flex-col items-center gap-4 bg-white">
-            {navLinks.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className="text-sm font-semibold text-brand hover:text-teal transition-colors"
-              >
-                {l.label}
-              </a>
-            ))}
-          </div>
-        )}
+        {/* Second row (2026-10-15 correction): always-visible horizontal
+            links row on mobile, matching components/marketing/nav.tsx's
+            mobile row exactly -- no dropdown, no toggle state. All five
+            links render simultaneously; flex-wrap + gap keep them from
+            overflowing on the narrowest supported width. */}
+        <div className="lg:hidden border-t border-gray-100 py-2 flex items-center justify-center gap-x-5 gap-y-2 flex-wrap">
+          {navLinks.map((l) => (
+            <a key={l.href} href={l.href} className="text-xs font-semibold text-brand hover:text-teal transition-colors">
+              {l.label}
+            </a>
+          ))}
+        </div>
+
       </div>
     </header>
   );
