@@ -44,10 +44,18 @@ export function Nav() {
             <button onClick={handleGetQuote} className="text-sm font-semibold text-brand hover:text-teal transition-colors">Get Quote</button>
           </nav>
 
-          {/* Right — CTA */}
-          <div className="flex items-center gap-4 shrink-0">
+          {/* Right — CTA, desktop only. Mobile fix (2026-10-15): this div
+              previously had no responsive class, so it rendered at every
+              width alongside the dedicated "Mobile nav" row below -- both
+              contain their own "🇹🇷 Türkçe" link, so mobile viewports showed
+              it twice and the extra row height made the header wrap/grow.
+              "hidden lg:flex" scopes it to desktop, matching the nav-links
+              block above it; Partner Login is now carried in the mobile row
+              instead so it isn't lost on small screens. */}
+          <div className="hidden lg:flex items-center gap-4 shrink-0">
             <Link
               href="/medical-tourism-turkey"
+              aria-label="Türkçe sürüme geç"
               className="text-sm font-semibold text-brand hover:text-teal transition-colors"
             >
               🇹🇷 Türkçe
@@ -62,14 +70,16 @@ export function Nav() {
 
         </div>
 
-        {/* Mobile nav */}
-        <div className="lg:hidden border-t border-gray-100 py-2 flex items-center justify-center gap-6 flex-wrap">
+        {/* Mobile nav — the single source of these links below lg; the
+            desktop CTA block above is hidden at this width. */}
+        <div className="lg:hidden border-t border-gray-100 py-2 flex items-center justify-center gap-x-6 gap-y-2 flex-wrap">
           <Link href="/" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Home</Link>
           <Link href="/hospitals-in-turkey" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Hospitals</Link>
           <Link href="/treatment-prices-in-turkey" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Cost Calculator</Link>
           <Link href="/blog" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Blog</Link>
           <button onClick={handleGetQuote} className="text-xs font-semibold text-brand hover:text-teal transition-colors">Get Quote</button>
-          <Link href="/medical-tourism-turkey" className="text-xs font-semibold text-brand hover:text-teal transition-colors">🇹🇷 Türkçe</Link>
+          <Link href="/agency" className="text-xs font-semibold text-brand hover:text-teal transition-colors">Partner Login</Link>
+          <Link href="/medical-tourism-turkey" aria-label="Türkçe sürüme geç" className="text-xs font-semibold text-brand hover:text-teal transition-colors">🇹🇷 Türkçe</Link>
         </div>
 
       </div>

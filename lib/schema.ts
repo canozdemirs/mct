@@ -70,6 +70,21 @@ export function generateProductsSchema(packages: PackageOffer[]) {
   };
 }
 
+// Post-launch P1 fix (2026-10-15): "@type" was hardcoded to "MedicalClinic",
+// naming Medical Center Turkey itself under a type that implies it directly
+// delivers medical care -- the same issue already fixed in
+// generateOrganizationSchema(), missed here because it's a separate
+// generator. Changed to "Organization" to match. See CLAUDE.md: "MCT is
+// NOT a hospital/clinic/healthcare provider."
+//
+// Separately, and left unresolved by this fix because no markup change can
+// resolve it: Google's structured-data policies treat review/rating markup
+// an organization publishes about itself on its own site as "self-serving"
+// and do not guarantee it star-rating rich-result eligibility, regardless
+// of @type. This function's output has never been, and is not now, proven
+// eligible for that treatment -- do not assume otherwise when reasoning
+// about expected search appearance. Testimonial content, names, ratings
+// and counts are unchanged by this fix.
 export function generateReviewSchema(
   serviceName: string,
   testimonials: Testimonial[]
@@ -80,7 +95,7 @@ export function generateReviewSchema(
 
   return {
     "@context": "https://schema.org",
-    "@type": "MedicalClinic",
+    "@type": "Organization",
     name: serviceName,
     aggregateRating: {
       "@type": "AggregateRating",

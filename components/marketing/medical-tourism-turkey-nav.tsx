@@ -38,7 +38,7 @@ export function MedicalTourismTurkeyNav() {
           </nav>
 
           <div className="hidden lg:flex items-center gap-4 shrink-0">
-            <Link href="/" className="text-sm font-semibold text-brand hover:text-teal transition-colors">
+            <Link href="/" aria-label="Switch to English" className="text-sm font-semibold text-brand hover:text-teal transition-colors">
               🇬🇧 English
             </Link>
             <Link
@@ -73,7 +73,7 @@ export function MedicalTourismTurkeyNav() {
               </a>
             ))}
             <div className="flex items-center gap-4 pt-4 mt-1 border-t border-gray-100 w-full justify-center">
-              <Link href="/" onClick={() => setOpen(false)} className="text-sm font-semibold text-brand hover:text-teal transition-colors">
+              <Link href="/" onClick={() => setOpen(false)} aria-label="Switch to English" className="text-sm font-semibold text-brand hover:text-teal transition-colors">
                 🇬🇧 English
               </Link>
               <Link
