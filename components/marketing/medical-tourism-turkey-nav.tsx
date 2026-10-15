@@ -30,7 +30,12 @@ export function MedicalTourismTurkeyNav() {
             panel below. The hamburger toggle (page-section links only
             now) stays in this same row, after Partner Login; logo and
             Partner Login shrink on narrow screens so all four pieces fit
-            without wrapping. */}
+            without wrapping.
+            2026-10-15 follow-up: flag glyph size reduced ~17-20% (text-2xl
+            -> text-xl mobile, text-3xl -> text-2xl desktop) per design
+            request; the w-11/h-11 (44x44, WCAG minimum) touch-target
+            container is intentionally left unchanged -- only the visual
+            glyph inside it shrank. */}
         <div className="flex items-center justify-between h-16 lg:h-20 gap-2">
           <Link href="/" className="shrink-0 min-w-0">
             <Image
@@ -55,7 +60,7 @@ export function MedicalTourismTurkeyNav() {
             <Link
               href="/"
               aria-label="Switch to English"
-              className="flex items-center justify-center w-11 h-11 lg:w-12 lg:h-12 rounded-full text-2xl lg:text-3xl leading-none hover:bg-gray-50 transition-colors"
+              className="flex items-center justify-center w-11 h-11 lg:w-12 lg:h-12 rounded-full text-xl lg:text-2xl leading-none hover:bg-gray-50 transition-colors"
             >
               🇬🇧
             </Link>
@@ -79,7 +84,13 @@ export function MedicalTourismTurkeyNav() {
         </div>
 
         {open && (
-          <div className="lg:hidden border-t border-gray-100 py-5 flex flex-col items-center gap-4">
+          // relative z-10 (2026-10-15): no overlap was found in testing --
+          // the panel is already in normal document flow inside the
+          // sticky, z-50 header, which should place it above everything
+          // that follows in the DOM -- but an explicit stacking context
+          // here costs nothing and removes any doubt if some future
+          // addition to the page introduces a competing one.
+          <div className="relative z-10 lg:hidden border-t border-gray-100 py-5 flex flex-col items-center gap-4 bg-white">
             {navLinks.map((l) => (
               <a
                 key={l.href}

@@ -54,12 +54,16 @@ export function Nav() {
 
           {/* Right — flag (icon-only, no "Türkçe" text) + Partner Login.
               Visible at every width now; sizes step up at lg so the flag
-              reads clearly larger on desktop, per design request. */}
+              reads clearly larger on desktop, per design request.
+              2026-10-15 follow-up: glyph size reduced ~17-20% (text-2xl ->
+              text-xl mobile, text-3xl -> text-2xl desktop); the w-11/h-11
+              (44x44, WCAG minimum) touch-target container is unchanged --
+              only the visual glyph inside it shrank. */}
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             <Link
               href="/medical-tourism-turkey"
               aria-label="Türkçe sürüme geç"
-              className="flex items-center justify-center w-11 h-11 lg:w-12 lg:h-12 rounded-full text-2xl lg:text-3xl leading-none hover:bg-gray-50 transition-colors"
+              className="flex items-center justify-center w-11 h-11 lg:w-12 lg:h-12 rounded-full text-xl lg:text-2xl leading-none hover:bg-gray-50 transition-colors"
             >
               🇹🇷
             </Link>
