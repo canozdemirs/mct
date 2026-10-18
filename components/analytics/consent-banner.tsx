@@ -30,6 +30,19 @@ export function ConsentBanner() {
   function applyAndClose(analytics: boolean, advertising: boolean) {
     storeConsent({ analytics, advertising });
     updateConsentSignals({ analytics, advertising });
+    // Fired ONLY from this active, in-banner decision -- never when a
+    // prior choice is restored from localStorage on a later page load
+    // (that reapplication happens separately, in GoogleTagManager's own
+    // effect, which this function has no part in and which this file
+    // deliberately does not touch). That split is what keeps this a
+    // once-per-active-grant signal rather than firing again on every
+    // subsequent page view for an already-consented visitor.
+    if (analytics && typeof window !== "undefined") {
+      const w = window as unknown as { dataLayer?: unknown[] };
+      if (Array.isArray(w.dataLayer)) {
+        w.dataLayer.push({ event: "consent_analytics_granted" });
+      }
+    }
     setVisible(false);
     setShowPreferences(false);
   }
