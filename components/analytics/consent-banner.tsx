@@ -28,8 +28,31 @@ export function ConsentBanner() {
   }, []);
 
   function applyAndClose(analytics: boolean, advertising: boolean) {
+    // Captured BEFORE storeConsent() overwrites it -- this is what makes
+    // the consent_granted push below a transition signal (not-granted ->
+    // granted) rather than a "granted right now" signal: reopening
+    // "Cookie Settings" and re-saving an already-granted choice must not
+    // push again (GTM's page_view tag on this event would otherwise fire
+    // a second time for a page already measured at G111).
+    const wasAnalyticsGranted = getStoredConsent()?.analytics === true;
+
     storeConsent({ analytics, advertising });
     updateConsentSignals({ analytics, advertising });
+
+    // GTM trigger for a GA4 page_view tag meant to catch the entry page,
+    // which otherwise only ever gets measured cookieless/denied (G100) --
+    // accepting never re-sends a cookied page_view for the page the
+    // visitor was already on. Fires only on the not-granted -> granted
+    // transition, only from this active banner click -- never from
+    // GoogleTagManager's effect reapplying a stored choice on a later
+    // page load (that's a separate function in a separate file, already
+    // measured at G111 from its own first hit, untouched by this change).
+    if (analytics && !wasAnalyticsGranted) {
+      const w = window as unknown as { dataLayer?: unknown[] };
+      w.dataLayer = w.dataLayer || [];
+      w.dataLayer.push({ event: "consent_granted" });
+    }
+
     // Fired ONLY from this active, in-banner decision -- never when a
     // prior choice is restored from localStorage on a later page load
     // (that reapplication happens separately, in GoogleTagManager's own
