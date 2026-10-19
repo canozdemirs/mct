@@ -70,6 +70,49 @@ export function generateProductsSchema(packages: PackageOffer[]) {
   };
 }
 
+// Structured-data audit fix (2026-10-19): these are coordinated medical
+// tourism service packages, not retail goods -- "Product" + "Offer" is what
+// was triggering Google's Merchant Listings validation (expecting
+// shippingDetails, hasMerchantReturnPolicy, etc., none of which apply to a
+// service). "Service" is the Schema.org type Google's own guidance points
+// service-based businesses to, and it does not trigger that Merchant
+// Listings path at all. `provider` (not `brand`/`seller` on the top-level
+// entity) is deliberately an Organization, matching generateOrganizationSchema()
+// elsewhere in this file -- never implies MCT itself is the hospital/
+// surgeon/direct treatment provider, consistent with CLAUDE.md's identity
+// ("MCT is NOT a hospital/clinic/healthcare provider"). No image, review,
+// rating, or policy data is invented here -- same fields as
+// generateProductsSchema(), same source data, only the @type and the
+// provider/seller framing change.
+//
+// generateProductsSchema() above is intentionally left untouched -- the
+// other 11 treatment pages still depend on it.
+export function generateServicesSchema(packages: PackageOffer[]) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": packages.map((pkg) => ({
+      "@type": "Service",
+      name: pkg.name,
+      description: pkg.description,
+      provider: {
+        "@type": "Organization",
+        name: "Medical Center Turkey",
+      },
+      offers: {
+        "@type": "Offer",
+        price: parsePrice(pkg.price),
+        priceCurrency: pkg.currency,
+        availability: "https://schema.org/InStock",
+        url: pkg.url,
+        seller: {
+          "@type": "Organization",
+          name: "Medical Center Turkey",
+        },
+      },
+    })),
+  };
+}
+
 // Post-launch P1 fix (2026-10-15): "@type" was hardcoded to "MedicalClinic",
 // naming Medical Center Turkey itself under a type that implies it directly
 // delivers medical care -- the same issue already fixed in
