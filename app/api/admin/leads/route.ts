@@ -30,12 +30,24 @@ export async function DELETE(req: NextRequest) {
   // Cleaning up only the attribution rows tied to these exact ids first
   // keeps the schema's default RESTRICT behavior intact for every other
   // path (no migration, no ON DELETE CASCADE loosening).
+  //
+  // Confirmed live (2026-10-19, preview, Vercel function logs): the
+  // lead_attributions table does not actually exist in this Supabase
+  // project yet -- supabase/migrations/lead_attributions.sql is explicitly
+  // marked "PREPARED LOCALLY -- NOT YET RUN" and has never been applied.
+  // PostgREST returns PGRST205 ("Could not find the table ... in the
+  // schema cache") for this, not a permission or FK error. Treating ONLY
+  // that specific code as "nothing to clean up" keeps this forward-
+  // compatible: if that migration is ever run, the real cleanup above
+  // starts working exactly as designed, with no code change needed here.
+  // Any other error (permissions, connectivity, a genuine FK violation
+  // once the table does exist) still fails loudly below, unchanged.
   const { error: attributionError } = await adminSupabase
     .from("lead_attributions")
     .delete()
     .in("lead_id", ids);
 
-  if (attributionError) {
+  if (attributionError && attributionError.code !== "PGRST205") {
     console.error("Lead attribution cleanup error:", attributionError);
     return NextResponse.json({ error: "Failed to delete linked attribution records." }, { status: 500 });
   }
