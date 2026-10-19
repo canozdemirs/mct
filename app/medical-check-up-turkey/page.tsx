@@ -4,7 +4,7 @@ import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import CheckUpLanding from "@/components/marketing/checkup-landing";
 import {
   generateFAQSchema,
-  generateProductsSchema,
+  generateServicesSchema,
   generateBreadcrumbSchema,
 } from "@/lib/schema";
 
@@ -34,7 +34,7 @@ const packages = [
 ];
 
 const faqSchema = generateFAQSchema(faqs);
-const productsSchema = generateProductsSchema(packages);
+const servicesSchema = generateServicesSchema(packages);
 const breadcrumbSchema = generateBreadcrumbSchema([
   { name: "Home", url: "https://www.medicalcenterturkey.com" },
   { name: "Medical Check-Up Turkey", url: PAGE_URL },
@@ -50,7 +50,7 @@ export default function CheckUpPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productsSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <Nav />
       <main>

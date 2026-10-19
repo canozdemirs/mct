@@ -4,7 +4,7 @@ import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import CataractLanding from "@/components/marketing/cataract-landing";
 import {
   generateFAQSchema,
-  generateProductsSchema,
+  generateServicesSchema,
   generateReviewSchema,
   generateBreadcrumbSchema,
 } from "@/lib/schema";
@@ -34,7 +34,7 @@ const testimonials = [
 ];
 
 const faqSchema = generateFAQSchema(faqs);
-const productsSchema = generateProductsSchema(packages);
+const servicesSchema = generateServicesSchema(packages);
 const reviewSchema = generateReviewSchema("Cataract Surgery Turkey — Medical Center Turkey", testimonials);
 const breadcrumbSchema = generateBreadcrumbSchema([
   { name: "Home", url: "https://www.medicalcenterturkey.com" },
@@ -51,7 +51,7 @@ export default function CataractPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productsSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <Nav />
