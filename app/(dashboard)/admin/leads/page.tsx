@@ -3,9 +3,9 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { ADMIN_EMAILS } from "@/lib/admin";
-import { LeadStatusSelect } from "@/components/admin/lead-status-select";
+import { LeadsTable } from "@/components/admin/leads-table";
 
-type Lead = {
+export type Lead = {
   id: string;
   created_at: string;
   source: string;
@@ -119,70 +119,7 @@ export default async function AdminLeadsPage({
           </Link>
         </form>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          {list.length === 0 ? (
-            <div className="text-center py-16 text-gray-400">
-              <p className="font-medium">No leads found</p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="bg-gray-50 border-b border-gray-100">
-                    <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Date</th>
-                    <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Name</th>
-                    <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden xl:table-cell">Contact</th>
-                    <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden md:table-cell">Country</th>
-                    <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Treatment</th>
-                    <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Source</th>
-                    <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
-                    <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Details</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {list.map((lead) => {
-                    const hasExtra = lead.message || Object.keys(lead.details || {}).length > 0;
-                    return (
-                      <tr key={lead.id} className="hover:bg-gray-50 transition-colors align-top">
-                        <td className="px-5 py-4 text-gray-500 whitespace-nowrap">
-                          {new Date(lead.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
-                        </td>
-                        <td className="px-5 py-4 font-semibold text-brand-dark">{lead.name}</td>
-                        <td className="px-5 py-4 text-gray-500 hidden xl:table-cell">
-                          <div>{lead.email || "—"}</div>
-                          <div className="text-xs text-gray-400">{lead.phone || ""}</div>
-                        </td>
-                        <td className="px-5 py-4 text-gray-500 hidden md:table-cell">{lead.country || "—"}</td>
-                        <td className="px-5 py-4 text-gray-700">{lead.treatment || "—"}</td>
-                        <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">{lead.source}</td>
-                        <td className="px-5 py-4">
-                          <LeadStatusSelect leadId={lead.id} currentStatus={lead.status} />
-                        </td>
-                        <td className="px-5 py-4 max-w-xs">
-                          {hasExtra ? (
-                            <details>
-                              <summary className="cursor-pointer text-brand text-xs font-semibold">View</summary>
-                              <div className="mt-2 text-xs text-gray-600 space-y-1">
-                                {lead.message && <p className="whitespace-pre-line">{lead.message}</p>}
-                                {Object.entries(lead.details || {}).map(([k, v]) => (
-                                  <div key={k}>
-                                    <span className="text-gray-400">{k}:</span> {String(v)}
-                                  </div>
-                                ))}
-                              </div>
-                            </details>
-                          ) : (
-                            <span className="text-gray-300">—</span>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+        <LeadsTable leads={list} />
       </div>
     </div>
   );
