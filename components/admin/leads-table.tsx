@@ -3,12 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { LeadStatusSelect } from "./lead-status-select";
 import { EditLeadForm } from "./edit-lead-form";
-import type { Lead, PartnerOption, ReferralInfo } from "@/app/(dashboard)/admin/leads/page";
+import type { Lead, PartnerOption } from "@/app/(dashboard)/admin/leads/page";
 import { REFERRAL_STATUS_LABELS, type ReferralStatus } from "@/types";
 
-const REFERRAL_STATUS_COLORS: Record<ReferralStatus, string> = {
+const STATUS_COLORS: Record<ReferralStatus, string> = {
   new: "bg-yellow-100 text-yellow-800",
   contacted: "bg-blue-100 text-blue-800",
   consultation: "bg-purple-100 text-purple-800",
@@ -36,12 +35,10 @@ export function LeadsTable({
   leads,
   partners,
   partnerNameById,
-  referralInfoByLeadId,
 }: {
   leads: Lead[];
   partners: PartnerOption[];
   partnerNameById: Record<string, string>;
-  referralInfoByLeadId: Record<string, ReferralInfo>;
 }) {
   const router = useRouter();
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -173,14 +170,11 @@ export function LeadsTable({
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Treatment</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Source</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
-                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Details</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {leads.map((lead) => {
-                  const hasExtra = lead.message || Object.keys(lead.details || {}).length > 0;
-                  const referralInfo = lead.owner_type === "partner" ? referralInfoByLeadId[lead.id] : undefined;
                   const partnerName = lead.partner_id ? partnerNameById[lead.partner_id] : null;
                   return (
                     <tr key={lead.id} className="hover:bg-gray-50 transition-colors align-top">
@@ -195,10 +189,12 @@ export function LeadsTable({
                       </td>
                       <td className="px-5 py-4 text-gray-500 whitespace-nowrap">{formatDate(lead.created_at)}</td>
                       <td className="px-5 py-4 font-semibold text-brand-dark">
-                        {lead.name}
-                        {lead.name === "Unknown" && lead.phone ? (
-                          <span className="font-normal text-gray-400"> ({lead.phone})</span>
-                        ) : null}
+                        <Link href={`/admin/leads/${lead.id}`} className="hover:text-brand transition-colors">
+                          {lead.name}
+                          {lead.name === "Unknown" && lead.phone ? (
+                            <span className="font-normal text-gray-400"> ({lead.phone})</span>
+                          ) : null}
+                        </Link>
                       </td>
                       <td className="px-5 py-4 text-gray-500 hidden xl:table-cell">
                         <div>{lead.email || "—"}</div>
@@ -217,64 +213,21 @@ export function LeadsTable({
                       <td className="px-5 py-4 text-gray-700">{lead.treatment || "—"}</td>
                       <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">{lead.source}</td>
                       <td className="px-5 py-4">
-                        {lead.owner_type === "partner" ? (
-                          referralInfo ? (
-                            <div className="space-y-1">
-                              <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${REFERRAL_STATUS_COLORS[referralInfo.status] ?? "bg-gray-100 text-gray-600"}`}>
-                                {REFERRAL_STATUS_LABELS[referralInfo.status] ?? referralInfo.status}
-                              </span>
-                              {referralInfo.commission && (
-                                <div className="text-xs text-gray-400">
-                                  {referralInfo.commission.amount.toLocaleString()} {referralInfo.commission.currency} ({referralInfo.commission.status})
-                                </div>
-                              )}
-                            </div>
-                          ) : (
-                            <span className="text-gray-300 text-xs">No linked referral</span>
-                          )
-                        ) : (
-                          <LeadStatusSelect leadId={lead.id} currentStatus={lead.status} />
-                        )}
-                      </td>
-                      <td className="px-5 py-4 max-w-xs">
-                        {hasExtra ? (
-                          <details>
-                            <summary className="cursor-pointer text-brand text-xs font-semibold">View</summary>
-                            <div className="mt-2 text-xs text-gray-600 space-y-1">
-                              {lead.message && <p className="whitespace-pre-line">{lead.message}</p>}
-                              {Object.entries(lead.details || {}).map(([k, v]) => (
-                                <div key={k}>
-                                  <span className="text-gray-400">{k}:</span> {String(v)}
-                                </div>
-                              ))}
-                            </div>
-                          </details>
-                        ) : (
-                          <span className="text-gray-300">—</span>
-                        )}
+                        <Link href={`/admin/leads/${lead.id}`}>
+                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[lead.status] ?? "bg-gray-100 text-gray-600"}`}>
+                            {REFERRAL_STATUS_LABELS[lead.status] ?? lead.status}
+                          </span>
+                        </Link>
                       </td>
                       <td className="px-5 py-4">
                         <div className="flex gap-2">
-                          {lead.owner_type === "partner" ? (
-                            referralInfo ? (
-                              <Link
-                                href={`/admin/referrals/${referralInfo.referralId}`}
-                                className="px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 text-xs font-semibold hover:bg-gray-50 transition-colors"
-                              >
-                                Edit
-                              </Link>
-                            ) : (
-                              <span className="px-3 py-1.5 rounded-lg border border-gray-100 text-gray-300 text-xs font-semibold">Edit</span>
-                            )
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={() => setEditTarget(lead)}
-                              className="px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 text-xs font-semibold hover:bg-gray-50 transition-colors"
-                            >
-                              Edit
-                            </button>
-                          )}
+                          <button
+                            type="button"
+                            onClick={() => setEditTarget(lead)}
+                            className="px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 text-xs font-semibold hover:bg-gray-50 transition-colors"
+                          >
+                            Edit
+                          </button>
                           <button
                             type="button"
                             onClick={() => openDeleteConfirm([lead.id])}

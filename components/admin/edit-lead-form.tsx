@@ -7,8 +7,6 @@ import { TREATMENT_OPTIONS } from "@/components/marketing/consultation-form";
 import { isValidEmail } from "@/lib/validation";
 import type { Lead, PartnerOption } from "@/app/(dashboard)/admin/leads/page";
 
-const STATUS_OPTIONS = ["new", "contacted", "closed"];
-
 type DuplicateInfo = { id: string; name: string; created_at: string };
 
 function toDateInputValue(iso: string | null | undefined) {
@@ -38,9 +36,8 @@ export function EditLeadForm({ lead, partners, onClose }: { lead: Lead; partners
   const [emailUnknown, setEmailUnknown] = useState(!lead.email);
   const [country, setCountry] = useState(lead.country || "");
   const [treatment, setTreatment] = useState(lead.treatment || "");
-  const [note, setNote] = useState(lead.message || "");
+  const [internalNotes, setInternalNotes] = useState(lead.internal_notes || "");
   const [firstContactedAt, setFirstContactedAt] = useState(toDateInputValue(lead.first_contacted_at));
-  const [status, setStatus] = useState(lead.status);
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState("");
   const [duplicate, setDuplicate] = useState<DuplicateInfo | null>(null);
@@ -61,9 +58,8 @@ export function EditLeadForm({ lead, partners, onClose }: { lead: Lead; partners
           email: emailUnknown ? "" : email,
           country,
           treatment,
-          note,
+          internalNotes,
           firstContactedAt: firstContactedAt || undefined,
-          status,
           force,
         }),
       });
@@ -268,10 +264,10 @@ export function EditLeadForm({ lead, partners, onClose }: { lead: Lead; partners
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Note</label>
+              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Internal notes</label>
               <textarea
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
+                value={internalNotes}
+                onChange={(e) => setInternalNotes(e.target.value)}
                 rows={2}
                 className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1"
               />
@@ -287,22 +283,7 @@ export function EditLeadForm({ lead, partners, onClose }: { lead: Lead; partners
               />
             </div>
 
-            <div>
-              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</label>
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value as Lead["status"])}
-                className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1"
-              >
-                {STATUS_OPTIONS.map((s) => (
-                  <option key={s} value={s}>
-                    {s.charAt(0).toUpperCase() + s.slice(1)}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {partners.length > 0 && (
+            {lead.owner_type === "mct" && partners.length > 0 && (
               <div className="pt-2 border-t border-gray-100">
                 <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Convert to partner patient</label>
                 <p className="text-xs text-gray-400 mt-1 mb-2">Links this patient to a partner's referral pipeline going forward. Does not create any retroactive commission.</p>

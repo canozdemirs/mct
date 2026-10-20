@@ -38,7 +38,7 @@ export function DetachReferralButton({
         setError(json.error || "Could not detach this patient.");
         return;
       }
-      router.push("/admin/leads");
+      router.push(`/admin/leads/${leadId}`);
     } catch {
       setError("Network error. Please try again.");
     } finally {

@@ -153,16 +153,12 @@ export async function PATCH(
       changed_by: user.email,
     });
 
-    // Best-effort sync onto the mirrored Patients (leads) row -- this
-    // mapping is coarse and display/filter-only (so the unified list's
-    // New/Contacted/Closed tabs include partner rows); the real 6-state
-    // status always lives on referrals.status and is read directly for
-    // this patient's detail view. A failure here never undoes the
-    // referral/commission update that already succeeded above.
+    // Best-effort sync onto the mirrored Patients (leads) row -- leads.status
+    // now shares the same 6-state range as referrals.status, so this is a
+    // direct copy. A failure here never undoes the referral/commission
+    // update that already succeeded above.
     if (existing.lead_id) {
-      const mappedStatus =
-        newStatus === "new" ? "new" : newStatus === "cancelled_lost" || newStatus === "treatment_completed" ? "closed" : "contacted";
-      await adminSupabase.from("leads").update({ status: mappedStatus }).eq("id", existing.lead_id);
+      await adminSupabase.from("leads").update({ status: newStatus }).eq("id", existing.lead_id);
     }
   }
 
