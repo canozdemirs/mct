@@ -21,6 +21,7 @@ export type PipelineCard = {
   daysInStage: number;
   amount: number | null;
   currency: string | null;
+  confirmedAt: string | null;
   column: PipelineColumnId;
 };
 
