@@ -37,6 +37,7 @@ export async function PATCH(
     status?: string;
     admin_notes?: string;
     commission?: CommissionInput;
+    notifyPartner?: boolean;
   };
 
   if (!body.status || !REFERRAL_STATUSES.includes(body.status as typeof REFERRAL_STATUSES[number])) {
@@ -195,8 +196,12 @@ export async function PATCH(
     }
   }
 
+  // Opt-out, not opt-in -- any existing caller that never sends this
+  // field (there shouldn't be one left, but the default stays safe
+  // either way) keeps today's behavior of always notifying.
+  const notifyPartner = body.notifyPartner !== false;
   const partnerEmail = (existing as unknown as { partners: { email: string | null } | null }).partners?.email;
-  if (partnerEmail && oldStatus !== newStatus) {
+  if (notifyPartner && partnerEmail && oldStatus !== newStatus) {
     const { subject, text } = buildReferralStatusEmail({
       patientName: existing.patient_full_name,
       referralId: existing.id,
