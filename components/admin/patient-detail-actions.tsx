@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { EditLeadForm } from "./edit-lead-form";
 import { REFERRAL_STATUS_LABELS, type ReferralStatus } from "@/types";
-import type { Lead, PartnerOption } from "@/app/(dashboard)/admin/leads/page";
+import type { Lead } from "@/app/(dashboard)/admin/leads/page";
 
 type DeletePreview = {
   ownerType: "mct" | "partner";
@@ -13,9 +12,10 @@ type DeletePreview = {
   commission: { amount: number; currency: string; status: string } | null;
 };
 
-export function PatientDetailActions({ lead, partners }: { lead: Lead; partners: PartnerOption[] }) {
+// Editing lives directly on the patient card now (patient-edit-card.tsx)
+// -- this component is Delete only.
+export function PatientDetailActions({ lead }: { lead: Lead }) {
   const router = useRouter();
-  const [editing, setEditing] = useState(false);
   const [loadingPreview, setLoadingPreview] = useState(false);
   const [preview, setPreview] = useState<DeletePreview | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -61,21 +61,12 @@ export function PatientDetailActions({ lead, partners }: { lead: Lead; partners:
     <div className="flex gap-3 mt-6">
       <button
         type="button"
-        onClick={() => setEditing(true)}
-        className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition-colors"
-      >
-        Edit
-      </button>
-      <button
-        type="button"
         onClick={openDeleteConfirm}
         disabled={loadingPreview}
         className="px-5 py-2.5 rounded-xl border-2 border-red-600 text-red-600 text-sm font-semibold hover:bg-red-600 hover:text-white transition-colors disabled:opacity-50"
       >
-        {loadingPreview ? "Loading..." : "Delete"}
+        {loadingPreview ? "Loading..." : "Delete patient"}
       </button>
-
-      {editing && <EditLeadForm lead={lead} partners={partners} onClose={() => setEditing(false)} />}
 
       {preview && (
         <div className="fixed inset-0 z-[999] flex items-center justify-center p-4">
