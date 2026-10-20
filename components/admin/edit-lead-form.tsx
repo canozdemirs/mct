@@ -5,9 +5,29 @@ import { useRouter } from "next/navigation";
 import { COUNTRIES, LEAD_SOURCE_OPTIONS, UNKNOWN_LABEL } from "@/lib/constants";
 import { TREATMENT_OPTIONS } from "@/components/marketing/consultation-form";
 import { isValidEmail } from "@/lib/validation";
+import { hospitals, hospitalGroups } from "@/lib/hospitals";
 import type { Lead, PartnerOption } from "@/app/(dashboard)/admin/leads/page";
 
 type DuplicateInfo = { id: string; name: string; created_at: string };
+
+const NOT_DECIDED = "Not decided yet";
+const OTHER_HOSPITAL = "Other";
+
+// Grouped once at module scope -- admin-only, never shown to partners
+// (leads.hospital has no equivalent column on referrals and is never
+// included in the referral mirror-sync).
+const HOSPITAL_GROUPS = Object.entries(hospitalGroups).map(([key, g]) => ({
+  key,
+  label: g.name,
+  names: hospitals.filter((h) => h.group === key).map((h) => h.name),
+}));
+const KNOWN_HOSPITAL_NAMES = new Set(hospitals.map((h) => h.name));
+
+function resolveHospitalPreset(current: string | null): { preset: string; other: string } {
+  if (!current || current === NOT_DECIDED) return { preset: NOT_DECIDED, other: "" };
+  if (KNOWN_HOSPITAL_NAMES.has(current)) return { preset: current, other: "" };
+  return { preset: OTHER_HOSPITAL, other: current };
+}
 
 function toDateInputValue(iso: string | null | undefined) {
   if (!iso) return "";
@@ -36,6 +56,10 @@ export function EditLeadForm({ lead, partners, onClose }: { lead: Lead; partners
   const [emailUnknown, setEmailUnknown] = useState(!lead.email);
   const [country, setCountry] = useState(lead.country || "");
   const [treatment, setTreatment] = useState(lead.treatment || "");
+  const initialHospital = resolveHospitalPreset(lead.hospital);
+  const [hospitalPreset, setHospitalPreset] = useState(initialHospital.preset);
+  const [hospitalOther, setHospitalOther] = useState(initialHospital.other);
+  const [patientMessage, setPatientMessage] = useState(lead.message || "");
   const [internalNotes, setInternalNotes] = useState(lead.internal_notes || "");
   const [firstContactedAt, setFirstContactedAt] = useState(toDateInputValue(lead.first_contacted_at));
   const [submitting, setSubmitting] = useState(false);
@@ -45,6 +69,8 @@ export function EditLeadForm({ lead, partners, onClose }: { lead: Lead; partners
   const referenceCode = typeof lead.details?.reference_code === "string" ? lead.details.reference_code : null;
 
   async function submit(force: boolean) {
+    const resolvedHospital = hospitalPreset === OTHER_HOSPITAL ? hospitalOther.trim() : hospitalPreset;
+
     setSubmitting(true);
     setFormError("");
     try {
@@ -58,6 +84,8 @@ export function EditLeadForm({ lead, partners, onClose }: { lead: Lead; partners
           email: emailUnknown ? "" : email,
           country,
           treatment,
+          hospital: resolvedHospital,
+          message: patientMessage,
           internalNotes,
           firstContactedAt: firstContactedAt || undefined,
           force,
@@ -261,6 +289,46 @@ export function EditLeadForm({ lead, partners, onClose }: { lead: Lead; partners
                   </option>
                 ))}
               </select>
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Hospital</label>
+              <select
+                value={hospitalPreset}
+                onChange={(e) => setHospitalPreset(e.target.value)}
+                className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1"
+              >
+                <option value={NOT_DECIDED}>{NOT_DECIDED}</option>
+                {HOSPITAL_GROUPS.map((g) => (
+                  <optgroup key={g.key} label={g.label}>
+                    {g.names.map((name) => (
+                      <option key={name} value={name}>
+                        {name}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+                <option value={OTHER_HOSPITAL}>{OTHER_HOSPITAL}</option>
+              </select>
+              {hospitalPreset === OTHER_HOSPITAL && (
+                <input
+                  value={hospitalOther}
+                  onChange={(e) => setHospitalOther(e.target.value)}
+                  placeholder="Hospital name"
+                  className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-2"
+                />
+              )}
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Patient message</label>
+              <textarea
+                value={patientMessage}
+                onChange={(e) => setPatientMessage(e.target.value)}
+                rows={2}
+                placeholder="The patient's own request/message, e.g. from a WhatsApp or phone conversation"
+                className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1"
+              />
             </div>
 
             <div>

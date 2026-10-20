@@ -1,10 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { EditLeadForm } from "./edit-lead-form";
-import type { Lead, PartnerOption } from "@/app/(dashboard)/admin/leads/page";
+import type { Lead } from "@/app/(dashboard)/admin/leads/page";
 import { REFERRAL_STATUS_LABELS, type ReferralStatus } from "@/types";
 
 const STATUS_COLORS: Record<ReferralStatus, string> = {
@@ -31,13 +29,14 @@ type ConfirmTarget = {
   rows: DeletePreviewRow[];
 };
 
+// Edit/Delete per row were retired -- clicking anywhere on a row opens
+// the full patient card (/admin/leads/[id]), which now carries both.
+// Only bulk delete (checkbox + "Delete selected") stays in the list.
 export function LeadsTable({
   leads,
-  partners,
   partnerNameById,
 }: {
   leads: Lead[];
-  partners: PartnerOption[];
   partnerNameById: Record<string, string>;
 }) {
   const router = useRouter();
@@ -45,7 +44,6 @@ export function LeadsTable({
   const [confirmTarget, setConfirmTarget] = useState<ConfirmTarget | null>(null);
   const [loadingPreview, setLoadingPreview] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [editTarget, setEditTarget] = useState<Lead | null>(null);
 
   function toggleOne(id: string) {
     setSelected((prev) => {
@@ -168,17 +166,21 @@ export function LeadsTable({
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Owner</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden md:table-cell">Country</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Treatment</th>
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Hospital</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Source</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
-                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {leads.map((lead) => {
                   const partnerName = lead.partner_id ? partnerNameById[lead.partner_id] : null;
                   return (
-                    <tr key={lead.id} className="hover:bg-gray-50 transition-colors align-top">
-                      <td className="px-5 py-4">
+                    <tr
+                      key={lead.id}
+                      className="hover:bg-gray-50 transition-colors align-top cursor-pointer"
+                      onClick={() => router.push(`/admin/leads/${lead.id}`)}
+                    >
+                      <td className="px-5 py-4" onClick={(e) => e.stopPropagation()}>
                         <input
                           type="checkbox"
                           checked={selected.has(lead.id)}
@@ -189,12 +191,10 @@ export function LeadsTable({
                       </td>
                       <td className="px-5 py-4 text-gray-500 whitespace-nowrap">{formatDate(lead.created_at)}</td>
                       <td className="px-5 py-4 font-semibold text-brand-dark">
-                        <Link href={`/admin/leads/${lead.id}`} className="hover:text-brand transition-colors">
-                          {lead.name}
-                          {lead.name === "Unknown" && lead.phone ? (
-                            <span className="font-normal text-gray-400"> ({lead.phone})</span>
-                          ) : null}
-                        </Link>
+                        {lead.name}
+                        {lead.name === "Unknown" && lead.phone ? (
+                          <span className="font-normal text-gray-400"> ({lead.phone})</span>
+                        ) : null}
                       </td>
                       <td className="px-5 py-4 text-gray-500 hidden xl:table-cell">
                         <div>{lead.email || "—"}</div>
@@ -211,32 +211,12 @@ export function LeadsTable({
                       </td>
                       <td className="px-5 py-4 text-gray-500 hidden md:table-cell">{lead.country || "—"}</td>
                       <td className="px-5 py-4 text-gray-700">{lead.treatment || "—"}</td>
+                      <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">{lead.hospital || "—"}</td>
                       <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">{lead.source}</td>
                       <td className="px-5 py-4">
-                        <Link href={`/admin/leads/${lead.id}`}>
-                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[lead.status] ?? "bg-gray-100 text-gray-600"}`}>
-                            {REFERRAL_STATUS_LABELS[lead.status] ?? lead.status}
-                          </span>
-                        </Link>
-                      </td>
-                      <td className="px-5 py-4">
-                        <div className="flex gap-2">
-                          <button
-                            type="button"
-                            onClick={() => setEditTarget(lead)}
-                            className="px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 text-xs font-semibold hover:bg-gray-50 transition-colors"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => openDeleteConfirm([lead.id])}
-                            disabled={loadingPreview}
-                            className="px-3 py-1.5 rounded-lg border border-red-200 text-red-600 text-xs font-semibold hover:bg-red-50 transition-colors disabled:opacity-50"
-                          >
-                            Delete
-                          </button>
-                        </div>
+                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[lead.status] ?? "bg-gray-100 text-gray-600"}`}>
+                          {REFERRAL_STATUS_LABELS[lead.status] ?? lead.status}
+                        </span>
                       </td>
                     </tr>
                   );
@@ -298,8 +278,6 @@ export function LeadsTable({
           </div>
         </div>
       )}
-
-      {editTarget && <EditLeadForm lead={editTarget} partners={partners} onClose={() => setEditTarget(null)} />}
     </>
   );
 }

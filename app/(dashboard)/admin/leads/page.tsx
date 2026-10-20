@@ -17,6 +17,7 @@ export type Lead = {
   phone: string | null;
   country: string | null;
   treatment: string | null;
+  hospital: string | null;
   message: string | null;
   internal_notes: string | null;
   details: Record<string, unknown>;
@@ -35,9 +36,9 @@ export type PartnerOption = { id: string; name: string };
 export default async function AdminLeadsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ source?: string; treatment?: string; status?: string; owner?: string }>;
+  searchParams: Promise<{ source?: string; treatment?: string; hospital?: string; status?: string; owner?: string }>;
 }) {
-  const { source, treatment, status, owner: ownerRaw } = await searchParams;
+  const { source, treatment, hospital, status, owner: ownerRaw } = await searchParams;
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -65,7 +66,7 @@ export default async function AdminLeadsPage({
 
   function withParams(extra: Record<string, string | undefined>) {
     const params = new URLSearchParams();
-    const merged = { source, treatment, status, owner: ownerRaw, ...extra };
+    const merged = { source, treatment, hospital, status, owner: ownerRaw, ...extra };
     for (const [k, v] of Object.entries(merged)) {
       if (v) params.set(k, v);
     }
@@ -76,6 +77,7 @@ export default async function AdminLeadsPage({
   let query = adminSupabase.from("leads").select("*").order("created_at", { ascending: false });
   if (source) query = query.ilike("source", `%${source}%`);
   if (treatment) query = query.ilike("treatment", `%${treatment}%`);
+  if (hospital) query = query.ilike("hospital", `%${hospital}%`);
   if (status && status !== "all") query = query.eq("status", status);
   if (ownerType) query = query.eq("owner_type", ownerType);
   if (partnerId) query = query.eq("partner_id", partnerId);
@@ -86,6 +88,7 @@ export default async function AdminLeadsPage({
   let countsQuery = adminSupabase.from("leads").select("status");
   if (source) countsQuery = countsQuery.ilike("source", `%${source}%`);
   if (treatment) countsQuery = countsQuery.ilike("treatment", `%${treatment}%`);
+  if (hospital) countsQuery = countsQuery.ilike("hospital", `%${hospital}%`);
   if (ownerType) countsQuery = countsQuery.eq("owner_type", ownerType);
   if (partnerId) countsQuery = countsQuery.eq("partner_id", partnerId);
   const { data: allForCounts } = await countsQuery;
@@ -96,8 +99,8 @@ export default async function AdminLeadsPage({
 
   const activeStatus = status || "all";
 
-  // Partners list, for both the Owner filter and the Edit modal's
-  // "convert to partner patient" picker.
+  // Partners list, for the Owner filter dropdown and resolving each
+  // partner-owned row's display name.
   const { data: partnerRows } = await adminSupabase
     .from("partners")
     .select("id, company_name, full_name")
@@ -209,6 +212,12 @@ export default async function AdminLeadsPage({
             placeholder="Treatment"
             className="bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm text-gray-700 w-40"
           />
+          <input
+            name="hospital"
+            defaultValue={hospital}
+            placeholder="Hospital"
+            className="bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm text-gray-700 w-40"
+          />
           <button type="submit" className="px-4 py-2 rounded-xl bg-gray-100 text-gray-700 text-sm font-semibold hover:bg-gray-200 transition-colors">
             Apply
           </button>
@@ -217,7 +226,7 @@ export default async function AdminLeadsPage({
           </Link>
         </form>
 
-        <LeadsTable leads={list} partners={partners} partnerNameById={Object.fromEntries(partnerNameById)} />
+        <LeadsTable leads={list} partnerNameById={Object.fromEntries(partnerNameById)} />
       </div>
     </div>
   );

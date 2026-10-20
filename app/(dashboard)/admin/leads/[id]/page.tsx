@@ -122,6 +122,7 @@ export default async function PatientDetailPage({
               phone={referral.patient_phone}
               email={referral.patient_email}
               treatment={referral.treatment}
+              hospital={lead.hospital}
               submittedAt={referral.created_at}
             />
             <PatientNotesCard title="Partner Notes" notes={referral.notes} />
@@ -193,6 +194,7 @@ export default async function PatientDetailPage({
             phone={lead.phone}
             email={lead.email}
             treatment={lead.treatment}
+            hospital={lead.hospital}
             submittedAt={lead.created_at}
           />
           <PatientNotesCard title="Patient Message" notes={lead.message} />
