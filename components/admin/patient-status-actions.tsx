@@ -38,6 +38,7 @@ export function PatientStatusActions({
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [moneyForm, setMoneyForm] = useState(initialMoneyFormState);
+  const [notifyPartner, setNotifyPartner] = useState(true);
 
   const needsMoneyForm = status === "treatment_completed" && !hasActiveMoney;
   const moneyLabel = variant.kind === "partner" ? "Commission" : "Revenue";
@@ -59,7 +60,7 @@ export function PatientStatusActions({
     try {
       let res: Response;
       if (variant.kind === "partner") {
-        const payload: Record<string, unknown> = { status, admin_notes: adminNotes };
+        const payload: Record<string, unknown> = { status, admin_notes: adminNotes, notifyPartner };
         if (moneyPayload) payload.commission = moneyPayload;
         res = await fetch(`/api/admin/referrals/${variant.referralId}`, {
           method: "PATCH",
@@ -81,7 +82,10 @@ export function PatientStatusActions({
       if (!res.ok) {
         setMessage({ type: "error", text: json.error ?? "Something went wrong." });
       } else {
-        setMessage({ type: "success", text: variant.kind === "partner" ? "Referral updated. The partner has been notified by email." : "Patient updated." });
+        setMessage({
+          type: "success",
+          text: variant.kind === "partner" ? (notifyPartner ? "Referral updated. The partner has been notified by email." : "Referral updated. The partner was not notified.") : "Patient updated.",
+        });
         router.refresh();
       }
     } catch {
@@ -120,16 +124,23 @@ export function PatientStatusActions({
       )}
 
       {variant.kind === "partner" && (
-        <div className="mb-5">
-          <label className={labelClass}>Internal Notes (never visible to the partner)</label>
-          <textarea
-            value={adminNotes}
-            onChange={(e) => setAdminNotes(e.target.value)}
-            rows={4}
-            placeholder="Internal notes about this referral..."
-            className={`${inputClass} resize-none`}
-          />
-        </div>
+        <>
+          <div className="mb-5">
+            <label className={labelClass}>Internal Notes (never visible to the partner)</label>
+            <textarea
+              value={adminNotes}
+              onChange={(e) => setAdminNotes(e.target.value)}
+              rows={4}
+              placeholder="Internal notes about this referral..."
+              className={`${inputClass} resize-none`}
+            />
+          </div>
+
+          <label className="flex items-center gap-2 text-sm text-gray-600 mb-5">
+            <input type="checkbox" checked={notifyPartner} onChange={(e) => setNotifyPartner(e.target.checked)} className="accent-brand" />
+            Notify partner by email
+          </label>
+        </>
       )}
 
       {message && (

@@ -26,6 +26,7 @@ export function PipelineCompleteModal({
 }) {
   const router = useRouter();
   const [moneyForm, setMoneyForm] = useState(initialMoneyFormState);
+  const [notifyPartner, setNotifyPartner] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -44,7 +45,7 @@ export function PipelineCompleteModal({
         res = await fetch(`/api/admin/referrals/${referralId}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status: "treatment_completed", commission: moneyFormPayload(moneyForm) }),
+          body: JSON.stringify({ status: "treatment_completed", commission: moneyFormPayload(moneyForm), notifyPartner }),
         });
       } else {
         res = await fetch(`/api/admin/leads/${leadId}/status`, {
@@ -84,6 +85,13 @@ export function PipelineCompleteModal({
           onChange={setMoneyForm}
           showPercentage={ownerType === "partner"}
         />
+
+        {ownerType === "partner" && (
+          <label className="flex items-center gap-2 text-sm text-gray-600 mb-4">
+            <input type="checkbox" checked={notifyPartner} onChange={(e) => setNotifyPartner(e.target.checked)} className="accent-brand" />
+            Notify partner by email
+          </label>
+        )}
 
         {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
 

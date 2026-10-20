@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { PipelineCard as PipelineCardView } from "./pipeline-card";
 import { PipelineCompleteModal } from "./pipeline-complete-modal";
+import { PipelineStatusConfirmModal } from "./pipeline-status-confirm-modal";
 import type { BillingStage } from "@/types";
 
 export type PipelineColumnId = "offered" | "treatment_planned" | "treatment_done" | "invoiced" | "earned";
@@ -65,18 +66,27 @@ function columnTotals(cards: PipelineCard[]): Map<string, number> {
 //  - treatment_done -> treatment_planned (backward): status change,
 //    reuses the existing leaving-completed commission/revenue handling.
 //  - treatment_done <-> invoiced <-> earned: the new billing route,
-//    which never touches `status` or commissions.status.
+//    which never touches `status` or commissions.status, and never
+//    emails the partner either way.
 // Any non-adjacent drop (skipping a column) is rejected client-side.
+// Any status move on a PARTNER card (the three cases above that can
+// actually change referrals.status) goes through
+// PipelineStatusConfirmModal first, so the partner-notification email
+// stays opt-out rather than silent; MCT cards skip that modal entirely
+// since no email path exists for them.
+type StatusConfirmTarget = { card: PipelineCard; status: string; title: string; warningText?: string };
+
 export function PipelineBoard({ cards }: { cards: PipelineCard[] }) {
   const router = useRouter();
   const [busyId, setBusyId] = useState<string | null>(null);
   const [completeModalCard, setCompleteModalCard] = useState<PipelineCard | null>(null);
+  const [statusConfirmTarget, setStatusConfirmTarget] = useState<StatusConfirmTarget | null>(null);
 
   function handleDragStart(e: React.DragEvent, card: PipelineCard) {
     e.dataTransfer.setData("text/plain", card.id);
   }
 
-  async function callStatusRoute(card: PipelineCard, status: string) {
+  async function callStatusRoute(card: PipelineCard, status: string, notifyPartner?: boolean) {
     setBusyId(card.id);
     try {
       const res =
@@ -84,7 +94,7 @@ export function PipelineBoard({ cards }: { cards: PipelineCard[] }) {
           ? await fetch(`/api/admin/referrals/${card.referralId}`, {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ status }),
+              body: JSON.stringify({ status, notifyPartner }),
             })
           : await fetch(`/api/admin/leads/${card.id}/status`, {
               method: "PATCH",
@@ -145,18 +155,31 @@ export function PipelineBoard({ cards }: { cards: PipelineCard[] }) {
     }
 
     if (card.column === "treatment_done" && targetColumn === "treatment_planned") {
-      if (!confirm(`Move "${card.name}" back to Treatment Planned? Any pending revenue/commission will be cancelled; an already-received one will be flagged for reconciliation.`)) return;
-      callStatusRoute(card, "treatment_planned");
+      const warningText = "Any pending revenue/commission will be cancelled; an already-received one will be flagged for reconciliation.";
+      if (card.ownerType === "partner") {
+        setStatusConfirmTarget({ card, status: "treatment_planned", title: `Move "${card.name}" back to Treatment Planned?`, warningText });
+      } else {
+        if (!confirm(`Move "${card.name}" back to Treatment Planned? ${warningText}`)) return;
+        callStatusRoute(card, "treatment_planned");
+      }
       return;
     }
 
     if (card.column === "offered" && targetColumn === "treatment_planned") {
-      callStatusRoute(card, "treatment_planned");
+      if (card.ownerType === "partner") {
+        setStatusConfirmTarget({ card, status: "treatment_planned", title: `Move "${card.name}" to Treatment Planned?` });
+      } else {
+        callStatusRoute(card, "treatment_planned");
+      }
       return;
     }
     if (card.column === "treatment_planned" && targetColumn === "offered") {
-      if (!confirm(`Move "${card.name}" back to Offered?`)) return;
-      callStatusRoute(card, "consultation");
+      if (card.ownerType === "partner") {
+        setStatusConfirmTarget({ card, status: "consultation", title: `Move "${card.name}" back to Offered?` });
+      } else {
+        if (!confirm(`Move "${card.name}" back to Offered?`)) return;
+        callStatusRoute(card, "consultation");
+      }
       return;
     }
 
@@ -213,6 +236,18 @@ export function PipelineBoard({ cards }: { cards: PipelineCard[] }) {
           referralId={completeModalCard.referralId}
           ownerType={completeModalCard.ownerType}
           onClose={() => setCompleteModalCard(null)}
+        />
+      )}
+
+      {statusConfirmTarget && (
+        <PipelineStatusConfirmModal
+          title={statusConfirmTarget.title}
+          warningText={statusConfirmTarget.warningText}
+          onCancel={() => setStatusConfirmTarget(null)}
+          onConfirm={(notifyPartner) => {
+            callStatusRoute(statusConfirmTarget.card, statusConfirmTarget.status, notifyPartner);
+            setStatusConfirmTarget(null);
+          }}
         />
       )}
     </>
