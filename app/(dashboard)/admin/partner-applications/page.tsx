@@ -101,7 +101,7 @@ export default async function PartnerApplicationsPage({
         </div>
         <div className="flex gap-4 mb-6">
           <Link href="/admin/referrals" className="text-sm text-gray-400 hover:text-brand transition-colors">
-            Referrals →
+            Patients →
           </Link>
           <Link href="/admin/leads" className="text-sm text-gray-400 hover:text-brand transition-colors">
             Leads →

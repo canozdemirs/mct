@@ -2,11 +2,10 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { CountrySelect } from "@/components/marketing/country-select";
+import { COUNTRIES, LEAD_SOURCE_OPTIONS, LEAD_SOURCES_REQUIRING_PHONE, UNKNOWN_LABEL } from "@/lib/constants";
 import { TREATMENT_OPTIONS } from "@/components/marketing/consultation-form";
+import { isValidEmail } from "@/lib/validation";
 import { useCountryDialCode } from "@/lib/hooks/use-country-dial-code";
-
-const SOURCE_OPTIONS = ["WhatsApp", "Telefon", "E-posta", "Instagram/Facebook", "Tavsiye", "Partner", "Diğer"];
 
 type ClickInfo = {
   reference_code: string;
@@ -23,13 +22,29 @@ function todayIso() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function clientFieldError(source: string, name: string, phone: string, email: string): string | null {
+  if (!source) return "Please select a source.";
+  if (!name.trim()) return "Please enter the patient's name.";
+  const hasPhone = phone.replace(/[^0-9]/g, "").length >= 7;
+  const hasEmail = !!email.trim() && isValidEmail(email);
+  if (LEAD_SOURCES_REQUIRING_PHONE.includes(source) && !hasPhone) {
+    return `Phone is required for the "${source}" source.`;
+  }
+  if (!hasPhone && !hasEmail) {
+    return "Please provide at least a phone number or an email address.";
+  }
+  return null;
+}
+
 export function AddManualLeadForm({ attributionAvailable }: { attributionAvailable: boolean }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [source, setSource] = useState(SOURCE_OPTIONS[0]);
+  const [source, setSource] = useState(LEAD_SOURCE_OPTIONS[0]);
   const [name, setName] = useState("");
+  const [nameUnknown, setNameUnknown] = useState(false);
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [emailUnknown, setEmailUnknown] = useState(false);
   const [country, setCountry] = useState("");
   const [treatment, setTreatment] = useState("");
   const [note, setNote] = useState("");
@@ -44,10 +59,12 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
   useCountryDialCode(country, phone, setPhone);
 
   function resetForm() {
-    setSource(SOURCE_OPTIONS[0]);
+    setSource(LEAD_SOURCE_OPTIONS[0]);
     setName("");
+    setNameUnknown(false);
     setPhone("");
     setEmail("");
+    setEmailUnknown(false);
     setCountry("");
     setTreatment("");
     setNote("");
@@ -94,9 +111,9 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           source,
-          name,
+          name: nameUnknown ? "Unknown" : name,
           phone,
-          email,
+          email: emailUnknown ? "" : email,
           country,
           treatment,
           note,
@@ -112,7 +129,7 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
         return;
       }
       if (!res.ok) {
-        setFormError(json.error || "Kayıt oluşturulamadı.");
+        setFormError(json.error || "Could not create the lead.");
         return;
       }
 
@@ -120,7 +137,7 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
       resetForm();
       router.refresh();
     } catch {
-      setFormError("Ağ hatası. Lütfen tekrar deneyin.");
+      setFormError("Network error. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -128,8 +145,11 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    if (!name.trim() || !phone.trim()) {
-      setFormError("Ad Soyad ve Telefon zorunludur.");
+    const effectiveName = nameUnknown ? "Unknown" : name;
+    const effectiveEmail = emailUnknown ? "" : email;
+    const error = clientFieldError(source, effectiveName, phone, effectiveEmail);
+    if (error) {
+      setFormError(error);
       return;
     }
     submit(false);
@@ -142,21 +162,21 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
         onClick={() => setOpen(true)}
         className="px-4 py-2 rounded-xl bg-brand text-white text-sm font-semibold hover:bg-[#154d8a] transition-colors"
       >
-        + Yeni hasta ekle
+        + Add new patient
       </button>
 
       {open && (
         <div className="fixed inset-0 z-[999] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/50" onClick={closeModal} />
           <div className="relative z-10 bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-bold text-brand-dark mb-4">Yeni hasta ekle</h3>
+            <h3 className="text-lg font-bold text-brand-dark mb-4">Add new patient</h3>
 
             {duplicate ? (
               <div className="space-y-4">
                 <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm">
-                  <p className="font-semibold text-amber-800 mb-1">Bu telefon/e-posta ile zaten bir kayıt var:</p>
+                  <p className="font-semibold text-amber-800 mb-1">A record with this phone/email already exists:</p>
                   <p className="text-amber-700">
-                    {duplicate.name} — {new Date(duplicate.created_at).toLocaleDateString("tr-TR")}
+                    {duplicate.name} — {new Date(duplicate.created_at).toLocaleDateString("en-GB")}
                   </p>
                 </div>
                 <div className="flex gap-3 justify-end">
@@ -166,7 +186,7 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
                     disabled={submitting}
                     className="px-4 py-2 rounded-xl text-sm font-semibold text-gray-500 border border-gray-200 hover:border-gray-300 disabled:opacity-50"
                   >
-                    Vazgeç
+                    Cancel
                   </button>
                   <button
                     type="button"
@@ -174,20 +194,20 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
                     disabled={submitting}
                     className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-brand hover:bg-[#154d8a] disabled:opacity-50"
                   >
-                    {submitting ? "Ekleniyor..." : "Yine de ekle"}
+                    {submitting ? "Adding..." : "Add anyway"}
                   </button>
                 </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-3">
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Kaynak *</label>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Source *</label>
                   <select
                     value={source}
                     onChange={(e) => setSource(e.target.value)}
                     className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1"
                   >
-                    {SOURCE_OPTIONS.map((s) => (
+                    {LEAD_SOURCE_OPTIONS.map((s) => (
                       <option key={s} value={s}>
                         {s}
                       </option>
@@ -196,48 +216,87 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Ad Soyad *</label>
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Full name *</label>
+                    <label className="flex items-center gap-1.5 text-xs text-gray-500">
+                      <input
+                        type="checkbox"
+                        checked={nameUnknown}
+                        onChange={(e) => setNameUnknown(e.target.checked)}
+                        className="accent-brand"
+                      />
+                      Unknown
+                    </label>
+                  </div>
                   <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    required
-                    className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1"
+                    disabled={nameUnknown}
+                    className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1 disabled:opacity-50"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Telefon *</label>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Phone {LEAD_SOURCES_REQUIRING_PHONE.includes(source) ? "*" : ""}
+                  </label>
                   <input
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    required
                     className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">E-posta</label>
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</label>
+                    <label className="flex items-center gap-1.5 text-xs text-gray-500">
+                      <input
+                        type="checkbox"
+                        checked={emailUnknown}
+                        onChange={(e) => setEmailUnknown(e.target.checked)}
+                        className="accent-brand"
+                      />
+                      Unknown
+                    </label>
+                  </div>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1"
+                    disabled={emailUnknown}
+                    className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1 disabled:opacity-50"
                   />
                 </div>
 
+                <p className="text-xs text-gray-400">At least one of phone or email is required (unless both are unknown and the source doesn&apos;t require a phone).</p>
+
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Ülke</label>
-                  <CountrySelect value={country} onChange={setCountry} />
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Country</label>
+                  <select
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                    className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1"
+                  >
+                    <option value="">Select...</option>
+                    <option value={UNKNOWN_LABEL}>{UNKNOWN_LABEL}</option>
+                    {COUNTRIES.map((c) => (
+                      <option key={c} value={c}>
+                        {c}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Tedavi</label>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Treatment</label>
                   <select
                     value={treatment}
                     onChange={(e) => setTreatment(e.target.value)}
                     className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1"
                   >
-                    <option value="">Seçiniz...</option>
+                    <option value="">Select...</option>
+                    <option value={UNKNOWN_LABEL}>{UNKNOWN_LABEL}</option>
                     {TREATMENT_OPTIONS.map((t) => (
                       <option key={t} value={t}>
                         {t}
@@ -247,7 +306,7 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Not</label>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Note</label>
                   <textarea
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
@@ -257,7 +316,7 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">İlk iletişim tarihi</label>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">First contact date</label>
                   <input
                     type="date"
                     value={firstContactedAt}
@@ -268,7 +327,7 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
 
                 {attributionAvailable && (
                   <div>
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Ref kodu (opsiyonel)</label>
+                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Reference code (optional)</label>
                     <div className="flex gap-2 mt-1">
                       <input
                         value={refCode}
@@ -286,30 +345,30 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
                         disabled={!refCode.trim() || refLookupState === "loading"}
                         className="px-3 py-2 rounded-xl bg-gray-100 text-gray-700 text-xs font-semibold hover:bg-gray-200 disabled:opacity-50"
                       >
-                        {refLookupState === "loading" ? "..." : "Bul"}
+                        {refLookupState === "loading" ? "..." : "Find"}
                       </button>
                     </div>
                     {refLookupState === "found" && clickInfo && (
                       <div className="mt-2 bg-teal-50 border border-teal-100 rounded-xl p-3 text-xs space-y-1">
                         <div>
-                          <span className="text-gray-400">Kanal:</span> {clickInfo.channel}
+                          <span className="text-gray-400">Channel:</span> {clickInfo.channel}
                         </div>
                         {clickInfo.inferred_channel && (
                           <div>
-                            <span className="text-gray-400">Kaynak:</span> {clickInfo.inferred_channel}
+                            <span className="text-gray-400">Source:</span> {clickInfo.inferred_channel}
                           </div>
                         )}
                         {clickInfo.last_touch_utm_campaign && (
                           <div>
-                            <span className="text-gray-400">Kampanya:</span> {clickInfo.last_touch_utm_campaign}
+                            <span className="text-gray-400">Campaign:</span> {clickInfo.last_touch_utm_campaign}
                           </div>
                         )}
                         <div>
-                          <span className="text-gray-400">Tarih:</span> {new Date(clickInfo.created_at).toLocaleString("tr-TR")}
+                          <span className="text-gray-400">Date:</span> {new Date(clickInfo.created_at).toLocaleString("en-GB")}
                         </div>
                       </div>
                     )}
-                    {refLookupState === "not_found" && <p className="mt-1 text-xs text-red-500">Bu kod için kayıt bulunamadı.</p>}
+                    {refLookupState === "not_found" && <p className="mt-1 text-xs text-red-500">No record found for that code.</p>}
                   </div>
                 )}
 
@@ -322,14 +381,14 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
                     disabled={submitting}
                     className="px-4 py-2 rounded-xl text-sm font-semibold text-gray-500 border border-gray-200 hover:border-gray-300 disabled:opacity-50"
                   >
-                    Vazgeç
+                    Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={submitting}
                     className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-brand hover:bg-[#154d8a] disabled:opacity-50"
                   >
-                    {submitting ? "Ekleniyor..." : "Ekle"}
+                    {submitting ? "Adding..." : "Add"}
                   </button>
                 </div>
               </form>

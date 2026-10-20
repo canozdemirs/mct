@@ -20,6 +20,8 @@ export type Lead = {
   page_url: string | null;
   consent: boolean;
   status: "new" | "contacted" | "closed";
+  is_manual?: boolean;
+  first_contacted_at?: string | null;
 };
 
 export default async function AdminLeadsPage({
@@ -93,7 +95,7 @@ export default async function AdminLeadsPage({
             ← Partner Applications
           </Link>
           <Link href="/admin/referrals" className="text-sm text-gray-400 hover:text-brand transition-colors">
-            Referrals →
+            Patients →
           </Link>
         </div>
 
