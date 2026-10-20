@@ -5,6 +5,8 @@ import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { ADMIN_EMAILS } from "@/lib/admin";
 import { LeadsTable } from "@/components/admin/leads-table";
 import { AddManualLeadForm } from "@/components/admin/add-manual-lead-form";
+import { SyncReferralsBanner } from "@/components/admin/sync-referrals-banner";
+import type { ReferralStatus } from "@/types";
 
 export type Lead = {
   id: string;
@@ -22,14 +24,24 @@ export type Lead = {
   status: "new" | "contacted" | "closed";
   is_manual?: boolean;
   first_contacted_at?: string | null;
+  owner_type: "mct" | "partner";
+  partner_id: string | null;
+};
+
+export type PartnerOption = { id: string; name: string };
+
+export type ReferralInfo = {
+  referralId: string;
+  status: ReferralStatus;
+  commission: { amount: number; currency: string; status: string } | null;
 };
 
 export default async function AdminLeadsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ source?: string; treatment?: string; status?: string }>;
+  searchParams: Promise<{ source?: string; treatment?: string; status?: string; owner?: string }>;
 }) {
-  const { source, treatment, status } = await searchParams;
+  const { source, treatment, status, owner: ownerRaw } = await searchParams;
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -43,16 +55,44 @@ export default async function AdminLeadsPage({
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
 
-  let query = adminSupabase.from("leads").select("*").order("created_at", { ascending: false });
+  // Single <select name="owner"> encodes three states as one value:
+  // "all" | "mct" | "partner:<uuid>" -- avoids a second, dependent
+  // dropdown and any client JS just to keep them in sync.
+  let ownerType: "mct" | "partner" | undefined;
+  let partnerId: string | undefined;
+  if (ownerRaw === "mct") {
+    ownerType = "mct";
+  } else if (ownerRaw?.startsWith("partner:")) {
+    ownerType = "partner";
+    partnerId = ownerRaw.slice("partner:".length);
+  }
 
+  function withParams(extra: Record<string, string | undefined>) {
+    const params = new URLSearchParams();
+    const merged = { source, treatment, status, owner: ownerRaw, ...extra };
+    for (const [k, v] of Object.entries(merged)) {
+      if (v) params.set(k, v);
+    }
+    const qs = params.toString();
+    return qs ? `/admin/leads?${qs}` : "/admin/leads";
+  }
+
+  let query = adminSupabase.from("leads").select("*").order("created_at", { ascending: false });
   if (source) query = query.ilike("source", `%${source}%`);
   if (treatment) query = query.ilike("treatment", `%${treatment}%`);
   if (status && status !== "all") query = query.eq("status", status);
+  if (ownerType) query = query.eq("owner_type", ownerType);
+  if (partnerId) query = query.eq("partner_id", partnerId);
 
   const { data: leads } = await query;
   const list = (leads ?? []) as Lead[];
 
-  const { data: allForCounts } = await adminSupabase.from("leads").select("status");
+  let countsQuery = adminSupabase.from("leads").select("status");
+  if (source) countsQuery = countsQuery.ilike("source", `%${source}%`);
+  if (treatment) countsQuery = countsQuery.ilike("treatment", `%${treatment}%`);
+  if (ownerType) countsQuery = countsQuery.eq("owner_type", ownerType);
+  if (partnerId) countsQuery = countsQuery.eq("partner_id", partnerId);
+  const { data: allForCounts } = await countsQuery;
   const counts = {
     all: (allForCounts ?? []).length,
     new: (allForCounts ?? []).filter((l) => l.status === "new").length,
@@ -62,11 +102,65 @@ export default async function AdminLeadsPage({
 
   const activeStatus = status || "all";
 
-  // Probe only -- determines whether the "Ref kodu" field in "Yeni hasta
-  // ekle" is shown at all. lead_attributions is a dormant table (see
-  // app/api/admin/leads/route.ts) that may not exist yet in this project;
-  // when it doesn't, PostgREST returns PGRST205 here and the field is
-  // hidden client-side instead of failing the whole form.
+  // Partners list, for both the Owner filter and the Edit modal's
+  // "convert to partner patient" picker.
+  const { data: partnerRows } = await adminSupabase
+    .from("partners")
+    .select("id, company_name, full_name")
+    .eq("status", "active")
+    .order("company_name");
+  const partners: PartnerOption[] = (partnerRows ?? []).map((p) => ({
+    id: p.id,
+    name: p.company_name || p.full_name || "Unnamed partner",
+  }));
+  const partnerNameById = new Map(partners.map((p) => [p.id, p.name]));
+
+  // For every partner-owned row in THIS page of results, pull its real
+  // referral status + active commission -- leads.status for these rows
+  // is only ever a coarse New/Contacted/Closed mapping (kept for the
+  // quick-filter tabs above), never the source of truth.
+  const partnerLeadIds = list.filter((l) => l.owner_type === "partner").map((l) => l.id);
+  const referralInfoByLeadId: Record<string, ReferralInfo> = {};
+  if (partnerLeadIds.length > 0) {
+    const { data: referrals } = await adminSupabase
+      .from("referrals")
+      .select("id, lead_id, status")
+      .in("lead_id", partnerLeadIds);
+
+    const referralIds = (referrals ?? []).map((r) => r.id);
+    const commissionByReferralId = new Map<string, { amount: number; currency: string; status: string }>();
+    if (referralIds.length > 0) {
+      const { data: commissions } = await adminSupabase
+        .from("commissions")
+        .select("referral_id, commission_amount, currency, status")
+        .in("referral_id", referralIds)
+        .neq("status", "cancelled");
+      for (const c of commissions ?? []) {
+        commissionByReferralId.set(c.referral_id, { amount: c.commission_amount, currency: c.currency, status: c.status });
+      }
+    }
+
+    for (const r of referrals ?? []) {
+      if (!r.lead_id) continue;
+      referralInfoByLeadId[r.lead_id] = {
+        referralId: r.id,
+        status: r.status,
+        commission: commissionByReferralId.get(r.id) ?? null,
+      };
+    }
+  }
+
+  // Best-effort mirror-create (app/api/partner-portal/referrals/route.ts)
+  // can fail silently -- this surfaces any referral it left unsynced so
+  // no partner patient is ever quietly missing from this list.
+  const { data: unsyncedReferrals } = await adminSupabase.from("referrals").select("id").is("lead_id", null);
+  const unsyncedCount = unsyncedReferrals?.length ?? 0;
+
+  // Probe only -- determines whether the "Reference code" field in "Add
+  // new patient" is shown at all. lead_attributions is a dormant table
+  // (see app/api/admin/leads/route.ts) that may not exist yet in this
+  // project; when it doesn't, PostgREST returns PGRST205 here and the
+  // field is hidden client-side instead of failing the whole form.
   let attributionAvailable = false;
   try {
     const { error } = await adminSupabase.from("lead_attributions").select("reference_code").limit(1);
@@ -80,8 +174,8 @@ export default async function AdminLeadsPage({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex items-center gap-4 mb-2 flex-wrap">
           <div>
-            <h1 className="text-2xl font-bold text-brand-dark">Leads</h1>
-            <p className="text-sm text-gray-500 mt-1">Every enquiry submitted across the marketing site</p>
+            <h1 className="text-2xl font-bold text-brand-dark">Patients</h1>
+            <p className="text-sm text-gray-500 mt-1">Every patient, direct or partner-referred, in one place</p>
           </div>
           <span className="ml-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-brand text-white">
             {counts.all} total
@@ -94,16 +188,18 @@ export default async function AdminLeadsPage({
           <Link href="/admin/partner-applications" className="text-sm text-gray-400 hover:text-brand transition-colors">
             ← Partner Applications
           </Link>
-          <Link href="/admin/referrals" className="text-sm text-gray-400 hover:text-brand transition-colors">
-            Patients →
+          <Link href="/admin/deleted-records" className="text-sm text-gray-400 hover:text-brand transition-colors">
+            Deleted Records →
           </Link>
         </div>
+
+        <SyncReferralsBanner count={unsyncedCount} />
 
         <div className="flex gap-2 mb-6 flex-wrap">
           {["all", "new", "contacted", "closed"].map((s) => (
             <Link
               key={s}
-              href={s === "all" ? "/admin/leads" : `/admin/leads?status=${s}`}
+              href={withParams({ status: s === "all" ? undefined : s })}
               className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
                 activeStatus === s ? "bg-brand text-white" : "bg-white text-gray-600 border border-gray-200 hover:border-brand hover:text-brand"
               }`}
@@ -118,6 +214,19 @@ export default async function AdminLeadsPage({
 
         <form method="get" className="flex flex-wrap gap-3 mb-6 bg-white border border-gray-100 rounded-2xl p-4">
           {status && <input type="hidden" name="status" value={status} />}
+          <select
+            name="owner"
+            defaultValue={ownerRaw || "all"}
+            className="bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm text-gray-700"
+          >
+            <option value="all">All owners</option>
+            <option value="mct">MCT (direct)</option>
+            {partners.map((p) => (
+              <option key={p.id} value={`partner:${p.id}`}>
+                {p.name}
+              </option>
+            ))}
+          </select>
           <input
             name="source"
             defaultValue={source}
@@ -138,7 +247,7 @@ export default async function AdminLeadsPage({
           </Link>
         </form>
 
-        <LeadsTable leads={list} />
+        <LeadsTable leads={list} partners={partners} partnerNameById={Object.fromEntries(partnerNameById)} referralInfoByLeadId={referralInfoByLeadId} />
       </div>
     </div>
   );

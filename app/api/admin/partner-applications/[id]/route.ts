@@ -191,13 +191,14 @@ export async function PATCH(
   return NextResponse.json({ ok: true, action });
 }
 
-// TODO(pre-launch): This cascade hard-deletes a partner's entire referral and
-// commission history whenever an admin deletes their application. That's fine
-// for cleaning up test data, but once real partners have real referrals, this
-// would destroy real business/financial records. Before going live, replace
-// the "partner has referrals" branch below with a deactivation path instead
-// (e.g. set partners.status = 'suspended' and stop here) rather than deleting
-// referrals/commissions.
+// Deleting a partner application no longer destroys financial records. The
+// partner's referrals/commissions/status-history are removed via the
+// detach_partner_patients() Postgres function (supabase/migrations/
+// safe_patient_delete.sql), which logs each one to deleted_records_log
+// BEFORE deleting it, inside the same DB transaction, and -- per the
+// approved Patients-merge plan -- resets each patient's mirrored `leads`
+// row to owner_type='mct' rather than deleting it, so the patient
+// themselves is never lost, only their partner attribution.
 export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -252,61 +253,32 @@ export async function DELETE(
       );
     }
 
-    const referralIds = (referrals ?? []).map((r) => r.id);
     const filePaths = (referrals ?? []).flatMap(
       (r) => (r.files ?? []).map((f: { path: string }) => f.path)
     );
 
-    if (referralIds.length > 0) {
-      const { error: commissionsError } = await adminSupabase
-        .from("commissions")
-        .delete()
-        .in("referral_id", referralIds);
+    const { error: detachError } = await adminSupabase.rpc("detach_partner_patients", {
+      p_partner_id: partner.id,
+      p_deleted_by: user.email,
+    });
 
-      if (commissionsError) {
-        console.error("Commissions delete error:", commissionsError);
-        return NextResponse.json(
-          { error: "Failed to delete linked commission records.", failedStep: "delete_commissions" },
-          { status: 500 }
-        );
-      }
+    if (detachError) {
+      console.error("detach_partner_patients error:", detachError);
+      return NextResponse.json(
+        { error: "Failed to safely remove the partner's referral/commission records.", failedStep: "delete_referrals" },
+        { status: 500 }
+      );
+    }
 
-      const { error: historyError } = await adminSupabase
-        .from("referral_status_history")
-        .delete()
-        .in("referral_id", referralIds);
-
-      if (historyError) {
-        console.error("Referral status history delete error:", historyError);
-        return NextResponse.json(
-          { error: "Failed to delete referral status history.", failedStep: "delete_status_history" },
-          { status: 500 }
-        );
-      }
-
-      if (filePaths.length > 0) {
-        const { error: storageError } = await adminSupabase.storage.from("referral-files").remove(filePaths);
-
-        if (storageError) {
-          console.error("Storage files delete error:", storageError);
-          return NextResponse.json(
-            { error: "Failed to delete uploaded referral files.", failedStep: "delete_storage_files" },
-            { status: 500 }
-          );
-        }
-      }
-
-      const { error: referralsDeleteError } = await adminSupabase
-        .from("referrals")
-        .delete()
-        .in("id", referralIds);
-
-      if (referralsDeleteError) {
-        console.error("Referrals delete error:", referralsDeleteError);
-        return NextResponse.json(
-          { error: "Failed to delete linked referrals.", failedStep: "delete_referrals" },
-          { status: 500 }
-        );
+    if (filePaths.length > 0) {
+      const { error: storageError } = await adminSupabase.storage.from("referral-files").remove(filePaths);
+      if (storageError) {
+        // Non-fatal: referrals/commissions are already safely logged and
+        // removed at this point -- failing the whole delete here would
+        // leave the partner application "half deleted" (referrals gone,
+        // partner row still present), which is worse than an orphaned
+        // storage file.
+        console.error("Storage files delete error (non-fatal):", storageError);
       }
     }
 

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { COUNTRIES, LEAD_SOURCE_OPTIONS, UNKNOWN_LABEL } from "@/lib/constants";
 import { TREATMENT_OPTIONS } from "@/components/marketing/consultation-form";
 import { isValidEmail } from "@/lib/validation";
-import type { Lead } from "@/app/(dashboard)/admin/leads/page";
+import type { Lead, PartnerOption } from "@/app/(dashboard)/admin/leads/page";
 
 const STATUS_OPTIONS = ["new", "contacted", "closed"];
 
@@ -26,8 +26,10 @@ function withCurrentValue(options: string[], current: string) {
   return [current, ...options];
 }
 
-export function EditLeadForm({ lead, onClose }: { lead: Lead; onClose: () => void }) {
+export function EditLeadForm({ lead, partners, onClose }: { lead: Lead; partners: PartnerOption[]; onClose: () => void }) {
   const router = useRouter();
+  const [convertPartnerId, setConvertPartnerId] = useState("");
+  const [converting, setConverting] = useState(false);
   const [source, setSource] = useState(lead.source);
   const [name, setName] = useState(lead.name);
   const [nameUnknown, setNameUnknown] = useState(lead.name === "Unknown");
@@ -82,6 +84,37 @@ export function EditLeadForm({ lead, onClose }: { lead: Lead; onClose: () => voi
       setFormError("Network error. Please try again.");
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function handleConvert() {
+    if (!convertPartnerId) return;
+    const partnerName = partners.find((p) => p.id === convertPartnerId)?.name || "this partner";
+    const ok = confirm(
+      `This will create a new partner referral for this patient under "${partnerName}". ` +
+      `${partnerName} becomes eligible for commission on this patient's FUTURE treatment only -- no retroactive commission is created. Continue?`
+    );
+    if (!ok) return;
+
+    setConverting(true);
+    setFormError("");
+    try {
+      const res = await fetch(`/api/admin/leads/${lead.id}/owner`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "attach", partnerId: convertPartnerId }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setFormError(json.error || "Could not convert this patient to a partner patient.");
+        return;
+      }
+      router.refresh();
+      onClose();
+    } catch {
+      setFormError("Network error. Please try again.");
+    } finally {
+      setConverting(false);
     }
   }
 
@@ -268,6 +301,35 @@ export function EditLeadForm({ lead, onClose }: { lead: Lead; onClose: () => voi
                 ))}
               </select>
             </div>
+
+            {partners.length > 0 && (
+              <div className="pt-2 border-t border-gray-100">
+                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Convert to partner patient</label>
+                <p className="text-xs text-gray-400 mt-1 mb-2">Links this patient to a partner's referral pipeline going forward. Does not create any retroactive commission.</p>
+                <div className="flex gap-2">
+                  <select
+                    value={convertPartnerId}
+                    onChange={(e) => setConvertPartnerId(e.target.value)}
+                    className="flex-1 bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm"
+                  >
+                    <option value="">Select a partner...</option>
+                    {partners.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.name}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={handleConvert}
+                    disabled={!convertPartnerId || converting || submitting}
+                    className="px-3 py-2 rounded-xl bg-gray-100 text-gray-700 text-xs font-semibold hover:bg-gray-200 disabled:opacity-50"
+                  >
+                    {converting ? "Converting..." : "Convert"}
+                  </button>
+                </div>
+              </div>
+            )}
 
             {formError && <p className="text-sm text-red-600">{formError}</p>}
 
