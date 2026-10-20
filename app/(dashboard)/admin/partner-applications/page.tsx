@@ -99,15 +99,6 @@ export default async function PartnerApplicationsPage({
             {counts.all} total
           </span>
         </div>
-        <div className="flex gap-4 mb-6">
-          <Link href="/admin/leads" className="text-sm text-gray-400 hover:text-brand transition-colors">
-            Patients →
-          </Link>
-          <Link href="/admin/leads" className="text-sm text-gray-400 hover:text-brand transition-colors">
-            Leads →
-          </Link>
-        </div>
-
         {/* Filter tabs */}
         <div className="flex gap-2 mb-6 flex-wrap">
           {tabs.map((tab) => (

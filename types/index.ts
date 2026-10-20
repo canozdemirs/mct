@@ -26,6 +26,20 @@ export const REFERRAL_STATUS_LABELS: Record<ReferralStatus, string> = {
   cancelled_lost: "Cancelled / Lost",
 };
 
+// Hospital-billing stage -- only meaningful while status is
+// 'treatment_completed'. A separate dimension from ReferralStatus: never
+// read by the commission/revenue status-transition gating, never
+// exposed to the partner portal (lives only on `leads`).
+export type BillingStage = "treatment_done" | "invoiced" | "earned";
+
+export const BILLING_STAGES: BillingStage[] = ["treatment_done", "invoiced", "earned"];
+
+export const BILLING_STAGE_LABELS: Record<BillingStage, string> = {
+  treatment_done: "Treatment Done",
+  invoiced: "Invoice",
+  earned: "Earned",
+};
+
 export type ReferralFile = {
   name: string;
   path: string;

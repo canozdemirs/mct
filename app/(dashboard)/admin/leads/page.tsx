@@ -29,6 +29,9 @@ export type Lead = {
   owner_type: "mct" | "partner";
   partner_id: string | null;
   files: ReferralFile[];
+  billing_stage?: string | null;
+  invoiced_at?: string | null;
+  earned_at?: string | null;
 };
 
 export type PartnerOption = { id: string; name: string };
@@ -146,21 +149,12 @@ export default async function AdminLeadsPage({
             <AddManualLeadForm attributionAvailable={attributionAvailable} />
           </div>
         </div>
-        <div className="flex gap-4 mb-6">
-          <Link href="/admin/partner-applications" className="text-sm text-gray-400 hover:text-brand transition-colors">
-            ← Partner Applications
-          </Link>
-          <Link href="/admin/deleted-records" className="text-sm text-gray-400 hover:text-brand transition-colors">
-            Deleted Records →
-          </Link>
-        </div>
-
         <SyncReferralsBanner count={unsyncedCount} />
 
         <div className="flex gap-2 mb-6 flex-wrap">
           <Link
             href={withParams({ status: undefined })}
-            className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+            className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors whitespace-nowrap ${
               activeStatus === "all" ? "bg-brand text-white" : "bg-white text-gray-600 border border-gray-200 hover:border-brand hover:text-brand"
             }`}
           >
@@ -173,7 +167,7 @@ export default async function AdminLeadsPage({
             <Link
               key={s}
               href={withParams({ status: s })}
-              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors whitespace-nowrap ${
                 activeStatus === s ? "bg-brand text-white" : "bg-white text-gray-600 border border-gray-200 hover:border-brand hover:text-brand"
               }`}
             >
@@ -227,6 +221,12 @@ export default async function AdminLeadsPage({
         </form>
 
         <LeadsTable leads={list} partnerNameById={Object.fromEntries(partnerNameById)} />
+
+        <div className="text-center mt-6">
+          <Link href="/admin/deleted-records" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
+            Deleted records log
+          </Link>
+        </div>
       </div>
     </div>
   );

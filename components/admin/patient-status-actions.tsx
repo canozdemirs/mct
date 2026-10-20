@@ -2,32 +2,27 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { REFERRAL_STATUSES, REFERRAL_STATUS_LABELS, type ReferralStatus } from "@/types";
 import {
-  REFERRAL_STATUSES,
-  REFERRAL_STATUS_LABELS,
-  EXTERNAL_INSTITUTIONS,
-  CURRENCIES,
-  commissionRateFor,
-  type ReferralStatus,
-  type InstitutionType,
-  type Currency,
-} from "@/types";
-
-const inputClass =
-  "w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 focus:outline-none focus:border-teal focus:bg-white transition-all";
-const labelClass = "block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2";
+  MoneyFormFields,
+  initialMoneyFormState,
+  validateMoneyForm,
+  moneyFormPayload,
+  inputClass,
+  labelClass,
+} from "./money-form-fields";
 
 type Variant =
   | { kind: "partner"; referralId: string; currentAdminNotes: string | null }
   | { kind: "mct"; leadId: string };
 
 // Shared by partner referrals and MCT-direct patients -- the "Treatment
-// Completed requires money details up front" gate, the preview-amount
-// math, and the leaving-completed warning text are identical for both;
-// only the save target and whether a commission % is shown differ.
-// Partner variant POSTs to the UNCHANGED /api/admin/referrals/[id]
-// (commission creation/cancellation logic there is untouched); MCT
-// variant POSTs to /api/admin/leads/[id]/status (revenue, no percentage).
+// Completed requires money details up front" gate (fields themselves are
+// money-form-fields.tsx, also reused by pipeline-complete-modal.tsx) and
+// the save target are the only things that differ. Partner variant POSTs
+// to the UNCHANGED /api/admin/referrals/[id] (commission creation/
+// cancellation logic there is untouched); MCT variant POSTs to
+// /api/admin/leads/[id]/status (revenue, no percentage).
 export function PatientStatusActions({
   variant,
   currentStatus,
@@ -42,27 +37,16 @@ export function PatientStatusActions({
   const [adminNotes, setAdminNotes] = useState(variant.kind === "partner" ? variant.currentAdminNotes ?? "" : "");
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
-
-  const [institutionType, setInstitutionType] = useState<InstitutionType>("mct_package");
-  const [institutionPreset, setInstitutionPreset] = useState(EXTERNAL_INSTITUTIONS[0]);
-  const [institutionOther, setInstitutionOther] = useState("");
-  const [netAmount, setNetAmount] = useState("");
-  const [currency, setCurrency] = useState<Currency>("EUR");
+  const [moneyForm, setMoneyForm] = useState(initialMoneyFormState);
 
   const needsMoneyForm = status === "treatment_completed" && !hasActiveMoney;
-  const resolvedInstitutionName = institutionPreset === "Other" ? institutionOther.trim() : institutionPreset;
-  const percentage = variant.kind === "partner" ? commissionRateFor(institutionType) : null;
-  const previewAmount = Number(netAmount) > 0 ? (percentage !== null ? (Number(netAmount) * percentage) / 100 : Number(netAmount)) : 0;
   const moneyLabel = variant.kind === "partner" ? "Commission" : "Revenue";
 
   async function handleSave() {
     if (needsMoneyForm) {
-      if (!netAmount || Number(netAmount) <= 0) {
-        setMessage({ type: "error", text: `Please enter a valid net amount to complete this ${variant.kind === "partner" ? "referral" : "patient record"}.` });
-        return;
-      }
-      if (institutionType === "external_institution" && !resolvedInstitutionName) {
-        setMessage({ type: "error", text: "Please provide the institution name." });
+      const validationError = validateMoneyForm(moneyForm);
+      if (validationError) {
+        setMessage({ type: "error", text: validationError });
         return;
       }
     }
@@ -70,14 +54,7 @@ export function PatientStatusActions({
     setSaving(true);
     setMessage(null);
 
-    const moneyPayload = needsMoneyForm
-      ? {
-          institution_type: institutionType,
-          institution_name: institutionType === "external_institution" ? resolvedInstitutionName : undefined,
-          net_amount: Number(netAmount),
-          currency,
-        }
-      : undefined;
+    const moneyPayload = needsMoneyForm ? moneyFormPayload(moneyForm) : undefined;
 
     try {
       let res: Response;
@@ -134,88 +111,12 @@ export function PatientStatusActions({
       </div>
 
       {needsMoneyForm && (
-        <div className="mb-5 p-4 rounded-xl bg-teal/5 border border-teal/20">
-          <div className="text-xs font-bold text-teal uppercase tracking-widest mb-4">
-            {moneyLabel} Details (required to complete)
-          </div>
-
-          <div className="mb-4">
-            <label className={labelClass}>Institution Type</label>
-            <select
-              value={institutionType}
-              onChange={(e) => setInstitutionType(e.target.value as InstitutionType)}
-              className={inputClass}
-            >
-              <option value="mct_package">MCT Package</option>
-              <option value="external_institution">External Institution</option>
-            </select>
-          </div>
-
-          {institutionType === "external_institution" && (
-            <div className="mb-4">
-              <label className={labelClass}>Institution Name</label>
-              <select
-                value={institutionPreset}
-                onChange={(e) => setInstitutionPreset(e.target.value)}
-                className={inputClass}
-              >
-                {EXTERNAL_INSTITUTIONS.map((i) => (
-                  <option key={i} value={i}>
-                    {i}
-                  </option>
-                ))}
-              </select>
-              {institutionPreset === "Other" && (
-                <input
-                  className={`${inputClass} mt-2`}
-                  value={institutionOther}
-                  onChange={(e) => setInstitutionOther(e.target.value)}
-                  placeholder="Institution name"
-                />
-              )}
-            </div>
-          )}
-
-          <div className="grid grid-cols-2 gap-3 mb-3">
-            <div>
-              <label className={labelClass}>Net Amount</label>
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                value={netAmount}
-                onChange={(e) => setNetAmount(e.target.value)}
-                className={inputClass}
-                placeholder="0.00"
-              />
-            </div>
-            <div>
-              <label className={labelClass}>Currency</label>
-              <select value={currency} onChange={(e) => setCurrency(e.target.value as Currency)} className={inputClass}>
-                {CURRENCIES.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {percentage !== null ? (
-            <p className="text-xs text-gray-500">
-              Commission: <span className="font-semibold text-brand-dark">{percentage}%</span> ={" "}
-              <span className="font-semibold text-brand-dark">
-                {previewAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {currency}
-              </span>
-            </p>
-          ) : (
-            <p className="text-xs text-gray-500">
-              Revenue: <span className="font-semibold text-brand-dark">
-                {previewAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {currency}
-              </span>
-            </p>
-          )}
-        </div>
+        <MoneyFormFields
+          label={moneyLabel}
+          state={moneyForm}
+          onChange={setMoneyForm}
+          showPercentage={variant.kind === "partner"}
+        />
       )}
 
       {variant.kind === "partner" && (

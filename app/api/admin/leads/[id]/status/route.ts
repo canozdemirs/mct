@@ -44,7 +44,7 @@ export async function PATCH(
 
   const { data: existing, error: fetchError } = await adminSupabase
     .from("leads")
-    .select("id, status, owner_type")
+    .select("id, status, owner_type, billing_stage")
     .eq("id", id)
     .single();
 
@@ -119,9 +119,29 @@ export async function PATCH(
     }
   }
 
+  // billing_stage is a separate dimension from status (hospital-billing
+  // progress, not patient status) -- bundled into the SAME update as
+  // status so the two are never out of sync: entering Treatment
+  // Completed always starts billing at 'treatment_done', leaving it
+  // always clears billing_stage (it's meaningless outside of
+  // Treatment Completed). Advancing through treatment_done -> invoiced
+  // -> earned happens separately, via /api/admin/leads/[id]/billing.
+  const oldBillingStage = existing.billing_stage as string | null;
+  let newBillingStage: string | null | undefined;
+  if (isEnteringCompleted) {
+    newBillingStage = "treatment_done";
+  } else if (isLeavingCompleted) {
+    newBillingStage = null;
+  }
+
+  const updatePayload: Record<string, unknown> = { status: newStatus };
+  if (newBillingStage !== undefined) {
+    updatePayload.billing_stage = newBillingStage;
+  }
+
   const { error: updateError } = await adminSupabase
     .from("leads")
-    .update({ status: newStatus })
+    .update(updatePayload)
     .eq("id", id);
 
   if (updateError) {
@@ -134,6 +154,15 @@ export async function PATCH(
       lead_id: id,
       old_status: oldStatus,
       new_status: newStatus,
+      changed_by: user.email,
+    });
+  }
+
+  if (newBillingStage !== undefined && newBillingStage !== oldBillingStage) {
+    await adminSupabase.from("billing_stage_history").insert({
+      lead_id: id,
+      old_stage: oldBillingStage,
+      new_stage: newBillingStage,
       changed_by: user.email,
     });
   }
