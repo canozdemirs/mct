@@ -24,45 +24,31 @@ export async function DELETE(req: NextRequest) {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
 
-  // lead_attributions.lead_id -> leads(id) has no ON DELETE clause, which
-  // Postgres defaults to NO ACTION -- deleting a lead with a linked
-  // attribution row would otherwise fail with a foreign-key violation.
-  // Cleaning up only the attribution rows tied to these exact ids first
-  // keeps the schema's default RESTRICT behavior intact for every other
-  // path (no migration, no ON DELETE CASCADE loosening).
-  //
-  // Confirmed live (2026-10-19, preview, Vercel function logs): the
-  // lead_attributions table does not actually exist in this Supabase
-  // project yet -- supabase/migrations/lead_attributions.sql is explicitly
-  // marked "PREPARED LOCALLY -- NOT YET RUN" and has never been applied.
-  // PostgREST returns PGRST205 ("Could not find the table ... in the
-  // schema cache") for this, not a permission or FK error. Treating ONLY
-  // that specific code as "nothing to clean up" keeps this forward-
-  // compatible: if that migration is ever run, the real cleanup above
-  // starts working exactly as designed, with no code change needed here.
-  // Any other error (permissions, connectivity, a genuine FK violation
-  // once the table does exist) still fails loudly below, unchanged.
-  const { error: attributionError } = await adminSupabase
-    .from("lead_attributions")
-    .delete()
-    .in("lead_id", ids);
+  // Each patient is deleted via the delete_patient() Postgres function
+  // (supabase/migrations/safe_patient_delete.sql) -- an audited, atomic
+  // transaction that logs the patient (and, for a partner-owned one, its
+  // referral + any commission) to deleted_records_log BEFORE removing
+  // commissions -> referral_status_history -> referrals -> lead_attributions
+  // -> leads. Every id is its own independent delete: one failure never
+  // blocks or rolls back any other id in the same batch.
+  const deleted: string[] = [];
+  const failed: { id: string; error: string }[] = [];
 
-  if (attributionError && attributionError.code !== "PGRST205") {
-    console.error("Lead attribution cleanup error:", attributionError);
-    return NextResponse.json({ error: "Failed to delete linked attribution records." }, { status: 500 });
-  }
+  for (const id of ids) {
+    const { error } = await adminSupabase.rpc("delete_patient", {
+      p_lead_id: id,
+      p_deleted_by: user.email,
+    });
 
-  const { error, count } = await adminSupabase
-    .from("leads")
-    .delete({ count: "exact" })
-    .in("id", ids);
-
-  if (error) {
-    console.error("Lead delete error:", error);
-    return NextResponse.json({ error: "Failed to delete leads." }, { status: 500 });
+    if (error) {
+      console.error("delete_patient error:", id, error);
+      failed.push({ id, error: error.message });
+    } else {
+      deleted.push(id);
+    }
   }
 
   revalidatePath("/admin/leads");
 
-  return NextResponse.json({ ok: true, deleted: count ?? ids.length });
+  return NextResponse.json({ ok: true, deleted, failed });
 }

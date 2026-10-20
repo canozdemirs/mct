@@ -46,6 +46,7 @@ export type Referral = {
   files: ReferralFile[];
   status: ReferralStatus;
   admin_notes: string | null;
+  lead_id: string | null;
   created_at: string;
   updated_at: string;
 };

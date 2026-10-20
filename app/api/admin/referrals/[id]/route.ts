@@ -50,7 +50,7 @@ export async function PATCH(
 
   const { data: existing, error: fetchError } = await adminSupabase
     .from("referrals")
-    .select("id, status, patient_full_name, partner_id, partners(email)")
+    .select("id, status, patient_full_name, partner_id, lead_id, partners(email)")
     .eq("id", id)
     .single();
 
@@ -152,6 +152,18 @@ export async function PATCH(
       new_status: newStatus,
       changed_by: user.email,
     });
+
+    // Best-effort sync onto the mirrored Patients (leads) row -- this
+    // mapping is coarse and display/filter-only (so the unified list's
+    // New/Contacted/Closed tabs include partner rows); the real 6-state
+    // status always lives on referrals.status and is read directly for
+    // this patient's detail view. A failure here never undoes the
+    // referral/commission update that already succeeded above.
+    if (existing.lead_id) {
+      const mappedStatus =
+        newStatus === "new" ? "new" : newStatus === "cancelled_lost" || newStatus === "treatment_completed" ? "closed" : "contacted";
+      await adminSupabase.from("leads").update({ status: mappedStatus }).eq("id", existing.lead_id);
+    }
   }
 
   const partnerEmail = (existing as unknown as { partners: { email: string | null } | null }).partners?.email;

@@ -5,6 +5,7 @@ import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { ADMIN_EMAILS } from "@/lib/admin";
 import { ReferralStatusActions } from "@/components/admin/referral-status-actions";
 import { CommissionPanel } from "@/components/admin/commission-panel";
+import { DetachReferralButton } from "@/components/admin/detach-referral-button";
 import { REFERRAL_STATUS_LABELS, type ReferralWithPartner, type Commission } from "@/types";
 
 const STATUS_COLORS: Record<string, string> = {
@@ -76,7 +77,7 @@ export default async function AdminReferralDetailPage({
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex items-center gap-2 text-sm text-gray-400 mb-6">
-          <Link href="/admin/referrals" className="hover:text-brand transition-colors">
+          <Link href="/admin/leads" className="hover:text-brand transition-colors">
             Patients
           </Link>
           <span>/</span>
@@ -163,6 +164,15 @@ export default async function AdminReferralDetailPage({
         />
 
         {commission && <CommissionPanel commission={commission} />}
+
+        {r.lead_id && (
+          <DetachReferralButton
+            leadId={r.lead_id}
+            patientName={r.patient_full_name}
+            partnerName={r.partner?.company_name || r.partner?.full_name || null}
+            hasActiveCommission={!!commission}
+          />
+        )}
       </div>
     </div>
   );

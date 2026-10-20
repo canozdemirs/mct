@@ -1,3 +1,4 @@
+import { createClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import type { ReferralFile } from "@/types";
@@ -21,7 +22,7 @@ export async function PATCH(
   // current row (status + files) to validate the edit before writing.
   const { data: existing, error: fetchError } = await supabase
     .from("referrals")
-    .select("id, partner_id, status, files")
+    .select("id, partner_id, status, files, lead_id")
     .eq("id", id)
     .single();
 
@@ -83,6 +84,32 @@ export async function PATCH(
     .map((f) => f.path);
   if (removedPaths.length > 0) {
     await supabase.storage.from("referral-files").remove(removedPaths);
+  }
+
+  // Best-effort sync onto the mirrored Patients (leads) row -- the
+  // partner's own session client can't write to `leads` (service-role
+  // only), so this needs the admin client. A failure here never undoes
+  // the referral edit that already succeeded above.
+  if (existing.lead_id) {
+    try {
+      const adminSupabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      );
+      await adminSupabase
+        .from("leads")
+        .update({
+          name: patient_full_name,
+          phone: patient_phone,
+          email: patient_email || null,
+          country: patient_country,
+          treatment,
+          message: notes || null,
+        })
+        .eq("id", existing.lead_id);
+    } catch (mirrorError) {
+      console.error("Patients mirror-sync error (non-fatal):", mirrorError);
+    }
   }
 
   return NextResponse.json({ ok: true });

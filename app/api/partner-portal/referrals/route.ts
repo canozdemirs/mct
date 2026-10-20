@@ -112,6 +112,38 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Failed to create referral. Please try again." }, { status: 500 });
   }
 
+  // Best-effort mirror into the unified Patients list (leads). A failure
+  // here never undoes the referral that was just saved above -- it just
+  // means this patient won't show up in /admin/leads until the next sync
+  // point (e.g. an admin-side status change, which also best-effort
+  // retries this link in app/api/admin/referrals/[id]/route.ts).
+  try {
+    const { data: newLead } = await adminSupabase
+      .from("leads")
+      .insert({
+        source: "Partner Referral",
+        name: patient_full_name,
+        email: patient_email || null,
+        phone: patient_phone,
+        country: patient_country,
+        treatment,
+        message: notes || null,
+        details: {},
+        page_url: null,
+        consent: true,
+        owner_type: "partner",
+        partner_id: partner.id,
+      })
+      .select("id")
+      .single();
+
+    if (newLead) {
+      await adminSupabase.from("referrals").update({ lead_id: newLead.id }).eq("id", inserted.id);
+    }
+  } catch (mirrorError) {
+    console.error("Patients mirror-create error (non-fatal):", mirrorError);
+  }
+
   const partnerName = partner.company_name || partner.full_name || "A partner";
   await sendEmail({
     to: ADMIN_RECIPIENTS,

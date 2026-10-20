@@ -1,20 +1,52 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LeadStatusSelect } from "./lead-status-select";
 import { EditLeadForm } from "./edit-lead-form";
-import type { Lead } from "@/app/(dashboard)/admin/leads/page";
+import type { Lead, PartnerOption, ReferralInfo } from "@/app/(dashboard)/admin/leads/page";
+import { REFERRAL_STATUS_LABELS, type ReferralStatus } from "@/types";
+
+const REFERRAL_STATUS_COLORS: Record<ReferralStatus, string> = {
+  new: "bg-yellow-100 text-yellow-800",
+  contacted: "bg-blue-100 text-blue-800",
+  consultation: "bg-purple-100 text-purple-800",
+  treatment_planned: "bg-indigo-100 text-indigo-800",
+  treatment_completed: "bg-green-100 text-green-800",
+  cancelled_lost: "bg-red-100 text-red-800",
+};
+
+type DeletePreviewRow = {
+  id: string;
+  name: string;
+  date: string;
+  ownerType: "mct" | "partner";
+  partnerName: string | null;
+  referralStatus: ReferralStatus | null;
+  commission: { amount: number; currency: string; status: string } | null;
+};
 
 type ConfirmTarget = {
   ids: string[];
-  rows: { name: string; date: string }[];
+  rows: DeletePreviewRow[];
 };
 
-export function LeadsTable({ leads }: { leads: Lead[] }) {
+export function LeadsTable({
+  leads,
+  partners,
+  partnerNameById,
+  referralInfoByLeadId,
+}: {
+  leads: Lead[];
+  partners: PartnerOption[];
+  partnerNameById: Record<string, string>;
+  referralInfoByLeadId: Record<string, ReferralInfo>;
+}) {
   const router = useRouter();
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [confirmTarget, setConfirmTarget] = useState<ConfirmTarget | null>(null);
+  const [loadingPreview, setLoadingPreview] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [editTarget, setEditTarget] = useState<Lead | null>(null);
 
@@ -35,15 +67,36 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
     return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
   }
 
-  function requestDeleteOne(lead: Lead) {
-    setConfirmTarget({ ids: [lead.id], rows: [{ name: lead.name, date: formatDate(lead.created_at) }] });
+  function fallbackRows(ids: string[]): DeletePreviewRow[] {
+    return ids.map((id) => {
+      const l = leads.find((x) => x.id === id);
+      return {
+        id,
+        name: l?.name ?? id,
+        date: l?.created_at ?? new Date().toISOString(),
+        ownerType: l?.owner_type ?? "mct",
+        partnerName: l?.partner_id ? partnerNameById[l.partner_id] ?? null : null,
+        referralStatus: null,
+        commission: null,
+      };
+    });
   }
 
-  function requestDeleteSelected() {
-    const rows = leads
-      .filter((l) => selected.has(l.id))
-      .map((l) => ({ name: l.name, date: formatDate(l.created_at) }));
-    setConfirmTarget({ ids: Array.from(selected), rows });
+  async function openDeleteConfirm(ids: string[]) {
+    setLoadingPreview(true);
+    try {
+      const res = await fetch(`/api/admin/leads/delete-preview?ids=${ids.join(",")}`);
+      if (res.ok) {
+        const json = await res.json() as { previews: DeletePreviewRow[] };
+        setConfirmTarget({ ids, rows: json.previews });
+      } else {
+        setConfirmTarget({ ids, rows: fallbackRows(ids) });
+      }
+    } catch {
+      setConfirmTarget({ ids, rows: fallbackRows(ids) });
+    } finally {
+      setLoadingPreview(false);
+    }
   }
 
   async function confirmDelete() {
@@ -55,6 +108,7 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ids: confirmTarget.ids }),
       });
+      const json = await res.json().catch(() => ({})) as { ok?: boolean; error?: string; failed?: { id: string; error: string }[] };
       if (res.ok) {
         setSelected((prev) => {
           const next = new Set(prev);
@@ -63,9 +117,11 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
         });
         setConfirmTarget(null);
         router.refresh();
+        if (json.failed && json.failed.length > 0) {
+          alert(`${json.failed.length} record(s) could not be deleted:\n` + json.failed.map((f) => `${f.id}: ${f.error}`).join("\n"));
+        }
       } else {
-        const json = await res.json().catch(() => ({}));
-        alert(json.error || "Failed to delete lead(s).");
+        alert(json.error || "Failed to delete record(s).");
       }
     } catch {
       alert("Network error. Please try again.");
@@ -81,10 +137,11 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
           <span className="text-sm text-red-700 font-medium">{selected.size} selected</span>
           <button
             type="button"
-            onClick={requestDeleteSelected}
-            className="px-4 py-1.5 rounded-lg bg-red-600 text-white text-xs font-semibold hover:bg-red-700 transition-colors"
+            onClick={() => openDeleteConfirm(Array.from(selected))}
+            disabled={loadingPreview}
+            className="px-4 py-1.5 rounded-lg bg-red-600 text-white text-xs font-semibold hover:bg-red-700 transition-colors disabled:opacity-50"
           >
-            Delete selected ({selected.size})
+            {loadingPreview ? "Loading..." : `Delete selected (${selected.size})`}
           </button>
         </div>
       )}
@@ -92,7 +149,7 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         {leads.length === 0 ? (
           <div className="text-center py-16 text-gray-400">
-            <p className="font-medium">No leads found</p>
+            <p className="font-medium">No patients found</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -111,6 +168,7 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Date</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Name</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden xl:table-cell">Contact</th>
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Owner</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden md:table-cell">Country</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Treatment</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Source</th>
@@ -122,6 +180,8 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
               <tbody className="divide-y divide-gray-50">
                 {leads.map((lead) => {
                   const hasExtra = lead.message || Object.keys(lead.details || {}).length > 0;
+                  const referralInfo = lead.owner_type === "partner" ? referralInfoByLeadId[lead.id] : undefined;
+                  const partnerName = lead.partner_id ? partnerNameById[lead.partner_id] : null;
                   return (
                     <tr key={lead.id} className="hover:bg-gray-50 transition-colors align-top">
                       <td className="px-5 py-4">
@@ -144,11 +204,37 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
                         <div>{lead.email || "—"}</div>
                         <div className="text-xs text-gray-400">{lead.phone || ""}</div>
                       </td>
+                      <td className="px-5 py-4 hidden lg:table-cell">
+                        {lead.owner_type === "partner" ? (
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-teal-50 text-teal-700">
+                            {partnerName || "Partner"}
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600">MCT</span>
+                        )}
+                      </td>
                       <td className="px-5 py-4 text-gray-500 hidden md:table-cell">{lead.country || "—"}</td>
                       <td className="px-5 py-4 text-gray-700">{lead.treatment || "—"}</td>
                       <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">{lead.source}</td>
                       <td className="px-5 py-4">
-                        <LeadStatusSelect leadId={lead.id} currentStatus={lead.status} />
+                        {lead.owner_type === "partner" ? (
+                          referralInfo ? (
+                            <div className="space-y-1">
+                              <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${REFERRAL_STATUS_COLORS[referralInfo.status] ?? "bg-gray-100 text-gray-600"}`}>
+                                {REFERRAL_STATUS_LABELS[referralInfo.status] ?? referralInfo.status}
+                              </span>
+                              {referralInfo.commission && (
+                                <div className="text-xs text-gray-400">
+                                  {referralInfo.commission.amount.toLocaleString()} {referralInfo.commission.currency} ({referralInfo.commission.status})
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="text-gray-300 text-xs">No linked referral</span>
+                          )
+                        ) : (
+                          <LeadStatusSelect leadId={lead.id} currentStatus={lead.status} />
+                        )}
                       </td>
                       <td className="px-5 py-4 max-w-xs">
                         {hasExtra ? (
@@ -169,17 +255,31 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
                       </td>
                       <td className="px-5 py-4">
                         <div className="flex gap-2">
+                          {lead.owner_type === "partner" ? (
+                            referralInfo ? (
+                              <Link
+                                href={`/admin/referrals/${referralInfo.referralId}`}
+                                className="px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 text-xs font-semibold hover:bg-gray-50 transition-colors"
+                              >
+                                Edit
+                              </Link>
+                            ) : (
+                              <span className="px-3 py-1.5 rounded-lg border border-gray-100 text-gray-300 text-xs font-semibold">Edit</span>
+                            )
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setEditTarget(lead)}
+                              className="px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 text-xs font-semibold hover:bg-gray-50 transition-colors"
+                            >
+                              Edit
+                            </button>
+                          )}
                           <button
                             type="button"
-                            onClick={() => setEditTarget(lead)}
-                            className="px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 text-xs font-semibold hover:bg-gray-50 transition-colors"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => requestDeleteOne(lead)}
-                            className="px-3 py-1.5 rounded-lg border border-red-200 text-red-600 text-xs font-semibold hover:bg-red-50 transition-colors"
+                            onClick={() => openDeleteConfirm([lead.id])}
+                            disabled={loadingPreview}
+                            className="px-3 py-1.5 rounded-lg border border-red-200 text-red-600 text-xs font-semibold hover:bg-red-50 transition-colors disabled:opacity-50"
                           >
                             Delete
                           </button>
@@ -202,11 +302,25 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
               Are you sure you want to delete {confirmTarget.ids.length} record{confirmTarget.ids.length !== 1 ? "s" : ""}?
             </h3>
             <p className="text-sm text-red-600 font-medium mb-4">This action cannot be undone.</p>
-            <ul className="max-h-48 overflow-y-auto text-sm text-gray-600 space-y-1 mb-6 border border-gray-100 rounded-xl p-3">
-              {confirmTarget.rows.map((r, i) => (
-                <li key={i} className="flex justify-between gap-3">
-                  <span className="font-medium text-gray-700">{r.name}</span>
-                  <span className="text-gray-400 shrink-0">{r.date}</span>
+            <ul className="max-h-64 overflow-y-auto text-sm text-gray-600 space-y-2 mb-6 border border-gray-100 rounded-xl p-3">
+              {confirmTarget.rows.map((r) => (
+                <li key={r.id} className="border-b border-gray-50 last:border-0 pb-2 last:pb-0">
+                  <div className="flex justify-between gap-3">
+                    <span className="font-medium text-gray-700">{r.name}</span>
+                    <span className="text-gray-400 shrink-0">{formatDate(r.date)}</span>
+                  </div>
+                  {r.ownerType === "partner" && (
+                    <div className="mt-1 bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-2 text-xs text-amber-800">
+                      Partner: <strong>{r.partnerName || "Unknown"}</strong>
+                      {r.referralStatus && <> · Referral: {REFERRAL_STATUS_LABELS[r.referralStatus] ?? r.referralStatus}</>}
+                      {r.commission && (
+                        <>
+                          {" "}· Commission: {r.commission.amount.toLocaleString()} {r.commission.currency} ({r.commission.status})
+                        </>
+                      )}
+                      <div className="mt-1 font-medium">This will also remove it from the partner&apos;s portal and delete the commission record (logged for accounting).</div>
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>
@@ -232,7 +346,7 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
         </div>
       )}
 
-      {editTarget && <EditLeadForm lead={editTarget} onClose={() => setEditTarget(null)} />}
+      {editTarget && <EditLeadForm lead={editTarget} partners={partners} onClose={() => setEditTarget(null)} />}
     </>
   );
 }
