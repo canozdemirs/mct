@@ -47,7 +47,7 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
   const [emailUnknown, setEmailUnknown] = useState(false);
   const [country, setCountry] = useState("");
   const [treatment, setTreatment] = useState("");
-  const [note, setNote] = useState("");
+  const [internalNotes, setInternalNotes] = useState("");
   const [firstContactedAt, setFirstContactedAt] = useState(todayIso);
   const [refCode, setRefCode] = useState("");
   const [clickInfo, setClickInfo] = useState<ClickInfo | null>(null);
@@ -67,7 +67,7 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
     setEmailUnknown(false);
     setCountry("");
     setTreatment("");
-    setNote("");
+    setInternalNotes("");
     setFirstContactedAt(todayIso());
     setRefCode("");
     setClickInfo(null);
@@ -116,7 +116,7 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
           email: emailUnknown ? "" : email,
           country,
           treatment,
-          note,
+          internalNotes,
           firstContactedAt,
           refCode: refCode.trim() || undefined,
           force,
@@ -306,10 +306,10 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Note</label>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Internal notes</label>
                   <textarea
-                    value={note}
-                    onChange={(e) => setNote(e.target.value)}
+                    value={internalNotes}
+                    onChange={(e) => setInternalNotes(e.target.value)}
                     rows={2}
                     className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1"
                   />

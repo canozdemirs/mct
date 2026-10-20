@@ -93,7 +93,7 @@ type ManualLeadBody = {
   email?: string;
   country?: string;
   treatment?: string;
-  note?: string;
+  internalNotes?: string;
   firstContactedAt?: string;
   refCode?: string;
   force?: boolean;
@@ -116,7 +116,7 @@ export async function POST(req: NextRequest) {
   const email = (body.email || "").trim();
   const country = (body.country || "").trim();
   const treatment = (body.treatment || "").trim();
-  const note = (body.note || "").trim();
+  const internalNotes = (body.internalNotes || "").trim();
   const refCode = (body.refCode || "").trim().toUpperCase();
 
   const fieldError = validateLeadContactFields({ source, name, phone, email });
@@ -153,7 +153,7 @@ export async function POST(req: NextRequest) {
     phone: phone || null,
     country: country || null,
     treatment: treatment || null,
-    message: note || null,
+    internal_notes: internalNotes || null,
     details: {},
     page_url: null,
     consent: false,

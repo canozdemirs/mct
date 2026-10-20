@@ -5,17 +5,20 @@ import { createClient as createServerClient } from "@/lib/supabase/server";
 import { ADMIN_EMAILS } from "@/lib/admin";
 import { validateLeadContactFields, findDuplicateLead } from "@/lib/admin-lead-helpers";
 
-const VALID_STATUSES = ["new", "contacted", "closed"];
-
+// Full-field edit for a Patients row, either owner type. Status is
+// deliberately NOT handled here -- it moved to
+// app/api/admin/leads/[id]/status/route.ts (MCT) and
+// app/api/admin/referrals/[id]/route.ts (partner, unchanged), both of
+// which gate Treatment Completed on a money form this route has no UI
+// for; a bare status field here could otherwise bypass that gate.
 type EditLeadBody = {
-  status?: string;
   source?: string;
   name?: string;
   phone?: string;
   email?: string;
   country?: string;
   treatment?: string;
-  note?: string;
+  internalNotes?: string;
   firstContactedAt?: string;
   force?: boolean;
 };
@@ -42,43 +45,13 @@ export async function PATCH(
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
 
-  // Every field below is optional on this type, so a request with ONLY
-  // `status` (the existing per-row status dropdown, components/admin/
-  // lead-status-select.tsx) falls through to this exact same branch and
-  // behavior it always had -- no validation, no dedupe check, just the
-  // status column. The fuller "Edit" modal always sends every field
-  // together, which is what routes it into the extended path below.
-  const hasExtendedFields = [
-    body.source, body.name, body.phone, body.email,
-    body.country, body.treatment, body.note, body.firstContactedAt,
-  ].some((v) => v !== undefined);
-
-  if (!hasExtendedFields) {
-    if (!body.status || !VALID_STATUSES.includes(body.status)) {
-      return NextResponse.json({ error: "Invalid status" }, { status: 400 });
-    }
-
-    const { error } = await adminSupabase.from("leads").update({ status: body.status }).eq("id", id);
-    if (error) {
-      console.error("Lead status update error:", error);
-      return NextResponse.json({ error: "Failed to update lead status." }, { status: 500 });
-    }
-
-    revalidatePath("/admin/leads");
-    return NextResponse.json({ ok: true });
-  }
-
-  if (body.status && !VALID_STATUSES.includes(body.status)) {
-    return NextResponse.json({ error: "Invalid status" }, { status: 400 });
-  }
-
   const source = (body.source || "").trim();
   const name = (body.name || "").trim();
   const phone = (body.phone || "").trim();
   const email = (body.email || "").trim();
   const country = (body.country || "").trim();
   const treatment = (body.treatment || "").trim();
-  const note = (body.note || "").trim();
+  const internalNotes = (body.internalNotes || "").trim();
 
   const fieldError = validateLeadContactFields({ source, name, phone, email }, false);
   if (fieldError) {
@@ -111,23 +84,21 @@ export async function PATCH(
     phone: phone || null,
     country: country || null,
     treatment: treatment || null,
-    message: note || null,
+    internal_notes: internalNotes || null,
     first_contacted_at: firstContactedAtIso,
   };
-  if (body.status) {
-    updatePayload.status = body.status;
-  }
 
   const { error } = await adminSupabase.from("leads").update(updatePayload).eq("id", id);
 
   if (error) {
-    // first_contacted_at may not exist yet if leads_manual_entry.sql
-    // hasn't been run in this environment -- retry without it so the
-    // rest of the edit still saves, mirroring the manual-create route's
-    // graceful degradation.
+    // first_contacted_at/internal_notes may not exist yet in an
+    // environment that hasn't run the relevant migration -- retry
+    // without them so the rest of the edit still saves, mirroring the
+    // manual-create route's graceful degradation.
     if (["42703", "PGRST204"].includes((error as { code?: string }).code ?? "")) {
-      const { first_contacted_at, ...fallbackPayload } = updatePayload;
+      const { first_contacted_at, internal_notes, ...fallbackPayload } = updatePayload;
       void first_contacted_at;
+      void internal_notes;
       const { error: fallbackError } = await adminSupabase.from("leads").update(fallbackPayload).eq("id", id);
       if (fallbackError) {
         console.error("Lead update error (fallback):", fallbackError);
@@ -139,6 +110,29 @@ export async function PATCH(
     }
   }
 
+  // Best-effort mirror onto the linked referral, if this lead is
+  // partner-owned -- a no-op (0 rows matched, no error) for an MCT
+  // patient. referrals.patient_country/patient_phone are NOT NULL, so
+  // this is skipped (not attempted with nulls that would violate that
+  // constraint) when either is blank; logged, never allowed to undo the
+  // edit that already succeeded above.
+  if (country && phone) {
+    const { error: mirrorError } = await adminSupabase
+      .from("referrals")
+      .update({
+        patient_full_name: name,
+        patient_country: country,
+        patient_phone: phone,
+        patient_email: email || null,
+        treatment: treatment || null,
+      })
+      .eq("lead_id", id);
+    if (mirrorError) {
+      console.error("Referral mirror-sync error (non-fatal):", mirrorError);
+    }
+  }
+
   revalidatePath("/admin/leads");
+  revalidatePath(`/admin/leads/${id}`);
   return NextResponse.json({ ok: true });
 }

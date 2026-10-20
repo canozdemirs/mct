@@ -37,9 +37,6 @@ export async function POST() {
   const failed: { id: string; error: string }[] = [];
 
   for (const r of unsynced ?? []) {
-    const mappedStatus =
-      r.status === "new" ? "new" : r.status === "cancelled_lost" || r.status === "treatment_completed" ? "closed" : "contacted";
-
     const { data: newLead, error: insertError } = await adminSupabase
       .from("leads")
       .insert({
@@ -55,7 +52,7 @@ export async function POST() {
         consent: r.patient_consent,
         owner_type: "partner",
         partner_id: r.partner_id,
-        status: mappedStatus,
+        status: r.status,
         created_at: r.created_at,
       })
       .select("id")

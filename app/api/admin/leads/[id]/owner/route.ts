@@ -65,10 +65,15 @@ export async function POST(
 
     if (error) {
       console.error("attach_patient_to_partner error:", error);
-      return NextResponse.json({ error: "Failed to convert this patient to a partner patient." }, { status: 500 });
+      // Surfaced as-is: attach_patient_to_partner() raises specific,
+      // admin-readable messages (e.g. "Cancel the revenue record
+      // first.") for its blocking checks -- a generic message here
+      // would hide exactly the information the admin needs to act on.
+      return NextResponse.json({ error: error.message || "Failed to convert this patient to a partner patient." }, { status: 400 });
     }
 
     revalidatePath("/admin/leads");
+    revalidatePath(`/admin/leads/${id}`);
     return NextResponse.json({ ok: true, referralId });
   }
 
@@ -80,10 +85,11 @@ export async function POST(
 
   if (error) {
     console.error("detach_single_patient error:", error);
-    return NextResponse.json({ error: "Failed to detach this patient from the partner." }, { status: 500 });
+    return NextResponse.json({ error: error.message || "Failed to detach this patient from the partner." }, { status: 400 });
   }
 
   revalidatePath("/admin/leads");
+  revalidatePath(`/admin/leads/${id}`);
   revalidatePath("/admin/referrals");
 
   return NextResponse.json({ ok: true });

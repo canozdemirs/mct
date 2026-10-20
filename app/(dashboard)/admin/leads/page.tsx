@@ -6,7 +6,7 @@ import { ADMIN_EMAILS } from "@/lib/admin";
 import { LeadsTable } from "@/components/admin/leads-table";
 import { AddManualLeadForm } from "@/components/admin/add-manual-lead-form";
 import { SyncReferralsBanner } from "@/components/admin/sync-referrals-banner";
-import type { ReferralStatus } from "@/types";
+import { REFERRAL_STATUSES, REFERRAL_STATUS_LABELS, type ReferralStatus, type ReferralFile } from "@/types";
 
 export type Lead = {
   id: string;
@@ -18,23 +18,19 @@ export type Lead = {
   country: string | null;
   treatment: string | null;
   message: string | null;
+  internal_notes: string | null;
   details: Record<string, unknown>;
   page_url: string | null;
   consent: boolean;
-  status: "new" | "contacted" | "closed";
+  status: ReferralStatus;
   is_manual?: boolean;
   first_contacted_at?: string | null;
   owner_type: "mct" | "partner";
   partner_id: string | null;
+  files: ReferralFile[];
 };
 
 export type PartnerOption = { id: string; name: string };
-
-export type ReferralInfo = {
-  referralId: string;
-  status: ReferralStatus;
-  commission: { amount: number; currency: string; status: string } | null;
-};
 
 export default async function AdminLeadsPage({
   searchParams,
@@ -93,12 +89,10 @@ export default async function AdminLeadsPage({
   if (ownerType) countsQuery = countsQuery.eq("owner_type", ownerType);
   if (partnerId) countsQuery = countsQuery.eq("partner_id", partnerId);
   const { data: allForCounts } = await countsQuery;
-  const counts = {
-    all: (allForCounts ?? []).length,
-    new: (allForCounts ?? []).filter((l) => l.status === "new").length,
-    contacted: (allForCounts ?? []).filter((l) => l.status === "contacted").length,
-    closed: (allForCounts ?? []).filter((l) => l.status === "closed").length,
-  };
+  const counts: Record<string, number> = { all: (allForCounts ?? []).length };
+  for (const s of REFERRAL_STATUSES) {
+    counts[s] = (allForCounts ?? []).filter((l) => l.status === s).length;
+  }
 
   const activeStatus = status || "all";
 
@@ -114,41 +108,6 @@ export default async function AdminLeadsPage({
     name: p.company_name || p.full_name || "Unnamed partner",
   }));
   const partnerNameById = new Map(partners.map((p) => [p.id, p.name]));
-
-  // For every partner-owned row in THIS page of results, pull its real
-  // referral status + active commission -- leads.status for these rows
-  // is only ever a coarse New/Contacted/Closed mapping (kept for the
-  // quick-filter tabs above), never the source of truth.
-  const partnerLeadIds = list.filter((l) => l.owner_type === "partner").map((l) => l.id);
-  const referralInfoByLeadId: Record<string, ReferralInfo> = {};
-  if (partnerLeadIds.length > 0) {
-    const { data: referrals } = await adminSupabase
-      .from("referrals")
-      .select("id, lead_id, status")
-      .in("lead_id", partnerLeadIds);
-
-    const referralIds = (referrals ?? []).map((r) => r.id);
-    const commissionByReferralId = new Map<string, { amount: number; currency: string; status: string }>();
-    if (referralIds.length > 0) {
-      const { data: commissions } = await adminSupabase
-        .from("commissions")
-        .select("referral_id, commission_amount, currency, status")
-        .in("referral_id", referralIds)
-        .neq("status", "cancelled");
-      for (const c of commissions ?? []) {
-        commissionByReferralId.set(c.referral_id, { amount: c.commission_amount, currency: c.currency, status: c.status });
-      }
-    }
-
-    for (const r of referrals ?? []) {
-      if (!r.lead_id) continue;
-      referralInfoByLeadId[r.lead_id] = {
-        referralId: r.id,
-        status: r.status,
-        commission: commissionByReferralId.get(r.id) ?? null,
-      };
-    }
-  }
 
   // Best-effort mirror-create (app/api/partner-portal/referrals/route.ts)
   // can fail silently -- this surfaces any referral it left unsynced so
@@ -196,17 +155,28 @@ export default async function AdminLeadsPage({
         <SyncReferralsBanner count={unsyncedCount} />
 
         <div className="flex gap-2 mb-6 flex-wrap">
-          {["all", "new", "contacted", "closed"].map((s) => (
+          <Link
+            href={withParams({ status: undefined })}
+            className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+              activeStatus === "all" ? "bg-brand text-white" : "bg-white text-gray-600 border border-gray-200 hover:border-brand hover:text-brand"
+            }`}
+          >
+            All
+            <span className={`text-xs px-1.5 py-0.5 rounded-full ${activeStatus === "all" ? "bg-white/20 text-white" : "bg-gray-100 text-gray-500"}`}>
+              {counts.all}
+            </span>
+          </Link>
+          {REFERRAL_STATUSES.map((s) => (
             <Link
               key={s}
-              href={withParams({ status: s === "all" ? undefined : s })}
+              href={withParams({ status: s })}
               className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
                 activeStatus === s ? "bg-brand text-white" : "bg-white text-gray-600 border border-gray-200 hover:border-brand hover:text-brand"
               }`}
             >
-              {s.charAt(0).toUpperCase() + s.slice(1)}
+              {REFERRAL_STATUS_LABELS[s]}
               <span className={`text-xs px-1.5 py-0.5 rounded-full ${activeStatus === s ? "bg-white/20 text-white" : "bg-gray-100 text-gray-500"}`}>
-                {counts[s as keyof typeof counts]}
+                {counts[s]}
               </span>
             </Link>
           ))}
@@ -247,7 +217,7 @@ export default async function AdminLeadsPage({
           </Link>
         </form>
 
-        <LeadsTable leads={list} partners={partners} partnerNameById={Object.fromEntries(partnerNameById)} referralInfoByLeadId={referralInfoByLeadId} />
+        <LeadsTable leads={list} partners={partners} partnerNameById={Object.fromEntries(partnerNameById)} />
       </div>
     </div>
   );
