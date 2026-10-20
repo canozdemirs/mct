@@ -4,20 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { ADMIN_EMAILS } from "@/lib/admin";
 import { isValidReferenceCodeFormat, type InferredChannel } from "@/lib/attribution";
-
-const SOURCE_OPTIONS = [
-  "WhatsApp",
-  "Telefon",
-  "E-posta",
-  "Instagram/Facebook",
-  "Tavsiye",
-  "Partner",
-  "Diğer",
-];
-
-function normalizeDigits(value: string) {
-  return value.replace(/[^0-9]/g, "");
-}
+import { validateLeadContactFields, findDuplicateLead } from "@/lib/admin-lead-helpers";
 
 function adminClient() {
   return createClient(
@@ -112,8 +99,6 @@ type ManualLeadBody = {
   force?: boolean;
 };
 
-type ExistingLeadRow = { id: string; name: string; phone: string | null; email: string | null; created_at: string };
-
 export async function POST(req: NextRequest) {
   const user = await requireAdmin();
   if (!user) {
@@ -134,15 +119,9 @@ export async function POST(req: NextRequest) {
   const note = (body.note || "").trim();
   const refCode = (body.refCode || "").trim().toUpperCase();
 
-  if (!SOURCE_OPTIONS.includes(source)) {
-    return NextResponse.json({ error: "Please select a valid source." }, { status: 400 });
-  }
-  if (!name) {
-    return NextResponse.json({ error: "Please enter the patient's name." }, { status: 400 });
-  }
-  const phoneDigits = normalizeDigits(phone);
-  if (phoneDigits.length < 7) {
-    return NextResponse.json({ error: "Please enter a valid phone number." }, { status: 400 });
+  const fieldError = validateLeadContactFields({ source, name, phone, email });
+  if (fieldError) {
+    return NextResponse.json({ error: fieldError }, { status: 400 });
   }
   if (refCode && !isValidReferenceCodeFormat(refCode)) {
     return NextResponse.json({ error: "That reference code doesn't look valid (expected format: MCT-XXXXXX)." }, { status: 400 });
@@ -158,41 +137,20 @@ export async function POST(req: NextRequest) {
   }
 
   const adminSupabase = adminClient();
-  const phoneTail = phoneDigits.slice(-10);
 
   if (!body.force) {
-    const [{ data: phoneCandidates }, { data: emailCandidates }] = await Promise.all([
-      adminSupabase
-        .from("leads")
-        .select("id, name, phone, email, created_at")
-        .ilike("phone", `%${phoneTail}%`)
-        .limit(5),
-      email
-        ? adminSupabase.from("leads").select("id, name, phone, email, created_at").ilike("email", email).limit(5)
-        : Promise.resolve({ data: [] as ExistingLeadRow[] }),
-    ]);
-
-    const candidates = [...(phoneCandidates ?? []), ...(emailCandidates ?? [])] as ExistingLeadRow[];
-    const duplicate = candidates.find((c) => {
-      const phoneMatch = !!c.phone && phoneTail.length >= 7 && normalizeDigits(c.phone).slice(-10) === phoneTail;
-      const emailMatch = !!email && !!c.email && c.email.toLowerCase() === email.toLowerCase();
-      return phoneMatch || emailMatch;
-    });
-
+    const duplicate = await findDuplicateLead(adminSupabase, phone, email);
     if (duplicate) {
-      return NextResponse.json(
-        { duplicate: true, existing: { id: duplicate.id, name: duplicate.name, created_at: duplicate.created_at } },
-        { status: 409 }
-      );
+      return NextResponse.json({ duplicate: true, existing: duplicate }, { status: 409 });
     }
   }
 
-  const sourceLabel = `${source} (manuel)`;
+  const sourceLabel = `${source} (manual)`;
   const basePayload = {
     source: sourceLabel,
     name,
     email: email || null,
-    phone,
+    phone: phone || null,
     country: country || null,
     treatment: treatment || null,
     message: note || null,

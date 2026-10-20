@@ -135,7 +135,7 @@ export default async function AdminReferralsPage({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex items-center gap-4 mb-2">
           <div>
-            <h1 className="text-2xl font-bold text-brand-dark">Referrals</h1>
+            <h1 className="text-2xl font-bold text-brand-dark">Patients</h1>
             <p className="text-sm text-gray-500 mt-1">Review and manage partner patient referrals</p>
           </div>
           <span className="ml-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-brand text-white">
@@ -304,7 +304,7 @@ export default async function AdminReferralsPage({
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           {list.length === 0 ? (
             <div className="text-center py-16 text-gray-400">
-              <p className="font-medium">No referrals found</p>
+              <p className="font-medium">No patients found</p>
             </div>
           ) : (
             <div className="overflow-x-auto">

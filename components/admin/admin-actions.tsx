@@ -97,12 +97,13 @@ export function AdminActions({
   }
 
   async function handleDelete() {
-    let confirmText = "Bu başvuruyu kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.";
+    let confirmText = "Are you sure you want to permanently delete this application? This action cannot be undone.";
     if (linkedReferralsCount > 0) {
       confirmText =
-        `Bu başvuruyu silmek, buna bağlı ${linkedReferralsCount} referral` +
-        (linkedCommissionsCount > 0 ? ` ve ${linkedCommissionsCount} komisyon` : "") +
-        ` kaydını da kalıcı olarak silecek (yüklenen dosyalar dahil). Bu işlem geri alınamaz. Devam edilsin mi?`;
+        `Deleting this application will also permanently delete ${linkedReferralsCount} linked referral` +
+        (linkedReferralsCount !== 1 ? "s" : "") +
+        (linkedCommissionsCount > 0 ? ` and ${linkedCommissionsCount} commission${linkedCommissionsCount !== 1 ? "s" : ""}` : "") +
+        ` record(s) (including uploaded files). This action cannot be undone. Continue?`;
     }
 
     if (!confirm(confirmText)) return;

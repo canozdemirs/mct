@@ -77,7 +77,7 @@ export default async function AdminReferralDetailPage({
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex items-center gap-2 text-sm text-gray-400 mb-6">
           <Link href="/admin/referrals" className="hover:text-brand transition-colors">
-            Referrals
+            Patients
           </Link>
           <span>/</span>
           <span className="text-gray-700 font-medium">{r.patient_full_name}</span>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LeadStatusSelect } from "./lead-status-select";
+import { EditLeadForm } from "./edit-lead-form";
 import type { Lead } from "@/app/(dashboard)/admin/leads/page";
 
 type ConfirmTarget = {
@@ -15,6 +16,7 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [confirmTarget, setConfirmTarget] = useState<ConfirmTarget | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [editTarget, setEditTarget] = useState<Lead | null>(null);
 
   function toggleOne(id: string) {
     setSelected((prev) => {
@@ -132,7 +134,12 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
                         />
                       </td>
                       <td className="px-5 py-4 text-gray-500 whitespace-nowrap">{formatDate(lead.created_at)}</td>
-                      <td className="px-5 py-4 font-semibold text-brand-dark">{lead.name}</td>
+                      <td className="px-5 py-4 font-semibold text-brand-dark">
+                        {lead.name}
+                        {lead.name === "Unknown" && lead.phone ? (
+                          <span className="font-normal text-gray-400"> ({lead.phone})</span>
+                        ) : null}
+                      </td>
                       <td className="px-5 py-4 text-gray-500 hidden xl:table-cell">
                         <div>{lead.email || "—"}</div>
                         <div className="text-xs text-gray-400">{lead.phone || ""}</div>
@@ -161,13 +168,22 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
                         )}
                       </td>
                       <td className="px-5 py-4">
-                        <button
-                          type="button"
-                          onClick={() => requestDeleteOne(lead)}
-                          className="px-3 py-1.5 rounded-lg border border-red-200 text-red-600 text-xs font-semibold hover:bg-red-50 transition-colors"
-                        >
-                          Delete
-                        </button>
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setEditTarget(lead)}
+                            className="px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 text-xs font-semibold hover:bg-gray-50 transition-colors"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => requestDeleteOne(lead)}
+                            className="px-3 py-1.5 rounded-lg border border-red-200 text-red-600 text-xs font-semibold hover:bg-red-50 transition-colors"
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
@@ -183,9 +199,9 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
           <div className="absolute inset-0 bg-black/50" onClick={() => !deleting && setConfirmTarget(null)} />
           <div className="relative z-10 bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
             <h3 className="text-lg font-bold text-brand-dark mb-2">
-              {confirmTarget.ids.length} kaydı silmek istediğine emin misin?
+              Are you sure you want to delete {confirmTarget.ids.length} record{confirmTarget.ids.length !== 1 ? "s" : ""}?
             </h3>
-            <p className="text-sm text-red-600 font-medium mb-4">Bu işlem geri alınamaz.</p>
+            <p className="text-sm text-red-600 font-medium mb-4">This action cannot be undone.</p>
             <ul className="max-h-48 overflow-y-auto text-sm text-gray-600 space-y-1 mb-6 border border-gray-100 rounded-xl p-3">
               {confirmTarget.rows.map((r, i) => (
                 <li key={i} className="flex justify-between gap-3">
@@ -215,6 +231,8 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
           </div>
         </div>
       )}
+
+      {editTarget && <EditLeadForm lead={editTarget} onClose={() => setEditTarget(null)} />}
     </>
   );
 }

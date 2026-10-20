@@ -1,3 +1,21 @@
+// Manual lead-entry source options, shared by the "Add new patient" /
+// "Edit" admin forms and their API routes so the two never drift apart.
+export const LEAD_SOURCE_OPTIONS = [
+  "WhatsApp",
+  "Phone",
+  "Email",
+  "Instagram/Facebook",
+  "Referral (word of mouth)",
+  "Partner",
+  "Other",
+];
+
+// Sources where a phone number is the only realistic way to reach the
+// patient back -- required even though `leads.phone` itself is nullable.
+export const LEAD_SOURCES_REQUIRING_PHONE = ["WhatsApp", "Phone"];
+
+export const UNKNOWN_LABEL = "Unknown / Not specified";
+
 export const TREATMENTS = [
   "Hair Transplant",
   "Dental Treatments",
