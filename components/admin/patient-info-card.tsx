@@ -13,6 +13,7 @@ export function PatientInfoCard({
   phone,
   email,
   treatment,
+  hospital,
   submittedAt,
 }: {
   name: string;
@@ -20,6 +21,7 @@ export function PatientInfoCard({
   phone: string | null;
   email: string | null;
   treatment: string | null;
+  hospital: string | null;
   submittedAt: string;
 }) {
   return (
@@ -33,6 +35,7 @@ export function PatientInfoCard({
         <Field label="Phone / WhatsApp" value={phone} />
         <Field label="Email" value={email} />
         <Field label="Treatment" value={treatment} />
+        <Field label="Hospital" value={hospital} />
         <Field
           label="Submitted"
           value={new Date(submittedAt).toLocaleString("en-GB", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })}

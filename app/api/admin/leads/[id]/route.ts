@@ -18,6 +18,8 @@ type EditLeadBody = {
   email?: string;
   country?: string;
   treatment?: string;
+  hospital?: string;
+  message?: string;
   internalNotes?: string;
   firstContactedAt?: string;
   force?: boolean;
@@ -51,6 +53,8 @@ export async function PATCH(
   const email = (body.email || "").trim();
   const country = (body.country || "").trim();
   const treatment = (body.treatment || "").trim();
+  const hospital = (body.hospital || "").trim();
+  const message = (body.message || "").trim();
   const internalNotes = (body.internalNotes || "").trim();
 
   const fieldError = validateLeadContactFields({ source, name, phone, email }, false);
@@ -84,6 +88,8 @@ export async function PATCH(
     phone: phone || null,
     country: country || null,
     treatment: treatment || null,
+    hospital: hospital || null,
+    message: message || null,
     internal_notes: internalNotes || null,
     first_contacted_at: firstContactedAtIso,
   };
@@ -91,14 +97,15 @@ export async function PATCH(
   const { error } = await adminSupabase.from("leads").update(updatePayload).eq("id", id);
 
   if (error) {
-    // first_contacted_at/internal_notes may not exist yet in an
+    // first_contacted_at/internal_notes/hospital may not exist yet in an
     // environment that hasn't run the relevant migration -- retry
     // without them so the rest of the edit still saves, mirroring the
     // manual-create route's graceful degradation.
     if (["42703", "PGRST204"].includes((error as { code?: string }).code ?? "")) {
-      const { first_contacted_at, internal_notes, ...fallbackPayload } = updatePayload;
+      const { first_contacted_at, internal_notes, hospital: _hospital, ...fallbackPayload } = updatePayload;
       void first_contacted_at;
       void internal_notes;
+      void _hospital;
       const { error: fallbackError } = await adminSupabase.from("leads").update(fallbackPayload).eq("id", id);
       if (fallbackError) {
         console.error("Lead update error (fallback):", fallbackError);
