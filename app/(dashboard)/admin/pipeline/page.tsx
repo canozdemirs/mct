@@ -16,6 +16,7 @@ type LeadRow = {
   status: string;
   billing_stage: string | null;
   created_at: string;
+  confirmed_at: string | null;
 };
 
 function columnFor(status: string, billingStage: string | null): PipelineColumnId | null {
@@ -59,7 +60,7 @@ export default async function SalesPipelinePage({
 
   let query = adminSupabase
     .from("leads")
-    .select("id, name, country, treatment, hospital, owner_type, partner_id, status, billing_stage, created_at")
+    .select("id, name, country, treatment, hospital, owner_type, partner_id, status, billing_stage, created_at, confirmed_at")
     .in("status", ["consultation", "treatment_planned", "treatment_completed"]);
   if (ownerType) query = query.eq("owner_type", ownerType);
   if (partnerId) query = query.eq("partner_id", partnerId);
@@ -198,6 +199,7 @@ export default async function SalesPipelinePage({
       daysInStage,
       amount: money?.amount ?? null,
       currency: money?.currency ?? null,
+      confirmedAt: lead.confirmed_at,
       column,
     });
   }

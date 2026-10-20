@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import type { Lead } from "@/app/(dashboard)/admin/leads/page";
 import { REFERRAL_STATUS_LABELS, type ReferralStatus } from "@/types";
 
@@ -35,9 +36,15 @@ type ConfirmTarget = {
 export function LeadsTable({
   leads,
   partnerNameById,
+  confirmedAtSortHref,
+  activeSort,
+  activeDir,
 }: {
   leads: Lead[];
   partnerNameById: Record<string, string>;
+  confirmedAtSortHref?: string;
+  activeSort?: string;
+  activeDir?: "asc" | "desc";
 }) {
   const router = useRouter();
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -169,6 +176,16 @@ export function LeadsTable({
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Hospital</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Source</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                    {confirmedAtSortHref ? (
+                      <Link href={confirmedAtSortHref} className="inline-flex items-center gap-1 hover:text-gray-600" onClick={(e) => e.stopPropagation()}>
+                        Confirmation date
+                        {activeSort === "confirmed_at" && <span>{activeDir === "asc" ? "↑" : "↓"}</span>}
+                      </Link>
+                    ) : (
+                      "Confirmation date"
+                    )}
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
@@ -217,6 +234,9 @@ export function LeadsTable({
                         <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[lead.status] ?? "bg-gray-100 text-gray-600"}`}>
                           {REFERRAL_STATUS_LABELS[lead.status] ?? lead.status}
                         </span>
+                      </td>
+                      <td className="px-5 py-4 text-gray-500 whitespace-nowrap">
+                        {lead.confirmed_at ? formatDate(lead.confirmed_at) : "—"}
                       </td>
                     </tr>
                   );

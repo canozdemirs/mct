@@ -56,6 +56,7 @@ type FormState = {
   patientMessage: string;
   internalNotes: string;
   firstContactedAt: string;
+  confirmedAt: string;
 };
 
 function buildFormState(lead: Lead): FormState {
@@ -74,6 +75,7 @@ function buildFormState(lead: Lead): FormState {
     patientMessage: lead.message || "",
     internalNotes: lead.internal_notes || "",
     firstContactedAt: toDateInputValue(lead.first_contacted_at),
+    confirmedAt: toDateInputValue(lead.confirmed_at),
   };
 }
 
@@ -148,6 +150,7 @@ export function PatientEditCard({ lead, partners }: { lead: Lead; partners: Part
           message: form.patientMessage,
           internalNotes: form.internalNotes,
           firstContactedAt: form.firstContactedAt || undefined,
+          confirmedAt: form.confirmedAt || undefined,
           force,
         }),
       });
@@ -278,6 +281,17 @@ export function PatientEditCard({ lead, partners }: { lead: Lead; partners: Part
               onChange={(e) => set("firstContactedAt", e.target.value)}
               className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1"
             />
+          </div>
+
+          <div>
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Confirmation date</label>
+            <input
+              type="date"
+              value={form.confirmedAt}
+              onChange={(e) => set("confirmedAt", e.target.value)}
+              className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1"
+            />
+            <p className="text-xs text-gray-400 mt-1">Auto-filled the first time this patient becomes Confirmed; editable for backdating.</p>
           </div>
 
           <div>

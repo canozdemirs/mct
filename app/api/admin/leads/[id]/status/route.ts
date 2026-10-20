@@ -44,7 +44,7 @@ export async function PATCH(
 
   const { data: existing, error: fetchError } = await adminSupabase
     .from("leads")
-    .select("id, status, owner_type, billing_stage")
+    .select("id, status, owner_type, billing_stage, confirmed_at")
     .eq("id", id)
     .single();
 
@@ -137,6 +137,15 @@ export async function PATCH(
   const updatePayload: Record<string, unknown> = { status: newStatus };
   if (newBillingStage !== undefined) {
     updatePayload.billing_stage = newBillingStage;
+  }
+
+  // Stamped automatically the first time a patient enters Confirmed --
+  // never overwritten if already set, so a manually-entered/backdated
+  // value (patient-edit-card.tsx) survives any later back-and-forth
+  // through this status.
+  const isEnteringConfirmed = newStatus === "treatment_planned" && oldStatus !== "treatment_planned";
+  if (isEnteringConfirmed && !existing.confirmed_at) {
+    updatePayload.confirmed_at = new Date().toISOString().slice(0, 10);
   }
 
   const { error: updateError } = await adminSupabase

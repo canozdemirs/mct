@@ -22,6 +22,7 @@ type EditLeadBody = {
   message?: string;
   internalNotes?: string;
   firstContactedAt?: string;
+  confirmedAt?: string;
   force?: boolean;
 };
 
@@ -71,6 +72,17 @@ export async function PATCH(
     firstContactedAtIso = parsed.toISOString();
   }
 
+  // Plain "date" column (no time component) -- stored as-is, unlike
+  // first_contacted_at (timestamptz above), so no ISO/timezone conversion.
+  let confirmedAtDate: string | null = null;
+  if (body.confirmedAt) {
+    const parsed = new Date(body.confirmedAt);
+    if (Number.isNaN(parsed.getTime())) {
+      return NextResponse.json({ error: "Invalid confirmation date." }, { status: 400 });
+    }
+    confirmedAtDate = body.confirmedAt;
+  }
+
   if (!body.force) {
     const duplicate = await findDuplicateLead(adminSupabase, phone, email, id);
     if (duplicate) {
@@ -92,20 +104,22 @@ export async function PATCH(
     message: message || null,
     internal_notes: internalNotes || null,
     first_contacted_at: firstContactedAtIso,
+    confirmed_at: confirmedAtDate,
   };
 
   const { error } = await adminSupabase.from("leads").update(updatePayload).eq("id", id);
 
   if (error) {
-    // first_contacted_at/internal_notes/hospital may not exist yet in an
-    // environment that hasn't run the relevant migration -- retry
-    // without them so the rest of the edit still saves, mirroring the
-    // manual-create route's graceful degradation.
+    // first_contacted_at/internal_notes/hospital/confirmed_at may not
+    // exist yet in an environment that hasn't run the relevant
+    // migration -- retry without them so the rest of the edit still
+    // saves, mirroring the manual-create route's graceful degradation.
     if (["42703", "PGRST204"].includes((error as { code?: string }).code ?? "")) {
-      const { first_contacted_at, internal_notes, hospital: _hospital, ...fallbackPayload } = updatePayload;
+      const { first_contacted_at, internal_notes, hospital: _hospital, confirmed_at, ...fallbackPayload } = updatePayload;
       void first_contacted_at;
       void internal_notes;
       void _hospital;
+      void confirmed_at;
       const { error: fallbackError } = await adminSupabase.from("leads").update(fallbackPayload).eq("id", id);
       if (fallbackError) {
         console.error("Lead update error (fallback):", fallbackError);

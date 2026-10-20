@@ -37,6 +37,11 @@ export function PipelineCard({
           {card.amount.toLocaleString()} {card.currency}
         </div>
       )}
+      {card.confirmedAt && (
+        <div className="text-[11px] text-gray-400 mt-1">
+          Confirmed {new Date(card.confirmedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+        </div>
+      )}
     </div>
   );
 }

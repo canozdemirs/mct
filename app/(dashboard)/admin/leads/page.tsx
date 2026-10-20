@@ -32,6 +32,7 @@ export type Lead = {
   billing_stage?: string | null;
   invoiced_at?: string | null;
   earned_at?: string | null;
+  confirmed_at?: string | null;
 };
 
 export type PartnerOption = { id: string; name: string };
@@ -39,9 +40,9 @@ export type PartnerOption = { id: string; name: string };
 export default async function AdminLeadsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ source?: string; treatment?: string; hospital?: string; status?: string; owner?: string }>;
+  searchParams: Promise<{ source?: string; treatment?: string; hospital?: string; status?: string; owner?: string; sort?: string; dir?: string }>;
 }) {
-  const { source, treatment, hospital, status, owner: ownerRaw } = await searchParams;
+  const { source, treatment, hospital, status, owner: ownerRaw, sort, dir } = await searchParams;
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -69,7 +70,7 @@ export default async function AdminLeadsPage({
 
   function withParams(extra: Record<string, string | undefined>) {
     const params = new URLSearchParams();
-    const merged = { source, treatment, hospital, status, owner: ownerRaw, ...extra };
+    const merged = { source, treatment, hospital, status, owner: ownerRaw, sort, dir, ...extra };
     for (const [k, v] of Object.entries(merged)) {
       if (v) params.set(k, v);
     }
@@ -77,7 +78,19 @@ export default async function AdminLeadsPage({
     return qs ? `/admin/leads?${qs}` : "/admin/leads";
   }
 
-  let query = adminSupabase.from("leads").select("*").order("created_at", { ascending: false });
+  // Only the Confirmation date column is sortable so far; everything
+  // else keeps the original newest-first order.
+  const sortField = sort === "confirmed_at" ? "confirmed_at" : "created_at";
+  const sortDir: "asc" | "desc" = dir === "asc" ? "asc" : "desc";
+  const confirmedAtSortHref = withParams({
+    sort: "confirmed_at",
+    dir: sortField === "confirmed_at" && sortDir === "asc" ? "desc" : "asc",
+  });
+
+  let query = adminSupabase
+    .from("leads")
+    .select("*")
+    .order(sortField, { ascending: sortDir === "asc", nullsFirst: false });
   if (source) query = query.ilike("source", `%${source}%`);
   if (treatment) query = query.ilike("treatment", `%${treatment}%`);
   if (hospital) query = query.ilike("hospital", `%${hospital}%`);
@@ -220,7 +233,13 @@ export default async function AdminLeadsPage({
           </Link>
         </form>
 
-        <LeadsTable leads={list} partnerNameById={Object.fromEntries(partnerNameById)} />
+        <LeadsTable
+          leads={list}
+          partnerNameById={Object.fromEntries(partnerNameById)}
+          confirmedAtSortHref={confirmedAtSortHref}
+          activeSort={sortField}
+          activeDir={sortDir}
+        />
 
         <div className="text-center mt-6">
           <Link href="/admin/deleted-records" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">

@@ -166,7 +166,7 @@ export async function PATCH(
     if (existing.lead_id) {
       const { data: mirroredLead } = await adminSupabase
         .from("leads")
-        .select("billing_stage")
+        .select("billing_stage, confirmed_at")
         .eq("id", existing.lead_id)
         .maybeSingle();
 
@@ -181,6 +181,12 @@ export async function PATCH(
       const mirrorUpdate: Record<string, unknown> = { status: newStatus };
       if (newBillingStage !== undefined) {
         mirrorUpdate.billing_stage = newBillingStage;
+      }
+
+      // Same "stamp once, never overwrite" rule as the MCT route.
+      const isEnteringConfirmed = newStatus === "treatment_planned" && oldStatus !== "treatment_planned";
+      if (isEnteringConfirmed && mirroredLead && !mirroredLead.confirmed_at) {
+        mirrorUpdate.confirmed_at = new Date().toISOString().slice(0, 10);
       }
 
       await adminSupabase.from("leads").update(mirrorUpdate).eq("id", existing.lead_id);
