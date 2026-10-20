@@ -26,7 +26,7 @@ export type PipelineCard = {
 
 const COLUMNS: { id: PipelineColumnId; label: string; showTotals: boolean }[] = [
   { id: "offered", label: "Offered", showTotals: false },
-  { id: "treatment_planned", label: "Treatment Planned", showTotals: false },
+  { id: "treatment_planned", label: "Confirmed", showTotals: false },
   { id: "treatment_done", label: "Treatment Done", showTotals: false },
   { id: "invoiced", label: "Invoice", showTotals: true },
   { id: "earned", label: "Earned", showTotals: true },
@@ -157,9 +157,9 @@ export function PipelineBoard({ cards }: { cards: PipelineCard[] }) {
     if (card.column === "treatment_done" && targetColumn === "treatment_planned") {
       const warningText = "Any pending revenue/commission will be cancelled; an already-received one will be flagged for reconciliation.";
       if (card.ownerType === "partner") {
-        setStatusConfirmTarget({ card, status: "treatment_planned", title: `Move "${card.name}" back to Treatment Planned?`, warningText });
+        setStatusConfirmTarget({ card, status: "treatment_planned", title: `Move "${card.name}" back to Confirmed?`, warningText });
       } else {
-        if (!confirm(`Move "${card.name}" back to Treatment Planned? ${warningText}`)) return;
+        if (!confirm(`Move "${card.name}" back to Confirmed? ${warningText}`)) return;
         callStatusRoute(card, "treatment_planned");
       }
       return;
@@ -167,7 +167,7 @@ export function PipelineBoard({ cards }: { cards: PipelineCard[] }) {
 
     if (card.column === "offered" && targetColumn === "treatment_planned") {
       if (card.ownerType === "partner") {
-        setStatusConfirmTarget({ card, status: "treatment_planned", title: `Move "${card.name}" to Treatment Planned?` });
+        setStatusConfirmTarget({ card, status: "treatment_planned", title: `Move "${card.name}" to Confirmed?` });
       } else {
         callStatusRoute(card, "treatment_planned");
       }
