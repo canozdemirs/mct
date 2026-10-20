@@ -51,7 +51,7 @@ export async function sendEmail(opts: {
 const REFERRAL_STATUS_LABELS: Record<string, string> = {
   new: "New",
   contacted: "Contacted",
-  consultation: "Consultation",
+  consultation: "Offered",
   treatment_planned: "Treatment Planned",
   treatment_completed: "Treatment Completed",
   cancelled_lost: "Cancelled / Lost",
