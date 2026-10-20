@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { ADMIN_EMAILS } from "@/lib/admin";
 import { LeadsTable } from "@/components/admin/leads-table";
+import { AddManualLeadForm } from "@/components/admin/add-manual-lead-form";
 
 export type Lead = {
   id: string;
@@ -59,10 +60,23 @@ export default async function AdminLeadsPage({
 
   const activeStatus = status || "all";
 
+  // Probe only -- determines whether the "Ref kodu" field in "Yeni hasta
+  // ekle" is shown at all. lead_attributions is a dormant table (see
+  // app/api/admin/leads/route.ts) that may not exist yet in this project;
+  // when it doesn't, PostgREST returns PGRST205 here and the field is
+  // hidden client-side instead of failing the whole form.
+  let attributionAvailable = false;
+  try {
+    const { error } = await adminSupabase.from("lead_attributions").select("reference_code").limit(1);
+    attributionAvailable = !error;
+  } catch {
+    attributionAvailable = false;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="flex items-center gap-4 mb-2">
+        <div className="flex items-center gap-4 mb-2 flex-wrap">
           <div>
             <h1 className="text-2xl font-bold text-brand-dark">Leads</h1>
             <p className="text-sm text-gray-500 mt-1">Every enquiry submitted across the marketing site</p>
@@ -70,6 +84,9 @@ export default async function AdminLeadsPage({
           <span className="ml-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-brand text-white">
             {counts.all} total
           </span>
+          <div className="ml-auto">
+            <AddManualLeadForm attributionAvailable={attributionAvailable} />
+          </div>
         </div>
         <div className="flex gap-4 mb-6">
           <Link href="/admin/partner-applications" className="text-sm text-gray-400 hover:text-brand transition-colors">
