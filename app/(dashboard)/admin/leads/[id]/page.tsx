@@ -3,11 +3,11 @@ import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient, type SupabaseClient } from "@supabase/supabase-js";
 import { ADMIN_EMAILS } from "@/lib/admin";
 import { PatientDetailHeader } from "@/components/admin/patient-detail-header";
-import { PatientInfoCard } from "@/components/admin/patient-info-card";
 import { PartnerInfoBox } from "@/components/admin/partner-info-box";
 import { SourceInfoBox, type AttributionInfo } from "@/components/admin/source-info-box";
 import { PatientNotesCard } from "@/components/admin/patient-notes-card";
 import { PatientFilesCard } from "@/components/admin/patient-files-card";
+import { PatientEditCard } from "@/components/admin/patient-edit-card";
 import { PatientStatusActions } from "@/components/admin/patient-status-actions";
 import { PatientStatusHistory } from "@/components/admin/patient-status-history";
 import { PatientDetailActions } from "@/components/admin/patient-detail-actions";
@@ -109,21 +109,14 @@ export default async function PatientDetailPage({
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <PatientDetailHeader name={referral.patient_full_name} subtitle={referral.treatment} status={referral.status} />
 
+          <PatientEditCard lead={lead} partners={partners} />
+
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
             <PartnerInfoBox
               companyName={referral.partner?.company_name ?? null}
               contactName={referral.partner?.full_name ?? null}
               email={referral.partner?.email ?? null}
               partnerType={referral.partner?.partner_type ?? null}
-            />
-            <PatientInfoCard
-              name={referral.patient_full_name}
-              country={referral.patient_country}
-              phone={referral.patient_phone}
-              email={referral.patient_email}
-              treatment={referral.treatment}
-              hospital={lead.hospital}
-              submittedAt={referral.created_at}
             />
             <PatientNotesCard title="Partner Notes" notes={referral.notes} />
             <PatientFilesCard files={signedFiles} />
@@ -146,7 +139,7 @@ export default async function PatientDetailPage({
             hasActiveCommission={!!activeCommission}
           />
 
-          <PatientDetailActions lead={lead} partners={partners} />
+          <PatientDetailActions lead={lead} />
         </div>
       </div>
     );
@@ -181,23 +174,15 @@ export default async function PatientDetailPage({
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <PatientDetailHeader name={lead.name} subtitle={lead.treatment} status={lead.status} />
 
+        <PatientEditCard lead={lead} partners={partners} />
+
+        {(referenceCode || attribution) && (
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
+            <SourceInfoBox referenceCode={referenceCode} attribution={attribution} />
+          </div>
+        )}
+
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
-          <SourceInfoBox
-            source={lead.source}
-            referenceCode={referenceCode}
-            firstContactedAt={lead.first_contacted_at ?? null}
-            attribution={attribution}
-          />
-          <PatientInfoCard
-            name={lead.name}
-            country={lead.country}
-            phone={lead.phone}
-            email={lead.email}
-            treatment={lead.treatment}
-            hospital={lead.hospital}
-            submittedAt={lead.created_at}
-          />
-          <PatientNotesCard title="Patient Message" notes={lead.message} />
           <PatientFilesCard files={signedFiles} leadId={id} />
         </div>
 
@@ -211,13 +196,7 @@ export default async function PatientDetailPage({
 
         <PatientStatusHistory entries={history ?? []} />
 
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mt-8">
-          <h3 className="text-base font-bold text-gray-900 mb-1">Internal Notes</h3>
-          <p className="text-sm text-gray-500 mb-4">Admin-only -- edit via the Edit form below.</p>
-          <p className="text-sm text-gray-800 whitespace-pre-line">{lead.internal_notes || "—"}</p>
-        </div>
-
-        <PatientDetailActions lead={lead} partners={partners} />
+        <PatientDetailActions lead={lead} />
       </div>
     </div>
   );
