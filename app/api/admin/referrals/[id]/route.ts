@@ -155,10 +155,43 @@ export async function PATCH(
 
     // Best-effort sync onto the mirrored Patients (leads) row -- leads.status
     // now shares the same 6-state range as referrals.status, so this is a
-    // direct copy. A failure here never undoes the referral/commission
-    // update that already succeeded above.
+    // direct copy. billing_stage is bundled in the same update for the
+    // same reason as the MCT route (app/api/admin/leads/[id]/status/
+    // route.ts): entering Treatment Completed always starts billing at
+    // 'treatment_done', leaving it always clears billing_stage. A
+    // failure anywhere in this block never undoes the referral/commission
+    // update that already succeeded above -- commissions.status is never
+    // touched by it.
     if (existing.lead_id) {
-      await adminSupabase.from("leads").update({ status: newStatus }).eq("id", existing.lead_id);
+      const { data: mirroredLead } = await adminSupabase
+        .from("leads")
+        .select("billing_stage")
+        .eq("id", existing.lead_id)
+        .maybeSingle();
+
+      const oldBillingStage = mirroredLead?.billing_stage ?? null;
+      let newBillingStage: string | null | undefined;
+      if (isEnteringCompleted) {
+        newBillingStage = "treatment_done";
+      } else if (isLeavingCompleted) {
+        newBillingStage = null;
+      }
+
+      const mirrorUpdate: Record<string, unknown> = { status: newStatus };
+      if (newBillingStage !== undefined) {
+        mirrorUpdate.billing_stage = newBillingStage;
+      }
+
+      await adminSupabase.from("leads").update(mirrorUpdate).eq("id", existing.lead_id);
+
+      if (newBillingStage !== undefined && newBillingStage !== oldBillingStage) {
+        await adminSupabase.from("billing_stage_history").insert({
+          lead_id: existing.lead_id,
+          old_stage: oldBillingStage,
+          new_stage: newBillingStage,
+          changed_by: user.email,
+        });
+      }
     }
   }
 

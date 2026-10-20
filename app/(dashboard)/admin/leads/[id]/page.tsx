@@ -14,7 +14,8 @@ import { PatientDetailActions } from "@/components/admin/patient-detail-actions"
 import { DetachReferralButton } from "@/components/admin/detach-referral-button";
 import { CommissionPanel } from "@/components/admin/commission-panel";
 import { RevenuePanel } from "@/components/admin/revenue-panel";
-import type { Commission, ReferralFile } from "@/types";
+import { HospitalBillingPanel } from "@/components/admin/hospital-billing-panel";
+import type { BillingStage, Commission, ReferralFile } from "@/types";
 import type { PatientRevenue } from "@/components/admin/revenue-panel";
 import type { Lead, PartnerOption } from "@/app/(dashboard)/admin/leads/page";
 
@@ -130,6 +131,18 @@ export default async function PatientDetailPage({
 
           {activeCommission && <CommissionPanel commission={activeCommission as Commission} />}
 
+          {lead.status === "treatment_completed" && (
+            <HospitalBillingPanel
+              leadId={id}
+              ownerType="partner"
+              billingStage={(lead.billing_stage as BillingStage | null) ?? "treatment_done"}
+              moneyAmount={activeCommission?.net_amount ?? null}
+              moneyCurrency={activeCommission?.currency ?? null}
+              invoicedAt={lead.invoiced_at ?? null}
+              earnedAt={lead.earned_at ?? null}
+            />
+          )}
+
           <PatientStatusHistory entries={history ?? []} />
 
           <DetachReferralButton
@@ -193,6 +206,18 @@ export default async function PatientDetailPage({
         />
 
         {activeRevenue && <RevenuePanel revenue={activeRevenue as PatientRevenue} />}
+
+        {lead.status === "treatment_completed" && (
+          <HospitalBillingPanel
+            leadId={id}
+            ownerType="mct"
+            billingStage={(lead.billing_stage as BillingStage | null) ?? "treatment_done"}
+            moneyAmount={activeRevenue?.net_amount ?? null}
+            moneyCurrency={activeRevenue?.currency ?? null}
+            invoicedAt={lead.invoiced_at ?? null}
+            earnedAt={lead.earned_at ?? null}
+          />
+        )}
 
         <PatientStatusHistory entries={history ?? []} />
 
