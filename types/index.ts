@@ -21,7 +21,7 @@ export const REFERRAL_STATUS_LABELS: Record<ReferralStatus, string> = {
   new: "New",
   contacted: "Contacted",
   consultation: "Offered",
-  treatment_planned: "Treatment Planned",
+  treatment_planned: "Confirmed",
   treatment_completed: "Treatment Completed",
   cancelled_lost: "Cancelled / Lost",
 };

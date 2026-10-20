@@ -52,7 +52,7 @@ const REFERRAL_STATUS_LABELS: Record<string, string> = {
   new: "New",
   contacted: "Contacted",
   consultation: "Offered",
-  treatment_planned: "Treatment Planned",
+  treatment_planned: "Confirmed",
   treatment_completed: "Treatment Completed",
   cancelled_lost: "Cancelled / Lost",
 };
@@ -61,7 +61,7 @@ const REFERRAL_STATUS_MESSAGES: Record<string, string> = {
   new: "Your referral has been received and is awaiting review by our team.",
   contacted: "Our team has contacted the patient to begin the coordination process.",
   consultation: "A treatment offer has been prepared and shared with the patient.",
-  treatment_planned: "A treatment plan has been prepared for the patient.",
+  treatment_planned: "The patient has confirmed the treatment.",
   treatment_completed: "The patient's treatment has been completed. Thank you for your referral.",
   cancelled_lost: "This referral has been marked as cancelled/lost. Contact us if you have questions.",
 };
