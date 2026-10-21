@@ -220,6 +220,59 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
                   </select>
                 </div>
 
+                {attributionAvailable && (
+                  <div>
+                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Add from WhatsApp (reference code)</label>
+                    <div className="flex gap-2 mt-1">
+                      <input
+                        value={refCode}
+                        onChange={(e) => {
+                          setRefCode(e.target.value);
+                          setRefLookupState("idle");
+                          setClickInfo(null);
+                        }}
+                        placeholder="MCT-A7K2P9"
+                        className="flex-1 bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm uppercase"
+                      />
+                      <button
+                        type="button"
+                        onClick={lookupRefCode}
+                        disabled={!refCode.trim() || refLookupState === "loading"}
+                        className="px-3 py-2 rounded-xl bg-gray-100 text-gray-700 text-xs font-semibold hover:bg-gray-200 disabled:opacity-50"
+                      >
+                        {refLookupState === "loading" ? "..." : "Find"}
+                      </button>
+                    </div>
+                    {refLookupState === "found" && clickInfo && (
+                      <div className="mt-2 bg-teal-50 border border-teal-100 rounded-xl p-3 text-xs space-y-1">
+                        <div>
+                          <span className="text-gray-400">Channel:</span> {clickInfo.channel}
+                        </div>
+                        {clickInfo.landing_page && (
+                          <div>
+                            <span className="text-gray-400">Page:</span> {clickInfo.landing_page}
+                          </div>
+                        )}
+                        {(clickInfo.utm_source || clickInfo.referrer_domain) && (
+                          <div>
+                            <span className="text-gray-400">Source:</span> {clickInfo.utm_source || clickInfo.referrer_domain}
+                          </div>
+                        )}
+                        {clickInfo.utm_campaign && (
+                          <div>
+                            <span className="text-gray-400">Campaign:</span> {clickInfo.utm_campaign}
+                          </div>
+                        )}
+                        <div>
+                          <span className="text-gray-400">Date:</span> {new Date(clickInfo.created_at).toLocaleString("en-GB")}
+                        </div>
+                        <p className="text-teal-700 pt-1">Source and Treatment auto-filled -- review before saving.</p>
+                      </div>
+                    )}
+                    {refLookupState === "not_found" && <p className="mt-1 text-xs text-red-500">No record found for that code.</p>}
+                  </div>
+                )}
+
                 <div>
                   <div className="flex items-center justify-between">
                     <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Full name *</label>
@@ -319,59 +372,6 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
                     className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1"
                   />
                 </div>
-
-                {attributionAvailable && (
-                  <div>
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Add from WhatsApp (reference code)</label>
-                    <div className="flex gap-2 mt-1">
-                      <input
-                        value={refCode}
-                        onChange={(e) => {
-                          setRefCode(e.target.value);
-                          setRefLookupState("idle");
-                          setClickInfo(null);
-                        }}
-                        placeholder="MCT-A7K2P9"
-                        className="flex-1 bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm uppercase"
-                      />
-                      <button
-                        type="button"
-                        onClick={lookupRefCode}
-                        disabled={!refCode.trim() || refLookupState === "loading"}
-                        className="px-3 py-2 rounded-xl bg-gray-100 text-gray-700 text-xs font-semibold hover:bg-gray-200 disabled:opacity-50"
-                      >
-                        {refLookupState === "loading" ? "..." : "Find"}
-                      </button>
-                    </div>
-                    {refLookupState === "found" && clickInfo && (
-                      <div className="mt-2 bg-teal-50 border border-teal-100 rounded-xl p-3 text-xs space-y-1">
-                        <div>
-                          <span className="text-gray-400">Channel:</span> {clickInfo.channel}
-                        </div>
-                        {clickInfo.landing_page && (
-                          <div>
-                            <span className="text-gray-400">Page:</span> {clickInfo.landing_page}
-                          </div>
-                        )}
-                        {(clickInfo.utm_source || clickInfo.referrer_domain) && (
-                          <div>
-                            <span className="text-gray-400">Source:</span> {clickInfo.utm_source || clickInfo.referrer_domain}
-                          </div>
-                        )}
-                        {clickInfo.utm_campaign && (
-                          <div>
-                            <span className="text-gray-400">Campaign:</span> {clickInfo.utm_campaign}
-                          </div>
-                        )}
-                        <div>
-                          <span className="text-gray-400">Date:</span> {new Date(clickInfo.created_at).toLocaleString("en-GB")}
-                        </div>
-                        <p className="text-teal-700 pt-1">Source/Treatment auto-filled below -- review before saving.</p>
-                      </div>
-                    )}
-                    {refLookupState === "not_found" && <p className="mt-1 text-xs text-red-500">No record found for that code.</p>}
-                  </div>
-                )}
 
                 {formError && <p className="text-sm text-red-600">{formError}</p>}
 

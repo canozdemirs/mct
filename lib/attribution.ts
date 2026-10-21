@@ -414,6 +414,22 @@ function appendPageContext(message: string): string {
 }
 
 /**
+ * Every WhatsApp entry point that hasn't collected any patient input yet
+ * (floating button, contact bar, the 12 landing pages' hero CTAs, the
+ * post-submit "message us" CTA) passes the shared WHATSAPP_GENERIC_MESSAGE
+ * constant verbatim. Centralizing the page-awareness here, rather than
+ * editing each of those call sites individually, guarantees it can never
+ * be missed at one of them -- same reasoning as appendPageContext() above.
+ * A caller that already built its own specific message (the consultation/
+ * landing forms, which include the patient's own answers) is untouched.
+ */
+function resolveGenericMessage(message: string): string {
+  if (message !== WHATSAPP_GENERIC_MESSAGE || typeof window === "undefined") return message;
+  const treatment = guessTreatmentFromPath(window.location.pathname);
+  return treatment ? `Hello, I would like information about ${treatment}.` : message;
+}
+
+/**
  * Opens the WhatsApp transition route synchronously, in direct response to
  * a user click (must be called from inside the click handler itself, with
  * no `await` before it -- that is what keeps this from being treated as a
@@ -425,7 +441,7 @@ function appendPageContext(message: string): string {
  * current tab otherwise.
  */
 export function openWhatsAppTransition(message: string): void {
-  writePendingWhatsAppMessage(appendPageContext(message));
+  writePendingWhatsAppMessage(appendPageContext(resolveGenericMessage(message)));
   captureWhatsAppClickContext();
   // Fired exactly once per call -- this function is the single, shared
   // entry point used by all 15 WhatsApp links/buttons on the site, so
