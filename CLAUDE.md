@@ -188,6 +188,16 @@ Sensitive tables default to `service_role`-only access. An `authenticated` grant
 - `referrals`, `commissions`: approved exception. `authenticated` partners may read/write only rows tied to their own `partner_id` (resolved server-side via `current_partner_id()`, never client-supplied), enforced by RLS plus column-level grants — e.g. a partner can see a commission's final amount and status but never the net amount, institution, or percentage behind it, and can edit a referral's patient-facing fields only while it is still `status = 'new'`.
 - Anonymous (`anon`) access to all five partner/referral tables is prohibited.
 
+## Supabase tablo izinleri (30 Ekim 2026 sonrası zorunlu)
+
+public şemada yeni bir tablo oluşturduğunda, aynı migration/SQL içinde mutlaka GRANT ekle:
+
+- service_role: select, insert, update, delete (her zaman)
+- authenticated: sadece gerekiyorsa
+- anon: sadece herkese açık okunacak veriyse (select). Hasta/lead/CRM verisi içeren tablolara ASLA anon izni verme.
+
+Her yeni tabloda RLS'i etkinleştir. Grant eklemeden tablo oluşturma.
+
 ---
 
 # Legacy Platform
