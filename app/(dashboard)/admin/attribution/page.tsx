@@ -75,22 +75,51 @@ async function fetchAttributionRecord(
     .eq("reference_code", code)
     .maybeSingle();
 
-  if (!error) return data as AttributionRecord | null;
+  if (!error && data) return data as AttributionRecord;
 
-  // Phase 5K-C columns not migrated yet -- fall back to the base set so
-  // this page keeps working against the pre-5K-C schema too.
-  const code_ = (error as { code?: string }).code;
-  if (code_ === "42703" || code_ === "PGRST204") {
-    const { data: baseData } = await adminSupabase
-      .from("lead_attributions")
-      .select(BASE_COLUMNS)
-      .eq("reference_code", code)
-      .maybeSingle();
-    return baseData as AttributionRecord | null;
+  if (error) {
+    // Phase 5K-C columns not migrated yet -- fall back to the base set so
+    // this page keeps working against the pre-5K-C schema too.
+    const code_ = (error as { code?: string }).code;
+    if (code_ === "42703" || code_ === "PGRST204") {
+      const { data: baseData } = await adminSupabase
+        .from("lead_attributions")
+        .select(BASE_COLUMNS)
+        .eq("reference_code", code)
+        .maybeSingle();
+      if (baseData) return baseData as AttributionRecord;
+    }
+    // Any other error, including PGRST205 (table doesn't exist -- it
+    // never has in this project), falls through to the contact_clicks
+    // lookup below.
   }
 
-  console.error("Admin attribution lookup error:", error);
-  return null;
+  // 2026-10-21: whatsapp/email codes are no longer written to
+  // lead_attributions at all (see supabase/migrations/contact_clicks.sql
+  // and app/api/attribution/route.ts) -- every code not found above is
+  // looked up there instead, normalized into the same shape this page
+  // already renders. inferred_channel has no equivalent here (contact_clicks
+  // doesn't classify a channel, only records what was literally observed),
+  // so it's left undefined -- the UI already renders that as "UNKNOWN".
+  const { data: clickData } = await adminSupabase
+    .from("contact_clicks")
+    .select("reference_code, channel, created_at, lead_id, landing_page, referrer_domain, utm_source, utm_medium, utm_campaign")
+    .eq("reference_code", code)
+    .maybeSingle();
+
+  if (!clickData) return null;
+  return {
+    reference_code: clickData.reference_code,
+    channel: clickData.channel,
+    created_at: clickData.created_at,
+    status: clickData.lead_id ? "lead_confirmed" : "contact_initiated",
+    lead_id: clickData.lead_id,
+    last_touch_utm_source: clickData.utm_source,
+    last_touch_utm_medium: clickData.utm_medium,
+    last_touch_utm_campaign: clickData.utm_campaign,
+    last_touch_landing_page: clickData.landing_page,
+    last_touch_referrer: clickData.referrer_domain,
+  } as AttributionRecord;
 }
 
 export default async function AdminAttributionPage({

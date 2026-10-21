@@ -17,7 +17,11 @@ export type AttributionInfo = {
 
 // Read-only, system-captured evidence -- "Source" itself (the channel
 // label) and "First contact date" are now editable fields on
-// patient-edit-card.tsx instead of being shown here.
+// patient-edit-card.tsx instead of being shown here. Landing Page/UTM
+// values come primarily from leads.landing_page/utm_* (parsed server-side
+// from page_url at submit time, unconditional); the lead_attributions
+// pipeline (consent-gated, client-side-only) is only a fallback for
+// whatever that one doesn't have.
 export function SourceInfoBox({
   referenceCode,
   attribution,
@@ -25,7 +29,7 @@ export function SourceInfoBox({
   referenceCode: string | null;
   attribution: AttributionInfo | null;
 }) {
-  if (!referenceCode) return null;
+  if (!referenceCode && !attribution) return null;
 
   return (
     <div className="mb-6">
@@ -33,7 +37,7 @@ export function SourceInfoBox({
         Attribution
       </div>
       <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        <Field label="Reference Code" value={referenceCode} />
+        {referenceCode && <Field label="Reference Code" value={referenceCode} />}
         {attribution && (
           <>
             <Field label="Landing Page" value={attribution.landingPage} />
@@ -43,7 +47,7 @@ export function SourceInfoBox({
         )}
       </dl>
       {!attribution && (
-        <p className="text-xs text-gray-400 mt-3">No attribution evidence captured for this reference code (no consent, or it predates attribution tracking).</p>
+        <p className="text-xs text-gray-400 mt-3">No attribution evidence captured for this lead (predates attribution tracking).</p>
       )}
     </div>
   );

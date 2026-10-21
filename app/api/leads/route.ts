@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { sendEmail } from "@/lib/email";
 import { validateRequiredLeadFields } from "@/lib/validation";
 import { reserveReferenceCode, createReferenceCodeWithRetry, isPlausibleTouchPayload, type TouchPayload } from "@/lib/attribution-server";
+import { parsePageUrlAttribution, parseReferrerDomain } from "@/lib/parse-page-url";
+import type { SessionEntry } from "@/lib/session-entry";
 
 const ADMIN_RECIPIENT = "hello@medicalcenterturkey.com";
 const WHATSAPP_LINK = "https://wa.me/908508888911";
@@ -85,7 +87,15 @@ type LeadPayload = {
   // own sanitization -- never trusted or interpreted here.
   firstTouch?: unknown;
   sessionTouch?: unknown;
+  // Unconditional (no consent gate), first-touch-of-session capture --
+  // see lib/session-entry.ts. Untrusted browser input, loosely validated
+  // below, same posture as page_url itself.
+  sessionEntry?: unknown;
 };
+
+function isPlausibleSessionEntry(value: unknown): value is Partial<SessionEntry> {
+  return typeof value === "object" && value !== null;
+}
 
 function buildAdminEmail(lead: LeadPayload & { id: string }) {
   const rows: Array<[string, string]> = [
@@ -258,22 +268,55 @@ export async function POST(req: NextRequest) {
     return null;
   });
 
-  const { data: inserted, error: insertError } = await adminSupabase
+  // Parsed straight from the current page's page_url -- unconditional, no
+  // consent gate, independent of the separate (currently unapplied)
+  // lead_attributions pipeline. The session's original entry touch (if
+  // captured -- see lib/session-entry.ts) takes priority over this when
+  // present, since it survives the visitor browsing to another page
+  // before submitting; this is only the fallback for when it wasn't
+  // captured (sessionStorage unavailable) or genuinely matches.
+  const pageUrlAttribution = parsePageUrlAttribution(body.page_url);
+  const sessionEntry = isPlausibleSessionEntry(body.sessionEntry) ? body.sessionEntry : null;
+  const referrerDomain = parseReferrerDomain(typeof sessionEntry?.referrer === "string" ? sessionEntry.referrer : null);
+
+  const insertPayload = {
+    source,
+    name,
+    email: email || null,
+    phone: phone || null,
+    country: country || null,
+    treatment: body.treatment || null,
+    message: body.message || null,
+    details: { ...(body.details || {}), ...(referenceCode ? { reference_code: referenceCode } : {}) },
+    page_url: body.page_url || null,
+    consent: !!body.consent,
+    landing_page: (typeof sessionEntry?.landingPage === "string" && sessionEntry.landingPage) || pageUrlAttribution.landingPage,
+    utm_source: (typeof sessionEntry?.utmSource === "string" && sessionEntry.utmSource) || pageUrlAttribution.utmSource,
+    utm_medium: (typeof sessionEntry?.utmMedium === "string" && sessionEntry.utmMedium) || pageUrlAttribution.utmMedium,
+    utm_campaign: (typeof sessionEntry?.utmCampaign === "string" && sessionEntry.utmCampaign) || pageUrlAttribution.utmCampaign,
+    referrer_domain: referrerDomain,
+  };
+
+  let { data: inserted, error: insertError } = await adminSupabase
     .from("leads")
-    .insert({
-      source,
-      name,
-      email: email || null,
-      phone: phone || null,
-      country: country || null,
-      treatment: body.treatment || null,
-      message: body.message || null,
-      details: { ...(body.details || {}), ...(referenceCode ? { reference_code: referenceCode } : {}) },
-      page_url: body.page_url || null,
-      consent: !!body.consent,
-    })
+    .insert(insertPayload)
     .select("id")
     .single();
+
+  // landing_page/utm_*/referrer_domain may not exist yet in an environment
+  // that hasn't run the relevant migration -- retry without them so the
+  // lead still saves.
+  if (insertError && ["42703", "PGRST204"].includes((insertError as { code?: string }).code ?? "")) {
+    const { landing_page, utm_source, utm_medium, utm_campaign, referrer_domain, ...fallbackPayload } = insertPayload;
+    void landing_page;
+    void utm_source;
+    void utm_medium;
+    void utm_campaign;
+    void referrer_domain;
+    const retry = await adminSupabase.from("leads").insert(fallbackPayload).select("id").single();
+    inserted = retry.data;
+    insertError = retry.error;
+  }
 
   if (insertError || !inserted) {
     console.error("Lead insert error:", insertError);

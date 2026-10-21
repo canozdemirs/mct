@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
-import { isValidChannel } from "@/lib/attribution";
-import { createReferenceCodeWithRetry, checkAttributionRateLimit, isPlausibleTouchPayload, type TouchPayload } from "@/lib/attribution-server";
+import { isValidChannel, type WhatsAppClickContext } from "@/lib/attribution";
+import { createContactClick, checkAttributionRateLimit } from "@/lib/attribution-server";
 
 // Phase 5K-A: generates a reference code for the whatsapp/email channels
 // (the form channel generates its own code server-side inside
@@ -11,18 +11,23 @@ import { createReferenceCodeWithRetry, checkAttributionRateLimit, isPlausibleTou
 // never should be -- staff lookup is a separate, authenticated,
 // server-side-authorized page (app/(dashboard)/admin/attribution).
 //
-// Phase 5K-C: optionally accepts first-touch/session-touch marketing
-// evidence (lib/attribution.ts's getCapturedAttribution() output) -- only
-// ever whatever the CLIENT already captured under consent (see
-// captureTouchIfConsented()); this route does not decide consent itself,
-// it just stores what it's handed. Every field is treated as untrusted,
+// 2026-10-21: the code + its click evidence (landing page, UTM, referrer
+// domain, best-effort treatment guess -- lib/attribution.ts's
+// captureWhatsAppClickContext()) are now persisted to contact_clicks,
+// unconditionally (no consent gate, same posture as leads.page_url).
+// This replaced an attempt to write into lead_attributions, which is
+// consent-gated multi-touch infrastructure that was never actually
+// applied to this database -- every reference code generated before this
+// change was silently unrecorded. Every field is treated as untrusted,
 // unverified browser input (see attribution-server.ts's sanitizeField) --
 // never as confirmed campaign data.
 
 // Same best-effort, resets-on-cold-start pattern as /api/leads -- a cheap
 // first line of defense against one warm instance being hammered.
-// attribution_rate_limits.sql (not yet applied) is the cross-instance
-// second layer once deployed.
+// checkAttributionRateLimit() below (attribution_rate_limits.sql) is the
+// cross-instance second layer -- required reading before touching this
+// file if that migration isn't applied yet: it degrades to "always
+// allowed" rather than blocking this public, unauthenticated endpoint.
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 5;
 const rateLimitLog = new Map<string, number[]>();
@@ -35,8 +40,12 @@ function isRateLimited(ip: string): boolean {
   return recent.length > RATE_LIMIT_MAX;
 }
 
+function isPlausibleClickContext(value: unknown): value is WhatsAppClickContext {
+  return typeof value === "object" && value !== null;
+}
+
 export async function POST(req: NextRequest) {
-  let body: { channel?: unknown; firstTouch?: unknown; sessionTouch?: unknown };
+  let body: { channel?: unknown; clickContext?: unknown };
   try {
     body = await req.json();
   } catch {
@@ -64,10 +73,9 @@ export async function POST(req: NextRequest) {
 
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, serviceRoleKey);
 
-  // Cross-instance rate limit. Security requirement explicitly allows this
-  // control to be prepared now and activated once attribution_rate_limits
-  // is applied to a real database -- until then, a missing table is caught
-  // and logged, never allowed to block the patient-facing action.
+  // Cross-instance rate limit (supabase/migrations/attribution_rate_limits.sql).
+  // A missing table (that migration not yet applied) is caught and
+  // logged, never allowed to block the patient-facing action.
   try {
     const result = await checkAttributionRateLimit(supabase, ip, serviceRoleKey);
     if (!result.allowed) {
@@ -77,12 +85,9 @@ export async function POST(req: NextRequest) {
     console.error("Attribution rate-limit check failed (table likely not yet deployed):", err);
   }
 
-  const touch = {
-    firstTouch: isPlausibleTouchPayload(body.firstTouch) ? (body.firstTouch as TouchPayload) : null,
-    sessionTouch: isPlausibleTouchPayload(body.sessionTouch) ? (body.sessionTouch as TouchPayload) : null,
-  };
+  const clickContext = isPlausibleClickContext(body.clickContext) ? body.clickContext : null;
 
-  const code = await createReferenceCodeWithRetry(supabase, body.channel, undefined, undefined, touch);
+  const code = await createContactClick(supabase, body.channel, clickContext);
   if (!code) {
     // Never a hard failure for the caller -- the WhatsApp/email flow's own
     // fallback (no Ref: line) covers this exactly as it covers a timeout.

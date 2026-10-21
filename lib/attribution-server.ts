@@ -12,7 +12,9 @@ import {
   inferChannel,
   type AttributionChannel,
   type AttributionEvidence,
+  type WhatsAppClickContext,
 } from "./attribution.ts";
+import { parseReferrerDomain } from "./parse-page-url.ts";
 
 const MAX_CODE_RETRIES = 5;
 const MAX_FIELD_LENGTH = 500;
@@ -183,6 +185,45 @@ export async function reserveReferenceCode(supabase: SupabaseClient): Promise<st
   // unlikely), returning the last-generated code is still safe: the real
   // insert in createReferenceCodeWithRetry() has its own collision retry.
   return generateReferenceCode();
+}
+
+/**
+ * Generates a reference code and inserts a new contact_clicks row --
+ * the whatsapp/email counterpart of the form channel's reference-code
+ * system, which lives in lead_attributions (see createReferenceCodeWithRetry
+ * above). Deliberately a SEPARATE, simpler table rather than resurrecting
+ * lead_attributions for this: that one is consent-gated multi-touch
+ * infrastructure not yet applied to this database, whereas contact_clicks
+ * only needs one unconditional snapshot per click (2026-10-21 decision).
+ * Same null-tolerant posture as createReferenceCodeWithRetry: a failure
+ * here must never block the patient from reaching WhatsApp.
+ */
+export async function createContactClick(
+  supabase: SupabaseClient,
+  channel: "whatsapp" | "email",
+  context: WhatsAppClickContext | null
+): Promise<string | null> {
+  const row = {
+    channel,
+    landing_page: sanitizeField(context?.landingPage),
+    referrer_domain: parseReferrerDomain(context?.referrer ?? null),
+    utm_source: sanitizeField(context?.utmSource),
+    utm_medium: sanitizeField(context?.utmMedium),
+    utm_campaign: sanitizeField(context?.utmCampaign),
+    treatment: sanitizeField(context?.treatment),
+  };
+
+  for (let attempt = 0; attempt < MAX_CODE_RETRIES; attempt++) {
+    const code = generateReferenceCode();
+    const { error } = await supabase.from("contact_clicks").insert({ reference_code: code, ...row });
+    if (!error) return code;
+    if ((error as { code?: string }).code !== "23505") {
+      console.error("contact_clicks insert error (non-collision):", error);
+      return null;
+    }
+  }
+  console.error(`contact_clicks: exhausted ${MAX_CODE_RETRIES} reference-code collision retries`);
+  return null;
 }
 
 const RATE_LIMIT_WINDOW_MS = 60_000;

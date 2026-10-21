@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { ADMIN_EMAILS } from "@/lib/admin";
-import { isValidReferenceCodeFormat, type InferredChannel } from "@/lib/attribution";
+import { isValidReferenceCodeFormat } from "@/lib/attribution";
 import { validateLeadContactFields, findDuplicateLead } from "@/lib/admin-lead-helpers";
 
 function adminClient() {
@@ -22,48 +22,37 @@ async function requireAdmin() {
   return user;
 }
 
-// --- GET: look up a reference code's click info before linking it to a
-// manually-entered lead. Mirrors app/(dashboard)/admin/attribution/page.tsx's
-// fetchAttributionRecord fallback (Phase 5K-C columns -> Phase 5K-A base
-// columns if that migration isn't applied yet). Any other error (including
-// PGRST205 if the table doesn't exist at all) is treated as "not found" --
-// the form already hides this field entirely when the table is inaccessible
-// (checked once, server-side, on page load), so this is just a second line
-// of defense, not the primary gate.
+// --- GET: look up a reference code's click info (contact_clicks -- see
+// supabase/migrations/contact_clicks.sql) before linking it to a
+// manually-entered lead, powering the "Add from WhatsApp" flow in
+// add-manual-lead-form.tsx. Any error (including PGRST205 if the
+// migration hasn't been run yet) is treated as "not found" -- the form
+// already hides this field entirely when the table is inaccessible
+// (checked once, server-side, on page load), so this is just a second
+// line of defense, not the primary gate.
 type ClickInfo = {
   reference_code: string;
-  channel: "whatsapp" | "email" | "form";
+  channel: "whatsapp" | "email";
   created_at: string;
   lead_id: string | null;
-  inferred_channel?: InferredChannel | null;
-  last_touch_landing_page?: string | null;
-  last_touch_utm_source?: string | null;
-  last_touch_utm_campaign?: string | null;
+  landing_page: string | null;
+  referrer_domain: string | null;
+  utm_source: string | null;
+  utm_campaign: string | null;
+  treatment: string | null;
 };
 
-const BASE_COLUMNS = "reference_code, channel, created_at, lead_id";
-const SOURCE_COLUMNS = "inferred_channel, last_touch_landing_page, last_touch_utm_source, last_touch_utm_campaign";
+const CLICK_COLUMNS = "reference_code, channel, created_at, lead_id, landing_page, referrer_domain, utm_source, utm_campaign, treatment";
 
 async function fetchClickInfo(adminSupabase: SupabaseClient, code: string): Promise<ClickInfo | null> {
   const { data, error } = await adminSupabase
-    .from("lead_attributions")
-    .select(`${BASE_COLUMNS}, ${SOURCE_COLUMNS}`)
+    .from("contact_clicks")
+    .select(CLICK_COLUMNS)
     .eq("reference_code", code)
     .maybeSingle();
 
-  if (!error) return data as ClickInfo | null;
-
-  const code_ = (error as { code?: string }).code;
-  if (code_ === "42703" || code_ === "PGRST204") {
-    const { data: baseData } = await adminSupabase
-      .from("lead_attributions")
-      .select(BASE_COLUMNS)
-      .eq("reference_code", code)
-      .maybeSingle();
-    return baseData as ClickInfo | null;
-  }
-
-  return null;
+  if (error) return null;
+  return data as ClickInfo | null;
 }
 
 export async function GET(req: NextRequest) {
@@ -94,7 +83,6 @@ type ManualLeadBody = {
   country?: string;
   treatment?: string;
   internalNotes?: string;
-  firstContactedAt?: string;
   refCode?: string;
   force?: boolean;
 };
@@ -127,15 +115,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "That reference code doesn't look valid (expected format: MCT-XXXXXX)." }, { status: 400 });
   }
 
-  let firstContactedAtIso: string | null = null;
-  if (body.firstContactedAt) {
-    const parsed = new Date(body.firstContactedAt);
-    if (Number.isNaN(parsed.getTime())) {
-      return NextResponse.json({ error: "Invalid first-contact date." }, { status: 400 });
-    }
-    firstContactedAtIso = parsed.toISOString();
-  }
-
   const adminSupabase = adminClient();
 
   if (!body.force) {
@@ -159,12 +138,14 @@ export async function POST(req: NextRequest) {
     consent: false,
   };
 
-  // is_manual / first_contacted_at require supabase/migrations/leads_manual_entry.sql
-  // to have been run. If it hasn't yet, PostgREST returns 42703/PGRST204 for
-  // the unknown columns -- retry without them so the lead is still saved,
-  // same graceful-degradation pattern as lib/attribution-server.ts's
-  // createReferenceCodeWithRetry.
-  const fullPayload = { ...basePayload, is_manual: true, first_contacted_at: firstContactedAtIso };
+  // is_manual requires supabase/migrations/leads_manual_entry.sql to have
+  // been run. If it hasn't yet, PostgREST returns 42703/PGRST204 for the
+  // unknown column -- retry without it so the lead is still saved, same
+  // graceful-degradation pattern as lib/attribution-server.ts's
+  // createReferenceCodeWithRetry. first_contacted_at is no longer set
+  // here at all -- "Registered Date" is now a DB-level default (now()),
+  // never a manually picked value (supabase/migrations/contact_clicks.sql).
+  const fullPayload = { ...basePayload, is_manual: true };
 
   let inserted: { id: string } | null = null;
   const { data: fullInsert, error: fullError } = await adminSupabase
@@ -194,11 +175,11 @@ export async function POST(req: NextRequest) {
   if (refCode && inserted) {
     // Best-effort link -- supabase-js never throws here, it returns
     // { error }, which is deliberately ignored: a missing/inaccessible
-    // lead_attributions table (PGRST205) or an unmatched code must never
+    // contact_clicks table (PGRST205) or an unmatched code must never
     // undo the lead that was already saved above.
     await adminSupabase
-      .from("lead_attributions")
-      .update({ lead_id: inserted.id, status: "lead_confirmed" })
+      .from("contact_clicks")
+      .update({ lead_id: inserted.id })
       .eq("reference_code", refCode);
   }
 

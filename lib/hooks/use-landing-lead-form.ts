@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useCountryDialCode } from "./use-country-dial-code";
 import { validateRequiredLeadFields, type LeadFieldErrors } from "@/lib/validation";
 import { openWhatsAppTransition, getCapturedAttribution } from "@/lib/attribution";
+import { getSessionEntry } from "@/lib/session-entry";
 import { trackGenerateLead } from "@/lib/analytics";
 
 export type LandingLeadFormState = {
@@ -72,6 +73,7 @@ export function useLandingLeadForm(treatment: string) {
           details: form.pkg ? { package: form.pkg } : undefined,
           consent: agreed,
           page_url: typeof window !== "undefined" ? window.location.href : undefined,
+          sessionEntry: getSessionEntry(),
           ...getCapturedAttribution(),
         }),
       });

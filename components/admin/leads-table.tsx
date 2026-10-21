@@ -175,6 +175,7 @@ export function LeadsTable({
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Treatment</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Hospital</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Source</th>
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Channel</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                     {confirmedAtSortHref ? (
@@ -230,6 +231,9 @@ export function LeadsTable({
                       <td className="px-5 py-4 text-gray-700">{lead.treatment || "—"}</td>
                       <td className="px-5 py-4 text-gray-500">{lead.hospital || "—"}</td>
                       <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">{lead.source}</td>
+                      <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">
+                        {lead.owner_type === "partner" ? "—" : lead.utm_source || lead.referrer_domain || "Direct"}
+                      </td>
                       <td className="px-5 py-4">
                         <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[lead.status] ?? "bg-gray-100 text-gray-600"}`}>
                           {REFERRAL_STATUS_LABELS[lead.status] ?? lead.status}

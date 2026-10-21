@@ -8,6 +8,7 @@
 
 import { createHmac, randomBytes } from "crypto";
 import { trackWhatsAppInitiated } from "./analytics.ts";
+import { getSessionEntry } from "./session-entry.ts";
 
 export type AttributionChannel = "whatsapp" | "email" | "form";
 
@@ -116,6 +117,84 @@ export function readAndClearPendingWhatsAppMessage(): string | null {
     if (typeof parsed.message !== "string" || typeof parsed.createdAt !== "number") return null;
     if (Date.now() - parsed.createdAt > WHATSAPP_PENDING_MAX_AGE_MS) return null;
     return parsed.message;
+  } catch {
+    return null;
+  }
+}
+
+const WHATSAPP_CLICK_CONTEXT_KEY = "mct_wa_click_context";
+const WHATSAPP_CLICK_CONTEXT_MAX_AGE_MS = 60_000;
+
+export type WhatsAppClickContext = {
+  landingPage: string | null;
+  referrer: string | null;
+  utmSource: string | null;
+  utmMedium: string | null;
+  utmCampaign: string | null;
+  treatment: string | null;
+};
+
+// Best-effort, auto-derived from the page's own path -- mirrors the
+// labels in components/marketing/CostCalculator.tsx's TREATMENT_OPTIONS,
+// duplicated here (rather than imported) to keep this server-safe pure
+// module decoupled from a "use client" marketing component. Pages that
+// aren't treatment-specific (homepage, pricing overview, blog posts)
+// correctly resolve to null -- the admin "Add from WhatsApp" flow still
+// lets staff pick/correct the treatment manually either way.
+const PATH_TO_TREATMENT: Record<string, string> = {
+  "/hair-transplant-packages": "Hair Transplant",
+  "/rhinoplasty-turkey": "Rhinoplasty",
+  "/breast-augmentation-turkey": "Breast Augmentation",
+  "/gynecomastia-turkey": "Gynecomastia",
+  "/dental-implants-turkey": "Dental Implant",
+  "/all-on-4-dental-implants-turkey": "All-on-4 Dental Implants",
+  "/blepharoplasty-turkey": "Blepharoplasty",
+  "/liposuction-turkey": "Liposuction",
+  "/lasik-eye-surgery-turkey": "LASIK Eye Surgery",
+  "/cataract-surgery-turkey": "Cataract Surgery",
+  "/ivf-treatment-turkey": "IVF",
+  "/medical-check-up-turkey": "Check-Up",
+};
+
+function guessTreatmentFromPath(pathname: string): string | null {
+  return PATH_TO_TREATMENT[pathname] ?? null;
+}
+
+/** Captures the clicked-from page's own landing page/UTM, the session's
+ * original entry referrer (lib/session-entry.ts -- more meaningful than
+ * document.referrer at this point if the visitor has already navigated
+ * internally), and a best-effort treatment guess. Stored the same
+ * short-lived way as the pending message (localStorage, max age 60s) so
+ * the /go/whatsapp transition page can read it after navigating. */
+function captureWhatsAppClickContext(): void {
+  if (typeof window === "undefined") return;
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const context: WhatsAppClickContext = {
+      landingPage: window.location.pathname || null,
+      referrer: getSessionEntry()?.referrer ?? (document.referrer || null),
+      utmSource: params.get("utm_source"),
+      utmMedium: params.get("utm_medium"),
+      utmCampaign: params.get("utm_campaign"),
+      treatment: guessTreatmentFromPath(window.location.pathname),
+    };
+    window.localStorage.setItem(WHATSAPP_CLICK_CONTEXT_KEY, JSON.stringify({ context, createdAt: Date.now() }));
+  } catch {
+    // Same non-fatal posture as writePendingWhatsAppMessage -- the
+    // transition page's own fallback covers a missing context.
+  }
+}
+
+export function readAndClearWhatsAppClickContext(): WhatsAppClickContext | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(WHATSAPP_CLICK_CONTEXT_KEY);
+    if (!raw) return null;
+    window.localStorage.removeItem(WHATSAPP_CLICK_CONTEXT_KEY);
+    const parsed = JSON.parse(raw) as { context: WhatsAppClickContext; createdAt: number };
+    if (typeof parsed.createdAt !== "number") return null;
+    if (Date.now() - parsed.createdAt > WHATSAPP_CLICK_CONTEXT_MAX_AGE_MS) return null;
+    return parsed.context;
   } catch {
     return null;
   }
@@ -347,6 +426,7 @@ function appendPageContext(message: string): string {
  */
 export function openWhatsAppTransition(message: string): void {
   writePendingWhatsAppMessage(appendPageContext(message));
+  captureWhatsAppClickContext();
   // Fired exactly once per call -- this function is the single, shared
   // entry point used by all 15 WhatsApp links/buttons on the site, so
   // centralizing the event push here (rather than at each call site)

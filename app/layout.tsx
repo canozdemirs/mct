@@ -6,6 +6,7 @@ import { ConsentDefaultInit } from "@/components/analytics/consent-default-init"
 import { GoogleTagManager } from "@/components/analytics/google-tag-manager";
 import { RouteChangeTracker } from "@/components/analytics/route-change-tracker";
 import { AttributionCapture } from "@/components/analytics/attribution-capture";
+import { SessionEntryCapture } from "@/components/analytics/session-entry-capture";
 import { ConsentBanner } from "@/components/analytics/consent-banner";
 import "./globals.css";
 
@@ -69,6 +70,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col overflow-x-hidden">
         <ConsentDefaultInit />
         <GoogleTagManager />
+        <SessionEntryCapture />
         <Suspense fallback={null}>
           <RouteChangeTracker />
           <AttributionCapture />
