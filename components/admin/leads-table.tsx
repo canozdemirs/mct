@@ -4,7 +4,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { Lead } from "@/app/(dashboard)/admin/leads/page";
+import { computePatientChannel } from "@/lib/patient-channel";
 import { REFERRAL_STATUS_LABELS, type ReferralStatus } from "@/types";
+
+export type SortField = "first_contacted_at" | "name" | "treatment" | "status" | "confirmed_at";
 
 const STATUS_COLORS: Record<ReferralStatus, string> = {
   new: "bg-yellow-100 text-yellow-800",
@@ -36,14 +39,14 @@ type ConfirmTarget = {
 export function LeadsTable({
   leads,
   partnerNameById,
-  confirmedAtSortHref,
+  sortHrefs,
   activeSort,
   activeDir,
 }: {
   leads: Lead[];
   partnerNameById: Record<string, string>;
-  confirmedAtSortHref?: string;
-  activeSort?: string;
+  sortHrefs: Partial<Record<SortField, string>>;
+  activeSort?: SortField;
   activeDir?: "asc" | "desc";
 }) {
   const router = useRouter();
@@ -67,6 +70,17 @@ export function LeadsTable({
 
   function formatDate(iso: string) {
     return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  }
+
+  function SortableHeader({ field, label }: { field: SortField; label: string }) {
+    const href = sortHrefs[field];
+    if (!href) return <>{label}</>;
+    return (
+      <Link href={href} className="inline-flex items-center gap-1 hover:text-gray-600" onClick={(e) => e.stopPropagation()}>
+        {label}
+        {activeSort === field && <span>{activeDir === "asc" ? "↑" : "↓"}</span>}
+      </Link>
+    );
   }
 
   function fallbackRows(ids: string[]): DeletePreviewRow[] {
@@ -167,25 +181,26 @@ export function LeadsTable({
                       className="accent-brand"
                     />
                   </th>
-                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Date</th>
-                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Name</th>
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap">
+                    <SortableHeader field="first_contacted_at" label="Registered Date" />
+                  </th>
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                    <SortableHeader field="name" label="Name" />
+                  </th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden xl:table-cell">Contact</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Owner</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden md:table-cell">Country</th>
-                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Treatment</th>
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                    <SortableHeader field="treatment" label="Treatment" />
+                  </th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Hospital</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Source</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Channel</th>
-                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                    {confirmedAtSortHref ? (
-                      <Link href={confirmedAtSortHref} className="inline-flex items-center gap-1 hover:text-gray-600" onClick={(e) => e.stopPropagation()}>
-                        Confirmation date
-                        {activeSort === "confirmed_at" && <span>{activeDir === "asc" ? "↑" : "↓"}</span>}
-                      </Link>
-                    ) : (
-                      "Confirmation date"
-                    )}
+                    <SortableHeader field="status" label="Status" />
+                  </th>
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap">
+                    <SortableHeader field="confirmed_at" label="Confirmation date" />
                   </th>
                 </tr>
               </thead>
@@ -207,7 +222,7 @@ export function LeadsTable({
                           className="accent-brand"
                         />
                       </td>
-                      <td className="px-5 py-4 text-gray-500 whitespace-nowrap">{formatDate(lead.created_at)}</td>
+                      <td className="px-5 py-4 text-gray-500 whitespace-nowrap">{formatDate(lead.first_contacted_at ?? lead.created_at)}</td>
                       <td className="px-5 py-4 font-semibold text-brand-dark">
                         {lead.name}
                         {lead.name === "Unknown" && lead.phone ? (
@@ -231,9 +246,7 @@ export function LeadsTable({
                       <td className="px-5 py-4 text-gray-700">{lead.treatment || "—"}</td>
                       <td className="px-5 py-4 text-gray-500">{lead.hospital || "—"}</td>
                       <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">{lead.source}</td>
-                      <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">
-                        {lead.owner_type === "partner" ? "—" : lead.utm_source || lead.referrer_domain || "Direct"}
-                      </td>
+                      <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">{computePatientChannel(lead)}</td>
                       <td className="px-5 py-4">
                         <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[lead.status] ?? "bg-gray-100 text-gray-600"}`}>
                           {REFERRAL_STATUS_LABELS[lead.status] ?? lead.status}

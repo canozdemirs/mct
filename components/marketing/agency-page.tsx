@@ -680,7 +680,7 @@ function RightPanel() {
     }
 
     if (ADMIN_EMAILS.includes(data.user.email ?? "")) {
-      router.push("/admin/partner-applications");
+      router.push("/admin/leads");
       return;
     }
 
