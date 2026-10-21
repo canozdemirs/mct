@@ -33,6 +33,11 @@ export type Lead = {
   invoiced_at?: string | null;
   earned_at?: string | null;
   confirmed_at?: string | null;
+  landing_page?: string | null;
+  utm_source?: string | null;
+  utm_medium?: string | null;
+  utm_campaign?: string | null;
+  referrer_domain?: string | null;
 };
 
 export type PartnerOption = { id: string; name: string };
@@ -134,14 +139,14 @@ export default async function AdminLeadsPage({
   const { data: unsyncedReferrals } = await adminSupabase.from("referrals").select("id").is("lead_id", null);
   const unsyncedCount = unsyncedReferrals?.length ?? 0;
 
-  // Probe only -- determines whether the "Reference code" field in "Add
-  // new patient" is shown at all. lead_attributions is a dormant table
-  // (see app/api/admin/leads/route.ts) that may not exist yet in this
+  // Probe only -- determines whether the "Add from WhatsApp (reference
+  // code)" field in "Add new patient" is shown at all. contact_clicks
+  // (supabase/migrations/contact_clicks.sql) may not exist yet in this
   // project; when it doesn't, PostgREST returns PGRST205 here and the
   // field is hidden client-side instead of failing the whole form.
   let attributionAvailable = false;
   try {
-    const { error } = await adminSupabase.from("lead_attributions").select("reference_code").limit(1);
+    const { error } = await adminSupabase.from("contact_clicks").select("reference_code").limit(1);
     attributionAvailable = !error;
   } catch {
     attributionAvailable = false;

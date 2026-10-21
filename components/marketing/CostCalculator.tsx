@@ -8,6 +8,7 @@ import { FormSuccessMessage } from "@/components/marketing/form-success-message"
 import { useCountryDialCode } from "@/lib/hooks/use-country-dial-code";
 import { validateRequiredLeadFields, type LeadFieldErrors } from "@/lib/validation";
 import { openWhatsAppTransition, getCapturedAttribution } from "@/lib/attribution";
+import { getSessionEntry } from "@/lib/session-entry";
 import { trackGenerateLead } from "@/lib/analytics";
 
 /**
@@ -408,6 +409,7 @@ export default function CostCalculator() {
           details: leadDetails(),
           consent: agreed,
           page_url: typeof window !== "undefined" ? window.location.href : undefined,
+          sessionEntry: getSessionEntry(),
           ...getCapturedAttribution(),
         }),
       });

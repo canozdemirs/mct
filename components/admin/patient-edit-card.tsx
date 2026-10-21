@@ -32,6 +32,11 @@ function toDateInputValue(iso: string | null | undefined) {
   return iso.slice(0, 10);
 }
 
+function formatDisplayDate(iso: string | null | undefined) {
+  if (!iso) return "—";
+  return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+}
+
 // Country/Treatment are plain <select>s with a fixed option list -- if an
 // existing lead's stored value isn't in that list (an older free-text
 // value, or a value this list has since dropped), it's appended so the
@@ -55,7 +60,6 @@ type FormState = {
   hospitalOther: string;
   patientMessage: string;
   internalNotes: string;
-  firstContactedAt: string;
   confirmedAt: string;
 };
 
@@ -74,7 +78,6 @@ function buildFormState(lead: Lead): FormState {
     hospitalOther: h.other,
     patientMessage: lead.message || "",
     internalNotes: lead.internal_notes || "",
-    firstContactedAt: toDateInputValue(lead.first_contacted_at),
     confirmedAt: toDateInputValue(lead.confirmed_at),
   };
 }
@@ -149,7 +152,6 @@ export function PatientEditCard({ lead, partners }: { lead: Lead; partners: Part
           hospital: resolvedHospital,
           message: form.patientMessage,
           internalNotes: form.internalNotes,
-          firstContactedAt: form.firstContactedAt || undefined,
           confirmedAt: form.confirmedAt || undefined,
           force,
         }),
@@ -274,13 +276,11 @@ export function PatientEditCard({ lead, partners }: { lead: Lead; partners: Part
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">First contact date</label>
-            <input
-              type="date"
-              value={form.firstContactedAt}
-              onChange={(e) => set("firstContactedAt", e.target.value)}
-              className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1"
-            />
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Registered Date</label>
+            <p className="text-sm text-gray-700 mt-1 px-3 py-2 bg-gray-50 border border-gray-100 rounded-xl">
+              {formatDisplayDate(lead.first_contacted_at ?? lead.created_at)}
+            </p>
+            <p className="text-xs text-gray-400 mt-1">Set automatically when this patient was registered (form or WhatsApp) -- not editable.</p>
           </div>
 
           <div>

@@ -9,18 +9,17 @@ import { useCountryDialCode } from "@/lib/hooks/use-country-dial-code";
 
 type ClickInfo = {
   reference_code: string;
-  channel: string;
+  channel: "whatsapp" | "email";
   created_at: string;
   lead_id: string | null;
-  inferred_channel?: string | null;
-  last_touch_utm_campaign?: string | null;
+  landing_page: string | null;
+  referrer_domain: string | null;
+  utm_source: string | null;
+  utm_campaign: string | null;
+  treatment: string | null;
 };
 
 type DuplicateInfo = { id: string; name: string; created_at: string };
-
-function todayIso() {
-  return new Date().toISOString().slice(0, 10);
-}
 
 function clientFieldError(source: string, name: string, phone: string, email: string): string | null {
   if (!source) return "Please select a source.";
@@ -48,7 +47,6 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
   const [country, setCountry] = useState("");
   const [treatment, setTreatment] = useState("");
   const [internalNotes, setInternalNotes] = useState("");
-  const [firstContactedAt, setFirstContactedAt] = useState(todayIso);
   const [refCode, setRefCode] = useState("");
   const [clickInfo, setClickInfo] = useState<ClickInfo | null>(null);
   const [refLookupState, setRefLookupState] = useState<"idle" | "loading" | "found" | "not_found">("idle");
@@ -68,7 +66,6 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
     setCountry("");
     setTreatment("");
     setInternalNotes("");
-    setFirstContactedAt(todayIso());
     setRefCode("");
     setClickInfo(null);
     setRefLookupState("idle");
@@ -90,8 +87,17 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
       const res = await fetch(`/api/admin/leads/manual?ref=${encodeURIComponent(code)}`);
       if (res.ok) {
         const json = await res.json();
-        setClickInfo(json.record);
+        const record = json.record as ClickInfo;
+        setClickInfo(record);
         setRefLookupState("found");
+        // Auto-fill Source/Treatment from the click evidence -- "page" has
+        // no dedicated field on this form, so it's shown read-only below
+        // instead. Name/phone are deliberately left for the staff member
+        // to type in themselves (never captured client-side).
+        setSource(record.channel === "whatsapp" ? "WhatsApp" : "Email");
+        if (record.treatment && TREATMENT_OPTIONS.includes(record.treatment)) {
+          setTreatment(record.treatment);
+        }
       } else {
         setClickInfo(null);
         setRefLookupState("not_found");
@@ -117,7 +123,6 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
           country,
           treatment,
           internalNotes,
-          firstContactedAt,
           refCode: refCode.trim() || undefined,
           force,
         }),
@@ -315,19 +320,9 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
                   />
                 </div>
 
-                <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">First contact date</label>
-                  <input
-                    type="date"
-                    value={firstContactedAt}
-                    onChange={(e) => setFirstContactedAt(e.target.value)}
-                    className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1"
-                  />
-                </div>
-
                 {attributionAvailable && (
                   <div>
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Reference code (optional)</label>
+                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Add from WhatsApp (reference code)</label>
                     <div className="flex gap-2 mt-1">
                       <input
                         value={refCode}
@@ -353,19 +348,25 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
                         <div>
                           <span className="text-gray-400">Channel:</span> {clickInfo.channel}
                         </div>
-                        {clickInfo.inferred_channel && (
+                        {clickInfo.landing_page && (
                           <div>
-                            <span className="text-gray-400">Source:</span> {clickInfo.inferred_channel}
+                            <span className="text-gray-400">Page:</span> {clickInfo.landing_page}
                           </div>
                         )}
-                        {clickInfo.last_touch_utm_campaign && (
+                        {(clickInfo.utm_source || clickInfo.referrer_domain) && (
                           <div>
-                            <span className="text-gray-400">Campaign:</span> {clickInfo.last_touch_utm_campaign}
+                            <span className="text-gray-400">Source:</span> {clickInfo.utm_source || clickInfo.referrer_domain}
+                          </div>
+                        )}
+                        {clickInfo.utm_campaign && (
+                          <div>
+                            <span className="text-gray-400">Campaign:</span> {clickInfo.utm_campaign}
                           </div>
                         )}
                         <div>
                           <span className="text-gray-400">Date:</span> {new Date(clickInfo.created_at).toLocaleString("en-GB")}
                         </div>
+                        <p className="text-teal-700 pt-1">Source/Treatment auto-filled below -- review before saving.</p>
                       </div>
                     )}
                     {refLookupState === "not_found" && <p className="mt-1 text-xs text-red-500">No record found for that code.</p>}

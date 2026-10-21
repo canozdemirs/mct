@@ -160,7 +160,22 @@ export default async function PatientDetailPage({
 
   // owner_type === "mct"
   const referenceCode = typeof lead.details?.reference_code === "string" ? lead.details.reference_code : null;
-  const attribution = referenceCode ? await fetchAttribution(adminSupabase, referenceCode) : null;
+  const fallbackAttribution = referenceCode ? await fetchAttribution(adminSupabase, referenceCode) : null;
+
+  // leads.landing_page/utm_* (parsed server-side from page_url at submit
+  // time, unconditional) take priority; lead_attributions.last_touch_*
+  // (consent-gated, client-side-only) only fills in what that doesn't have.
+  const hasOwnAttribution = !!(lead.landing_page || lead.utm_source || lead.utm_medium || lead.utm_campaign);
+  const attribution: AttributionInfo | null =
+    hasOwnAttribution || fallbackAttribution
+      ? {
+          channel: fallbackAttribution?.channel ?? null,
+          landingPage: lead.landing_page ?? fallbackAttribution?.landingPage ?? null,
+          utmSource: lead.utm_source ?? fallbackAttribution?.utmSource ?? null,
+          utmMedium: lead.utm_medium ?? fallbackAttribution?.utmMedium ?? null,
+          utmCampaign: lead.utm_campaign ?? fallbackAttribution?.utmCampaign ?? null,
+        }
+      : null;
 
   const signedFiles = await Promise.all(
     ((lead.files as unknown as ReferralFile[]) ?? []).map(async (f) => {

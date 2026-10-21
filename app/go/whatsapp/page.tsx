@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   readAndClearPendingWhatsAppMessage,
+  readAndClearWhatsAppClickContext,
   buildWhatsAppUrl,
   WHATSAPP_GENERIC_MESSAGE,
   getCapturedAttribution,
@@ -53,12 +54,13 @@ export default function WhatsAppTransitionPage() {
     const timeoutId = window.setTimeout(() => redirect(null), TIMEOUT_MS);
 
     const { firstTouch, sessionTouch } = getCapturedAttribution();
+    const clickContext = readAndClearWhatsAppClickContext();
 
     fetch("/api/attribution", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       keepalive: true,
-      body: JSON.stringify({ channel: "whatsapp", firstTouch, sessionTouch }),
+      body: JSON.stringify({ channel: "whatsapp", firstTouch, sessionTouch, clickContext }),
     })
       .then((res) => (res.ok ? res.json() : null))
       .then((json: { code?: string } | null) => {

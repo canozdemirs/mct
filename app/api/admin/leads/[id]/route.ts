@@ -21,7 +21,6 @@ type EditLeadBody = {
   hospital?: string;
   message?: string;
   internalNotes?: string;
-  firstContactedAt?: string;
   confirmedAt?: string;
   force?: boolean;
 };
@@ -63,17 +62,8 @@ export async function PATCH(
     return NextResponse.json({ error: fieldError }, { status: 400 });
   }
 
-  let firstContactedAtIso: string | null = null;
-  if (body.firstContactedAt) {
-    const parsed = new Date(body.firstContactedAt);
-    if (Number.isNaN(parsed.getTime())) {
-      return NextResponse.json({ error: "Invalid first-contact date." }, { status: 400 });
-    }
-    firstContactedAtIso = parsed.toISOString();
-  }
-
-  // Plain "date" column (no time component) -- stored as-is, unlike
-  // first_contacted_at (timestamptz above), so no ISO/timezone conversion.
+  // Plain "date" column (no time component) -- stored as-is, no
+  // ISO/timezone conversion.
   let confirmedAtDate: string | null = null;
   if (body.confirmedAt) {
     const parsed = new Date(body.confirmedAt);
@@ -103,20 +93,20 @@ export async function PATCH(
     hospital: hospital || null,
     message: message || null,
     internal_notes: internalNotes || null,
-    first_contacted_at: firstContactedAtIso,
     confirmed_at: confirmedAtDate,
   };
 
   const { error } = await adminSupabase.from("leads").update(updatePayload).eq("id", id);
 
   if (error) {
-    // first_contacted_at/internal_notes/hospital/confirmed_at may not
-    // exist yet in an environment that hasn't run the relevant
-    // migration -- retry without them so the rest of the edit still
-    // saves, mirroring the manual-create route's graceful degradation.
+    // internal_notes/hospital/confirmed_at may not exist yet in an
+    // environment that hasn't run the relevant migration -- retry
+    // without them so the rest of the edit still saves, mirroring the
+    // manual-create route's graceful degradation. first_contacted_at is
+    // no longer settable here at all -- "Registered Date" is a DB-level
+    // default now, never a manually picked value.
     if (["42703", "PGRST204"].includes((error as { code?: string }).code ?? "")) {
-      const { first_contacted_at, internal_notes, hospital: _hospital, confirmed_at, ...fallbackPayload } = updatePayload;
-      void first_contacted_at;
+      const { internal_notes, hospital: _hospital, confirmed_at, ...fallbackPayload } = updatePayload;
       void internal_notes;
       void _hospital;
       void confirmed_at;
