@@ -188,6 +188,7 @@ export function LeadsTable({
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                     <SortableHeader field="name" label="Name" />
                   </th>
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Source</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden xl:table-cell">Contact</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Owner</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden md:table-cell">Country</th>
@@ -195,8 +196,6 @@ export function LeadsTable({
                     <SortableHeader field="treatment" label="Treatment" />
                   </th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Hospital</th>
-                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell whitespace-nowrap">Form / Page</th>
-                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Source</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Channel</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                     <SortableHeader field="status" label="Status" />
@@ -204,6 +203,7 @@ export function LeadsTable({
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap">
                     <SortableHeader field="confirmed_at" label="Confirmation date" />
                   </th>
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell whitespace-nowrap">Form / Page</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
@@ -231,6 +231,7 @@ export function LeadsTable({
                           <span className="font-normal text-gray-400"> ({lead.phone})</span>
                         ) : null}
                       </td>
+                      <td className="px-5 py-4 text-gray-500">{lead.acquisition_source ?? computePatientSource(lead)}</td>
                       <td className="px-5 py-4 text-gray-500 hidden xl:table-cell">
                         <div>{lead.email || "—"}</div>
                         <div className="text-xs text-gray-400">{lead.phone || ""}</div>
@@ -247,8 +248,6 @@ export function LeadsTable({
                       <td className="px-5 py-4 text-gray-500 hidden md:table-cell">{lead.country || "—"}</td>
                       <td className="px-5 py-4 text-gray-700">{lead.treatment || "—"}</td>
                       <td className="px-5 py-4 text-gray-500">{lead.hospital || "—"}</td>
-                      <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">{lead.source}</td>
-                      <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">{lead.acquisition_source ?? computePatientSource(lead)}</td>
                       <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">{lead.channel ?? computePatientChannel(lead)}</td>
                       <td className="px-5 py-4">
                         <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[lead.status] ?? "bg-gray-100 text-gray-600"}`}>
@@ -258,6 +257,7 @@ export function LeadsTable({
                       <td className="px-5 py-4 text-gray-500 whitespace-nowrap">
                         {lead.confirmed_at ? formatDate(lead.confirmed_at) : "—"}
                       </td>
+                      <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">{lead.source}</td>
                     </tr>
                   );
                 })}

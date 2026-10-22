@@ -143,6 +143,14 @@ export function PatientsFilters({
       />
 
       <div className="flex flex-wrap gap-3">
+        <select value={acqSource} onChange={(e) => updateParams({ acqSource: e.target.value || undefined })} className={SELECT_CLASS}>
+          <option value="">All sources</option>
+          {acqSourceOptions.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
         <select value={owner} onChange={(e) => updateParams({ owner: e.target.value === "all" ? undefined : e.target.value })} className={SELECT_CLASS}>
           <option value="all">All owners</option>
           <option value="mct">MCT (direct)</option>
@@ -166,14 +174,6 @@ export function PatientsFilters({
           placeholder="Hospital"
           className="bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm text-gray-700 w-40"
         />
-        <select value={source} onChange={(e) => updateParams({ source: e.target.value || undefined })} className={SELECT_CLASS}>
-          <option value="">All forms / pages</option>
-          {sourceOptions.map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
-        </select>
         <select value={country} onChange={(e) => updateParams({ country: e.target.value || undefined })} className={SELECT_CLASS}>
           <option value="">All countries</option>
           {countryOptions.map((c) => (
@@ -182,11 +182,11 @@ export function PatientsFilters({
             </option>
           ))}
         </select>
-        <select value={acqSource} onChange={(e) => updateParams({ acqSource: e.target.value || undefined })} className={SELECT_CLASS}>
-          <option value="">All sources</option>
-          {acqSourceOptions.map((c) => (
-            <option key={c} value={c}>
-              {c}
+        <select value={source} onChange={(e) => updateParams({ source: e.target.value || undefined })} className={SELECT_CLASS}>
+          <option value="">All forms / pages</option>
+          {sourceOptions.map((s) => (
+            <option key={s} value={s}>
+              {s}
             </option>
           ))}
         </select>
