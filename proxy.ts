@@ -4,6 +4,7 @@ import { BLOG_SLUGS } from "@/lib/blog-slugs.generated";
 import { isGonePath } from "@/lib/gone-paths";
 import { getLegacyRedirect } from "@/lib/legacy-redirects";
 import { resolveEmbeddedUrlRedirect, resolveTrailingJunkRedirect } from "@/lib/malformed-url-redirects";
+import { GONE_PAGE_HTML } from "@/lib/gone-page";
 import { isProductionHost } from "@/lib/site-host";
 
 // Next.js 16 renamed `middleware.ts` to `proxy.ts` (same API, same
@@ -44,10 +45,17 @@ import { isProductionHost } from "@/lib/site-host";
 // route (verified before writing lib/gone-paths.ts), so this can never
 // shadow /medical-tourism-turkey, /medicaltourismturkey, a blog post, a
 // hospital page, or a treatment page.
+// Search Console follow-up (2026-10-22): branded HTML body instead of
+// plain text -- see lib/gone-page.ts for why this has to be a static
+// string rather than a rendered page. Status stays 410; the page's own
+// <meta name="robots" content="noindex"> is unconditional (unlike
+// withRobotsTag's X-Robots-Tag header below, which only fires off the
+// production host) since a 410 should never be indexable regardless of
+// host.
 function goneResponse() {
-  return new NextResponse("Gone", {
+  return new NextResponse(GONE_PAGE_HTML, {
     status: 410,
-    headers: { "Content-Type": "text/plain; charset=utf-8" },
+    headers: { "Content-Type": "text/html; charset=utf-8" },
   });
 }
 

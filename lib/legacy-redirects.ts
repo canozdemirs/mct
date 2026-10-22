@@ -82,6 +82,14 @@ export const LEGACY_REDIRECTS: Readonly<Record<string, string>> = {
   "tounge-cancer": "/tongue-cancer",
   "everything-you-need-to-know-about-dht": "/everything-you-need-to-know-about-dht-blockers",
 
+  // Search Console follow-up (2026-10-22): the old free-consultation
+  // landing page -> the homepage's own consultation section
+  // (components/marketing/contact-faq.tsx renders id="consultation" and
+  // is included on app/page.tsx). The WordPress oEmbed variant
+  // (/request-a-free-consultation/embed) stays 410 -- see
+  // lib/gone-paths.ts's EMBED_ONLY_GONE_SLUGS.
+  "request-a-free-consultation": "/#consultation",
+
   // Search Console follow-up (2026-10-22): WordPress-era comment/trackback
   // style suffix on an otherwise-valid slug. Covers both the single- and
   // double-slash variant reported (/dhi-vs-fue-hair-transplant-procedures/1000

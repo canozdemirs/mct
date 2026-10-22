@@ -18,14 +18,16 @@
 //    a whole-prefix rule is safe and also covers any sub-path WordPress
 //    might have had under them that the sitemap crawl didn't catch.
 //
-// 2. GONE_EXACT_SLUGS — the remaining 37 "page"-group 410 rows (18
-//    medical-park-* competitor hospital pages + 19 one-off retired pages:
-//    old order/checkout flow, old doctor-profile index, old free-consult
-//    page, etc.). These do NOT share one universally-safe prefix across
-//    the whole set, so each is matched exactly rather than by a wildcard —
-//    same rule as above, applied conservatively.
+// 2. GONE_EXACT_SLUGS — the remaining 36 "page"-group 410 rows (18
+//    medical-park-* competitor hospital pages + 18 one-off retired pages:
+//    old order/checkout flow, old doctor-profile index, etc.). These do
+//    NOT share one universally-safe prefix across the whole set, so each
+//    is matched exactly rather than by a wildcard — same rule as above,
+//    applied conservatively.
 //
-// 142 (prefixes) + 37 (exact) = 179, matching the spreadsheet's total.
+// 142 (prefixes) + 36 (exact) = 178; the spreadsheet's original 179 also
+// included request-a-free-consultation, moved out to a 301 — see the
+// 2026-10-22 changelog entry below.
 //
 // Separately, GTRANSLATE_PREFIXES (/tr, /fr, /de) is NOT from the
 // spreadsheet — the sitemap crawl never saw these because the live
@@ -79,6 +81,15 @@
 // belongs here rather than in that set), plus draft/profile/sitemap/
 // sitemap.html/step-by-step/test (WordPress placeholder/leftover pages
 // with no real content on either site).
+//
+// Search Console follow-up (2026-10-22): request-a-free-consultation
+// removed from GONE_EXACT_SLUGS -- the live site now has a real
+// consultation entry point (the homepage's #consultation section), so
+// this is a 301 in lib/legacy-redirects.ts instead of a 410. Its
+// WordPress oEmbed variant (.../embed) has no equivalent and stays 410 --
+// EMBED_ONLY_GONE_SLUGS below exists so that one sub-path can keep 410ing
+// without the base slug being in GONE_EXACT_SLUGS (where it would also
+// make the base slug 410, contradicting the 301).
 
 export const GONE_PREFIXES: ReadonlySet<string> = new Set([
   "tag",
@@ -99,6 +110,10 @@ export const PHASE_5E_ORGAN_TRANSPLANT_REMOVALS: ReadonlySet<string> = new Set([
   "how-long-is-bone-marrow-transplant",
   "kidney-transplant-in-turkey",
   "how-much-is-a-kidney-transplant-surgery",
+]);
+
+export const EMBED_ONLY_GONE_SLUGS: ReadonlySet<string> = new Set([
+  "request-a-free-consultation",
 ]);
 
 export const GONE_EXACT_SLUGS: ReadonlySet<string> = new Set([
@@ -135,7 +150,6 @@ export const GONE_EXACT_SLUGS: ReadonlySet<string> = new Set([
   "our-doctors",
   "our-video",
   "pricing-tables",
-  "request-a-free-consultation",
   "temporary-title-18924",
   "test-cost-calculator",
   "the-best-clinics-in-turkey",
@@ -188,10 +202,18 @@ export function isGonePath(segments: string[]): boolean {
   if (last === "feed") return true;
   if (segments.length === 1 && GONE_EXACT_SLUGS.has(first)) return true;
   if (segments.length === 1 && PHASE_5E_ORGAN_TRANSPLANT_REMOVALS.has(first)) return true;
-  // WordPress's auto-generated oEmbed variant of an already-gone single-
-  // segment page/post (e.g. request-a-free-consultation/embed) -- never
-  // a distinct page in its own right, so it rides along with whatever
-  // the base slug already resolves to.
-  if (segments.length === 2 && last === "embed" && GONE_EXACT_SLUGS.has(segments[0])) return true;
+  // WordPress's auto-generated oEmbed variant of a gone single-segment
+  // page/post -- never a distinct page in its own right, so it rides
+  // along with whatever the base slug already resolves to. Checked
+  // against both sets: GONE_EXACT_SLUGS for slugs that are still 410 at
+  // the base path too, and EMBED_ONLY_GONE_SLUGS for ones whose base slug
+  // now redirects elsewhere (e.g. request-a-free-consultation/embed stays
+  // 410 even though /request-a-free-consultation itself is now a 301).
+  if (
+    segments.length === 2 &&
+    last === "embed" &&
+    (GONE_EXACT_SLUGS.has(segments[0]) || EMBED_ONLY_GONE_SLUGS.has(segments[0]))
+  )
+    return true;
   return false;
 }
