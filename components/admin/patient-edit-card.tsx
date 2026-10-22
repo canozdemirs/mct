@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { COUNTRIES, LEAD_SOURCE_OPTIONS, UNKNOWN_LABEL } from "@/lib/constants";
+import { COUNTRIES, UNKNOWN_LABEL } from "@/lib/constants";
 import { TREATMENT_OPTIONS } from "@/components/marketing/consultation-form";
 import { isValidEmail } from "@/lib/validation";
 import { hospitals, hospitalGroups } from "@/lib/hospitals";
+import { computePatientSource, SOURCE_CATEGORIES } from "@/lib/patient-source";
 import type { Lead, PartnerOption } from "@/app/(dashboard)/admin/leads/page";
 
 const NOT_DECIDED = "Not decided yet";
@@ -61,6 +62,7 @@ type FormState = {
   patientMessage: string;
   internalNotes: string;
   confirmedAt: string;
+  sourceOverride: string;
 };
 
 function buildFormState(lead: Lead): FormState {
@@ -79,6 +81,7 @@ function buildFormState(lead: Lead): FormState {
     patientMessage: lead.message || "",
     internalNotes: lead.internal_notes || "",
     confirmedAt: toDateInputValue(lead.confirmed_at),
+    sourceOverride: lead.source_override || "",
   };
 }
 
@@ -102,6 +105,19 @@ export function PatientEditCard({ lead, partners }: { lead: Lead; partners: Part
   const [converting, setConverting] = useState(false);
 
   const isDirty = JSON.stringify(form) !== JSON.stringify(initialRef.current);
+
+  // What the automatic rules would produce on their own, ignoring any
+  // existing override -- shown in the "Auto" option so staff can see
+  // what they'd be overriding before picking something else.
+  const detectedSource = computePatientSource({
+    owner_type: lead.owner_type,
+    source: lead.source,
+    utm_source: lead.utm_source,
+    utm_medium: lead.utm_medium,
+    referrer_domain: lead.referrer_domain,
+    google_click_id: lead.google_click_id,
+    source_override: null,
+  });
 
   useEffect(() => {
     function handleBeforeUnload(e: BeforeUnloadEvent) {
@@ -153,6 +169,10 @@ export function PatientEditCard({ lead, partners }: { lead: Lead; partners: Part
           message: form.patientMessage,
           internalNotes: form.internalNotes,
           confirmedAt: form.confirmedAt || undefined,
+          // Always sent, even empty -- an empty value must explicitly
+          // clear a previously-set override back to "Auto", not be
+          // skipped (which would leave the old override in place).
+          sourceOverride: form.sourceOverride,
           force,
         }),
       });
@@ -260,19 +280,25 @@ export function PatientEditCard({ lead, partners }: { lead: Lead; partners: Part
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Source *</label>
-            <input
-              value={form.source}
-              onChange={(e) => set("source", e.target.value)}
-              list="lead-source-suggestions"
-              required
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Source</label>
+            <select
+              value={form.sourceOverride}
+              onChange={(e) => set("sourceOverride", e.target.value)}
               className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm mt-1"
-            />
-            <datalist id="lead-source-suggestions">
-              {LEAD_SOURCE_OPTIONS.map((s) => (
-                <option key={s} value={s} />
+            >
+              <option value="">{`Auto (detected: ${detectedSource})`}</option>
+              {SOURCE_CATEGORIES.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
               ))}
-            </datalist>
+            </select>
+            <p className="text-xs text-gray-400 mt-1">Overrides the automatically detected acquisition category for this patient.</p>
+          </div>
+
+          <div>
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Form / Page</label>
+            <p className="text-sm text-gray-700 mt-1 px-3 py-2 bg-gray-50 border border-gray-100 rounded-xl">{form.source || "—"}</p>
           </div>
 
           <div>

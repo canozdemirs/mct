@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { ADMIN_EMAILS } from "@/lib/admin";
 import { validateLeadContactFields, findDuplicateLead } from "@/lib/admin-lead-helpers";
+import { SOURCE_CATEGORIES } from "@/lib/patient-source";
 
 // Full-field edit for a Patients row, either owner type. Status is
 // deliberately NOT handled here -- it moved to
@@ -22,6 +23,7 @@ type EditLeadBody = {
   message?: string;
   internalNotes?: string;
   confirmedAt?: string;
+  sourceOverride?: string;
   force?: boolean;
 };
 
@@ -73,6 +75,11 @@ export async function PATCH(
     confirmedAtDate = body.confirmedAt;
   }
 
+  const sourceOverrideValue = (body.sourceOverride || "").trim();
+  if (sourceOverrideValue && !(SOURCE_CATEGORIES as readonly string[]).includes(sourceOverrideValue)) {
+    return NextResponse.json({ error: "Invalid source override category." }, { status: 400 });
+  }
+
   if (!body.force) {
     const duplicate = await findDuplicateLead(adminSupabase, phone, email, id);
     if (duplicate) {
@@ -94,22 +101,24 @@ export async function PATCH(
     message: message || null,
     internal_notes: internalNotes || null,
     confirmed_at: confirmedAtDate,
+    source_override: sourceOverrideValue || null,
   };
 
   const { error } = await adminSupabase.from("leads").update(updatePayload).eq("id", id);
 
   if (error) {
-    // internal_notes/hospital/confirmed_at may not exist yet in an
-    // environment that hasn't run the relevant migration -- retry
-    // without them so the rest of the edit still saves, mirroring the
-    // manual-create route's graceful degradation. first_contacted_at is
-    // no longer settable here at all -- "Registered Date" is a DB-level
-    // default now, never a manually picked value.
+    // internal_notes/hospital/confirmed_at/source_override may not exist
+    // yet in an environment that hasn't run the relevant migration --
+    // retry without them so the rest of the edit still saves, mirroring
+    // the manual-create route's graceful degradation. first_contacted_at
+    // is no longer settable here at all -- "Registered Date" is a
+    // DB-level default now, never a manually picked value.
     if (["42703", "PGRST204"].includes((error as { code?: string }).code ?? "")) {
-      const { internal_notes, hospital: _hospital, confirmed_at, ...fallbackPayload } = updatePayload;
+      const { internal_notes, hospital: _hospital, confirmed_at, source_override, ...fallbackPayload } = updatePayload;
       void internal_notes;
       void _hospital;
       void confirmed_at;
+      void source_override;
       const { error: fallbackError } = await adminSupabase.from("leads").update(fallbackPayload).eq("id", id);
       if (fallbackError) {
         console.error("Lead update error (fallback):", fallbackError);

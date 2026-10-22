@@ -48,6 +48,7 @@ export type Lead = {
   google_click_id?: string | null;
   channel?: string | null;
   acquisition_source?: string | null;
+  source_override?: string | null;
 };
 
 export type PartnerOption = { id: string; name: string };

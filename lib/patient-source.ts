@@ -11,6 +11,16 @@ export const AI_DOMAINS = ["chatgpt.com", "chat.openai.com", "gemini.google.com"
 export const SOCIAL_DOMAINS = ["instagram.com", "facebook.com", "tiktok.com", "youtube.com", "linkedin.com", "twitter.com", "x.com"];
 export const OTHER_SEARCH_DOMAINS = ["bing.com", "yandex.com", "yandex.ru", "duckduckgo.com"];
 
+// Every value leads.source_override is allowed to hold (DB check
+// constraint mirrors this exact list) -- a staff member's explicit
+// pick always wins over every automatic signal below, including
+// Partner/WhatsApp/Phone/Email.
+export const SOURCE_CATEGORIES = [
+  "Google Ads", "Google (SEO)", "AI", "Social Media", "Other Search",
+  "Other Websites", "Word of Mouth", "Direct", "WhatsApp", "Phone",
+  "Email", "Partner",
+] as const;
+
 // Matches any google.* search-results domain (google.com, google.co.uk,
 // google.com.tr, ...) without needing a maintained country-suffix list --
 // mirrors the SQL side's `~ '(^|\.)google\.[a-z]{2,3}(\.[a-z]{2})?$'`.
@@ -29,7 +39,9 @@ export function computePatientSource(lead: {
   utm_medium?: string | null;
   referrer_domain?: string | null;
   google_click_id?: string | null;
+  source_override?: string | null;
 }): string {
+  if (lead.source_override) return lead.source_override;
   if (lead.owner_type === "partner") return "Partner";
 
   const source = lead.source || "";
