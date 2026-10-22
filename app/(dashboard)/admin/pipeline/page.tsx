@@ -23,6 +23,7 @@ type LeadRow = {
   utm_medium: string | null;
   referrer_domain: string | null;
   google_click_id: string | null;
+  source_override: string | null;
   acquisition_source?: string | null;
 };
 
@@ -78,7 +79,7 @@ export default async function SalesPipelinePage({
   }
 
   const baseColumns =
-    "id, name, country, treatment, hospital, owner_type, partner_id, status, billing_stage, created_at, confirmed_at, source, utm_source, utm_medium, referrer_domain, google_click_id";
+    "id, name, country, treatment, hospital, owner_type, partner_id, status, billing_stage, created_at, confirmed_at, source, utm_source, utm_medium, referrer_domain, google_click_id, source_override";
   let query = adminSupabase
     .from("leads")
     .select(acqSourceAvailable ? `${baseColumns}, acquisition_source` : baseColumns)
