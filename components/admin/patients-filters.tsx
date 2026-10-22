@@ -35,12 +35,14 @@ export function PatientsFilters({
   treatmentOptions,
   countryOptions,
   sourceOptions,
+  channelOptions,
   partners,
   resultCount,
 }: {
   treatmentOptions: string[];
   countryOptions: string[];
   sourceOptions: string[];
+  channelOptions: string[];
   partners: { id: string; name: string }[];
   resultCount: number;
 }) {
@@ -54,6 +56,7 @@ export function PatientsFilters({
   const hospital = searchParams.get("hospital") || "";
   const source = searchParams.get("source") || "";
   const country = searchParams.get("country") || "";
+  const channel = searchParams.get("channel") || "";
   const dateFrom = searchParams.get("dateFrom") || "";
   const dateTo = searchParams.get("dateTo") || "";
   const confirmedFrom = searchParams.get("confirmedFrom") || "";
@@ -108,6 +111,7 @@ export function PatientsFilters({
   if (hospital) chips.push({ key: "hospital", label: `Hospital: ${hospital}` });
   if (source) chips.push({ key: "source", label: `Source: ${source}` });
   if (country) chips.push({ key: "country", label: `Country: ${country}` });
+  if (channel) chips.push({ key: "channel", label: `Channel: ${channel}` });
   if (dateFrom || dateTo) chips.push({ key: "registered", label: `Registered: ${dateFrom || "…"} – ${dateTo || "…"}` });
   if (confirmedFrom || confirmedTo) chips.push({ key: "confirmed", label: `Confirmed: ${confirmedFrom || "…"} – ${confirmedTo || "…"}` });
 
@@ -173,6 +177,14 @@ export function PatientsFilters({
         <select value={country} onChange={(e) => updateParams({ country: e.target.value || undefined })} className={SELECT_CLASS}>
           <option value="">All countries</option>
           {countryOptions.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
+        <select value={channel} onChange={(e) => updateParams({ channel: e.target.value || undefined })} className={SELECT_CLASS}>
+          <option value="">All channels</option>
+          {channelOptions.map((c) => (
             <option key={c} value={c}>
               {c}
             </option>

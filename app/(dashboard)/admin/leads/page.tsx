@@ -11,6 +11,7 @@ import { SyncReferralsBanner } from "@/components/admin/sync-referrals-banner";
 import { PatientsFilters } from "@/components/admin/patients-filters";
 import { TREATMENT_OPTIONS } from "@/components/marketing/consultation-form";
 import { foldSearchText } from "@/lib/search-fold";
+import { computePatientChannel } from "@/lib/patient-channel";
 import { REFERRAL_STATUSES, REFERRAL_STATUS_LABELS, type ReferralFile, type ReferralStatus } from "@/types";
 
 export type Lead = {
@@ -44,6 +45,7 @@ export type Lead = {
   utm_campaign?: string | null;
   referrer_domain?: string | null;
   linked_reference_code?: string | null;
+  channel?: string | null;
 };
 
 export type PartnerOption = { id: string; name: string };
@@ -72,6 +74,7 @@ type Filters = {
   hospital?: string;
   source?: string;
   country?: string;
+  channel?: string;
   dateFrom?: string;
   dateTo?: string;
   confirmedFrom?: string;
@@ -90,6 +93,7 @@ export default async function AdminLeadsPage({
     hospital?: string;
     source?: string;
     country?: string;
+    channel?: string;
     dateFrom?: string;
     dateTo?: string;
     confirmedFrom?: string;
@@ -100,7 +104,7 @@ export default async function AdminLeadsPage({
   }>;
 }) {
   const {
-    q, treatment, status, owner: ownerRaw, hospital, source, country,
+    q, treatment, status, owner: ownerRaw, hospital, source, country, channel,
     dateFrom, dateTo, confirmedFrom, confirmedTo, sort, dir, page: pageRaw,
   } = await searchParams;
 
@@ -131,7 +135,7 @@ export default async function AdminLeadsPage({
   function withParams(extra: Record<string, string | undefined>) {
     const params = new URLSearchParams();
     const merged = {
-      q, treatment, status, owner: ownerRaw, hospital, source, country,
+      q, treatment, status, owner: ownerRaw, hospital, source, country, channel,
       dateFrom, dateTo, confirmedFrom, confirmedTo, sort, dir, page: pageRaw,
       ...extra,
     };
@@ -168,6 +172,18 @@ export default async function AdminLeadsPage({
     }
   }
 
+  // channel (supabase/migrations/leads_channel.sql) -- same posture.
+  // Probed unconditionally (not just when filtering) since the Channel
+  // dropdown's option list needs it on every page load, not only when
+  // a channel filter is active.
+  let channelAvailable = true;
+  try {
+    const { error } = await adminSupabase.from("leads").select("channel").limit(1);
+    channelAvailable = !error;
+  } catch {
+    channelAvailable = false;
+  }
+
   const { gte: regGte, lte: regLte } = registeredDateBounds(dateFrom, dateTo);
 
   function applyCommonFilters<T>(q0: T, filters: Filters): T {
@@ -179,6 +195,7 @@ export default async function AdminLeadsPage({
     if (filters.hospital) q1 = q1.ilike("hospital", `%${filters.hospital}%`);
     if (filters.source) q1 = q1.eq("source", filters.source);
     if (filters.country) q1 = q1.eq("country", filters.country);
+    if (filters.channel && channelAvailable) q1 = q1.eq("channel", filters.channel);
     if (regGte) q1 = q1.gte("first_contacted_at", regGte);
     if (regLte) q1 = q1.lte("first_contacted_at", regLte);
     if (confirmedFrom) q1 = q1.gte("confirmed_at", confirmedFrom);
@@ -187,7 +204,7 @@ export default async function AdminLeadsPage({
     return q1 as T;
   }
 
-  const filters: Filters = { treatment, hospital, source, country, q };
+  const filters: Filters = { treatment, hospital, source, country, channel, q };
 
   let mainQuery = applyCommonFilters(
     adminSupabase.from("leads").select("*", { count: "exact" }).order(sortField, { ascending: sortDir === "asc", nullsFirst: false }),
@@ -217,6 +234,20 @@ export default async function AdminLeadsPage({
   const sourceOptions = Array.from(new Set((sourceRows ?? []).map((r) => r.source).filter(Boolean))).sort((a, b) =>
     a.localeCompare(b)
   );
+
+  // Stable Channel option list, same spirit as Source above. Reads the
+  // generated column directly once migrated; falls back to computing it
+  // in JS (lib/patient-channel.ts, kept byte-for-byte equivalent to the
+  // SQL function) so the dropdown still works before that migration runs.
+  let channelOptions: string[];
+  if (channelAvailable) {
+    const { data: channelRows } = await adminSupabase.from("leads").select("channel");
+    channelOptions = Array.from(new Set((channelRows ?? []).map((r) => r.channel).filter(Boolean))) as string[];
+  } else {
+    const { data: channelSourceRows } = await adminSupabase.from("leads").select("owner_type, source, utm_source, referrer_domain");
+    channelOptions = Array.from(new Set((channelSourceRows ?? []).map((l) => computePatientChannel(l as Lead))));
+  }
+  channelOptions.sort((a, b) => a.localeCompare(b));
 
   // Partners list, for the Owner filter dropdown and resolving each
   // partner-owned row's display name.
@@ -302,6 +333,7 @@ export default async function AdminLeadsPage({
             treatmentOptions={TREATMENT_OPTIONS}
             countryOptions={COUNTRIES}
             sourceOptions={sourceOptions}
+            channelOptions={channelOptions}
             partners={partners}
             resultCount={filteredCount ?? 0}
           />

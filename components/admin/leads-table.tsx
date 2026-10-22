@@ -246,7 +246,7 @@ export function LeadsTable({
                       <td className="px-5 py-4 text-gray-700">{lead.treatment || "—"}</td>
                       <td className="px-5 py-4 text-gray-500">{lead.hospital || "—"}</td>
                       <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">{lead.source}</td>
-                      <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">{computePatientChannel(lead)}</td>
+                      <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">{lead.channel ?? computePatientChannel(lead)}</td>
                       <td className="px-5 py-4">
                         <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[lead.status] ?? "bg-gray-100 text-gray-600"}`}>
                           {REFERRAL_STATUS_LABELS[lead.status] ?? lead.status}
