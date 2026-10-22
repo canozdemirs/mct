@@ -32,6 +32,13 @@ function hostMatchesAny(host: string | null | undefined, domains: string[]): boo
   return domains.some((d) => h === d || h.endsWith(`.${d}`));
 }
 
+// Order matters: real web evidence (gclid/UTM/referrer) always wins
+// over a manually-typed source label when BOTH are present -- a
+// WhatsApp-added patient whose linked click came from ChatGPT should
+// classify as "AI", not "WhatsApp", just because the admin picked
+// "WhatsApp" as the entry-point label. The manually-entered labels
+// (WhatsApp/Phone/Email/Social Media/Word of Mouth) are only a
+// fallback for when there's genuinely no web evidence at all.
 export function computePatientSource(lead: {
   owner_type: "mct" | "partner";
   source: string;
@@ -43,13 +50,6 @@ export function computePatientSource(lead: {
 }): string {
   if (lead.source_override) return lead.source_override;
   if (lead.owner_type === "partner") return "Partner";
-
-  const source = lead.source || "";
-  if (/^whatsapp/i.test(source)) return "WhatsApp";
-  if (/^phone/i.test(source)) return "Phone";
-  if (/^email/i.test(source)) return "Email";
-  if (/^instagram/i.test(source) || /^facebook/i.test(source)) return "Social Media";
-  if (/^referral/i.test(source)) return "Word of Mouth";
 
   if (lead.google_click_id) return "Google Ads";
   if (
@@ -66,5 +66,28 @@ export function computePatientSource(lead: {
   if (hostMatchesAny(lead.referrer_domain, OTHER_SEARCH_DOMAINS)) return "Other Search";
   if (lead.referrer_domain || lead.utm_source) return "Other Websites";
 
+  const source = lead.source || "";
+  if (/^whatsapp/i.test(source)) return "WhatsApp";
+  if (/^phone/i.test(source)) return "Phone";
+  if (/^email/i.test(source)) return "Email";
+  if (/^instagram/i.test(source) || /^facebook/i.test(source)) return "Social Media";
+  if (/^referral/i.test(source)) return "Word of Mouth";
+
   return "Direct";
+}
+
+// Distinct from computePatientSource (WHERE the patient came from) --
+// this is HOW they first reached MCT. A web-form submission is always
+// "Website form" regardless of acquisition channel; a manually-added
+// patient's method is whatever the admin recorded at entry.
+export function computeContactMethod(source: string): string {
+  const s = source || "";
+  if (/^whatsapp/i.test(s)) return "WhatsApp";
+  if (/^phone/i.test(s)) return "Phone";
+  if (/^email/i.test(s)) return "Email";
+  if (/^instagram/i.test(s) || /^facebook/i.test(s)) return "Instagram/Facebook";
+  if (/^referral/i.test(s)) return "Referral (word of mouth)";
+  if (/^partner/i.test(s)) return "Partner";
+  if (/^other/i.test(s)) return "Other";
+  return "Website form";
 }

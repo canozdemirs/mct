@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { ADMIN_EMAILS } from "@/lib/admin";
 import { isValidReferenceCodeFormat } from "@/lib/attribution";
+import { linkContactClickToLead } from "@/lib/attribution-server";
 import { validateLeadContactFields, findDuplicateLead } from "@/lib/admin-lead-helpers";
 
 function adminClient() {
@@ -173,24 +174,14 @@ export async function POST(req: NextRequest) {
   }
 
   if (refCode && inserted) {
-    // Best-effort link -- supabase-js never throws here, it returns
-    // { error }, which is deliberately ignored: a missing/inaccessible
-    // contact_clicks table (PGRST205) or an unmatched code must never
-    // undo the lead that was already saved above.
-    await adminSupabase
-      .from("contact_clicks")
-      .update({ lead_id: inserted.id })
-      .eq("reference_code", refCode);
-
-    // Denormalized onto the lead itself so the Patients list search box
-    // can match it via leads.search_text without a cross-table join at
-    // search time (supabase/migrations/leads_search.sql). Same
-    // best-effort posture -- a missing column/migration never undoes
-    // the lead or the link above.
-    await adminSupabase
-      .from("leads")
-      .update({ linked_reference_code: refCode })
-      .eq("id", inserted.id);
+    // Links the click to this lead AND copies its evidence (landing
+    // page, referrer domain, UTM, google click id) onto the lead's own
+    // columns -- what lets compute_patient_source() classify this
+    // patient by their real acquisition channel instead of just
+    // "WhatsApp". Best-effort -- a missing/inaccessible contact_clicks
+    // table or an unmatched code must never undo the lead already saved
+    // above.
+    await linkContactClickToLead(adminSupabase, inserted.id, refCode);
   }
 
   revalidatePath("/admin/leads");
