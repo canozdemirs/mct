@@ -211,6 +211,7 @@ export async function createContactClick(
     utm_medium: sanitizeField(context?.utmMedium),
     utm_campaign: sanitizeField(context?.utmCampaign),
     treatment: sanitizeField(context?.treatment),
+    google_click_id: sanitizeField(context?.googleClickId),
   };
 
   for (let attempt = 0; attempt < MAX_CODE_RETRIES; attempt++) {
@@ -224,6 +225,59 @@ export async function createContactClick(
   }
   console.error(`contact_clicks: exhausted ${MAX_CODE_RETRIES} reference-code collision retries`);
   return null;
+}
+
+/**
+ * Links a contact_clicks row to a lead (by reference code) and copies
+ * its evidence (landing page, referrer domain, UTM, google click id)
+ * onto the lead's OWN columns -- only ever filling fields that are
+ * still empty, never overwriting anything the lead already has (e.g.
+ * from its own form submission, if it has one). This is what lets
+ * compute_patient_source() classify a WhatsApp-added patient by their
+ * real acquisition channel (AI/Google Ads/etc.) instead of just
+ * "WhatsApp" -- without it, linking only recorded which lead the click
+ * belonged to, never the click's own evidence.
+ *
+ * Used both at creation time (app/api/admin/leads/manual/route.ts's
+ * "Add from WhatsApp") and when linking a code onto an existing patient
+ * after the fact (app/api/admin/leads/[id]/link-reference-code/route.ts).
+ * Returns false (never throws) if the code doesn't match any click --
+ * callers treat that as "nothing to link," not a hard error.
+ */
+export async function linkContactClickToLead(
+  supabase: SupabaseClient,
+  leadId: string,
+  refCode: string
+): Promise<boolean> {
+  const { data: click } = await supabase
+    .from("contact_clicks")
+    .select("landing_page, referrer_domain, utm_source, utm_medium, utm_campaign, google_click_id")
+    .eq("reference_code", refCode)
+    .maybeSingle();
+
+  if (!click) return false;
+
+  // Best-effort -- supabase-js never throws, it returns { error }, which
+  // is deliberately ignored here: a missing/inaccessible table must
+  // never undo the lead this is called from.
+  await supabase.from("contact_clicks").update({ lead_id: leadId }).eq("reference_code", refCode);
+
+  const { data: existingLead } = await supabase
+    .from("leads")
+    .select("landing_page, referrer_domain, utm_source, utm_medium, utm_campaign, google_click_id")
+    .eq("id", leadId)
+    .maybeSingle();
+
+  const patch: Record<string, unknown> = { linked_reference_code: refCode };
+  if (!existingLead?.landing_page && click.landing_page) patch.landing_page = click.landing_page;
+  if (!existingLead?.referrer_domain && click.referrer_domain) patch.referrer_domain = click.referrer_domain;
+  if (!existingLead?.utm_source && click.utm_source) patch.utm_source = click.utm_source;
+  if (!existingLead?.utm_medium && click.utm_medium) patch.utm_medium = click.utm_medium;
+  if (!existingLead?.utm_campaign && click.utm_campaign) patch.utm_campaign = click.utm_campaign;
+  if (!existingLead?.google_click_id && click.google_click_id) patch.google_click_id = click.google_click_id;
+
+  await supabase.from("leads").update(patch).eq("id", leadId);
+  return true;
 }
 
 const RATE_LIMIT_WINDOW_MS = 60_000;

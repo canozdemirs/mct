@@ -6,7 +6,8 @@ import { COUNTRIES, UNKNOWN_LABEL } from "@/lib/constants";
 import { TREATMENT_OPTIONS } from "@/components/marketing/consultation-form";
 import { isValidEmail } from "@/lib/validation";
 import { hospitals, hospitalGroups } from "@/lib/hospitals";
-import { computePatientSource, SOURCE_CATEGORIES } from "@/lib/patient-source";
+import { computePatientSource, computeContactMethod, SOURCE_CATEGORIES } from "@/lib/patient-source";
+import { isValidReferenceCodeFormat } from "@/lib/attribution";
 import type { Lead, PartnerOption } from "@/app/(dashboard)/admin/leads/page";
 
 const NOT_DECIDED = "Not decided yet";
@@ -103,8 +104,18 @@ export function PatientEditCard({ lead, partners }: { lead: Lead; partners: Part
   const [duplicate, setDuplicate] = useState<DuplicateInfo | null>(null);
   const [convertPartnerId, setConvertPartnerId] = useState("");
   const [converting, setConverting] = useState(false);
+  const [refCodeInput, setRefCodeInput] = useState("");
+  const [linkingRefCode, setLinkingRefCode] = useState(false);
+  const [linkRefCodeError, setLinkRefCodeError] = useState("");
+  const [linkRefCodeDone, setLinkRefCodeDone] = useState(false);
 
   const isDirty = JSON.stringify(form) !== JSON.stringify(initialRef.current);
+
+  // HOW the patient first reached MCT -- distinct from Source (WHERE
+  // they came from), so e.g. a patient who messaged WhatsApp after
+  // clicking a ChatGPT link shows Source: AI, Contact method: WhatsApp,
+  // not one value standing in for both.
+  const contactMethod = computeContactMethod(lead.source);
 
   // What the automatic rules would produce on their own, ignoring any
   // existing override -- shown in the "Auto" option so staff can see
@@ -228,6 +239,34 @@ export function PatientEditCard({ lead, partners }: { lead: Lead; partners: Part
     }
   }
 
+  async function linkRefCode() {
+    const code = refCodeInput.trim().toUpperCase();
+    if (!code || !isValidReferenceCodeFormat(code)) {
+      setLinkRefCodeError("That doesn't look like a valid reference code (expected format: MCT-XXXXXX).");
+      return;
+    }
+    setLinkingRefCode(true);
+    setLinkRefCodeError("");
+    try {
+      const res = await fetch(`/api/admin/leads/${lead.id}/link-reference-code`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refCode: code }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setLinkRefCodeError(json.error || "Could not link that reference code.");
+        return;
+      }
+      setLinkRefCodeDone(true);
+      router.refresh();
+    } catch {
+      setLinkRefCodeError("Network error. Please try again.");
+    } finally {
+      setLinkingRefCode(false);
+    }
+  }
+
   const SaveButton = () => (
     <button
       type="button"
@@ -297,9 +336,49 @@ export function PatientEditCard({ lead, partners }: { lead: Lead; partners: Part
           </div>
 
           <div>
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Contact method</label>
+            <p className="text-sm text-gray-700 mt-1 px-3 py-2 bg-gray-50 border border-gray-100 rounded-xl">{contactMethod}</p>
+            <p className="text-xs text-gray-400 mt-1">How the patient first reached out -- distinct from Source (where they came from).</p>
+          </div>
+
+          <div>
             <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Form / Page</label>
             <p className="text-sm text-gray-700 mt-1 px-3 py-2 bg-gray-50 border border-gray-100 rounded-xl">{form.source || "—"}</p>
           </div>
+
+          {lead.linked_reference_code ? (
+            <div>
+              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Reference code</label>
+              <p className="text-sm text-gray-700 mt-1 px-3 py-2 bg-gray-50 border border-gray-100 rounded-xl">{lead.linked_reference_code}</p>
+            </div>
+          ) : (
+            <div>
+              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Link reference code</label>
+              <div className="flex gap-2 mt-1">
+                <input
+                  value={refCodeInput}
+                  onChange={(e) => {
+                    setRefCodeInput(e.target.value);
+                    setLinkRefCodeError("");
+                    setLinkRefCodeDone(false);
+                  }}
+                  placeholder="MCT-A7K2P9"
+                  className="flex-1 bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm uppercase"
+                />
+                <button
+                  type="button"
+                  onClick={linkRefCode}
+                  disabled={!refCodeInput.trim() || linkingRefCode}
+                  className="px-3 py-2 rounded-xl bg-gray-100 text-gray-700 text-xs font-semibold hover:bg-gray-200 disabled:opacity-50"
+                >
+                  {linkingRefCode ? "..." : "Link"}
+                </button>
+              </div>
+              {linkRefCodeError && <p className="text-xs text-red-500 mt-1">{linkRefCodeError}</p>}
+              {linkRefCodeDone && !linkRefCodeError && <p className="text-xs text-green-600 mt-1">Linked -- Source has been updated.</p>}
+              <p className="text-xs text-gray-400 mt-1">If a WhatsApp/email reference code wasn&apos;t entered when this patient was added.</p>
+            </div>
+          )}
 
           <div>
             <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Registered Date</label>

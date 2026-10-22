@@ -132,6 +132,7 @@ export type WhatsAppClickContext = {
   utmMedium: string | null;
   utmCampaign: string | null;
   treatment: string | null;
+  googleClickId: string | null;
 };
 
 // Best-effort, auto-derived from the page's own path -- mirrors the
@@ -177,6 +178,7 @@ function captureWhatsAppClickContext(): void {
       utmMedium: params.get("utm_medium"),
       utmCampaign: params.get("utm_campaign"),
       treatment: guessTreatmentFromPath(window.location.pathname),
+      googleClickId: params.get("gclid") || params.get("gbraid") || params.get("wbraid"),
     };
     window.localStorage.setItem(WHATSAPP_CLICK_CONTEXT_KEY, JSON.stringify({ context, createdAt: Date.now() }));
   } catch {

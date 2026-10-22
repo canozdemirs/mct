@@ -23,7 +23,7 @@ import { computePatientSource } from "@/lib/patient-source";
 const ATTRIBUTION_BASE_COLUMNS = "reference_code, channel, created_at, lead_id";
 const ATTRIBUTION_SOURCE_COLUMNS = "last_touch_landing_page, last_touch_utm_source, last_touch_utm_medium, last_touch_utm_campaign";
 
-async function fetchAttribution(adminSupabase: SupabaseClient, code: string): Promise<Omit<AttributionInfo, "sourceCategory"> | null> {
+async function fetchAttribution(adminSupabase: SupabaseClient, code: string): Promise<Omit<AttributionInfo, "sourceCategory" | "referrerDomain" | "clickedAt"> | null> {
   const { data, error } = await adminSupabase
     .from("lead_attributions")
     .select(`${ATTRIBUTION_BASE_COLUMNS}, ${ATTRIBUTION_SOURCE_COLUMNS}`)
@@ -160,15 +160,40 @@ export default async function PatientDetailPage({
   }
 
   // owner_type === "mct"
-  const referenceCode = typeof lead.details?.reference_code === "string" ? lead.details.reference_code : null;
+  // Reference codes live in two different places depending on how the
+  // patient was added: leads.details.reference_code (form channel, set
+  // at insert time) or leads.linked_reference_code (WhatsApp/email,
+  // denormalized by lib/attribution-server.ts's linkContactClickToLead()
+  // -- the old version of this line only checked the first one, which is
+  // why a WhatsApp-added patient's Attribution box never showed anything).
+  const referenceCode =
+    (typeof lead.details?.reference_code === "string" ? lead.details.reference_code : null) ??
+    lead.linked_reference_code ??
+    null;
   const fallbackAttribution = referenceCode ? await fetchAttribution(adminSupabase, referenceCode) : null;
 
+  // The click's own timestamp isn't copied onto `leads` (unlike
+  // landing_page/utm_*/referrer_domain/google_click_id, which are --
+  // see linkContactClickToLead()) since leads already has its own
+  // created_at/first_contacted_at; fetched separately here just for display.
+  let clickedAt: string | null = null;
+  if (referenceCode) {
+    const { data: clickRow } = await adminSupabase
+      .from("contact_clicks")
+      .select("created_at")
+      .eq("reference_code", referenceCode)
+      .maybeSingle();
+    clickedAt = clickRow?.created_at ?? null;
+  }
+
   // leads.landing_page/utm_* (parsed server-side from page_url at submit
-  // time, unconditional) take priority; lead_attributions.last_touch_*
-  // (consent-gated, client-side-only) only fills in what that doesn't have.
-  // sourceCategory (lib/patient-source.ts) is always computable, so the
-  // attribution object itself is never null -- the box always has at
-  // least that to show, even for a patient with no landing page/UTM at all.
+  // time, unconditional, or copied in from the linked click) take
+  // priority; lead_attributions.last_touch_* (consent-gated, client-
+  // side-only, and dormant in this database) only fills in what that
+  // doesn't have. sourceCategory (lib/patient-source.ts) is always
+  // computable, so the attribution object itself is never null -- the
+  // box always has at least that to show, even for a patient with no
+  // landing page/UTM at all.
   const attribution: AttributionInfo = {
     channel: fallbackAttribution?.channel ?? null,
     landingPage: lead.landing_page ?? fallbackAttribution?.landingPage ?? null,
@@ -176,6 +201,8 @@ export default async function PatientDetailPage({
     utmMedium: lead.utm_medium ?? fallbackAttribution?.utmMedium ?? null,
     utmCampaign: lead.utm_campaign ?? fallbackAttribution?.utmCampaign ?? null,
     sourceCategory: lead.acquisition_source ?? computePatientSource(lead),
+    referrerDomain: lead.referrer_domain ?? null,
+    clickedAt,
   };
 
   const signedFiles = await Promise.all(
@@ -206,7 +233,7 @@ export default async function PatientDetailPage({
         <PatientEditCard lead={lead} partners={partners} />
 
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
-          <SourceInfoBox referenceCode={referenceCode} attribution={attribution} />
+          <SourceInfoBox referenceCode={referenceCode} attribution={attribution} country={lead.country} />
         </div>
 
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
