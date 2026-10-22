@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { BLOG_SLUGS } from "@/lib/blog-slugs.generated";
 import { isGonePath } from "@/lib/gone-paths";
+import { getLegacyRedirect } from "@/lib/legacy-redirects";
 import { isProductionHost } from "@/lib/site-host";
 
 // Next.js 16 renamed `middleware.ts` to `proxy.ts` (same API, same
@@ -92,6 +93,16 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const segments = pathname.split("/").filter(Boolean);
 
+  // 404-audit follow-up (2026-10-22): checked first, ahead of isGonePath,
+  // since the two sets are disjoint by construction (verified when
+  // lib/legacy-redirects.ts was written) -- order between them doesn't
+  // matter, but a redirect answering "where do I go" reads more naturally
+  // before a flat "this is gone".
+  const legacyTarget = getLegacyRedirect(segments);
+  if (legacyTarget) {
+    return withRobotsTag(NextResponse.redirect(new URL(legacyTarget, request.url), 301), host);
+  }
+
   if (isGonePath(segments)) {
     return withRobotsTag(goneResponse(), host);
   }
@@ -107,11 +118,33 @@ export function proxy(request: NextRequest) {
     return withRobotsTag(NextResponse.redirect(new URL(`/${segments[1]}`, request.url), 308), host);
   }
 
+  // next.config.ts sets skipTrailingSlashRedirect: true so the two legacy
+  // mechanisms above can be genuinely single-hop even when the incoming
+  // request has a trailing slash (Next's own automatic trailing-slash
+  // redirect would otherwise run BEFORE any of this code, turning every
+  // one of them into a 308-then-redirect chain). This replicates that
+  // same default behavior for every other path, so nothing else on the
+  // site changes: strip exactly one trailing slash, same 308, same
+  // destination Next would have produced on its own.
+  if (pathname.length > 1 && pathname.endsWith("/")) {
+    const url = new URL(request.url);
+    url.pathname = pathname.slice(0, -1);
+    return withRobotsTag(NextResponse.redirect(url, 308), host);
+  }
+
   return withRobotsTag(NextResponse.next(), host);
 }
 
+// 404-audit follow-up (2026-10-22) bug fix: the previous pattern excluded
+// any path merely STARTING WITH these literal characters, with no word
+// boundary -- "auth" (meant to exclude only /auth/*) also matched
+// /author/*, since "author" begins with the four characters "auth".
+// This silently made AUTHOR_PREFIX in lib/gone-paths.ts dead code: every
+// /author/* request bypassed this whole function and fell through to
+// Next's default 404 instead of ever reaching isGonePath(). Each
+// alternative now requires a following "/" or end-of-string.
 export const config = {
   matcher: [
-    "/((?!api|_next|admin|partner-portal|auth|favicon.ico).*)",
+    "/((?!(?:api|_next|admin|partner-portal|auth|favicon\\.ico)(?:/|$)).*)",
   ],
 };

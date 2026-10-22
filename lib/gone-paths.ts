@@ -59,6 +59,26 @@
 // URL fell through to a generic 404 instead of the same 410 the other 3
 // sibling URLs get. No content exists anywhere in this repo for either
 // slug — confirmed before writing this change.
+//
+// 404-audit follow-up (2026-10-22): AUTHOR_PREFIX and the FEED_SUFFIX
+// check in isGonePath() below are a third, separate exception — also NOT
+// from the spreadsheet. WordPress author-archive pages (/author/<name>)
+// and RSS feed URLs (/feed, /comments/feed, /<post>/feed) were never in
+// the sitemap crawl (robots.txt already blocked /feed on the legacy
+// site), so they were never candidates for the original 410 audit either
+// — a cross-check against GA4 "404" pageviews, the Wayback Machine, and
+// live Vercel production logs surfaced them instead. 19 new
+// GONE_EXACT_SLUGS entries were added in the same pass: the 18
+// no-hyphen-naming Medical Park URLs the original crawl's medical-park-*
+// rows didn't catch, plus medical-park-bahcelievler-hospital (a 19th
+// hyphenated one the original 18 missed), istanbulaestheticcenter,
+// istinyeuniversityhospital, vmmedicalparkflorya (same competitor-
+// hospital-not-on-new-site reasoning as the existing 18), and
+// the-best-organ-transplant-doctors-in-turkey (same PHASE_5E compliance
+// reasoning, but this one was never real WordPress content, so it
+// belongs here rather than in that set), plus draft/profile/sitemap/
+// sitemap.html/step-by-step/test (WordPress placeholder/leftover pages
+// with no real content on either site).
 
 export const GONE_PREFIXES: ReadonlySet<string> = new Set([
   "tag",
@@ -70,6 +90,8 @@ export const GONE_PREFIXES: ReadonlySet<string> = new Set([
 ]);
 
 export const GTRANSLATE_PREFIXES: ReadonlySet<string> = new Set(["tr", "fr", "de"]);
+
+export const AUTHOR_PREFIX: ReadonlySet<string> = new Set(["author"]);
 
 export const PHASE_5E_ORGAN_TRANSPLANT_REMOVALS: ReadonlySet<string> = new Set([
   "transplant-surgery-in-turkey-2025",
@@ -117,6 +139,37 @@ export const GONE_EXACT_SLUGS: ReadonlySet<string> = new Set([
   "temporary-title-18924",
   "test-cost-calculator",
   "the-best-clinics-in-turkey",
+
+  // 404-audit follow-up (2026-10-22) -- see the comment above GONE_PREFIXES.
+  "draft",
+  "profile",
+  "sitemap",
+  "sitemap.html",
+  "step-by-step",
+  "test",
+  "istanbulaestheticcenter",
+  "istinyeuniversityhospital",
+  "vmmedicalparkflorya",
+  "medical-park-bahcelievler-hospital",
+  "medicalparkankara",
+  "medicalparkbahcelievler",
+  "medicalparkbatman",
+  "medicalparkbursa",
+  "medicalparkelazig",
+  "medicalparkfatih",
+  "medicalparkgaziantep",
+  "medicalparkgaziosmanpasa",
+  "medicalparkgoztepe",
+  "medicalparkizmir",
+  "medicalparkkaradeniz",
+  "medicalparkkocaeli",
+  "medicalparksamsun",
+  "medicalparksilivri",
+  "medicalparktarsus",
+  "medicalparktokathospital",
+  "medicalparktrabzon",
+  "medicalparkusak",
+  "the-best-organ-transplant-doctors-in-turkey",
 ]);
 
 /** True if this pathname should return HTTP 410 Gone. Checked against the
@@ -124,9 +177,21 @@ export const GONE_EXACT_SLUGS: ReadonlySet<string> = new Set([
 export function isGonePath(segments: string[]): boolean {
   if (segments.length === 0) return false;
   const first = segments[0];
+  const last = segments[segments.length - 1];
   if (GONE_PREFIXES.has(first)) return true;
   if (GTRANSLATE_PREFIXES.has(first)) return true;
+  if (AUTHOR_PREFIX.has(first)) return true;
+  // Every WordPress RSS feed variant: /feed, /comments/feed, /<post>/feed
+  // -- robots.txt already blocked these on the legacy site, so they were
+  // never in the original sitemap-based 410 audit; added from the
+  // 2026-10-22 production-log cross-check instead (404-audit follow-up).
+  if (last === "feed") return true;
   if (segments.length === 1 && GONE_EXACT_SLUGS.has(first)) return true;
   if (segments.length === 1 && PHASE_5E_ORGAN_TRANSPLANT_REMOVALS.has(first)) return true;
+  // WordPress's auto-generated oEmbed variant of an already-gone single-
+  // segment page/post (e.g. request-a-free-consultation/embed) -- never
+  // a distinct page in its own right, so it rides along with whatever
+  // the base slug already resolves to.
+  if (segments.length === 2 && last === "embed" && GONE_EXACT_SLUGS.has(segments[0])) return true;
   return false;
 }
