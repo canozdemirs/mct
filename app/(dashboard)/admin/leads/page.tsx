@@ -4,14 +4,14 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { ADMIN_EMAILS } from "@/lib/admin";
+import { COUNTRIES } from "@/lib/constants";
 import { LeadsTable, type SortField } from "@/components/admin/leads-table";
 import { AddManualLeadForm } from "@/components/admin/add-manual-lead-form";
 import { SyncReferralsBanner } from "@/components/admin/sync-referrals-banner";
 import { PatientsFilters } from "@/components/admin/patients-filters";
 import { TREATMENT_OPTIONS } from "@/components/marketing/consultation-form";
-import { computePatientChannel } from "@/lib/patient-channel";
 import { foldSearchText } from "@/lib/search-fold";
-import type { ReferralFile, ReferralStatus } from "@/types";
+import { REFERRAL_STATUSES, REFERRAL_STATUS_LABELS, type ReferralFile, type ReferralStatus } from "@/types";
 
 export type Lead = {
   id: string;
@@ -43,9 +43,12 @@ export type Lead = {
   utm_medium?: string | null;
   utm_campaign?: string | null;
   referrer_domain?: string | null;
+  linked_reference_code?: string | null;
 };
 
 export type PartnerOption = { id: string; name: string };
+
+const PAGE_SIZE = 50;
 
 const SORTABLE_FIELDS: SortField[] = ["first_contacted_at", "name", "treatment", "status", "confirmed_at"];
 const DEFAULT_DIR: Record<SortField, "asc" | "desc"> = {
@@ -56,28 +59,25 @@ const DEFAULT_DIR: Record<SortField, "asc" | "desc"> = {
   status: "asc",
 };
 
-function dateRangeBounds(range: string | undefined, dateFrom?: string, dateTo?: string): { gte?: string; lte?: string } {
-  const now = new Date();
-  if (range === "today") {
-    return { gte: new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())).toISOString() };
-  }
-  if (range === "7d") {
-    return { gte: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString() };
-  }
-  if (range === "30d") {
-    return { gte: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString() };
-  }
-  if (range === "month") {
-    return { gte: new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)).toISOString() };
-  }
-  if (range === "custom") {
-    return {
-      gte: dateFrom ? `${dateFrom}T00:00:00.000Z` : undefined,
-      lte: dateTo ? `${dateTo}T23:59:59.999Z` : undefined,
-    };
-  }
-  return {};
+function registeredDateBounds(dateFrom?: string, dateTo?: string): { gte?: string; lte?: string } {
+  return {
+    gte: dateFrom ? `${dateFrom}T00:00:00.000Z` : undefined,
+    lte: dateTo ? `${dateTo}T23:59:59.999Z` : undefined,
+  };
 }
+
+type Filters = {
+  treatment?: string;
+  owner?: string;
+  hospital?: string;
+  source?: string;
+  country?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  confirmedFrom?: string;
+  confirmedTo?: string;
+  q?: string;
+};
 
 export default async function AdminLeadsPage({
   searchParams,
@@ -87,15 +87,22 @@ export default async function AdminLeadsPage({
     treatment?: string;
     status?: string;
     owner?: string;
-    channel?: string;
-    dateRange?: string;
+    hospital?: string;
+    source?: string;
+    country?: string;
     dateFrom?: string;
     dateTo?: string;
+    confirmedFrom?: string;
+    confirmedTo?: string;
     sort?: string;
     dir?: string;
+    page?: string;
   }>;
 }) {
-  const { q, treatment, status, owner: ownerRaw, channel, dateRange, dateFrom, dateTo, sort, dir } = await searchParams;
+  const {
+    q, treatment, status, owner: ownerRaw, hospital, source, country,
+    dateFrom, dateTo, confirmedFrom, confirmedTo, sort, dir, page: pageRaw,
+  } = await searchParams;
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -123,7 +130,11 @@ export default async function AdminLeadsPage({
 
   function withParams(extra: Record<string, string | undefined>) {
     const params = new URLSearchParams();
-    const merged = { q, treatment, status, owner: ownerRaw, channel, dateRange, dateFrom, dateTo, sort, dir, ...extra };
+    const merged = {
+      q, treatment, status, owner: ownerRaw, hospital, source, country,
+      dateFrom, dateTo, confirmedFrom, confirmedTo, sort, dir, page: pageRaw,
+      ...extra,
+    };
     for (const [k, v] of Object.entries(merged)) {
       if (v) params.set(k, v);
     }
@@ -136,81 +147,76 @@ export default async function AdminLeadsPage({
   const sortHrefs = Object.fromEntries(
     SORTABLE_FIELDS.map((field) => {
       const nextDir = sortField === field ? (sortDir === "asc" ? "desc" : "asc") : DEFAULT_DIR[field];
-      return [field, withParams({ sort: field, dir: nextDir })];
+      // Changing sort resets back to page 1 -- a stale page number into a
+      // differently-ordered result set would otherwise show nonsense.
+      return [field, withParams({ sort: field, dir: nextDir, page: undefined })];
     })
   ) as Record<SortField, string>;
 
-  let query = adminSupabase
-    .from("leads")
-    .select("*")
-    .order(sortField, { ascending: sortDir === "asc", nullsFirst: false });
-  if (treatment) query = query.eq("treatment", treatment);
-  if (status && status !== "all") query = query.eq("status", status);
-  if (ownerType) query = query.eq("owner_type", ownerType);
-  if (partnerId) query = query.eq("partner_id", partnerId);
+  const page = Math.max(1, parseInt(pageRaw || "1", 10) || 1);
 
-  const { gte, lte } = dateRangeBounds(dateRange, dateFrom, dateTo);
-  if (gte) query = query.gte("first_contacted_at", gte);
-  if (lte) query = query.lte("first_contacted_at", lte);
-
-  const { data: leadRows } = await query;
-  let list = (leadRows ?? []) as Lead[];
-
-  // Reference codes live in two different places depending on how the
-  // patient was added: leads.details.reference_code (form channel, set
-  // at insert time) or contact_clicks.reference_code (WhatsApp/email,
-  // linked via the "Add from WhatsApp" lookup) -- merged here so the
-  // search box can match either without the admin needing to know which.
-  // contact_clicks may not exist yet in every environment (same
-  // PGRST205-tolerant pattern used elsewhere for this table).
-  const refCodeByLeadId = new Map<string, string>();
-  try {
-    const { data: clickRows } = await adminSupabase
-      .from("contact_clicks")
-      .select("lead_id, reference_code")
-      .not("lead_id", "is", null);
-    for (const row of clickRows ?? []) {
-      if (row.lead_id) refCodeByLeadId.set(row.lead_id as string, row.reference_code as string);
-    }
-  } catch {
-    // Table not deployed in this environment -- ref-code search just
-    // falls back to whatever's in leads.details for form-channel leads.
-  }
-
-  function searchBlobFor(lead: Lead): string {
-    const formRefCode = typeof lead.details?.reference_code === "string" ? lead.details.reference_code : null;
-    const parts = [lead.name, lead.email, lead.phone, formRefCode, refCodeByLeadId.get(lead.id)].filter(
-      (v): v is string => typeof v === "string" && v.length > 0
-    );
-    return foldSearchText(parts.join(" "));
-  }
-
-  // Channel and the search term both depend on values that aren't plain
-  // indexed columns (channel is computed; search needs Turkish-aware
-  // folding Postgres collation doesn't do) -- applied here in JS, after
-  // the DB-level filters/sort above. Array#filter preserves order, so
-  // the .order() above still holds for whatever survives this.
-  if (channel) {
-    list = list.filter((l) => computePatientChannel(l) === channel);
-  }
+  // search_text (supabase/migrations/leads_search.sql) may not exist yet
+  // in every environment -- probed once, only when actually searching,
+  // same non-blocking posture as the attributionAvailable probe below.
+  let searchAvailable = true;
   if (q) {
-    const foldedQ = foldSearchText(q);
-    list = list.filter((l) => searchBlobFor(l).includes(foldedQ));
+    try {
+      const { error } = await adminSupabase.from("leads").select("search_text").limit(1);
+      searchAvailable = !error;
+    } catch {
+      searchAvailable = false;
+    }
   }
 
-  // Stable channel option list -- computed from ALL patients regardless
-  // of the other active filters, so the dropdown doesn't reshuffle as
-  // the admin filters. Lightweight columns only.
-  const { data: channelSourceRows } = await adminSupabase
-    .from("leads")
-    .select("owner_type, source, utm_source, referrer_domain");
-  const channelOptions = Array.from(
-    new Set((channelSourceRows ?? []).map((l) => computePatientChannel(l as Lead)))
-  ).sort((a, b) => a.localeCompare(b));
+  const { gte: regGte, lte: regLte } = registeredDateBounds(dateFrom, dateTo);
 
-  // True, filter-independent total for the header badge -- the filter
-  // bar's own count reflects the current (possibly filtered) view.
-  const { count: totalCount } = await adminSupabase.from("leads").select("id", { count: "exact", head: true });
+  function applyCommonFilters<T>(q0: T, filters: Filters): T {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let q1 = q0 as any;
+    if (filters.treatment) q1 = q1.eq("treatment", filters.treatment);
+    if (ownerType) q1 = q1.eq("owner_type", ownerType);
+    if (partnerId) q1 = q1.eq("partner_id", partnerId);
+    if (filters.hospital) q1 = q1.ilike("hospital", `%${filters.hospital}%`);
+    if (filters.source) q1 = q1.eq("source", filters.source);
+    if (filters.country) q1 = q1.eq("country", filters.country);
+    if (regGte) q1 = q1.gte("first_contacted_at", regGte);
+    if (regLte) q1 = q1.lte("first_contacted_at", regLte);
+    if (confirmedFrom) q1 = q1.gte("confirmed_at", confirmedFrom);
+    if (confirmedTo) q1 = q1.lte("confirmed_at", confirmedTo);
+    if (filters.q && searchAvailable) q1 = q1.ilike("search_text", `%${foldSearchText(filters.q)}%`);
+    return q1 as T;
+  }
+
+  const filters: Filters = { treatment, hospital, source, country, q };
+
+  let mainQuery = applyCommonFilters(
+    adminSupabase.from("leads").select("*", { count: "exact" }).order(sortField, { ascending: sortDir === "asc", nullsFirst: false }),
+    filters
+  );
+  if (status && status !== "all") mainQuery = mainQuery.eq("status", status);
+  mainQuery = mainQuery.range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
+
+  const { data: leadRows, count: filteredCount } = await mainQuery;
+  const list = (leadRows ?? []) as Lead[];
+  const totalPages = Math.max(1, Math.ceil((filteredCount ?? 0) / PAGE_SIZE));
+
+  // Status tab counts -- respect every OTHER active filter (so "if I
+  // also picked this status, how many would I see"), but never the
+  // status filter itself. One skinny query (just the status column).
+  const { data: statusRows } = await applyCommonFilters(adminSupabase.from("leads").select("status"), filters);
+  const statusCounts: Record<string, number> = { all: (statusRows ?? []).length };
+  for (const s of REFERRAL_STATUSES) {
+    statusCounts[s] = (statusRows ?? []).filter((r) => r.status === s).length;
+  }
+  const activeStatus = status || "all";
+
+  // Stable Source option list -- every distinct value ever stored,
+  // regardless of the other active filters, so the dropdown doesn't
+  // reshuffle as the admin filters.
+  const { data: sourceRows } = await adminSupabase.from("leads").select("source");
+  const sourceOptions = Array.from(new Set((sourceRows ?? []).map((r) => r.source).filter(Boolean))).sort((a, b) =>
+    a.localeCompare(b)
+  );
 
   // Partners list, for the Owner filter dropdown and resolving each
   // partner-owned row's display name.
@@ -244,6 +250,8 @@ export default async function AdminLeadsPage({
     attributionAvailable = false;
   }
 
+  const { count: totalCount } = await adminSupabase.from("leads").select("id", { count: "exact", head: true });
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -261,12 +269,41 @@ export default async function AdminLeadsPage({
         </div>
         <SyncReferralsBanner count={unsyncedCount} />
 
+        <div className="flex gap-2 mb-6 flex-wrap">
+          <Link
+            href={withParams({ status: undefined, page: undefined })}
+            className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors whitespace-nowrap ${
+              activeStatus === "all" ? "bg-brand text-white" : "bg-white text-gray-600 border border-gray-200 hover:border-brand hover:text-brand"
+            }`}
+          >
+            All
+            <span className={`text-xs px-1.5 py-0.5 rounded-full ${activeStatus === "all" ? "bg-white/20 text-white" : "bg-gray-100 text-gray-500"}`}>
+              {statusCounts.all}
+            </span>
+          </Link>
+          {REFERRAL_STATUSES.map((s) => (
+            <Link
+              key={s}
+              href={withParams({ status: s, page: undefined })}
+              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors whitespace-nowrap ${
+                activeStatus === s ? "bg-brand text-white" : "bg-white text-gray-600 border border-gray-200 hover:border-brand hover:text-brand"
+              }`}
+            >
+              {REFERRAL_STATUS_LABELS[s]}
+              <span className={`text-xs px-1.5 py-0.5 rounded-full ${activeStatus === s ? "bg-white/20 text-white" : "bg-gray-100 text-gray-500"}`}>
+                {statusCounts[s]}
+              </span>
+            </Link>
+          ))}
+        </div>
+
         <Suspense fallback={<div className="h-[72px] mb-6 rounded-2xl bg-white border border-gray-100" />}>
           <PatientsFilters
             treatmentOptions={TREATMENT_OPTIONS}
+            countryOptions={COUNTRIES}
+            sourceOptions={sourceOptions}
             partners={partners}
-            channelOptions={channelOptions}
-            resultCount={list.length}
+            resultCount={filteredCount ?? 0}
           />
         </Suspense>
 
@@ -277,6 +314,32 @@ export default async function AdminLeadsPage({
           activeSort={sortField}
           activeDir={sortDir}
         />
+
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-3 mt-6">
+            <Link
+              href={withParams({ page: page > 1 ? String(page - 1) : undefined })}
+              aria-disabled={page <= 1}
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+                page <= 1 ? "text-gray-300 cursor-not-allowed pointer-events-none" : "text-gray-600 bg-white border border-gray-200 hover:border-brand hover:text-brand"
+              }`}
+            >
+              ← Previous
+            </Link>
+            <span className="text-sm text-gray-500">
+              Page {page} of {totalPages}
+            </span>
+            <Link
+              href={withParams({ page: page < totalPages ? String(page + 1) : undefined })}
+              aria-disabled={page >= totalPages}
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+                page >= totalPages ? "text-gray-300 cursor-not-allowed pointer-events-none" : "text-gray-600 bg-white border border-gray-200 hover:border-brand hover:text-brand"
+              }`}
+            >
+              Next →
+            </Link>
+          </div>
+        )}
 
         <div className="text-center mt-6">
           <Link href="/admin/deleted-records" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">

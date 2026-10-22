@@ -181,6 +181,16 @@ export async function POST(req: NextRequest) {
       .from("contact_clicks")
       .update({ lead_id: inserted.id })
       .eq("reference_code", refCode);
+
+    // Denormalized onto the lead itself so the Patients list search box
+    // can match it via leads.search_text without a cross-table join at
+    // search time (supabase/migrations/leads_search.sql). Same
+    // best-effort posture -- a missing column/migration never undoes
+    // the lead or the link above.
+    await adminSupabase
+      .from("leads")
+      .update({ linked_reference_code: refCode })
+      .eq("id", inserted.id);
   }
 
   revalidatePath("/admin/leads");
