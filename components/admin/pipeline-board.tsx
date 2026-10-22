@@ -22,6 +22,7 @@ export type PipelineCard = {
   amount: number | null;
   currency: string | null;
   confirmedAt: string | null;
+  sourceCategory: string;
   column: PipelineColumnId;
 };
 

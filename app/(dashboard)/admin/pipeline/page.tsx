@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { ADMIN_EMAILS } from "@/lib/admin";
 import { PipelineBoard, type PipelineCard, type PipelineColumnId } from "@/components/admin/pipeline-board";
+import { computePatientSource } from "@/lib/patient-source";
 import type { BillingStage } from "@/types";
 
 type LeadRow = {
@@ -17,6 +18,12 @@ type LeadRow = {
   billing_stage: string | null;
   created_at: string;
   confirmed_at: string | null;
+  source: string;
+  utm_source: string | null;
+  utm_medium: string | null;
+  referrer_domain: string | null;
+  google_click_id: string | null;
+  acquisition_source?: string | null;
 };
 
 function columnFor(status: string, billingStage: string | null): PipelineColumnId | null {
@@ -58,9 +65,23 @@ export default async function SalesPipelinePage({
     partnerId = ownerRaw.slice("partner:".length);
   }
 
+  // acquisition_source (supabase/migrations/leads_source_category.sql)
+  // may not exist yet in every environment -- probed once; falls back
+  // to the raw columns + computePatientSource() (lib/patient-source.ts,
+  // kept byte-for-byte equivalent to the SQL function) when it doesn't.
+  let acqSourceAvailable = true;
+  try {
+    const { error } = await adminSupabase.from("leads").select("acquisition_source").limit(1);
+    acqSourceAvailable = !error;
+  } catch {
+    acqSourceAvailable = false;
+  }
+
+  const baseColumns =
+    "id, name, country, treatment, hospital, owner_type, partner_id, status, billing_stage, created_at, confirmed_at, source, utm_source, utm_medium, referrer_domain, google_click_id";
   let query = adminSupabase
     .from("leads")
-    .select("id, name, country, treatment, hospital, owner_type, partner_id, status, billing_stage, created_at, confirmed_at")
+    .select(acqSourceAvailable ? `${baseColumns}, acquisition_source` : baseColumns)
     .in("status", ["consultation", "treatment_planned", "treatment_completed"]);
   if (ownerType) query = query.eq("owner_type", ownerType);
   if (partnerId) query = query.eq("partner_id", partnerId);
@@ -68,7 +89,7 @@ export default async function SalesPipelinePage({
   if (treatment) query = query.ilike("treatment", `%${treatment}%`);
 
   const { data: leadRows } = await query;
-  const leads = (leadRows ?? []) as LeadRow[];
+  const leads = (leadRows ?? []) as unknown as LeadRow[];
   const leadIds = leads.map((l) => l.id);
   const partnerLeadIds = leads.filter((l) => l.owner_type === "partner").map((l) => l.id);
   const mctLeadIds = leads.filter((l) => l.owner_type === "mct").map((l) => l.id);
@@ -200,6 +221,7 @@ export default async function SalesPipelinePage({
       amount: money?.amount ?? null,
       currency: money?.currency ?? null,
       confirmedAt: lead.confirmed_at,
+      sourceCategory: lead.acquisition_source ?? computePatientSource(lead),
       column,
     });
   }

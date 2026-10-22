@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { Lead } from "@/app/(dashboard)/admin/leads/page";
 import { computePatientChannel } from "@/lib/patient-channel";
+import { computePatientSource } from "@/lib/patient-source";
 import { REFERRAL_STATUS_LABELS, type ReferralStatus } from "@/types";
 
 export type SortField = "first_contacted_at" | "name" | "treatment" | "status" | "confirmed_at";
@@ -194,6 +195,7 @@ export function LeadsTable({
                     <SortableHeader field="treatment" label="Treatment" />
                   </th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Hospital</th>
+                  <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell whitespace-nowrap">Form / Page</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Source</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Channel</th>
                   <th className="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">
@@ -246,6 +248,7 @@ export function LeadsTable({
                       <td className="px-5 py-4 text-gray-700">{lead.treatment || "—"}</td>
                       <td className="px-5 py-4 text-gray-500">{lead.hospital || "—"}</td>
                       <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">{lead.source}</td>
+                      <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">{lead.acquisition_source ?? computePatientSource(lead)}</td>
                       <td className="px-5 py-4 text-gray-500 hidden lg:table-cell">{lead.channel ?? computePatientChannel(lead)}</td>
                       <td className="px-5 py-4">
                         <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[lead.status] ?? "bg-gray-100 text-gray-600"}`}>

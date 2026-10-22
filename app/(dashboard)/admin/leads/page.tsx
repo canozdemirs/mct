@@ -11,7 +11,7 @@ import { SyncReferralsBanner } from "@/components/admin/sync-referrals-banner";
 import { PatientsFilters } from "@/components/admin/patients-filters";
 import { TREATMENT_OPTIONS } from "@/components/marketing/consultation-form";
 import { foldSearchText } from "@/lib/search-fold";
-import { computePatientChannel } from "@/lib/patient-channel";
+import { computePatientSource } from "@/lib/patient-source";
 import { REFERRAL_STATUSES, REFERRAL_STATUS_LABELS, type ReferralFile, type ReferralStatus } from "@/types";
 
 export type Lead = {
@@ -45,7 +45,9 @@ export type Lead = {
   utm_campaign?: string | null;
   referrer_domain?: string | null;
   linked_reference_code?: string | null;
+  google_click_id?: string | null;
   channel?: string | null;
+  acquisition_source?: string | null;
 };
 
 export type PartnerOption = { id: string; name: string };
@@ -74,7 +76,7 @@ type Filters = {
   hospital?: string;
   source?: string;
   country?: string;
-  channel?: string;
+  acqSource?: string;
   dateFrom?: string;
   dateTo?: string;
   confirmedFrom?: string;
@@ -93,7 +95,7 @@ export default async function AdminLeadsPage({
     hospital?: string;
     source?: string;
     country?: string;
-    channel?: string;
+    acqSource?: string;
     dateFrom?: string;
     dateTo?: string;
     confirmedFrom?: string;
@@ -104,7 +106,7 @@ export default async function AdminLeadsPage({
   }>;
 }) {
   const {
-    q, treatment, status, owner: ownerRaw, hospital, source, country, channel,
+    q, treatment, status, owner: ownerRaw, hospital, source, country, acqSource,
     dateFrom, dateTo, confirmedFrom, confirmedTo, sort, dir, page: pageRaw,
   } = await searchParams;
 
@@ -135,7 +137,7 @@ export default async function AdminLeadsPage({
   function withParams(extra: Record<string, string | undefined>) {
     const params = new URLSearchParams();
     const merged = {
-      q, treatment, status, owner: ownerRaw, hospital, source, country, channel,
+      q, treatment, status, owner: ownerRaw, hospital, source, country, acqSource,
       dateFrom, dateTo, confirmedFrom, confirmedTo, sort, dir, page: pageRaw,
       ...extra,
     };
@@ -172,16 +174,16 @@ export default async function AdminLeadsPage({
     }
   }
 
-  // channel (supabase/migrations/leads_channel.sql) -- same posture.
-  // Probed unconditionally (not just when filtering) since the Channel
-  // dropdown's option list needs it on every page load, not only when
-  // a channel filter is active.
-  let channelAvailable = true;
+  // acquisition_source (supabase/migrations/leads_source_category.sql)
+  // -- same posture. Probed unconditionally (not just when filtering)
+  // since the Source dropdown's option list needs it on every page
+  // load, not only when a Source filter is active.
+  let acqSourceAvailable = true;
   try {
-    const { error } = await adminSupabase.from("leads").select("channel").limit(1);
-    channelAvailable = !error;
+    const { error } = await adminSupabase.from("leads").select("acquisition_source").limit(1);
+    acqSourceAvailable = !error;
   } catch {
-    channelAvailable = false;
+    acqSourceAvailable = false;
   }
 
   const { gte: regGte, lte: regLte } = registeredDateBounds(dateFrom, dateTo);
@@ -195,7 +197,7 @@ export default async function AdminLeadsPage({
     if (filters.hospital) q1 = q1.ilike("hospital", `%${filters.hospital}%`);
     if (filters.source) q1 = q1.eq("source", filters.source);
     if (filters.country) q1 = q1.eq("country", filters.country);
-    if (filters.channel && channelAvailable) q1 = q1.eq("channel", filters.channel);
+    if (filters.acqSource && acqSourceAvailable) q1 = q1.eq("acquisition_source", filters.acqSource);
     if (regGte) q1 = q1.gte("first_contacted_at", regGte);
     if (regLte) q1 = q1.lte("first_contacted_at", regLte);
     if (confirmedFrom) q1 = q1.gte("confirmed_at", confirmedFrom);
@@ -204,7 +206,7 @@ export default async function AdminLeadsPage({
     return q1 as T;
   }
 
-  const filters: Filters = { treatment, hospital, source, country, channel, q };
+  const filters: Filters = { treatment, hospital, source, country, acqSource, q };
 
   let mainQuery = applyCommonFilters(
     adminSupabase.from("leads").select("*", { count: "exact" }).order(sortField, { ascending: sortDir === "asc", nullsFirst: false }),
@@ -235,19 +237,24 @@ export default async function AdminLeadsPage({
     a.localeCompare(b)
   );
 
-  // Stable Channel option list, same spirit as Source above. Reads the
-  // generated column directly once migrated; falls back to computing it
-  // in JS (lib/patient-channel.ts, kept byte-for-byte equivalent to the
-  // SQL function) so the dropdown still works before that migration runs.
-  let channelOptions: string[];
-  if (channelAvailable) {
-    const { data: channelRows } = await adminSupabase.from("leads").select("channel");
-    channelOptions = Array.from(new Set((channelRows ?? []).map((r) => r.channel).filter(Boolean))) as string[];
+  // Stable Source (acquisition category) option list, same spirit as
+  // Form/Page above. Reads the generated column directly once migrated;
+  // falls back to computing it in JS (lib/patient-source.ts, kept
+  // byte-for-byte equivalent to the SQL function) so the dropdown still
+  // works before that migration runs. "Word of Mouth" is always offered
+  // even before any patient is actually classified that way yet.
+  let acqSourceOptions: string[];
+  if (acqSourceAvailable) {
+    const { data: acqSourceRows } = await adminSupabase.from("leads").select("acquisition_source");
+    acqSourceOptions = Array.from(new Set((acqSourceRows ?? []).map((r) => r.acquisition_source).filter(Boolean))) as string[];
   } else {
-    const { data: channelSourceRows } = await adminSupabase.from("leads").select("owner_type, source, utm_source, referrer_domain");
-    channelOptions = Array.from(new Set((channelSourceRows ?? []).map((l) => computePatientChannel(l as Lead))));
+    const { data: acqSourceFallbackRows } = await adminSupabase
+      .from("leads")
+      .select("owner_type, source, utm_source, utm_medium, referrer_domain, google_click_id");
+    acqSourceOptions = Array.from(new Set((acqSourceFallbackRows ?? []).map((l) => computePatientSource(l as Lead))));
   }
-  channelOptions.sort((a, b) => a.localeCompare(b));
+  acqSourceOptions = Array.from(new Set([...acqSourceOptions, "Word of Mouth"]));
+  acqSourceOptions.sort((a, b) => a.localeCompare(b));
 
   // Partners list, for the Owner filter dropdown and resolving each
   // partner-owned row's display name.
@@ -333,7 +340,7 @@ export default async function AdminLeadsPage({
             treatmentOptions={TREATMENT_OPTIONS}
             countryOptions={COUNTRIES}
             sourceOptions={sourceOptions}
-            channelOptions={channelOptions}
+            acqSourceOptions={acqSourceOptions}
             partners={partners}
             resultCount={filteredCount ?? 0}
           />

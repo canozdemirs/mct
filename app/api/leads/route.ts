@@ -295,6 +295,7 @@ export async function POST(req: NextRequest) {
     utm_medium: (typeof sessionEntry?.utmMedium === "string" && sessionEntry.utmMedium) || pageUrlAttribution.utmMedium,
     utm_campaign: (typeof sessionEntry?.utmCampaign === "string" && sessionEntry.utmCampaign) || pageUrlAttribution.utmCampaign,
     referrer_domain: referrerDomain,
+    google_click_id: (typeof sessionEntry?.googleClickId === "string" && sessionEntry.googleClickId) || pageUrlAttribution.googleClickId,
   };
 
   let { data: inserted, error: insertError } = await adminSupabase
@@ -303,16 +304,17 @@ export async function POST(req: NextRequest) {
     .select("id")
     .single();
 
-  // landing_page/utm_*/referrer_domain may not exist yet in an environment
-  // that hasn't run the relevant migration -- retry without them so the
-  // lead still saves.
+  // landing_page/utm_*/referrer_domain/google_click_id may not exist yet
+  // in an environment that hasn't run the relevant migration -- retry
+  // without them so the lead still saves.
   if (insertError && ["42703", "PGRST204"].includes((insertError as { code?: string }).code ?? "")) {
-    const { landing_page, utm_source, utm_medium, utm_campaign, referrer_domain, ...fallbackPayload } = insertPayload;
+    const { landing_page, utm_source, utm_medium, utm_campaign, referrer_domain, google_click_id, ...fallbackPayload } = insertPayload;
     void landing_page;
     void utm_source;
     void utm_medium;
     void utm_campaign;
     void referrer_domain;
+    void google_click_id;
     const retry = await adminSupabase.from("leads").insert(fallbackPayload).select("id").single();
     inserted = retry.data;
     insertError = retry.error;

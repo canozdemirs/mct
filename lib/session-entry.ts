@@ -17,6 +17,7 @@ export type SessionEntry = {
   utmSource: string | null;
   utmMedium: string | null;
   utmCampaign: string | null;
+  googleClickId: string | null;
 };
 
 export function captureSessionEntryOnce(): void {
@@ -30,6 +31,7 @@ export function captureSessionEntryOnce(): void {
       utmSource: params.get("utm_source"),
       utmMedium: params.get("utm_medium"),
       utmCampaign: params.get("utm_campaign"),
+      googleClickId: params.get("gclid") || params.get("gbraid") || params.get("wbraid"),
     };
     window.sessionStorage.setItem(SESSION_ENTRY_KEY, JSON.stringify(entry));
   } catch {

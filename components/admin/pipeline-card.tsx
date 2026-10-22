@@ -32,6 +32,7 @@ export function PipelineCard({
         </span>
         <span className="text-[11px] text-gray-400">{card.daysInStage}d</span>
       </div>
+      <div className="text-[11px] text-gray-400 mt-1 truncate">{card.sourceCategory}</div>
       {card.amount !== null && card.currency && (
         <div className="text-xs font-semibold text-brand-dark mt-1.5">
           {card.amount.toLocaleString()} {card.currency}
