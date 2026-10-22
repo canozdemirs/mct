@@ -2,36 +2,46 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { REFERRAL_STATUSES, REFERRAL_STATUS_LABELS } from "@/types";
-
-type DateRangeKey = "today" | "7d" | "30d" | "month" | "custom";
-
-const DATE_RANGE_LABELS: Record<DateRangeKey, string> = {
-  today: "Today",
-  "7d": "Last 7 days",
-  "30d": "Last 30 days",
-  month: "This month",
-  custom: "Custom range",
-};
 
 const SELECT_CLASS = "bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm text-gray-700";
 
-// All filter state lives in the URL (?q=&owner=&treatment=&status=&
-// channel=&dateRange=&dateFrom=&dateTo=&sort=&dir=) so it survives a
-// refresh and stays shareable -- this component only ever reads
-// useSearchParams() and pushes updates back to it, it never holds its
-// own source of truth besides the debounced search input (which needs
-// local state so typing doesn't feel like it's fighting a server round
-// trip on every keystroke).
+function isoDate(d: Date): string {
+  return d.toISOString().slice(0, 10);
+}
+
+// Quick Registered-date presets just fill dateFrom/dateTo directly --
+// there's no separate "preset" concept kept in the URL, so a manually
+// edited date range and a quick-picked one are indistinguishable (and
+// equally easy to clear via the one chip that covers both).
+function quickRange(key: "today" | "7d" | "30d" | "month"): { from: string; to: string } {
+  const now = new Date();
+  const to = isoDate(now);
+  if (key === "today") return { from: to, to };
+  if (key === "7d") return { from: isoDate(new Date(now.getTime() - 6 * 24 * 60 * 60 * 1000)), to };
+  if (key === "30d") return { from: isoDate(new Date(now.getTime() - 29 * 24 * 60 * 60 * 1000)), to };
+  return { from: isoDate(new Date(now.getFullYear(), now.getMonth(), 1)), to };
+}
+
+// All filter state lives in the URL (?q=&treatment=&owner=&hospital=&
+// source=&country=&dateFrom=&dateTo=&confirmedFrom=&confirmedTo=&sort=&
+// dir=&page=) so it survives a refresh, a back-navigation from a
+// patient card, and stays shareable. Status itself is driven by the
+// tabs above this component (same `status` param) -- not duplicated
+// here. This component only ever reads useSearchParams() and pushes
+// updates back to it; the debounced search input is the only local
+// state, so typing doesn't feel like it's fighting a server round trip
+// on every keystroke.
 export function PatientsFilters({
   treatmentOptions,
+  countryOptions,
+  sourceOptions,
   partners,
-  channelOptions,
   resultCount,
 }: {
   treatmentOptions: string[];
+  countryOptions: string[];
+  sourceOptions: string[];
   partners: { id: string; name: string }[];
-  channelOptions: string[];
   resultCount: number;
 }) {
   const router = useRouter();
@@ -41,21 +51,24 @@ export function PatientsFilters({
   const q = searchParams.get("q") || "";
   const owner = searchParams.get("owner") || "all";
   const treatment = searchParams.get("treatment") || "";
-  const status = searchParams.get("status") || "all";
-  const channel = searchParams.get("channel") || "";
-  const dateRange = searchParams.get("dateRange") || "";
+  const hospital = searchParams.get("hospital") || "";
+  const source = searchParams.get("source") || "";
+  const country = searchParams.get("country") || "";
   const dateFrom = searchParams.get("dateFrom") || "";
   const dateTo = searchParams.get("dateTo") || "";
+  const confirmedFrom = searchParams.get("confirmedFrom") || "";
+  const confirmedTo = searchParams.get("confirmedTo") || "";
 
   const [searchInput, setSearchInput] = useState(q);
+  const [hospitalInput, setHospitalInput] = useState(hospital);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hospitalDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Keeps the box in sync when the URL changes from elsewhere (e.g. a
+  // Keeps the boxes in sync when the URL changes from elsewhere (e.g. a
   // chip removal or "Clear filters"), without fighting the debounce
-  // timer for ordinary typing.
-  useEffect(() => {
-    setSearchInput(q);
-  }, [q]);
+  // timers for ordinary typing.
+  useEffect(() => setSearchInput(q), [q]);
+  useEffect(() => setHospitalInput(hospital), [hospital]);
 
   function updateParams(updates: Record<string, string | undefined>) {
     const params = new URLSearchParams(searchParams.toString());
@@ -63,19 +76,26 @@ export function PatientsFilters({
       if (value) params.set(key, value);
       else params.delete(key);
     }
+    // Any filter change invalidates the current page number.
+    params.delete("page");
     router.push(params.toString() ? `${pathname}?${params.toString()}` : pathname);
   }
 
-  function handleSearchChange(value: string) {
-    setSearchInput(value);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => updateParams({ q: value || undefined }), 300);
+  function debounced(ref: typeof debounceRef, field: string, value: string, setLocal: (v: string) => void) {
+    setLocal(value);
+    if (ref.current) clearTimeout(ref.current);
+    ref.current = setTimeout(() => updateParams({ [field]: value || undefined }), 300);
   }
 
   function clearAll() {
     if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (hospitalDebounceRef.current) clearTimeout(hospitalDebounceRef.current);
     setSearchInput("");
-    router.push(pathname);
+    setHospitalInput("");
+    const params = new URLSearchParams();
+    const statusParam = searchParams.get("status");
+    if (statusParam) params.set("status", statusParam); // tabs stay as they are
+    router.push(params.toString() ? `${pathname}?${params.toString()}` : pathname);
   }
 
   const chips: { key: string; label: string }[] = [];
@@ -85,25 +105,25 @@ export function PatientsFilters({
     chips.push({ key: "owner", label: `Owner: ${ownerLabel}` });
   }
   if (treatment) chips.push({ key: "treatment", label: `Treatment: ${treatment}` });
-  if (status !== "all") {
-    chips.push({ key: "status", label: `Status: ${REFERRAL_STATUS_LABELS[status as keyof typeof REFERRAL_STATUS_LABELS] ?? status}` });
-  }
-  if (channel) chips.push({ key: "channel", label: `Channel: ${channel}` });
-  if (dateRange) {
-    const label =
-      dateRange === "custom"
-        ? `Registered: ${dateFrom || "…"} – ${dateTo || "…"}`
-        : `Registered: ${DATE_RANGE_LABELS[dateRange as DateRangeKey] ?? dateRange}`;
-    chips.push({ key: "dateRange", label });
-  }
+  if (hospital) chips.push({ key: "hospital", label: `Hospital: ${hospital}` });
+  if (source) chips.push({ key: "source", label: `Source: ${source}` });
+  if (country) chips.push({ key: "country", label: `Country: ${country}` });
+  if (dateFrom || dateTo) chips.push({ key: "registered", label: `Registered: ${dateFrom || "…"} – ${dateTo || "…"}` });
+  if (confirmedFrom || confirmedTo) chips.push({ key: "confirmed", label: `Confirmed: ${confirmedFrom || "…"} – ${confirmedTo || "…"}` });
 
   function removeChip(key: string) {
-    if (key === "dateRange") {
-      updateParams({ dateRange: undefined, dateFrom: undefined, dateTo: undefined });
+    if (key === "registered") {
+      updateParams({ dateFrom: undefined, dateTo: undefined });
+    } else if (key === "confirmed") {
+      updateParams({ confirmedFrom: undefined, confirmedTo: undefined });
     } else if (key === "q") {
       if (debounceRef.current) clearTimeout(debounceRef.current);
       setSearchInput("");
       updateParams({ q: undefined });
+    } else if (key === "hospital") {
+      if (hospitalDebounceRef.current) clearTimeout(hospitalDebounceRef.current);
+      setHospitalInput("");
+      updateParams({ hospital: undefined });
     } else {
       updateParams({ [key]: undefined });
     }
@@ -111,13 +131,14 @@ export function PatientsFilters({
 
   return (
     <div className="bg-white border border-gray-100 rounded-2xl p-4 mb-6 space-y-3">
+      <input
+        value={searchInput}
+        onChange={(e) => debounced(debounceRef, "q", e.target.value, setSearchInput)}
+        placeholder="Search name, email, phone, or reference code..."
+        className="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm text-gray-700"
+      />
+
       <div className="flex flex-wrap gap-3">
-        <input
-          value={searchInput}
-          onChange={(e) => handleSearchChange(e.target.value)}
-          placeholder="Search name, email, phone, or reference code..."
-          className="flex-1 min-w-[240px] bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm text-gray-700"
-        />
         <select value={owner} onChange={(e) => updateParams({ owner: e.target.value === "all" ? undefined : e.target.value })} className={SELECT_CLASS}>
           <option value="all">All owners</option>
           <option value="mct">MCT (direct)</option>
@@ -135,57 +156,61 @@ export function PatientsFilters({
             </option>
           ))}
         </select>
-        <select value={status} onChange={(e) => updateParams({ status: e.target.value === "all" ? undefined : e.target.value })} className={SELECT_CLASS}>
-          <option value="all">All statuses</option>
-          {REFERRAL_STATUSES.map((s) => (
+        <input
+          value={hospitalInput}
+          onChange={(e) => debounced(hospitalDebounceRef, "hospital", e.target.value, setHospitalInput)}
+          placeholder="Hospital"
+          className="bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm text-gray-700 w-40"
+        />
+        <select value={source} onChange={(e) => updateParams({ source: e.target.value || undefined })} className={SELECT_CLASS}>
+          <option value="">All sources</option>
+          {sourceOptions.map((s) => (
             <option key={s} value={s}>
-              {REFERRAL_STATUS_LABELS[s]}
+              {s}
             </option>
           ))}
         </select>
-        <select value={channel} onChange={(e) => updateParams({ channel: e.target.value || undefined })} className={SELECT_CLASS}>
-          <option value="">All channels</option>
-          {channelOptions.map((c) => (
+        <select value={country} onChange={(e) => updateParams({ country: e.target.value || undefined })} className={SELECT_CLASS}>
+          <option value="">All countries</option>
+          {countryOptions.map((c) => (
             <option key={c} value={c}>
               {c}
             </option>
           ))}
         </select>
-        <select
-          value={dateRange}
-          onChange={(e) => {
-            const value = e.target.value;
-            if (value === "custom") updateParams({ dateRange: "custom" });
-            else updateParams({ dateRange: value || undefined, dateFrom: undefined, dateTo: undefined });
-          }}
-          className={SELECT_CLASS}
-        >
-          <option value="">Any Registered Date</option>
-          <option value="today">Today</option>
-          <option value="7d">Last 7 days</option>
-          <option value="30d">Last 30 days</option>
-          <option value="month">This month</option>
-          <option value="custom">Custom range</option>
-        </select>
-        {dateRange === "custom" && (
-          <>
-            <input
-              type="date"
-              value={dateFrom}
-              onChange={(e) => updateParams({ dateFrom: e.target.value || undefined })}
-              className={SELECT_CLASS}
-            />
-            <input
-              type="date"
-              value={dateTo}
-              onChange={(e) => updateParams({ dateTo: e.target.value || undefined })}
-              className={SELECT_CLASS}
-            />
-          </>
-        )}
       </div>
 
-      <div className="flex items-center justify-between flex-wrap gap-2">
+      <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-gray-50">
+        <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider mr-1">Registered</span>
+        <input type="date" value={dateFrom} onChange={(e) => updateParams({ dateFrom: e.target.value || undefined })} className={SELECT_CLASS} />
+        <span className="text-gray-300 text-xs">to</span>
+        <input type="date" value={dateTo} onChange={(e) => updateParams({ dateTo: e.target.value || undefined })} className={SELECT_CLASS} />
+        {(["today", "7d", "30d", "month"] as const).map((key) => (
+          <button
+            key={key}
+            type="button"
+            onClick={() => {
+              const range = quickRange(key);
+              updateParams({ dateFrom: range.from, dateTo: range.to });
+            }}
+            className="px-3 py-1.5 rounded-lg bg-gray-50 border border-gray-100 text-xs font-semibold text-gray-600 hover:bg-gray-100 transition-colors"
+          >
+            {key === "today" ? "Today" : key === "7d" ? "Last 7 days" : key === "30d" ? "Last 30 days" : "This month"}
+          </button>
+        ))}
+
+        <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider mr-1 ml-4">Confirmed</span>
+        <input
+          type="date"
+          value={confirmedFrom}
+          onChange={(e) => updateParams({ confirmedFrom: e.target.value || undefined })}
+          className={SELECT_CLASS}
+        />
+        <span className="text-gray-300 text-xs">to</span>
+        <input type="date" value={confirmedTo} onChange={(e) => updateParams({ confirmedTo: e.target.value || undefined })} className={SELECT_CLASS} />
+      </div>
+
+      <div className="flex items-center justify-between flex-wrap gap-2 pt-1">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-sm font-semibold text-gray-600">
             {resultCount} patient{resultCount !== 1 ? "s" : ""}
