@@ -80,6 +80,15 @@ export const LEGACY_REDIRECTS: Readonly<Record<string, string>> = {
   "the-best-ophthalmologist-in-turkey": "/the-best-hospitals-in-turkey",
   "the-best-plastic-surgeon-in-turkey": "/plastic-surgery-in-turkey",
   "tounge-cancer": "/tongue-cancer",
+  "everything-you-need-to-know-about-dht": "/everything-you-need-to-know-about-dht-blockers",
+
+  // Search Console follow-up (2026-10-22): WordPress-era comment/trackback
+  // style suffix on an otherwise-valid slug. Covers both the single- and
+  // double-slash variant reported (/dhi-vs-fue-hair-transplant-procedures/1000
+  // and .../1000 with a doubled slash before it) -- proxy.ts's segment
+  // normalization (split("/").filter(Boolean)) already collapses the
+  // doubled slash to the same key before this map is checked.
+  "dhi-vs-fue-hair-transplant-procedures/1000": "/dhi-vs-fue-hair-transplant-procedures",
   "what-are-10-ways-to-prevent-cancer-2": "/what-are-10-ways-to-prevent-cancer",
   "what-is-medical-travel": "/medical-tourism-turkey",
   "what-medication-do-you-take-after-hair-transplant/embed": "/what-medication-do-you-take-after-hair-transplant",

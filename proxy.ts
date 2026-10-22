@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 import { BLOG_SLUGS } from "@/lib/blog-slugs.generated";
 import { isGonePath } from "@/lib/gone-paths";
 import { getLegacyRedirect } from "@/lib/legacy-redirects";
+import { resolveEmbeddedUrlRedirect, resolveTrailingJunkRedirect } from "@/lib/malformed-url-redirects";
 import { isProductionHost } from "@/lib/site-host";
 
 // Next.js 16 renamed `middleware.ts` to `proxy.ts` (same API, same
@@ -93,6 +94,21 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const segments = pathname.split("/").filter(Boolean);
 
+  // Search Console follow-up (2026-10-22): checked before anything else --
+  // a request whose path has a whole second URL pasted into it
+  // (/https://www.medicalcenterturkey.com/<real-path>) can never itself be
+  // a real route, legacy-redirect key, or gone slug, so there's no risk of
+  // this shadowing any of the checks below. Resolves straight to the
+  // embedded path's own final target (single hop) or 410 if that embedded
+  // path isn't real.
+  const embedded = resolveEmbeddedUrlRedirect(segments);
+  if (embedded) {
+    if ("gone" in embedded) {
+      return withRobotsTag(goneResponse(), host);
+    }
+    return withRobotsTag(NextResponse.redirect(new URL(embedded.target, request.url), 301), host);
+  }
+
   // 404-audit follow-up (2026-10-22): checked first, ahead of isGonePath,
   // since the two sets are disjoint by construction (verified when
   // lib/legacy-redirects.ts was written) -- order between them doesn't
@@ -105,6 +121,17 @@ export function proxy(request: NextRequest) {
 
   if (isGonePath(segments)) {
     return withRobotsTag(goneResponse(), host);
+  }
+
+  // Search Console follow-up (2026-10-22): a path with stray trailing
+  // whitespace/%20/%0A/";" (often arriving as its own trailing segment,
+  // e.g. .../how-to-make-your-breasts-grow-bigger-naturally/;). Only
+  // redirects when the cleaned path is a real page -- otherwise falls
+  // through to the ordinary 404 below rather than manufacturing a redirect
+  // to somewhere that doesn't exist.
+  const trailingJunk = resolveTrailingJunkRedirect(segments);
+  if (trailingJunk) {
+    return withRobotsTag(NextResponse.redirect(new URL(trailingJunk.target, request.url), 301), host);
   }
 
   if (segments.length === 1) {
