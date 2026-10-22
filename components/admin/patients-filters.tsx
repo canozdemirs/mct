@@ -35,14 +35,14 @@ export function PatientsFilters({
   treatmentOptions,
   countryOptions,
   sourceOptions,
-  channelOptions,
+  acqSourceOptions,
   partners,
   resultCount,
 }: {
   treatmentOptions: string[];
   countryOptions: string[];
   sourceOptions: string[];
-  channelOptions: string[];
+  acqSourceOptions: string[];
   partners: { id: string; name: string }[];
   resultCount: number;
 }) {
@@ -56,7 +56,7 @@ export function PatientsFilters({
   const hospital = searchParams.get("hospital") || "";
   const source = searchParams.get("source") || "";
   const country = searchParams.get("country") || "";
-  const channel = searchParams.get("channel") || "";
+  const acqSource = searchParams.get("acqSource") || "";
   const dateFrom = searchParams.get("dateFrom") || "";
   const dateTo = searchParams.get("dateTo") || "";
   const confirmedFrom = searchParams.get("confirmedFrom") || "";
@@ -109,9 +109,9 @@ export function PatientsFilters({
   }
   if (treatment) chips.push({ key: "treatment", label: `Treatment: ${treatment}` });
   if (hospital) chips.push({ key: "hospital", label: `Hospital: ${hospital}` });
-  if (source) chips.push({ key: "source", label: `Source: ${source}` });
+  if (source) chips.push({ key: "source", label: `Form / Page: ${source}` });
   if (country) chips.push({ key: "country", label: `Country: ${country}` });
-  if (channel) chips.push({ key: "channel", label: `Channel: ${channel}` });
+  if (acqSource) chips.push({ key: "acqSource", label: `Source: ${acqSource}` });
   if (dateFrom || dateTo) chips.push({ key: "registered", label: `Registered: ${dateFrom || "…"} – ${dateTo || "…"}` });
   if (confirmedFrom || confirmedTo) chips.push({ key: "confirmed", label: `Confirmed: ${confirmedFrom || "…"} – ${confirmedTo || "…"}` });
 
@@ -167,7 +167,7 @@ export function PatientsFilters({
           className="bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm text-gray-700 w-40"
         />
         <select value={source} onChange={(e) => updateParams({ source: e.target.value || undefined })} className={SELECT_CLASS}>
-          <option value="">All sources</option>
+          <option value="">All forms / pages</option>
           {sourceOptions.map((s) => (
             <option key={s} value={s}>
               {s}
@@ -182,9 +182,9 @@ export function PatientsFilters({
             </option>
           ))}
         </select>
-        <select value={channel} onChange={(e) => updateParams({ channel: e.target.value || undefined })} className={SELECT_CLASS}>
-          <option value="">All channels</option>
-          {channelOptions.map((c) => (
+        <select value={acqSource} onChange={(e) => updateParams({ acqSource: e.target.value || undefined })} className={SELECT_CLASS}>
+          <option value="">All sources</option>
+          {acqSourceOptions.map((c) => (
             <option key={c} value={c}>
               {c}
             </option>

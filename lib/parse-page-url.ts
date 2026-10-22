@@ -8,11 +8,12 @@ export type PageUrlAttribution = {
   utmSource: string | null;
   utmMedium: string | null;
   utmCampaign: string | null;
+  googleClickId: string | null;
 };
 
 export function parsePageUrlAttribution(pageUrl: string | null | undefined): PageUrlAttribution {
   if (!pageUrl) {
-    return { landingPage: null, utmSource: null, utmMedium: null, utmCampaign: null };
+    return { landingPage: null, utmSource: null, utmMedium: null, utmCampaign: null, googleClickId: null };
   }
   try {
     const url = new URL(pageUrl);
@@ -21,9 +22,14 @@ export function parsePageUrlAttribution(pageUrl: string | null | undefined): Pag
       utmSource: url.searchParams.get("utm_source"),
       utmMedium: url.searchParams.get("utm_medium"),
       utmCampaign: url.searchParams.get("utm_campaign"),
+      // gclid (standard web), gbraid/wbraid (Google's iOS/privacy-sandbox
+      // click-id variants) -- all three serve the same purpose here
+      // (presence == a Google Ads click), so only one combined field is
+      // kept; which exact variant it was doesn't matter for this.
+      googleClickId: url.searchParams.get("gclid") || url.searchParams.get("gbraid") || url.searchParams.get("wbraid"),
     };
   } catch {
-    return { landingPage: null, utmSource: null, utmMedium: null, utmCampaign: null };
+    return { landingPage: null, utmSource: null, utmMedium: null, utmCampaign: null, googleClickId: null };
   }
 }
 

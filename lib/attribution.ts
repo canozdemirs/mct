@@ -245,7 +245,10 @@ export type AttributionEvidence = {
   landingPage?: string | null;
 };
 
-const PAID_MEDIA_MEDIUMS = ["cpc", "ppc", "paid", "display", "paidsocial", "paid-social"];
+// Exported for reuse by lib/patient-source.ts's computePatientSource()
+// (the Patients list "Source" acquisition-category classifier) -- kept
+// here since this file owns the canonical definition.
+export const PAID_MEDIA_MEDIUMS = ["cpc", "ppc", "paid", "display", "paidsocial", "paid-social"];
 
 // Google's actual search-results hostnames (any subdomain of these, e.g.
 // "www.google.com", "google.co.uk") -- a finite, known list, not a loose
@@ -254,7 +257,7 @@ const PAID_MEDIA_MEDIUMS = ["cpc", "ppc", "paid", "display", "paidsocial", "paid
 // third-party-controlled host like "google.evil.com" (every label after
 // "google." there is still just letters/dots). Checking against this
 // explicit suffix list avoids that false positive.
-const GOOGLE_SEARCH_SUFFIXES = [
+export const GOOGLE_SEARCH_SUFFIXES = [
   "google.com", "google.co.uk", "google.ca", "google.com.au", "google.co.jp",
   "google.co.in", "google.de", "google.fr", "google.it", "google.es", "google.nl",
   "google.com.tr", "google.com.br", "google.co.id", "google.co.nz", "google.ie",

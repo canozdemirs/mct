@@ -18,11 +18,12 @@ import { HospitalBillingPanel } from "@/components/admin/hospital-billing-panel"
 import type { BillingStage, Commission, ReferralFile } from "@/types";
 import type { PatientRevenue } from "@/components/admin/revenue-panel";
 import type { Lead, PartnerOption } from "@/app/(dashboard)/admin/leads/page";
+import { computePatientSource } from "@/lib/patient-source";
 
 const ATTRIBUTION_BASE_COLUMNS = "reference_code, channel, created_at, lead_id";
 const ATTRIBUTION_SOURCE_COLUMNS = "last_touch_landing_page, last_touch_utm_source, last_touch_utm_medium, last_touch_utm_campaign";
 
-async function fetchAttribution(adminSupabase: SupabaseClient, code: string): Promise<AttributionInfo | null> {
+async function fetchAttribution(adminSupabase: SupabaseClient, code: string): Promise<Omit<AttributionInfo, "sourceCategory"> | null> {
   const { data, error } = await adminSupabase
     .from("lead_attributions")
     .select(`${ATTRIBUTION_BASE_COLUMNS}, ${ATTRIBUTION_SOURCE_COLUMNS}`)
@@ -165,17 +166,17 @@ export default async function PatientDetailPage({
   // leads.landing_page/utm_* (parsed server-side from page_url at submit
   // time, unconditional) take priority; lead_attributions.last_touch_*
   // (consent-gated, client-side-only) only fills in what that doesn't have.
-  const hasOwnAttribution = !!(lead.landing_page || lead.utm_source || lead.utm_medium || lead.utm_campaign);
-  const attribution: AttributionInfo | null =
-    hasOwnAttribution || fallbackAttribution
-      ? {
-          channel: fallbackAttribution?.channel ?? null,
-          landingPage: lead.landing_page ?? fallbackAttribution?.landingPage ?? null,
-          utmSource: lead.utm_source ?? fallbackAttribution?.utmSource ?? null,
-          utmMedium: lead.utm_medium ?? fallbackAttribution?.utmMedium ?? null,
-          utmCampaign: lead.utm_campaign ?? fallbackAttribution?.utmCampaign ?? null,
-        }
-      : null;
+  // sourceCategory (lib/patient-source.ts) is always computable, so the
+  // attribution object itself is never null -- the box always has at
+  // least that to show, even for a patient with no landing page/UTM at all.
+  const attribution: AttributionInfo = {
+    channel: fallbackAttribution?.channel ?? null,
+    landingPage: lead.landing_page ?? fallbackAttribution?.landingPage ?? null,
+    utmSource: lead.utm_source ?? fallbackAttribution?.utmSource ?? null,
+    utmMedium: lead.utm_medium ?? fallbackAttribution?.utmMedium ?? null,
+    utmCampaign: lead.utm_campaign ?? fallbackAttribution?.utmCampaign ?? null,
+    sourceCategory: lead.acquisition_source ?? computePatientSource(lead),
+  };
 
   const signedFiles = await Promise.all(
     ((lead.files as unknown as ReferralFile[]) ?? []).map(async (f) => {
@@ -204,11 +205,9 @@ export default async function PatientDetailPage({
 
         <PatientEditCard lead={lead} partners={partners} />
 
-        {(referenceCode || attribution) && (
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
-            <SourceInfoBox referenceCode={referenceCode} attribution={attribution} />
-          </div>
-        )}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
+          <SourceInfoBox referenceCode={referenceCode} attribution={attribution} />
+        </div>
 
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
           <PatientFilesCard files={signedFiles} leadId={id} />
