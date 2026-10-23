@@ -22,19 +22,34 @@ import { PRODUCTION_HOST } from "@/lib/site-host";
 // governs actual tracking cookies.
 const EXCLUDED_PATH_PREFIXES = ["/admin", "/partner-portal", "/auth", "/api"];
 
+// Bug found 2026-10-23: the first version of this file assumed
+// event.url was always an absolute URL and called `new URL(event.url)`
+// unconditionally, throwing into a catch that returned null -- i.e.
+// dropping EVERY event, on every page, regardless of hostname or path.
+// Vercel's own beforeSend docs example checks `event.url.includes(...)`
+// directly, which only makes sense if event.url can be a bare pathname
+// with no scheme/host -- so this no longer assumes either shape: it
+// tries URL parsing and falls back to treating the string as a path if
+// that throws, and it reads the hostname from window.location (always
+// reliable in a browser context) instead of trying to pull it out of
+// event.url at all.
+function getPathname(eventUrl: string): string {
+  try {
+    return new URL(eventUrl).pathname;
+  } catch {
+    return eventUrl.split("?")[0].split("#")[0];
+  }
+}
+
 function isExcludedPath(pathname: string): boolean {
   return EXCLUDED_PATH_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
 }
 
 function beforeSend(event: BeforeSendEvent): BeforeSendEvent | null {
-  let url: URL;
-  try {
-    url = new URL(event.url);
-  } catch {
+  if (typeof window !== "undefined" && window.location.hostname !== PRODUCTION_HOST) {
     return null;
   }
-  if (url.hostname !== PRODUCTION_HOST) return null;
-  if (isExcludedPath(url.pathname)) return null;
+  if (isExcludedPath(getPathname(event.url))) return null;
   return event;
 }
 
