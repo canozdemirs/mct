@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/marketing/nav";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import LiposuctionLanding from "@/components/marketing/liposuction-landing";
+import { RelatedArticles } from "@/components/marketing/related-articles";
 import {
   generateFAQSchema,
   generateServicesSchema,
@@ -59,6 +60,7 @@ export default function LiposuctionPage() {
       <main>
         <LiposuctionLanding />
       </main>
+      <RelatedArticles landingSlug="liposuction-turkey" />
       <WhatsAppFloat />
     </>
   );

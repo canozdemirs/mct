@@ -15,6 +15,20 @@ import {
   getHospitalsByGroup,
   getAllHospitalSlugs,
 } from "@/lib/hospitals";
+import { LANDING_INFO } from "@/lib/related-package-box";
+
+// 2026-10-23 internal-link project, item 2: the 6 highest-demand packages,
+// shown on every hospital page (not hospital-specific -- a generic
+// cross-sell, same 6 everywhere) since hospital pages previously linked to
+// no treatment/package page at all.
+const POPULAR_TREATMENT_SLUGS = [
+  "hair-transplant-packages",
+  "rhinoplasty-turkey",
+  "breast-augmentation-turkey",
+  "liposuction-turkey",
+  "dental-implants-turkey",
+  "gynecomastia-turkey",
+] as const;
 
 type PageProps = { params: Promise<{ hospital: string }> };
 
@@ -380,6 +394,31 @@ export default async function HospitalPage({ params }: PageProps) {
             </aside>
           </div>
         </div>
+
+        {/* Popular Treatments */}
+        <section className="bg-slate-50 border-t border-slate-100 py-14">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <span className="text-xs font-bold uppercase tracking-widest text-teal">Popular Treatments</span>
+              <h2 className="text-2xl font-bold text-brand mt-2">Treatments at {hospital.name}</h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {POPULAR_TREATMENT_SLUGS.map((slug) => {
+                const info = LANDING_INFO[slug];
+                return (
+                  <Link
+                    key={slug}
+                    href={info.href}
+                    className="block rounded-xl border border-slate-100 bg-white p-5 hover:border-teal hover:shadow-md transition-all"
+                  >
+                    <h3 className="text-base font-bold text-brand mb-1">{info.name}</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">{info.description}</p>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
 
         {/* Consultation form */}
         <section id="consultation" className="bg-white border-t border-slate-100 py-14">

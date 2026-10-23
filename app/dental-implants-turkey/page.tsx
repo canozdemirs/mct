@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/marketing/nav";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import DentalImplantLanding from "@/components/marketing/dental-implant-landing";
+import { RelatedArticles } from "@/components/marketing/related-articles";
 import {
   generateFAQSchema,
   generateServicesSchema,
@@ -58,6 +59,7 @@ export default function DentalImplantsPage() {
       <main>
         <DentalImplantLanding />
       </main>
+      <RelatedArticles landingSlug="dental-implants-turkey" />
       <WhatsAppFloat />
     </>
   );

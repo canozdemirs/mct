@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/marketing/nav";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import GynecomastiaLanding from "@/components/marketing/gynecomastia-landing";
+import { RelatedArticles } from "@/components/marketing/related-articles";
 import {
   generateFAQSchema,
   generateServicesSchema,
@@ -51,6 +52,7 @@ export default function GynecomastiaPage() {
       <main>
         <GynecomastiaLanding />
       </main>
+      <RelatedArticles landingSlug="gynecomastia-turkey" />
       <WhatsAppFloat />
     </>
   );

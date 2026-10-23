@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/marketing/nav";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import HairTransplantLanding from "@/components/marketing/hair-transplant-landing";
+import { RelatedArticles } from "@/components/marketing/related-articles";
 import {
   generateFAQSchema,
   generateServicesSchema,
@@ -64,6 +65,7 @@ export default function HairTransplantPackagesPage() {
       <main>
         <HairTransplantLanding />
       </main>
+      <RelatedArticles landingSlug="hair-transplant-packages" />
       <WhatsAppFloat />
     </>
   );

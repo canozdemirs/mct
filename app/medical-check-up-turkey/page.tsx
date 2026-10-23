@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/marketing/nav";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import CheckUpLanding from "@/components/marketing/checkup-landing";
+import { RelatedArticles } from "@/components/marketing/related-articles";
 import {
   generateFAQSchema,
   generateServicesSchema,
@@ -56,6 +57,7 @@ export default function CheckUpPage() {
       <main>
         <CheckUpLanding />
       </main>
+      <RelatedArticles landingSlug="medical-check-up-turkey" />
       <WhatsAppFloat />
     </>
   );
