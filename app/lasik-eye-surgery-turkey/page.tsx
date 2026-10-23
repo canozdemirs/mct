@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/marketing/nav";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import LasikLanding from "@/components/marketing/lasik-landing";
+import { RelatedArticles } from "@/components/marketing/related-articles";
 import {
   generateFAQSchema,
   generateServicesSchema,
@@ -51,6 +52,7 @@ export default function LasikPage() {
       <main>
         <LasikLanding />
       </main>
+      <RelatedArticles landingSlug="lasik-eye-surgery-turkey" />
       <WhatsAppFloat />
     </>
   );

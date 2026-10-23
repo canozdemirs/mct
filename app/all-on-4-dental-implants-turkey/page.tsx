@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/marketing/nav";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import AllOnFourLanding from "@/components/marketing/all-on-4-landing";
+import { RelatedArticles } from "@/components/marketing/related-articles";
 import {
   generateFAQSchema,
   generateServicesSchema,
@@ -58,6 +59,7 @@ export default function AllOnFourPage() {
       <main>
         <AllOnFourLanding />
       </main>
+      <RelatedArticles landingSlug="all-on-4-dental-implants-turkey" />
       <WhatsAppFloat />
     </>
   );
