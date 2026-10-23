@@ -122,17 +122,29 @@ export function getRelatedPackageBoxHtml(slug: string): string | null {
   return renderBoxHtml(info);
 }
 
+// Matches the article's opening block of real text. By the time this
+// runs, removeTemplateIntro() (in the page component) has already
+// stripped the generic "...is an article that aims to give you all the
+// information..." sentence most posts open with -- so what's actually
+// left at the start is often the bullet-list table of contents that
+// originally followed it, THEN the real first paragraph. The optional
+// leading <ul> is skipped so the box still lands after real prose, not
+// immediately under the H1 the way matching only the very first tag did.
+const FIRST_PARAGRAPH = /^\s*(?:<ul\b[\s\S]*?<\/ul>\s*)?<(p|span)\b[^>]*>[\s\S]*?<\/\1>/;
+
 /** Splices the box into an article's HTML: always appended at the end,
- * and ALSO inserted right before the first <h2> for long posts (3+ H2
- * sections) so it isn't the only thing a reader sees after scrolling past
- * a long wall of text before reaching the first real subheading. */
+ * and ALSO inserted after the first paragraph of body text for long
+ * posts (3+ H2 sections) -- never directly under the H1, which is what
+ * inserting before the first <h2> used to do on posts whose opening
+ * paragraph is very short. */
 export function injectRelatedPackageBox(html: string, boxHtml: string): string {
   const h2Count = (html.match(/<h2[ >]/g) || []).length;
   let result = html;
   if (h2Count >= 3) {
-    const idx = result.indexOf("<h2");
-    if (idx !== -1) {
-      result = result.slice(0, idx) + boxHtml + result.slice(idx);
+    const match = result.match(FIRST_PARAGRAPH);
+    if (match) {
+      const insertAt = match[0].length;
+      result = result.slice(0, insertAt) + boxHtml + result.slice(insertAt);
     }
   }
   return result + boxHtml;
