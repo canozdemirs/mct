@@ -9,7 +9,9 @@ const NAV_ITEMS = [
   { href: "/admin/partner-applications", label: "Partners" },
 ];
 
-export function AdminNav() {
+const VERCEL_ANALYTICS_URL = "https://vercel.com/mct-s-projects/mct-xnse/analytics";
+
+export function AdminNav({ isAdmin }: { isAdmin: boolean }) {
   const pathname = usePathname();
 
   return (
@@ -29,6 +31,16 @@ export function AdminNav() {
             </Link>
           );
         })}
+        {isAdmin && (
+          <a
+            href={VERCEL_ANALYTICS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-4 py-2 rounded-xl text-sm font-semibold transition-colors bg-gray-50 text-gray-600 hover:bg-gray-100"
+          >
+            Traffic
+          </a>
+        )}
       </div>
     </div>
   );
