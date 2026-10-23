@@ -11,7 +11,7 @@ import { BLOG_POSTS } from "@/lib/blog-index.generated";
 import { getPostBySlug } from "@/lib/blog-listing";
 import { BLOG_SLUGS } from "@/lib/blog-slugs.generated";
 import { getAllHospitalSlugs } from "@/lib/hospitals";
-import { getRelatedPackageBoxHtml, injectRelatedPackageBox } from "@/lib/related-package-box";
+import { getRelatedPackageBoxHtml, injectRelatedPackageBox, getGenericConsultationBoxHtml } from "@/lib/related-package-box";
 
 // This route is reached only via a proxy.ts rewrite from the public
 // root-level URL (/<slug>). Its own canonical always points back to that
@@ -639,9 +639,12 @@ export default async function BlogPostPage({ params }: PageProps) {
       )
     )
   );
-  const relatedBoxHtml = getRelatedPackageBoxHtml(slug);
-  if (relatedBoxHtml) {
-    html = injectRelatedPackageBox(html, relatedBoxHtml);
+  const midBoxHtml = getRelatedPackageBoxHtml(slug, false);
+  if (midBoxHtml) {
+    const endBoxHtml = getRelatedPackageBoxHtml(slug, true)!;
+    html = injectRelatedPackageBox(html, midBoxHtml, endBoxHtml);
+  } else {
+    html = html + getGenericConsultationBoxHtml();
   }
   const articleSchema = generateArticleSchema({
     title: post.title,

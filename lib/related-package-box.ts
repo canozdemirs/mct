@@ -103,23 +103,48 @@ export const LANDING_INFO: Readonly<Record<string, LandingInfo>> = {
   },
 };
 
-function renderBoxHtml(info: LandingInfo): string {
+// Secondary (outline) button, same data-cta="consultation" mechanism the
+// WordPress-era banner images used before removeBannerImages() started
+// stripping them -- see lib/gone-page.ts's sibling discussion. Only added
+// to the END-of-article box, never the mid-article one (2026-10-23
+// follow-up, item 1): one package CTA mid-article reads as a helpful
+// pointer, two reads as nagging.
+const QUOTE_BUTTON = `<a href="#" data-cta="consultation" class="!no-underline !text-brand inline-flex items-center justify-center rounded-full border border-brand px-5 py-2.5 text-sm font-semibold hover:!text-white hover:bg-brand transition-colors">Get a Free Quote</a>`;
+
+function renderBoxHtml(info: LandingInfo, withQuoteButton: boolean): string {
   return `<div class="my-8 rounded-2xl border border-gray-100 bg-gray-50 p-6 not-prose">
 <p class="text-xs font-bold uppercase tracking-widest text-teal mb-2">Related Package</p>
 <h4 class="text-lg font-bold text-brand mb-1">${info.name}</h4>
 <p class="text-sm text-gray-600 mb-4">${info.description}</p>
+<div class="flex flex-wrap gap-3">
 <a href="${info.href}" class="!no-underline !text-white inline-flex items-center justify-center rounded-full bg-brand px-5 py-2.5 text-sm font-semibold hover:bg-[#154d8a] transition-colors">${info.ctaLabel}</a>
+${withQuoteButton ? QUOTE_BUTTON : ""}
+</div>
 </div>`;
 }
 
 /** Returns the box's HTML, or null if this post has no title-tier landing
- * match (see lib/blog-landing-matches.generated.ts). */
-export function getRelatedPackageBoxHtml(slug: string): string | null {
+ * match (see lib/blog-landing-matches.generated.ts). `withQuoteButton`
+ * adds the secondary "Get a Free Quote" CTA -- pass true only for the
+ * end-of-article box, false for the mid-article one. */
+export function getRelatedPackageBoxHtml(slug: string, withQuoteButton: boolean): string | null {
   const landing = BLOG_LANDING_MATCHES[slug];
   if (!landing) return null;
   const info = LANDING_INFO[landing];
   if (!info) return null;
-  return renderBoxHtml(info);
+  return renderBoxHtml(info, withQuoteButton);
+}
+
+/** Fallback box for posts with no landing match at all (including the
+ * body-tier matches deliberately excluded from BLOG_LANDING_MATCHES) --
+ * no package to point to, so just a plain consultation CTA. Always
+ * end-of-article only, never mid-article. */
+export function getGenericConsultationBoxHtml(): string {
+  return `<div class="my-8 rounded-2xl border border-gray-100 bg-gray-50 p-6 not-prose text-center">
+<h4 class="text-lg font-bold text-brand mb-1">Have questions about your treatment?</h4>
+<p class="text-sm text-gray-600 mb-4">Our International Patient Center will prepare a free, personalized plan within 48 hours.</p>
+<a href="#" data-cta="consultation" class="!no-underline !text-white inline-flex items-center justify-center rounded-full bg-brand px-5 py-2.5 text-sm font-semibold hover:bg-[#154d8a] transition-colors">Get a Free Quote</a>
+</div>`;
 }
 
 // Matches the article's opening block of real text. By the time this
@@ -132,20 +157,20 @@ export function getRelatedPackageBoxHtml(slug: string): string | null {
 // immediately under the H1 the way matching only the very first tag did.
 const FIRST_PARAGRAPH = /^\s*(?:<ul\b[\s\S]*?<\/ul>\s*)?<(p|span)\b[^>]*>[\s\S]*?<\/\1>/;
 
-/** Splices the box into an article's HTML: always appended at the end,
- * and ALSO inserted after the first paragraph of body text for long
- * posts (3+ H2 sections) -- never directly under the H1, which is what
- * inserting before the first <h2> used to do on posts whose opening
- * paragraph is very short. */
-export function injectRelatedPackageBox(html: string, boxHtml: string): string {
+/** Splices the two box variants into an article's HTML: endBoxHtml is
+ * always appended at the end, and midBoxHtml is ALSO inserted after the
+ * first paragraph of body text for long posts (3+ H2 sections) -- never
+ * directly under the H1, which is what inserting before the first <h2>
+ * used to do on posts whose opening paragraph is very short. */
+export function injectRelatedPackageBox(html: string, midBoxHtml: string, endBoxHtml: string): string {
   const h2Count = (html.match(/<h2[ >]/g) || []).length;
   let result = html;
   if (h2Count >= 3) {
     const match = result.match(FIRST_PARAGRAPH);
     if (match) {
       const insertAt = match[0].length;
-      result = result.slice(0, insertAt) + boxHtml + result.slice(insertAt);
+      result = result.slice(0, insertAt) + midBoxHtml + result.slice(insertAt);
     }
   }
-  return result + boxHtml;
+  return result + endBoxHtml;
 }
