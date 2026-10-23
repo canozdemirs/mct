@@ -10,7 +10,7 @@ import Image from "next/image";
 // page, which is the exact problem this component replaces.
 const navLinks = [
   { href: "#hero", label: "Ana Sayfa" },
-  { href: "#hakkimizda", label: "Hakkımızda" },
+  { href: "/hospitals-in-turkey", label: "Hastaneler" },
   { href: "#surec", label: "Süreç" },
   { href: "#sss", label: "SSS" },
   { href: "#iletisim", label: "İletişim" },
