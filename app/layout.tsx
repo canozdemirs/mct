@@ -8,6 +8,7 @@ import { RouteChangeTracker } from "@/components/analytics/route-change-tracker"
 import { AttributionCapture } from "@/components/analytics/attribution-capture";
 import { SessionEntryCapture } from "@/components/analytics/session-entry-capture";
 import { ConsentBanner } from "@/components/analytics/consent-banner";
+import { VercelWebAnalytics } from "@/components/analytics/vercel-web-analytics";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -77,6 +78,7 @@ export default function RootLayout({
         </Suspense>
         <ConsultationModalProvider>{children}</ConsultationModalProvider>
         <ConsentBanner />
+        <VercelWebAnalytics />
       </body>
     </html>
   );
