@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { ADMIN_EMAILS } from "@/lib/admin";
-import { validateLeadContactFields, findDuplicateLead } from "@/lib/admin-lead-helpers";
+import { validateLeadContactFields, findDuplicateLead, isPhoneEffectivelyEmpty } from "@/lib/admin-lead-helpers";
 import { SOURCE_CATEGORIES } from "@/lib/patient-source";
 
 // Full-field edit for a Patients row, either owner type. Status is
@@ -51,7 +51,11 @@ export async function PATCH(
 
   const source = (body.source || "").trim();
   const name = (body.name || "").trim();
-  const phone = (body.phone || "").trim();
+  const rawPhone = (body.phone || "").trim();
+  // A phone field left exactly as the country-code autofill set it (e.g.
+  // "+93") carries no real number -- treated as not provided at all, same
+  // as validateLeadContactFields()/findDuplicateLead() treat it below.
+  const phone = isPhoneEffectivelyEmpty(rawPhone) ? "" : rawPhone;
   const email = (body.email || "").trim();
   const country = (body.country || "").trim();
   const treatment = (body.treatment || "").trim();

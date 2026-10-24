@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { isValidEmail } from "@/lib/validation";
-import { LEAD_SOURCE_OPTIONS } from "@/lib/constants";
+import { LEAD_SOURCE_OPTIONS, COUNTRY_DIAL_CODES } from "@/lib/constants";
 
 // Shared by both POST /api/admin/leads/manual (create) and
 // PATCH /api/admin/leads/[id] (edit) so the two can never validate or
@@ -8,6 +8,26 @@ import { LEAD_SOURCE_OPTIONS } from "@/lib/constants";
 
 export function normalizeDigits(value: string) {
   return value.replace(/[^0-9]/g, "");
+}
+
+const DIAL_CODE_DIGITS = new Set(Object.values(COUNTRY_DIAL_CODES).map((code) => normalizeDigits(code)));
+
+// 2026-10-24 follow-up: useCountryDialCode (lib/hooks/use-country-dial-
+// code.ts) pre-fills the phone field with "<dial code> " the moment a
+// country is picked -- e.g. "+93 " for Afghanistan. A patient with no
+// phone, only an email, left that autofill untouched, and the old code
+// treated "+93" as a typed-but-invalid phone number ("Please enter a
+// valid phone number.") instead of recognizing nothing real had been
+// entered. Anything that reduces to just a known calling code (or is
+// blank, or just a bare "+") counts as no phone at all -- not run
+// through format validation, not written to the database, not used for
+// duplicate matching.
+export function isPhoneEffectivelyEmpty(phone: string): boolean {
+  const trimmed = phone.trim();
+  if (trimmed === "" || trimmed === "+") return true;
+  const digits = normalizeDigits(phone);
+  if (digits === "") return true;
+  return DIAL_CODE_DIGITS.has(digits);
 }
 
 export type LeadContactFields = {
@@ -52,10 +72,11 @@ export function validateLeadContactFields(
     return "Please enter the patient's name.";
   }
 
-  const hasPhone = normalizeDigits(fields.phone).length >= 7;
+  const phoneEmpty = isPhoneEffectivelyEmpty(fields.phone);
+  const hasPhone = !phoneEmpty && normalizeDigits(fields.phone).length >= 7;
   const hasEmail = !!fields.email && isValidEmail(fields.email);
 
-  if (fields.phone && !hasPhone) {
+  if (!phoneEmpty && !hasPhone) {
     return "Please enter a valid phone number.";
   }
   if (fields.email && !hasEmail) {
@@ -82,7 +103,7 @@ export async function findDuplicateLead(
   email: string,
   excludeId?: string
 ): Promise<DuplicateLead | null> {
-  const phoneTail = normalizeDigits(phone).slice(-10);
+  const phoneTail = isPhoneEffectivelyEmpty(phone) ? "" : normalizeDigits(phone).slice(-10);
 
   const [{ data: phoneCandidates }, { data: emailCandidates }] = await Promise.all([
     phoneTail.length >= 7

@@ -5,7 +5,7 @@ import { createClient as createServerClient } from "@/lib/supabase/server";
 import { ADMIN_EMAILS } from "@/lib/admin";
 import { isValidReferenceCodeFormat } from "@/lib/attribution";
 import { linkContactClickToLead } from "@/lib/attribution-server";
-import { validateLeadContactFields, findDuplicateLead } from "@/lib/admin-lead-helpers";
+import { validateLeadContactFields, findDuplicateLead, isPhoneEffectivelyEmpty } from "@/lib/admin-lead-helpers";
 
 function adminClient() {
   return createClient(
@@ -101,7 +101,11 @@ export async function POST(req: NextRequest) {
 
   const source = (body.source || "").trim();
   const name = (body.name || "").trim();
-  const phone = (body.phone || "").trim();
+  const rawPhone = (body.phone || "").trim();
+  // A phone field left exactly as the country-code autofill set it (e.g.
+  // "+93") carries no real number -- treated as not provided at all, same
+  // as validateLeadContactFields()/findDuplicateLead() treat it below.
+  const phone = isPhoneEffectivelyEmpty(rawPhone) ? "" : rawPhone;
   const email = (body.email || "").trim();
   const country = (body.country || "").trim();
   const treatment = (body.treatment || "").trim();
