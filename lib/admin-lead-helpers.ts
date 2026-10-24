@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { isValidEmail } from "@/lib/validation";
-import { LEAD_SOURCE_OPTIONS, LEAD_SOURCES_REQUIRING_PHONE } from "@/lib/constants";
+import { LEAD_SOURCE_OPTIONS } from "@/lib/constants";
 
 // Shared by both POST /api/admin/leads/manual (create) and
 // PATCH /api/admin/leads/[id] (edit) so the two can never validate or
@@ -20,9 +20,16 @@ export type LeadContactFields = {
 // Returns an error message, or null if the fields are valid. Phone and
 // email are both nullable on `leads` -- some patients only give one, or
 // neither if they declined (hence "Unknown" in the form) -- but at least
-// one is required to actually reach them, and WhatsApp/Phone-sourced
-// leads specifically need a phone number since that's the only contact
-// method those channels implies.
+// one is required to actually reach them.
+//
+// 2026-10-24 follow-up: there used to be an extra rule requiring a phone
+// number specifically for the "WhatsApp"/"Phone" sources (on the
+// reasoning that those channels imply phone is the only contact method),
+// enforced via LEAD_SOURCES_REQUIRING_PHONE. Removed per report: a staff
+// member reached a patient over WhatsApp/phone but the patient only gave
+// an email, and saving that patient was blocked outright with no way
+// around it. The source describes HOW staff reached the patient, not
+// what contact info exists on file, so it should never gate this.
 //
 // `requireKnownSource` defaults to true for the manual-entry "Add new
 // patient" flow, where the admin always picks from LEAD_SOURCE_OPTIONS.
@@ -54,11 +61,8 @@ export function validateLeadContactFields(
   if (fields.email && !hasEmail) {
     return "Please enter a valid email address.";
   }
-  if (LEAD_SOURCES_REQUIRING_PHONE.includes(fields.source) && !hasPhone) {
-    return `Phone is required for the "${fields.source}" source.`;
-  }
   if (!hasPhone && !hasEmail) {
-    return "Please provide at least a phone number or an email address.";
+    return "Enter at least a phone number or an email.";
   }
 
   return null;

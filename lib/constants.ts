@@ -10,10 +10,6 @@ export const LEAD_SOURCE_OPTIONS = [
   "Other",
 ];
 
-// Sources where a phone number is the only realistic way to reach the
-// patient back -- required even though `leads.phone` itself is nullable.
-export const LEAD_SOURCES_REQUIRING_PHONE = ["WhatsApp", "Phone"];
-
 export const UNKNOWN_LABEL = "Unknown / Not specified";
 
 export const TREATMENTS = [

@@ -156,7 +156,7 @@ export function PatientEditCard({ lead, partners }: { lead: Lead; partners: Part
       const hasPhone = form.phone.replace(/[^0-9]/g, "").length >= 7;
       const hasEmail = !form.emailUnknown && !!form.email.trim() && isValidEmail(form.email);
       if (!hasPhone && !hasEmail) {
-        setFormError("Please provide at least a phone number or an email address.");
+        setFormError("Enter at least a phone number or an email.");
         return;
       }
     }
