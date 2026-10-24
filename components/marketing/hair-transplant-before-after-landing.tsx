@@ -19,17 +19,24 @@ import { packages, recoveryTimeline, testimonials, whyMCT } from "@/components/m
 // different design language.
 
 const GALLERY_DIR = "/blog/hair-transplant-surgery-before-and-after-turkey";
-// The original post had 19 images total; 13 are genuine before/after
-// result composites (confirmed by inspecting each) -- the other 6 are an
-// Instagram promo banner, a Trustpilot promo banner, two plain review-
-// text screenshots with no photos at all, the Treatment Cost Calculator
-// banner, and the old "Request a FREE Consultation" banner. Only the 13
-// real result photos are shown here.
-const GALLERY_PHOTOS: BeforeAfterPhoto[] = [
-  "10-1", "2", "8-1", "3", "7-1", "4", "13-1", "5", "12-1", "6", "11-1", "1", "9-1",
-].map((n, i) => ({
+// The original post had 19 images total. Inspecting each individually
+// (not just by filename pattern) found two different things mixed
+// together under what looked like one "before/after" set:
+//   - 6 are genuine before/after result photo composites: 1, 2, 3, 4, 5, 6
+//   - 7 are "PATIENT REVIEW" screenshot cards (Google/Trustpilot review
+//     text, no photos at all): 7-1, 8-1, 9-1, 10-1, 11-1, 12-1, 13-1
+// The other 6 (not used anywhere on this page) are an Instagram promo
+// banner, a Trustpilot promo banner, two plain review-text screenshots
+// with no photos, the Treatment Cost Calculator banner, and the old
+// "Request a FREE Consultation" banner.
+const GALLERY_PHOTOS: BeforeAfterPhoto[] = ["1", "2", "3", "4", "5", "6"].map((n, i) => ({
   src: `${GALLERY_DIR}/${n}.png`,
   alt: `Hair transplant before and after – Medical Center Turkey patient ${i + 1}`,
+}));
+
+const REVIEW_SCREENSHOTS: BeforeAfterPhoto[] = ["7-1", "8-1", "9-1", "10-1", "11-1", "12-1", "13-1"].map((n, i) => ({
+  src: `${GALLERY_DIR}/${n}.png`,
+  alt: `Google patient review – Medical Center Turkey patient ${i + 1}`,
 }));
 
 const WHY_MCT_SLUGS = ["Dedicated GO Coordinator", "Warranty Certificate", "Ministry of Health Authorized", "Fast Recovery"];
@@ -70,36 +77,53 @@ export function HairTransplantBeforeAfterLanding() {
   return (
     <>
       {/* ── 1. HERO ─────────────────────────────────────────────── */}
-      <section style={{ background: "linear-gradient(135deg, #053980, #031e46)", padding: "56px 20px 44px" }}>
+      {/* Mobile is deliberately compact (small text, 2x2 badge grid, side-
+          by-side CTAs, tight padding) so the first before/after photo is
+          visible without scrolling on a 375x812 viewport. Desktop keeps
+          the original larger sizing via sm:/lg: overrides. */}
+      <section
+        className="px-5 pt-6 pb-5 sm:pt-14 sm:pb-11"
+        style={{ background: "linear-gradient(135deg, #053980, #031e46)" }}
+      >
         <div style={{ maxWidth: 820, margin: "0 auto", textAlign: "center" }}>
-          <h1 style={{ fontSize: "clamp(28px, 5vw, 46px)", fontWeight: 800, color: "#fff", lineHeight: 1.15, marginBottom: 14 }}>
+          <h1
+            className="text-white font-extrabold text-[24px] leading-[1.2] mb-2 sm:text-[46px] sm:leading-[1.15] sm:mb-3.5"
+          >
             Hair Transplant Before &amp; After in Turkey
           </h1>
-          <p style={{ fontSize: "clamp(15px, 2vw, 18px)", color: "rgba(255,255,255,0.75)", marginBottom: 28 }}>
+          <p className="text-[12.5px] sm:text-[18px] mb-3 sm:mb-7" style={{ color: "rgba(255,255,255,0.75)" }}>
             Real Medical Center Turkey patients. Natural hairlines, no filters.
           </p>
 
-          <div className="flex justify-center flex-wrap gap-2.5 mb-8">
+          <div className="grid grid-cols-2 gap-1.5 sm:flex sm:flex-wrap sm:justify-center sm:gap-2.5 mb-3 sm:mb-8">
             {["5,000+ International Patients", "★ 4.9 Trustpilot", "Ministry of Health Authorized", "12 Months Aftercare"].map((label) => (
-              <div key={label} style={{ background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.25)", borderRadius: 100, padding: "7px 16px", fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.9)" }}>
+              <div
+                key={label}
+                className="text-[9.5px] px-2 py-1.5 sm:text-xs sm:px-4 sm:py-1.5"
+                style={{ background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.25)", borderRadius: 100, fontWeight: 600, color: "rgba(255,255,255,0.9)" }}
+              >
                 {label}
               </div>
             ))}
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-3">
+          <div className="flex flex-row justify-center gap-2 sm:gap-3">
             <button
               onClick={scrollToForm}
-              style={{ background: "#053980", border: "2px solid #A3C6CF", color: "#fff", padding: "14px 28px", borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8 }}
+              className="flex-1 sm:flex-initial text-[12px] px-3 py-2.5 sm:text-[15px] sm:px-7 sm:py-3.5"
+              style={{ background: "#053980", border: "2px solid #A3C6CF", color: "#fff", borderRadius: 8, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6 }}
             >
-              Get Your Free Hair Analysis <ArrowRight size={16} />
+              Get Your Free Hair Analysis <ArrowRight size={14} className="hidden sm:inline" />
             </button>
             <WhatsAppLink
               message="Hi, I'd like to send photos for a free hair transplant analysis."
-              className="inline-flex items-center justify-center gap-2"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center"
             >
-              <span style={{ background: "#25D366", color: "#fff", padding: "14px 28px", borderRadius: 8, fontWeight: 700, fontSize: 15, display: "inline-flex", alignItems: "center", gap: 8 }}>
-                <MessageCircle size={16} /> WhatsApp Us
+              <span
+                className="w-full text-[12px] px-3 py-2.5 sm:text-[15px] sm:px-7 sm:py-3.5"
+                style={{ background: "#25D366", color: "#fff", borderRadius: 8, fontWeight: 700, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6 }}
+              >
+                <MessageCircle size={14} /> WhatsApp Us
               </span>
             </WhatsAppLink>
           </div>
@@ -107,9 +131,9 @@ export function HairTransplantBeforeAfterLanding() {
       </section>
 
       {/* ── 2. GALLERY — immediately below the hero ────────────── */}
-      <section style={{ background: "#F4F8FB", padding: "48px 20px 60px" }}>
+      <section className="px-5 pt-5 pb-10 sm:pt-12 sm:pb-16" style={{ background: "#F4F8FB" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <BeforeAfterGallery photos={GALLERY_PHOTOS} />
+          <BeforeAfterGallery photos={GALLERY_PHOTOS} layout="grid" />
         </div>
       </section>
 
@@ -207,6 +231,12 @@ export function HairTransplantBeforeAfterLanding() {
               </div>
             ))}
           </div>
+
+          <div style={{ marginTop: 48 }}>
+            <h3 style={{ fontSize: 14, fontWeight: 700, color: "#053980", marginBottom: 16, textAlign: "center" }}>More reviews from Google &amp; Trustpilot</h3>
+            <BeforeAfterGallery photos={REVIEW_SCREENSHOTS} layout="carousel" />
+          </div>
+
           <div className="text-center" style={{ marginTop: 28 }}>
             <a href="https://www.trustpilot.com/review/medicalcenterturkey.com" target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, fontWeight: 600, color: "#5788AC" }}>
               See all reviews on Trustpilot →
