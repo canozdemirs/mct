@@ -12,7 +12,11 @@ import { generateBreadcrumbSchema } from "@/lib/schema";
 // words of migrated WordPress text first.
 const PAGE_URL = "https://www.medicalcenterturkey.com/hair-transplant-surgery-before-and-after-turkey";
 
-const GALLERY_COUNT = 13;
+// 6 real before/after photos only -- the 7 "PATIENT REVIEW" screenshot
+// cards that used to be mixed into this same set live in the Reviews
+// section instead (see hair-transplant-before-after-landing.tsx), not
+// here, since they're not photos of a treatment result.
+const GALLERY_SLUGS = ["1", "2", "3", "4", "5", "6"];
 
 export const metadata: Metadata = {
   title: "Hair Transplant Before and After Turkey | Real Patient Results | Medical Center Turkey",
@@ -36,13 +40,11 @@ const imageListSchema = {
   "@context": "https://schema.org",
   "@type": "ItemList",
   name: "Hair Transplant Before and After — Medical Center Turkey Patient Results",
-  numberOfItems: GALLERY_COUNT,
-  itemListElement: Array.from({ length: GALLERY_COUNT }, (_, i) => ({
+  numberOfItems: GALLERY_SLUGS.length,
+  itemListElement: GALLERY_SLUGS.map((slug, i) => ({
     "@type": "ImageObject",
     position: i + 1,
-    contentUrl: `https://www.medicalcenterturkey.com/blog/hair-transplant-surgery-before-and-after-turkey/${
-      ["10-1", "2", "8-1", "3", "7-1", "4", "13-1", "5", "12-1", "6", "11-1", "1", "9-1"][i]
-    }.png`,
+    contentUrl: `https://www.medicalcenterturkey.com/blog/hair-transplant-surgery-before-and-after-turkey/${slug}.png`,
     name: `Hair transplant before and after – Medical Center Turkey patient ${i + 1}`,
   })),
 };
