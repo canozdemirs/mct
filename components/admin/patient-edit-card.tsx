@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { COUNTRIES, UNKNOWN_LABEL } from "@/lib/constants";
 import { TREATMENT_OPTIONS } from "@/components/marketing/consultation-form";
 import { isValidEmail } from "@/lib/validation";
+import { isPhoneEffectivelyEmpty } from "@/lib/admin-lead-helpers";
 import { hospitals, hospitalGroups } from "@/lib/hospitals";
 import { computePatientSource, computeContactMethod, SOURCE_CATEGORIES } from "@/lib/patient-source";
 import { isValidReferenceCodeFormat } from "@/lib/attribution";
@@ -153,7 +154,7 @@ export function PatientEditCard({ lead, partners }: { lead: Lead; partners: Part
         setFormError("Please enter the patient's name.");
         return;
       }
-      const hasPhone = form.phone.replace(/[^0-9]/g, "").length >= 7;
+      const hasPhone = !isPhoneEffectivelyEmpty(form.phone) && form.phone.replace(/[^0-9]/g, "").length >= 7;
       const hasEmail = !form.emailUnknown && !!form.email.trim() && isValidEmail(form.email);
       if (!hasPhone && !hasEmail) {
         setFormError("Enter at least a phone number or an email.");
