@@ -2,10 +2,10 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { COUNTRIES, LEAD_SOURCE_OPTIONS, LEAD_SOURCES_REQUIRING_PHONE, UNKNOWN_LABEL } from "@/lib/constants";
+import { COUNTRIES, LEAD_SOURCE_OPTIONS, UNKNOWN_LABEL } from "@/lib/constants";
 import { TREATMENT_OPTIONS } from "@/components/marketing/consultation-form";
-import { isValidEmail } from "@/lib/validation";
 import { useCountryDialCode } from "@/lib/hooks/use-country-dial-code";
+import { validateLeadContactFields } from "@/lib/admin-lead-helpers";
 
 type ClickInfo = {
   reference_code: string;
@@ -21,18 +21,11 @@ type ClickInfo = {
 
 type DuplicateInfo = { id: string; name: string; created_at: string };
 
+// Delegates to the same validateLeadContactFields() the API routes use
+// (lib/admin-lead-helpers.ts) so this client-side pre-check can never
+// drift from what the server actually enforces.
 function clientFieldError(source: string, name: string, phone: string, email: string): string | null {
-  if (!source) return "Please select a source.";
-  if (!name.trim()) return "Please enter the patient's name.";
-  const hasPhone = phone.replace(/[^0-9]/g, "").length >= 7;
-  const hasEmail = !!email.trim() && isValidEmail(email);
-  if (LEAD_SOURCES_REQUIRING_PHONE.includes(source) && !hasPhone) {
-    return `Phone is required for the "${source}" source.`;
-  }
-  if (!hasPhone && !hasEmail) {
-    return "Please provide at least a phone number or an email address.";
-  }
-  return null;
+  return validateLeadContactFields({ source, name, phone, email });
 }
 
 export function AddManualLeadForm({ attributionAvailable }: { attributionAvailable: boolean }) {
@@ -295,9 +288,7 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Phone {LEAD_SOURCES_REQUIRING_PHONE.includes(source) ? "*" : ""}
-                  </label>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Phone</label>
                   <input
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
@@ -327,7 +318,7 @@ export function AddManualLeadForm({ attributionAvailable }: { attributionAvailab
                   />
                 </div>
 
-                <p className="text-xs text-gray-400">At least one of phone or email is required (unless both are unknown and the source doesn&apos;t require a phone).</p>
+                <p className="text-xs text-gray-400">Enter at least a phone number or an email.</p>
 
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Country</label>
