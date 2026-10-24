@@ -9,6 +9,7 @@
 import { BLOG_POSTS, type BlogPostMeta } from "./blog-index.generated";
 import { CATEGORY_OVERRIDES } from "./blog-category-overrides";
 import { LISTING_EXCERPTS } from "./blog-listing-excerpts";
+import { BLOG_SLUGS_REPLACED_BY_PAGE } from "./blog-replaced-by-page";
 
 export const POSTS_PER_PAGE = 12;
 
@@ -28,11 +29,13 @@ function toTimestamp(date: string): number {
 // via getPostBySlug) sees the corrected categories / card excerpts
 // consistently — the auto-generated BLOG_POSTS array itself is never
 // mutated.
-const POSTS_WITH_OVERRIDES: BlogPostMetaWithExcerpt[] = BLOG_POSTS.map((post) => ({
-  ...post,
-  ...(CATEGORY_OVERRIDES[post.slug] ? { categories: CATEGORY_OVERRIDES[post.slug] } : null),
-  ...(LISTING_EXCERPTS[post.slug] ? { listingExcerpt: LISTING_EXCERPTS[post.slug] } : null),
-}));
+const POSTS_WITH_OVERRIDES: BlogPostMetaWithExcerpt[] = BLOG_POSTS
+  .filter((post) => !BLOG_SLUGS_REPLACED_BY_PAGE.has(post.slug))
+  .map((post) => ({
+    ...post,
+    ...(CATEGORY_OVERRIDES[post.slug] ? { categories: CATEGORY_OVERRIDES[post.slug] } : null),
+    ...(LISTING_EXCERPTS[post.slug] ? { listingExcerpt: LISTING_EXCERPTS[post.slug] } : null),
+  }));
 
 export const SORTED_BLOG_POSTS: BlogPostMetaWithExcerpt[] = [...POSTS_WITH_OVERRIDES].sort(
   (a, b) => toTimestamp(b.date) - toTimestamp(a.date)

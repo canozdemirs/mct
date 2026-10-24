@@ -7,8 +7,7 @@ import { Footer } from "@/components/marketing/footer";
 import { WhatsAppFloat } from "@/components/marketing/whatsapp-float";
 import { BlogArticleContent } from "@/components/marketing/blog-article-content";
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/schema";
-import { BLOG_POSTS } from "@/lib/blog-index.generated";
-import { getPostBySlug } from "@/lib/blog-listing";
+import { getPostBySlug, SORTED_BLOG_POSTS } from "@/lib/blog-listing";
 import { BLOG_SLUGS } from "@/lib/blog-slugs.generated";
 import { getAllHospitalSlugs } from "@/lib/hospitals";
 import { getRelatedPackageBoxHtml, injectRelatedPackageBox, getGenericConsultationBoxHtml } from "@/lib/related-package-box";
@@ -29,8 +28,12 @@ import { getRelatedPackageBoxHtml, injectRelatedPackageBox, getGenericConsultati
 
 type PageProps = { params: Promise<{ slug: string }> };
 
+// SORTED_BLOG_POSTS (not the raw BLOG_POSTS array) so a slug excluded via
+// lib/blog-replaced-by-page.ts (now served by its own dedicated page) is
+// never statically generated here -- same set either way otherwise, just
+// filtered and sorted, so this changes nothing for any other post.
 export async function generateStaticParams() {
-  return BLOG_POSTS.map((p) => ({ slug: p.slug }));
+  return SORTED_BLOG_POSTS.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

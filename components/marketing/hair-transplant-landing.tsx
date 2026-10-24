@@ -26,7 +26,10 @@ function useCountUp(target: number, duration = 1800, start = false) {
   return count;
 }
 
-const packages = [
+// Exported for reuse by the before/after landing page
+// (hair-transplant-before-after-landing.tsx) -- single source of truth so
+// a future price change only has to happen in one place.
+export const packages = [
   {
     tier: "Entry",
     name: "Premium Package",
@@ -141,7 +144,7 @@ const faqs = [
   },
 ];
 
-const whyMCT = [
+export const whyMCT = [
   { icon: "✓", title: "Truly Hassle-Free", desc: "From first message to final result — every detail is handled. No research, no coordination, no stress on your end." },
   { icon: "🎧", title: "Dedicated GO Coordinator", desc: "Your personal 'Gentle Organiser' is with you from airport arrival to departure. You are never alone." },
   { icon: "★", title: "Zero Question Marks", desc: "We answer every concern before you board the plane. We've heard every question — and we have the answers." },
@@ -158,14 +161,14 @@ const journeySteps = [
   { num: "5", title: "Return Home & Ongoing Support", desc: "Fly home confidently. We provide 12 months of online follow-up support and monitor your results every step of the way." },
 ];
 
-const recoveryTimeline = [
+export const recoveryTimeline = [
   { val: "Next Day", label: "Independent hair washing" },
   { val: "2 Days", label: "Return to work" },
   { val: "1 Week", label: "Light exercise" },
   { val: "12 Months", label: "Full aftercare support" },
 ];
 
-const testimonials = [
+export const testimonials = [
   {
     name: "Manish Parmar",
     source: "Trustpilot · CA · December 2024",
