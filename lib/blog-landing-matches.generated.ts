@@ -129,7 +129,6 @@ export const BLOG_LANDING_MATCHES: Readonly<Record<string, string>> = {
   "hair-transplant-in-turkey-best-doctors": "hair-transplant-packages",
   "hair-transplant-in-turkey-process-safety-what-international-patients-should-know-2026-guide": "hair-transplant-packages",
   "hair-transplant-recovery-process-and-care-tips": "hair-transplant-packages",
-  "hair-transplant-surgery-before-and-after-turkey": "hair-transplant-packages",
   "hair-transplant-techniques-explained-step-by-step": "hair-transplant-packages",
   "hair-transplantation-in-istanbul": "hair-transplant-packages",
   "hair-transplantation-in-turkey-types-prices-procedures": "hair-transplant-packages",

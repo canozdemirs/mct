@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { BLOG_SLUGS } from "@/lib/blog-slugs.generated";
+import { BLOG_SLUGS_REPLACED_BY_PAGE } from "@/lib/blog-replaced-by-page";
 import { isGonePath } from "@/lib/gone-paths";
 import { getLegacyRedirect } from "@/lib/legacy-redirects";
 import { resolveEmbeddedUrlRedirect, resolveTrailingJunkRedirect } from "@/lib/malformed-url-redirects";
@@ -142,14 +143,24 @@ export function proxy(request: NextRequest) {
     return withRobotsTag(NextResponse.redirect(new URL(trailingJunk.target, request.url), 301), host);
   }
 
+  // BLOG_SLUGS_REPLACED_BY_PAGE: a slug that used to be blog content but
+  // now has its own dedicated static route at the same URL -- skipped
+  // here so the request falls through to normal filesystem routing
+  // (reaching that route) instead of being rewritten into the blog
+  // engine. See lib/blog-replaced-by-page.ts.
   if (segments.length === 1) {
     const slug = segments[0];
-    if (BLOG_SLUGS.has(slug)) {
+    if (BLOG_SLUGS.has(slug) && !BLOG_SLUGS_REPLACED_BY_PAGE.has(slug)) {
       return withRobotsTag(NextResponse.rewrite(new URL(`/posts/${slug}`, request.url)), host);
     }
   }
 
-  if (segments.length === 2 && segments[0] === "posts" && BLOG_SLUGS.has(segments[1])) {
+  if (
+    segments.length === 2 &&
+    segments[0] === "posts" &&
+    BLOG_SLUGS.has(segments[1]) &&
+    !BLOG_SLUGS_REPLACED_BY_PAGE.has(segments[1])
+  ) {
     return withRobotsTag(NextResponse.redirect(new URL(`/${segments[1]}`, request.url), 308), host);
   }
 

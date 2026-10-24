@@ -37,6 +37,11 @@ const STATIC_PATHS: { path: string; priority: number; changeFrequency: MetadataR
   { path: "/privacy-policy", priority: 0.2, changeFrequency: "yearly" },
   { path: "/terms", priority: 0.2, changeFrequency: "yearly" },
   { path: "/blog", priority: 0.8, changeFrequency: "daily" },
+  // 2026-10-24: was a blog post (SORTED_BLOG_POSTS), now a dedicated
+  // conversion landing page -- see lib/blog-replaced-by-page.ts. Listed
+  // here instead so it's sitemapped exactly once, not duplicated by the
+  // blog-post loop below (which already excludes it via that same file).
+  { path: "/hair-transplant-surgery-before-and-after-turkey", priority: 0.8, changeFrequency: "monthly" },
 ];
 
 const TREATMENT_SLUGS = [
