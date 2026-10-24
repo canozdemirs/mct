@@ -30,8 +30,8 @@ const packages = [
   {
     tier: "Entry",
     name: "Premium Package",
-    price: "1,400",
-    subtitle: "All-inclusive · No hidden fees",
+    price: "1,550",
+    subtitle: "Operation only · No hidden fees",
     highlight: false,
     badge: null as string | null,
     cta: "outline",
@@ -50,7 +50,7 @@ const packages = [
   {
     tier: "Complete",
     name: "Gold Package",
-    price: "1,700",
+    price: "1,840",
     subtitle: "All-inclusive · Local Anaesthesia",
     highlight: false,
     badge: "Award Winning · Best Value",
@@ -68,7 +68,7 @@ const packages = [
   {
     tier: "Most Popular",
     name: "Hassle-Free Package",
-    price: "1,870",
+    price: "1,940",
     subtitle: "Most popular · The package others tried to copy",
     highlight: true,
     badge: "MOST POPULAR",
@@ -86,7 +86,7 @@ const packages = [
   {
     tier: "Luxury",
     name: "Exclusive Package",
-    price: "3,300",
+    price: "3,500",
     subtitle: "Full VIP experience · Premium accommodation",
     highlight: false,
     badge: null as string | null,
@@ -109,7 +109,7 @@ const faqs = [
   },
   {
     q: "How much does a hair transplant in Turkey cost with Medical Center Turkey?",
-    a: "Our packages start from €1,400 for the Premium Package and from €1,870 for the most popular Hassle-Free Package, which includes hotel, transfers, meals, and a personal coordinator. Our Exclusive VIP Package starts from €3,300 and includes luxury hotel accommodation, BMW chauffeur service, and private dining experiences. Final pricing may vary slightly depending on your individual case and graft requirements — we provide a personalised quote after reviewing your photos during the free consultation. There are no hidden fees.",
+    a: "Our Premium Package starts from €1,550 and covers the operation itself. Our most popular Hassle-Free Package starts from €1,940 and includes hotel, transfers, meals, and a personal coordinator. Our Exclusive VIP Package starts from €3,500 and includes luxury hotel accommodation, BMW chauffeur service, and private dining experiences. Final pricing may vary slightly depending on your individual case and graft requirements — we provide a personalised quote after reviewing your photos during the free consultation. There are no hidden fees.",
   },
   {
     q: "How many days do I need to stay in Istanbul for a hair transplant?",
@@ -553,10 +553,10 @@ export default function HairTransplantLanding() {
                   <select value={form.pkg} onChange={e => setForm({ ...form, pkg: e.target.value })}
                     style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, padding: "12px 16px", fontSize: 14, color: "#fff", outline: "none" }}>
                     <option value="" style={{ color: "#000" }}>Select a package...</option>
-                    <option value="Premium Package — From €1,400" style={{ color: "#000" }}>Premium Package — From €1,400</option>
-                    <option value="Gold Package — From €1,700" style={{ color: "#000" }}>Gold Package — From €1,700</option>
-                    <option value="Hassle-Free Package — From €1,870" style={{ color: "#000" }}>Hassle-Free Package — From €1,870</option>
-                    <option value="Exclusive Package — From €3,300" style={{ color: "#000" }}>Exclusive Package — From €3,300</option>
+                    <option value="Premium Package — From €1,550" style={{ color: "#000" }}>Premium Package — From €1,550</option>
+                    <option value="Gold Package — From €1,840" style={{ color: "#000" }}>Gold Package — From €1,840</option>
+                    <option value="Hassle-Free Package — From €1,940" style={{ color: "#000" }}>Hassle-Free Package — From €1,940</option>
+                    <option value="Exclusive Package — From €3,500" style={{ color: "#000" }}>Exclusive Package — From €3,500</option>
                     <option value="Not sure yet" style={{ color: "#000" }}>Not sure yet</option>
                   </select>
                 </div>

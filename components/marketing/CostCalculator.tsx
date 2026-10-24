@@ -138,12 +138,12 @@ const SUB_SERVICES: Record<string, SubService[]> = {
     { name: "Other" },
   ],
   "hair-transplant": [
-    { name: "FUE Sapphire", price: 1400, defaultDays: 2 },
-    { name: "FUE Sedation (Pain-Free)", price: 1550, defaultDays: 2 },
-    { name: "DHI", price: 1550, defaultDays: 2 },
-    { name: "DHI Sedation", price: 1700, defaultDays: 2 },
-    { name: "Beard Transplant", price: 1400, defaultDays: 2 },
-    { name: "Eyebrow Transplant", price: 1400, defaultDays: 2 },
+    { name: "FUE Sapphire", price: 1550, defaultDays: 2 },
+    { name: "FUE Sedation (Pain-Free)", price: 1650, defaultDays: 2 },
+    { name: "DHI", price: 1700, defaultDays: 2 },
+    { name: "DHI Sedation", price: 1800, defaultDays: 2 },
+    { name: "Beard Transplant", price: 1550, defaultDays: 2 },
+    { name: "Eyebrow Transplant", price: 1550, defaultDays: 2 },
     { name: "Other" },
   ],
   "ivf": [

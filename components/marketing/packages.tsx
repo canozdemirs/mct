@@ -134,7 +134,7 @@ function TreatmentIcon({ name }: { name: string }) {
 const treatments = [
   {
     name: "Hair Transplant",
-    price: "From €1,400",
+    price: "From €1,840",
     image: "/treatments/hair-transplant/v7.jpg",
     inclusions: [
       "FUE / DHI technique",
